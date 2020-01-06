@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.tvd12</groupId>
+		<artifactId>ezyfox</artifactId>
+		<version>0.0.2</version>
+	</parent>
+	<artifactId>ezydata</artifactId>
+    <version>1.1.0</version>
+	<packaging>pom</packaging>
+
+	<name>ezydata</name>
+	<url>http://www.tvd12.com/java/projects/ezydata</url>
+	<description>
+		Support for data, database interaction 
+	</description>
+
+	<organization>
+		<name>Young Monkeys</name>
+		<url>http://www.tvd12.com</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<connection>scm:git:git@github.com:youngmonkeys/ezydata.git</connection>
+		<developerConnection>scm:git:git@github.com:youngmonkeys/ezydata.git</developerConnection>
+		<url>https://github.com/youngmonkeys/ezydata</url>
+	</scm>
+
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/youngmonkeys/ezydata/issues</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>travis</system>
+		<url>https://travis-ci.org/youngmonkeys/ezydata</url>
+	</ciManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>oss.sonatype.org</id>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<developers>
+		<developer>
+			<name>Ta Van Dung</name>
+			<email>itprono3@gmail.com</email>
+			<organization>Young Monkeys</organization>
+			<organizationUrl>http://www.youngmonkeys.org</organizationUrl>
+		</developer>
+	</developers>
+  <modules>
+    <module>ezydata-mongodb</module>
+    <module>ezydata-morphia</module>
+    <module>ezydata-hazelcast</module>
+    <module>ezydata-hazelcast-bean</module>
+    <module>ezydata-hazelcast-mongodb</module>
+    <module>ezydata-hazelcast-morphia</module>
+    <module>ezydata-elasticsearch</module>
+  </modules>
+</project>

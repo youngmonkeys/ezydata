@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests">
+	<test name="All">
+		<packages>
+			<package name="com.tvd12.ezydata.mongodb.testing"></package>
+			<package name="com.tvd12.ezydata.mongodb.testing.bean"></package>
+			<package name="com.tvd12.ezydata.mongodb.testing.loader"></package>
+		</packages>
+	</test>
+</suite>
