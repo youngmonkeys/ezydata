@@ -7,7 +7,7 @@
 		<version>0.0.2</version>
 	</parent>
 	<artifactId>ezydata</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 	<packaging>pom</packaging>
 
 	<name>ezydata</name>
