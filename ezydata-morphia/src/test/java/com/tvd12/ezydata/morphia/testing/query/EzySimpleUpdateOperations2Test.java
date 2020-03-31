@@ -4,8 +4,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezydata.morphia.query.impl.EzySimpleFindAndModifyOptions;
-import com.tvd12.ezydata.morphia.query.impl.EzySimpleUpdateOperations;
+import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaFindAndModifyOptions;
+import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaUpdateOperations;
 import com.tvd12.ezydata.morphia.testing.BaseMongoDBTest;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 import com.tvd12.ezydata.morphia.testing.data.Kitty;
@@ -19,7 +19,7 @@ public class EzySimpleUpdateOperations2Test extends BaseMongoDBTest {
 	@Test
 	public void test() {
 		UpdateOperations<Cat> realOperations = DATASTORE.createUpdateOperations(Cat.class);
-		EzySimpleUpdateOperations<Cat> proxyOperations = new EzySimpleUpdateOperations<>(realOperations);
+		EzyMorphiaUpdateOperations<Cat> proxyOperations = new EzyMorphiaUpdateOperations<>(realOperations);
 		
 		proxyOperations.disableValidation();
 		proxyOperations.enableValidation();
@@ -44,7 +44,7 @@ public class EzySimpleUpdateOperations2Test extends BaseMongoDBTest {
 		
 		
 		FindAndModifyOptions realOptions = new FindAndModifyOptions();
-		EzySimpleFindAndModifyOptions proxyOptions = new EzySimpleFindAndModifyOptions(realOptions);
+		EzyMorphiaFindAndModifyOptions proxyOptions = new EzyMorphiaFindAndModifyOptions(realOptions);
 		proxyOptions.upsert(true)
 			.maxTime(10, TimeUnit.SECONDS)
 			.remove(false)

@@ -7,8 +7,8 @@ import java.util.List;
 import com.mongodb.WriteResult;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
-import com.tvd12.ezydata.morphia.query.impl.EzySimpleFindAndModifyOptions;
-import com.tvd12.ezydata.morphia.query.impl.EzySimpleUpdateOperations;
+import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaFindAndModifyOptions;
+import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaUpdateOperations;
 import com.tvd12.ezyfox.bean.annotation.EzyAutoBind;
 import com.tvd12.ezyfox.database.query.EzyFindAndModifyOptions;
 import com.tvd12.ezyfox.database.query.EzyUpdateOperations;
@@ -34,6 +34,11 @@ public abstract class EzyDatastoreRepository<I, E>
 	@Setter
 	@EzyAutoBind
 	protected Datastore datastore;
+	protected final Class<E> entityType;
+	
+	public EzyDatastoreRepository() {
+		this.entityType = getEntityType();
+	}
 	
 	@Override
 	public long count() {
@@ -107,11 +112,13 @@ public abstract class EzyDatastoreRepository<I, E>
 		return list;
 	}
 	
+	@Deprecated
 	@Override
 	public void updateOneById(I id, E entity) {
 		updateOneById(id, entity, false);
 	}
 	
+	@Deprecated
 	@Override
 	public void updateOneById(I id, E entity, boolean upsert) {
 		Query<E> query = newQuery("_id", id);
@@ -128,11 +135,13 @@ public abstract class EzyDatastoreRepository<I, E>
 		updateOneByQuery(newQuery("_id", id), operations, upsert);
 	}
 	
+	@Deprecated
 	@Override
 	public void updateOneByField(String field, Object value, E entity) {
 		updateOneByField(field, value, entity, false);
 	}
 	
+	@Deprecated
 	@Override
 	public void updateOneByField(String field, Object value, E entity, boolean upsert) {
 		Query<E> query = newQuery(field, value);
@@ -151,16 +160,16 @@ public abstract class EzyDatastoreRepository<I, E>
 	
 	@Override
 	public void updateManyByField(String field, Object value, EzyApply<EzyUpdateOperations<E>> operations) {
-		UpdateOperations<E> realOperations = datastore.createUpdateOperations(getEntityType());
-		EzyUpdateOperations<E> proxyOperations = new EzySimpleUpdateOperations<>(realOperations);
+		UpdateOperations<E> realOperations = datastore.createUpdateOperations(entityType);
+		EzyUpdateOperations<E> proxyOperations = new EzyMorphiaUpdateOperations<>(realOperations);
 		operations.apply(proxyOperations);
 		UpdateOptions realOptions = new UpdateOptions().multi(true).upsert(false);
 		datastore.update(newQuery(field, value), realOperations, realOptions);
 	}
 	
 	private void updateOneByQuery(Query<E> query, EzyApply<EzyUpdateOperations<E>> operations, boolean upsert) {
-		UpdateOperations<E> realOperations = datastore.createUpdateOperations(getEntityType());
-		EzyUpdateOperations<E> proxyOperations = new EzySimpleUpdateOperations<>(realOperations);
+		UpdateOperations<E> realOperations = datastore.createUpdateOperations(entityType);
+		EzyUpdateOperations<E> proxyOperations = new EzyMorphiaUpdateOperations<>(realOperations);
 		operations.apply(proxyOperations);
 		UpdateOptions updateOptions = new UpdateOptions()
 				.upsert(true)
@@ -190,17 +199,17 @@ public abstract class EzyDatastoreRepository<I, E>
 	}
 	
 	private E findAndModifyByQuery(Query<E> query, EzyApply<EzyUpdateOperations<E>> operations) {
-		UpdateOperations<E> realOperations = datastore.createUpdateOperations(getEntityType());
-		EzyUpdateOperations<E> proxyOperations = new EzySimpleUpdateOperations<>(realOperations);
+		UpdateOperations<E> realOperations = datastore.createUpdateOperations(entityType);
+		EzyUpdateOperations<E> proxyOperations = new EzyMorphiaUpdateOperations<>(realOperations);
 		operations.apply(proxyOperations);
 		return datastore.findAndModify(query, realOperations);
 	}
 	
 	private E findAndModifyByQuery(Query<E> query, EzyApply<EzyUpdateOperations<E>> operations, EzyApply<EzyFindAndModifyOptions> options) {
-		UpdateOperations<E> realOperations = datastore.createUpdateOperations(getEntityType());
-		EzyUpdateOperations<E> proxyOperations = new EzySimpleUpdateOperations<>(realOperations);
+		UpdateOperations<E> realOperations = datastore.createUpdateOperations(entityType);
+		EzyUpdateOperations<E> proxyOperations = new EzyMorphiaUpdateOperations<>(realOperations);
 		FindAndModifyOptions realOptions = new FindAndModifyOptions();
-		EzyFindAndModifyOptions proxyOptions = new EzySimpleFindAndModifyOptions(realOptions);
+		EzyFindAndModifyOptions proxyOptions = new EzyMorphiaFindAndModifyOptions(realOptions);
 		operations.apply(proxyOperations);
 		options.apply(proxyOptions);
 		return datastore.findAndModify(query, realOperations, realOptions);
@@ -224,7 +233,7 @@ public abstract class EzyDatastoreRepository<I, E>
 	}
 	
 	protected Query<E> newQuery() {
-		return datastore.createQuery(getEntityType());
+		return datastore.createQuery(entityType);
 	}
 	
 	protected Query<E> newQuery(String field, Object value) {

@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
-			<artifactId>ezyfox-database</artifactId>
+			<artifactId>ezydata-database</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -6,11 +6,11 @@ import com.tvd12.ezyfox.database.query.EzyFindAndModifyOptions;
 
 import dev.morphia.FindAndModifyOptions;
 
-public final class EzySimpleFindAndModifyOptions implements EzyFindAndModifyOptions {
+public final class EzyMorphiaFindAndModifyOptions implements EzyFindAndModifyOptions {
 
 	private final FindAndModifyOptions options;
 	
-	public EzySimpleFindAndModifyOptions(FindAndModifyOptions options) {
+	public EzyMorphiaFindAndModifyOptions(FindAndModifyOptions options) {
 		this.options = options;
 	}
 
@@ -57,7 +57,5 @@ public final class EzySimpleFindAndModifyOptions implements EzyFindAndModifyOpti
 		options.maxTime(maxTime, timeUnit);
 		return this;
 	}
-	
-	
 	
 }

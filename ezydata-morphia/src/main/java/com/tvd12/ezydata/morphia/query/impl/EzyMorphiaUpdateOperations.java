@@ -9,11 +9,11 @@ import com.tvd12.ezyfox.function.EzyApply;
 import dev.morphia.query.PushOptions;
 import dev.morphia.query.UpdateOperations;
 
-public final class EzySimpleUpdateOperations<T> implements EzyUpdateOperations<T> {
+public final class EzyMorphiaUpdateOperations<T> implements EzyUpdateOperations<T> {
 
 	private final UpdateOperations<T> operations;
 	
-	public EzySimpleUpdateOperations(UpdateOperations<T> operations) {
+	public EzyMorphiaUpdateOperations(UpdateOperations<T> operations) {
 		this.operations = operations;
 	}
 
@@ -96,7 +96,7 @@ public final class EzySimpleUpdateOperations<T> implements EzyUpdateOperations<T
 	@Override
 	public EzyUpdateOperations<T> push(String field, Object value, EzyApply<EzyPushOptions> options) {
 		PushOptions real = new PushOptions();
-		EzyPushOptions proxy = new EzySimplePushOptions(real);
+		EzyPushOptions proxy = new EzyMorphiaPushOptions(real);
 		options.apply(proxy);
 		operations.push(field, value, real);
 		return this;
@@ -111,7 +111,7 @@ public final class EzySimpleUpdateOperations<T> implements EzyUpdateOperations<T
 	@Override
 	public EzyUpdateOperations<T> push(String field, List<?> values, EzyApply<EzyPushOptions> options) {
 		PushOptions real = new PushOptions();
-		EzyPushOptions proxy = new EzySimplePushOptions(real);
+		EzyPushOptions proxy = new EzyMorphiaPushOptions(real);
 		options.apply(proxy);
 		operations.push(field, values, real);
 		return this;
@@ -158,7 +158,5 @@ public final class EzySimpleUpdateOperations<T> implements EzyUpdateOperations<T
 		operations.unset(field);
 		return this;
 	}
-	
-	
 	
 }

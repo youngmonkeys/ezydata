@@ -4,11 +4,11 @@ import com.tvd12.ezyfox.database.query.EzyPushOptions;
 
 import dev.morphia.query.PushOptions;
 
-public final class EzySimplePushOptions implements EzyPushOptions {
+public final class EzyMorphiaPushOptions implements EzyPushOptions {
 
 	private final PushOptions options;
 	
-	public EzySimplePushOptions(PushOptions options) {
+	public EzyMorphiaPushOptions(PushOptions options) {
 		this.options = options;
 	}
 	
@@ -36,6 +36,4 @@ public final class EzySimplePushOptions implements EzyPushOptions {
 		return this;
 	}
 
-	
-	
 }

@@ -1,9 +1,6 @@
 package com.tvd12.ezydata.mongodb;
 
-import com.tvd12.ezyfox.database.repository.EzyEmptyRepository;
-import com.tvd12.ezyfox.database.service.EzyCrudService;
+import com.tvd12.ezydata.database.EzyDatabaseRepository;
 
-public interface EzyMongoRepository<I,E> 
-		extends EzyEmptyRepository<I, E>, EzyCrudService<I, E> {
-
+public interface EzyMongoRepository<I,E> extends EzyDatabaseRepository<I, E> {
 }

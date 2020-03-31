@@ -2,7 +2,7 @@ package com.tvd12.ezydata.morphia.testing.query;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezydata.morphia.query.impl.EzySimpleUpdateOperations;
+import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaUpdateOperations;
 import com.tvd12.ezydata.morphia.testing.BaseMongoDBTest;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 import com.tvd12.ezydata.morphia.testing.data.Kitty;
@@ -15,7 +15,7 @@ public class EzySimpleUpdateOperationsTest extends BaseMongoDBTest {
 	@Test
 	public void test() {
 		UpdateOperations<Cat> realOperations = DATASTORE.createUpdateOperations(Cat.class);
-		EzySimpleUpdateOperations<Cat> proxyOperations = new EzySimpleUpdateOperations<>(realOperations);
+		EzyMorphiaUpdateOperations<Cat> proxyOperations = new EzyMorphiaUpdateOperations<>(realOperations);
 		
 		proxyOperations.addToSet("valueSet", "a");
 		proxyOperations.addToSet("valueSet", Lists.newArrayList("b", "c"));

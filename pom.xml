@@ -68,5 +68,6 @@
     <module>ezydata-hazelcast-mongodb</module>
     <module>ezydata-hazelcast-morphia</module>
     <module>ezydata-elasticsearch</module>
+    <module>ezydata-database</module>
   </modules>
 </project>
