@@ -1,12 +1,12 @@
 package com.tvd12.ezydata.morphia.impl;
 
-import com.tvd12.ezydata.mongodb.bean.EzySimpleRepositoryImplementer;
+import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
 import com.tvd12.ezydata.morphia.repository.EzyDatastoreRepository;
 
 import dev.morphia.Datastore;
 
-public class EzyMorphiaRepositoryImplementer extends EzySimpleRepositoryImplementer {
+public class EzyMorphiaRepositoryImplementer extends EzyMongoRepositoryImplementer {
 
 	public EzyMorphiaRepositoryImplementer(Class<?> clazz) {
 		super(clazz);

@@ -1,13 +1,12 @@
 package com.tvd12.ezydata.morphia.impl;
 
-import com.tvd12.ezydata.mongodb.bean.EzySimpleRepositoriesImplementer;
-import com.tvd12.ezydata.mongodb.bean.EzySimpleRepositoryImplementer;
+import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
 
 public class EzyMorphiaRepositoriesImplementer
-		extends EzySimpleRepositoriesImplementer {
+		extends EzyMongoRepositoriesImplementer {
 	
 	@Override
-	protected EzySimpleRepositoryImplementer newRepoImplementer(Class<?> itf) {
+	protected EzyMorphiaRepositoryImplementer newRepoImplementer(Class<?> itf) {
 		return new EzyMorphiaRepositoryImplementer(itf);
 	}
 	

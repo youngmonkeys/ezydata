@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.mongodb.testing.bean;
+package com.tvd12.ezydata.database.test.bean;
 
 import java.util.Map;
 
@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
-import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.test.base.BaseTest;
 
@@ -16,9 +15,9 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 	@Test
 	public void test() {
 		EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
-				.scan("com.tvd12.ezydata.mongodb.testing.bean")
-				.scan("com.tvd12.ezydata.mongodb.testing.bean", "com.tvd12.ezydata.mongodb.testing.bean")
-				.scan(Sets.newHashSet("com.tvd12.ezydata.mongodb.testing.bean"))
+				.scan("com.tvd12.ezydata.database.test.bean")
+				.scan("com.tvd12.ezydata.database.test.bean", "com.tvd12.ezydata.database.test.bean")
+				.scan(Sets.newHashSet("com.tvd12.ezydata.database.test.bean"))
 				.repositoryInterface(PersonRepo2.class)
 				.repositoryInterface(Class.class)
 				.repositoryInterface(NothingInterface.class)
@@ -44,7 +43,7 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 		
 	}
 	
-	public static class ExEzySimpleRepositoryImplementer extends EzyMongoRepositoryImplementer {
+	public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
 		public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
 			super(clazz);
@@ -56,7 +55,7 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 
 		@Override
 		protected Class<?> getSuperClass() {
-			return ExEzyMongoRepository.class;
+			return ExEzyDatabaseRepository.class;
 		}
 		
 	}

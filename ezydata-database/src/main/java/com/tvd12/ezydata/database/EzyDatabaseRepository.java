@@ -12,6 +12,12 @@ public interface EzyDatabaseRepository<I, E> extends
 	
 	@Deprecated
 	@Override
+	default void updateOneById(I id, E entity) {
+		throw new UnsupportedOperationException("unsupport this operation");
+	}
+	
+	@Deprecated
+	@Override
 	default void updateOneById(I id, E entity, boolean upsert) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}

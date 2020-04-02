@@ -1,9 +1,9 @@
-package com.tvd12.ezydata.mongodb.bean;
+package com.tvd12.ezydata.database.bean;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.tvd12.ezydata.mongodb.EzyMongoRepository;
+import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyClass;
@@ -15,17 +15,17 @@ import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtNewMethod;
 
-public abstract class EzySimpleRepositoryImplementer {
+public abstract class EzyAbstractRepositoryImplementer {
 
 	private final EzyClass clazz;
 	
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
 	
-	public EzySimpleRepositoryImplementer(Class<?> clazz) {
+	public EzyAbstractRepositoryImplementer(Class<?> clazz) {
 		this(new EzyClass(clazz));
 	}
 	
-	public EzySimpleRepositoryImplementer(EzyClass clazz) {
+	public EzyAbstractRepositoryImplementer(EzyClass clazz) {
 		this.clazz = clazz;
 	}
 	
@@ -83,7 +83,11 @@ public abstract class EzySimpleRepositoryImplementer {
 	
 	@SuppressWarnings("rawtypes")
 	protected Class[] getIdAndEntityTypes() {
-		return EzyGenerics.getGenericInterfacesArguments(clazz.getClazz(), EzyMongoRepository.class, 2);
+		return EzyGenerics.getGenericInterfacesArguments(clazz.getClazz(), getBaseRepositoryInterface(), 2);
+	}
+	
+	protected Class<?> getBaseRepositoryInterface() {
+		return EzyDatabaseRepository.class;
 	}
 	
 }

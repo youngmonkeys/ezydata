@@ -15,6 +15,7 @@ import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyDatastoreRepositoryTest extends BaseMongoDBTest {
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		CatRepo repo = (CatRepo) BEAN_CONTEXT.getBean(CatRepo.class);
@@ -115,7 +116,7 @@ public class EzyDatastoreRepositoryTest extends BaseMongoDBTest {
 					.invoke();
 		}
 		catch (Exception e) {
-			assert e.getCause().getCause() instanceof UnimplementedOperationException;
+			assert e instanceof UnimplementedOperationException;
 		}
 	}
 	

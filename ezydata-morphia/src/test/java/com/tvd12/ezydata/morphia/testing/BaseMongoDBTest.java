@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Map;
 
 import com.mongodb.MongoClient;
-import com.tvd12.ezydata.mongodb.bean.EzyRepositoriesImplementer;
+import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.morphia.EzyDataStoreBuilder;
