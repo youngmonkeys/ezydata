@@ -10,6 +10,8 @@ public interface EzyDatabaseRepository<I, E> extends
 		EzyEmptyRepository<I, E>, 
 		EzyCrudService<I, E> {
 	
+	String PREFIX_FIND = "find";
+	
 	@Deprecated
 	@Override
 	default void updateOneById(I id, E entity) {

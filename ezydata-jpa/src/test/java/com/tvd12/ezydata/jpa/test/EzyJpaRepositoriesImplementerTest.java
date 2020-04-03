@@ -1,0 +1,55 @@
+package com.tvd12.ezydata.jpa.test;
+
+import java.util.List;
+import java.util.Map;
+
+import org.testng.annotations.Test;
+
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.database.annotation.EzyQuery;
+import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
+import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
+import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
+import com.tvd12.ezydata.jpa.test.entity.User;
+import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
+
+public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
+
+	protected EzyDatabaseContext databaseContext;
+	
+	protected EzyJpaRepositoriesImplementerTest() {
+		databaseContext = new EzyJpaDatabaseContextBuilder()
+				.entityManagerFactory(ENTITY_MANAGER_FACTORY)
+				.build();
+	}
+
+	@Test
+	public void test() {
+		EzyAbstractRepositoryImplementer.setDebug(true);
+		EzyJpaRepositoriesImplementer implementer = new EzyJpaRepositoriesImplementer();
+		implementer.repositoryInterfaces(Object.class);
+		implementer.repositoryInterfaces(InterfaceA.class);
+		implementer.repositoryInterfaces(UserXRepo.class);
+		Map<Class<?>, Object> map = implementer.implement(databaseContext);
+		UserXRepo userRepo = (UserXRepo) map.get(UserXRepo.class); 
+		System.out.println(userRepo.count());
+		System.out.println(userRepo.findByEmail("dzung@gmail.com"));
+		List<UserIdFullNameResult> list = userRepo.findIdAndFullName();
+		System.out.println(list);
+	}
+	
+	public static interface InterfaceA {
+		
+	}
+	
+	public static interface UserXRepo extends EzyDatabaseRepository<String, User> {
+		
+		@EzyQuery("select e from User e where e.email = ?0")
+		User findByEmail(String email);
+		
+		@EzyQuery(value = "select e.id, e.fullName from User e")
+		List<UserIdFullNameResult> findIdAndFullName();
+		
+	}
+}

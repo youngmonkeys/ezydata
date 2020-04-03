@@ -21,9 +21,9 @@ public abstract class EzyAbstractRepositoriesImplementer
 		extends EzyLoggable
 		implements EzyRepositoriesImplementer {
 
-	protected List<Object> reflections;
 	protected Set<String> packagesToScan;
 	protected Set<Class<?>> autoImplInterfaces;
+	protected List<EzyReflection> reflections;
 	
 	public EzyAbstractRepositoriesImplementer() {
 		this.reflections = new ArrayList<>();
@@ -59,10 +59,6 @@ public abstract class EzyAbstractRepositoriesImplementer
 			autoImplInterfaces.add(itf);
 		}
 		return this;
-	}
-	
-	protected Class<?> getBaseRepositoryInterface() {
-		return EzyDatabaseRepository.class;
 	}
 	
 	@Override
@@ -108,12 +104,14 @@ public abstract class EzyAbstractRepositoriesImplementer
 		Set<Class<?>> classes = new HashSet<>();
 		Class<?> baseInterface = getBaseRepositoryInterface();
 		for(Object item : reflections) {
-			if(item instanceof EzyReflection) {
-				EzyReflection reflection = (EzyReflection)item;
-				classes.addAll(reflection.getExtendsClasses(baseInterface));
-			}
+			EzyReflection reflection = (EzyReflection)item;
+			classes.addAll(reflection.getExtendsClasses(baseInterface));
 		}
 		return EzySets.filter(classes, clazz -> this.isAutoImplRepoInterface(clazz));
+	}
+	
+	protected Class<?> getBaseRepositoryInterface() {
+		return EzyDatabaseRepository.class;
 	}
 	
 	private boolean isAutoImplRepoInterface(Class<?> clazz) {

@@ -7,31 +7,37 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
-import lombok.Setter;
-
 @SuppressWarnings("unchecked")
 public abstract class EzyJpaRepository<I,E> 
 		extends EzyLoggable
-		implements EzyDatabaseRepository<I,E>, EzyEntityManagerAware {
+		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware {
 
-	@Setter
-	protected EntityManager entityManager;
 	protected final Class<E> entityType;
+	protected EntityManager entityManager;
+	protected EzyJpaDatabaseContext databaseContext;
 	
 	public EzyJpaRepository() {
 		this.entityType = getEntityType();
 	}
 	
 	@Override
+	public void setDatabaseContext(EzyDatabaseContext context) {
+		this.databaseContext = (EzyJpaDatabaseContext)context;
+		this.entityManager = databaseContext.getEntityManager();
+	}
+	
+	@Override
 	public long count() {
 		String queryString = new StringBuilder()
 				.append("select count(e.id) from ")
-				.append(entityType.getSimpleName()).append(" e ")
+				.append(entityType.getName()).append(" e ")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		long count = (long)query.getSingleResult();
@@ -59,8 +65,8 @@ public abstract class EzyJpaRepository<I,E>
 	public List<E> findListByIds(Collection<I> ids) {
 		String queryString = new StringBuilder()
 				.append("select e from ")
-				.append(entityType.getSimpleName()).append(" e ")
-				.append("where e.id in ?")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.id in ?0")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, ids);
@@ -72,8 +78,8 @@ public abstract class EzyJpaRepository<I,E>
 	public E findByField(String field, Object value) {
 		String queryString = new StringBuilder()
 				.append("select e from ")
-				.append(entityType.getSimpleName()).append(" e ")
-				.append("where e.").append(field).append(" in ?")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.").append(field).append(" = ?0")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, value);
@@ -85,8 +91,8 @@ public abstract class EzyJpaRepository<I,E>
 	public List<E> findListByField(String field, Object value) {
 		String queryString = new StringBuilder()
 				.append("select e from ")
-				.append(entityType.getSimpleName()).append(" e ")
-				.append("where e.").append(field).append(" in ?")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.").append(field).append(" = ?0")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, value);
@@ -98,8 +104,8 @@ public abstract class EzyJpaRepository<I,E>
 	public List<E> findListByField(String field, Object value, int skip, int limit) {
 		String queryString = new StringBuilder()
 				.append("select e from ")
-				.append(entityType.getSimpleName()).append(" e ")
-				.append("where e.").append(field).append(" in ?")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.").append(field).append(" = ?0")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, value);
@@ -113,7 +119,7 @@ public abstract class EzyJpaRepository<I,E>
 	public List<E> findAll() {
 		String queryString = new StringBuilder()
 				.append("select e from ")
-				.append(entityType.getSimpleName()).append(" e ")
+				.append(entityType.getName()).append(" e ")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		List<E> list = query.getResultList();
@@ -124,7 +130,7 @@ public abstract class EzyJpaRepository<I,E>
 	public List<E> findAll(int skip, int limit) {
 		String queryString = new StringBuilder()
 				.append("select e from ")
-				.append(entityType.getSimpleName()).append(" e ")
+				.append(entityType.getName()).append(" e ")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setFirstResult(skip);
@@ -137,7 +143,7 @@ public abstract class EzyJpaRepository<I,E>
 	public int deleteAll() {
 		String queryString = new StringBuilder()
 				.append("delete from ")
-				.append(entityType.getSimpleName()).append(" e ")
+				.append(entityType.getName()).append(" e ")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		int deletedRows = query.executeUpdate();
@@ -148,8 +154,8 @@ public abstract class EzyJpaRepository<I,E>
 	public void delete(I id) {
 		String queryString = new StringBuilder()
 				.append("delete from ")
-				.append(entityType.getSimpleName()).append(" e ")
-				.append("where e.id = ?")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.id = ?0")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, id);
@@ -160,8 +166,8 @@ public abstract class EzyJpaRepository<I,E>
 	public int deleteByIds(Collection<I> ids) {
 		String queryString = new StringBuilder()
 				.append("delete from ")
-				.append(entityType.getSimpleName()).append(" e ")
-				.append("where e.id in ?")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.id in ?0")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, ids);

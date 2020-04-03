@@ -17,5 +17,10 @@
 			<artifactId>ezyfox-database</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-binding</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 </project>
