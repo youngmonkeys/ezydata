@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.io.EzySets;
@@ -24,6 +25,7 @@ public abstract class EzyAbstractRepositoriesImplementer
 	protected Set<String> packagesToScan;
 	protected Set<Class<?>> autoImplInterfaces;
 	protected List<EzyReflection> reflections;
+	protected EzyQueryRegister queryManager;
 	
 	public EzyAbstractRepositoriesImplementer() {
 		this.reflections = new ArrayList<>();
@@ -53,7 +55,7 @@ public abstract class EzyAbstractRepositoriesImplementer
 		}
 		else if(!getBaseRepositoryInterface().isAssignableFrom(itf)) {
 			logger.warn("interface {} doestn't extends {}, ignore its", 
-					itf.getSimpleName(), getBaseRepositoryInterface().getSimpleName());
+				itf.getSimpleName(), getBaseRepositoryInterface().getSimpleName());
 		}
 		else {
 			autoImplInterfaces.add(itf);
@@ -75,7 +77,14 @@ public abstract class EzyAbstractRepositoriesImplementer
 	
 	@Override
 	public EzyRepositoriesImplementer repositoryInterfaces(EzyReflection reflection) {
-		this.reflections.add(reflection);
+		if(reflection != null)
+			this.reflections.add(reflection);
+		return this;
+	}
+	
+	@Override
+	public EzyRepositoriesImplementer queryManager(EzyQueryRegister queryManager) {
+		this.queryManager = queryManager;
 		return this;
 	}
 	
@@ -93,6 +102,7 @@ public abstract class EzyAbstractRepositoriesImplementer
 	
 	private Object implementRepoInterface(Class<?> itf, Object template) {
 		EzyAbstractRepositoryImplementer implementer = newRepoImplementer(itf);
+		implementer.setQueryManager(queryManager);
 		return implementer.implement(template);
 	}
 	

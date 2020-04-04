@@ -2,16 +2,20 @@ package com.tvd12.ezydata.database.query;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.io.EzyStrings;
+import com.tvd12.ezyfox.util.EzyPair;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 public class EzyQueryEntity {
 
 	protected final String name;
 	protected final String value;
-	protected final boolean nativeQuery;
-	protected final Class<?> resultType;
+	@Setter
+	protected boolean nativeQuery;
+	@Setter
+	protected Class<?> resultType;
 	
 	protected EzyQueryEntity(Builder builder) {
 		this.name = builder.name;
@@ -22,6 +26,27 @@ public class EzyQueryEntity {
 			throw new IllegalArgumentException("query name can't be null or empty");
 		if(EzyStrings.isNoContent(value))
 			throw new IllegalArgumentException("query value can't be null or empty");
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null)
+			return false;
+		if(obj == this)
+			return true;
+		if(obj instanceof EzyPair)
+			return name.equals(((EzyQueryEntity)obj).name);
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	@Override
+	public String toString() {
+		return value;
 	}
 	
 	public static Builder builder() {

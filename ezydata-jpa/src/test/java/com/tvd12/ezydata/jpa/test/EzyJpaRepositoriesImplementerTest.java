@@ -21,6 +21,7 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 				.repositoryInterfaces(Object.class)
 				.repositoryInterfaces(InterfaceA.class)
 				.repositoryInterfaces(UserXRepo.class)
+				.scan("com.tvd12.ezydata.jpa.test.result")
 				.entityManagerFactory(ENTITY_MANAGER_FACTORY)
 				.build();
 	}

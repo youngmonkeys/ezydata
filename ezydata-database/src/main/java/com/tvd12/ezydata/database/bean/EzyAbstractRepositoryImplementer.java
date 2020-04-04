@@ -6,8 +6,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
+import com.tvd12.ezydata.database.query.EzyQueryEntity;
+import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyInstruction;
+import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyMethod;
@@ -25,7 +28,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	protected final EzyClass clazz;
 	protected Class<?> idType;
 	protected Class<?> entityType;
-	
+	@Setter
+	protected EzyQueryRegister queryManager;
 	@Setter
 	protected static boolean debug; 
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
@@ -57,6 +61,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		EzyClass superClass = new EzyClass(getSuperClass());
 		implClass.setSuperclass(pool.get(superClass.getName()));
 		for(EzyMethod method : getAbstractMethods()) {
+			registerQuery(method);
 			String methodContent = makeAbstractMethodContent(method);
 			printMethodContent(methodContent);
 			implClass.addMethod(CtNewMethod.make(methodContent, implClass));
@@ -76,6 +81,25 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	
 	protected Collection<EzyMethod> getAbstractMethods() {
 		return clazz.getMethods(m -> m.isAnnotated(EzyQuery.class));
+	}
+	
+	protected void registerQuery(EzyMethod method) {
+		if(queryManager == null)
+			return;
+		EzyQuery queryAnno = method.getAnnotation(EzyQuery.class);
+		String queryValue = queryAnno.value();
+		if(EzyStrings.isNoContent(queryValue))
+			return;
+		String queryName = queryAnno.name();
+		if(EzyStrings.isNoContent(queryName))
+			queryName = method.toString();
+		EzyQueryEntity queryEntity = EzyQueryEntity.builder()
+				.name(queryName)
+				.value(queryValue)
+				.nativeQuery(queryAnno.nativeQuery())
+				.resultType(queryAnno.resultType())
+				.build();
+		queryManager.addQuery(queryEntity);
 	}
 	
 	protected String makeAbstractMethodContent(EzyMethod method) {

@@ -30,8 +30,14 @@ public class EzySimpleResultDeserializers
 		return deserializer;
 	}
 	
+	@Override
+	public Map<Class<?>, EzyResultDeserializer> getDeserializers() {
+		return new HashMap<>(deserializers);
+	}
+	
 	public void addDeserializer(Class<?> resultType, EzyResultDeserializer deserializer) {
-		this.deserializers.put(resultType, deserializer);
+		if(!deserializers.containsKey(resultType))
+			deserializers.put(resultType, deserializer);
 	}
 	
 }

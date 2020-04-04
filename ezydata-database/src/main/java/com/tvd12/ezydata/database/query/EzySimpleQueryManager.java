@@ -7,7 +7,7 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzySimpleQueryManager
 		extends EzyLoggable 
-		implements EzyQueryManager {
+		implements EzyQueryManager, EzyQueryRegister {
 
 	protected final Map<String, EzyQueryEntity> queries;
 	
@@ -18,8 +18,6 @@ public class EzySimpleQueryManager
 	@Override
 	public EzyQueryEntity getQuery(String name) {
 		EzyQueryEntity query = queries.get(name);
-		if(query == null)
-			throw new IllegalArgumentException("has no query with name: " + name);
 		return query;
 	}
 	
@@ -28,6 +26,7 @@ public class EzySimpleQueryManager
 		return new HashMap<>(queries);
 	}
 	
+	@Override
 	public void addQuery(EzyQueryEntity query) {
 		this.queries.put(query.getName(), query);
 	}
