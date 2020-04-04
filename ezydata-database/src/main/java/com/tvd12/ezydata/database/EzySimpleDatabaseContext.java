@@ -1,6 +1,8 @@
 package com.tvd12.ezydata.database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.tvd12.ezydata.database.codec.EzyResultDeserializers;
@@ -32,6 +34,16 @@ public class EzySimpleDatabaseContext implements EzyDatabaseContext {
 	@Override
 	public Object deserializeResult(Object result, Class<?> resultType) {
 		Object answer = deserializers.deserialize(result, resultType);
+		return answer;
+	}
+	
+	@Override
+	public List deserializeResultList(Object result, Class<?> resultType) {
+		List answer = new ArrayList<>();
+		for(Object item : (Iterable)result) {
+			Object data = deserializers.deserialize(item, resultType);
+			answer.add(data);
+		}
 		return answer;
 	}
 

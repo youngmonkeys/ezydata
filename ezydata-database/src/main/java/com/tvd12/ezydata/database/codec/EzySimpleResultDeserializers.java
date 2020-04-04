@@ -24,6 +24,12 @@ public class EzySimpleResultDeserializers
 		return answer;
 	}
 	
+	@Override
+	public EzyResultDeserializer getDeserializer(Class<?> resultType) {
+		EzyResultDeserializer deserializer = deserializers.get(resultType);
+		return deserializer;
+	}
+	
 	public void addDeserializer(Class<?> resultType, EzyResultDeserializer deserializer) {
 		this.deserializers.put(resultType, deserializer);
 	}

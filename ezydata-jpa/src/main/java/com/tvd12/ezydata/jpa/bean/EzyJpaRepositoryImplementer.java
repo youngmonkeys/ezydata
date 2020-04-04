@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.jpa.bean;
 
+import java.util.List;
+
 import javax.persistence.Query;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
@@ -26,12 +28,9 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		EzyBody body = new EzyFunction(method).body();
 		EzyInstruction createQueryInstruction = new EzyInstruction("\t", "\n")
 				.variable(Query.class)
-					.equal()
-				.append("this.entityManager.createQuery(").string(queryString);
-		Class<?> resultType = anno.resultType();
-		if(resultType != Object.class)
-			createQueryInstruction.append(",").clazz(resultType, true);
-		createQueryInstruction.append(")");
+				.equal()
+				.append("this.entityManager.createQuery(").string(queryString)
+				.append(")");
 		body.append(createQueryInstruction);
 		for(int i = 0 ; i < method.getParameterCount() ; ++i) {
 			body.append(new EzyInstruction("\t", "\n")
@@ -41,18 +40,45 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		}
 
 		String methodName = method.getName();
+		Class<?> resultType = anno.resultType();
 		Class<?> returnType = method.getReturnType();
-		EzyInstruction resultInstruction = new EzyInstruction("\t", "\n")
-				.append("java.lang.Object answer = ");
-		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND)) {
-			if(Iterable.class.isAssignableFrom(returnType))
-				resultInstruction.append("query.getResultList()");
-			else
-				resultInstruction.append("query.getSingleResult()");
+		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
+		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST) ||
+				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST)) {
+			if(resultType == Object.class || resultType == entityType) {
+				answerInstruction.answer().cast(returnType, "query.getResultList()");
+			}
+			else {	
+				body.append(new EzyInstruction("\t", "\n")
+						.variable(List.class, "result")
+							.equal()
+						.append("query.getResultList()"));
+				answerInstruction.answer()
+					.append("this.databaseContext.deserializeResultList(result,")
+					.clazz(resultType, true).append(")");
+			}
 		}
-		body.append(resultInstruction);
-		body.append(new EzyInstruction("\t", "\n")
-				.answer().cast(returnType, "answer"));
+		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE) ||
+				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE)) {
+			if(resultType == Object.class || resultType == entityType) {
+				answerInstruction.answer().cast(returnType, "query.getSingleResult()");
+			}
+			else {
+				body.append(new EzyInstruction("\t", "\n")
+						.variable(List.class, "result")
+							.equal()
+						.append("query.getResultList()"));
+				answerInstruction
+					.variable(Object.class, "answer")
+						.equal()
+					.append("this.databaseContext.deserializeResult(result,")
+						.clazz(resultType, true).append(")");
+				body.append(answerInstruction);
+				answerInstruction = new EzyInstruction("\t", "\n")
+						.answer().cast(returnType, "answer");
+			}
+		}
+		body.append(answerInstruction);
 		return body.function().toString();
 	}
 	

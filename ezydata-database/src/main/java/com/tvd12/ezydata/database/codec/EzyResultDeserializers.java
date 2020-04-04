@@ -4,4 +4,6 @@ public interface EzyResultDeserializers {
 
 	Object deserialize(Object result, Class<?> resultType); 
 	
+	EzyResultDeserializer getDeserializer(Class<?> resultType);
+	
 }

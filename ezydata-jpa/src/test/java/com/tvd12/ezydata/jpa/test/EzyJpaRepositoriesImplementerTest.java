@@ -1,7 +1,6 @@
 package com.tvd12.ezydata.jpa.test;
 
 import java.util.List;
-import java.util.Map;
 
 import org.testng.annotations.Test;
 
@@ -10,7 +9,6 @@ import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
-import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
 import com.tvd12.ezydata.jpa.test.entity.User;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
 
@@ -20,6 +18,9 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 	
 	protected EzyJpaRepositoriesImplementerTest() {
 		databaseContext = new EzyJpaDatabaseContextBuilder()
+				.repositoryInterfaces(Object.class)
+				.repositoryInterfaces(InterfaceA.class)
+				.repositoryInterfaces(UserXRepo.class)
 				.entityManagerFactory(ENTITY_MANAGER_FACTORY)
 				.build();
 	}
@@ -27,15 +28,10 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 	@Test
 	public void test() {
 		EzyAbstractRepositoryImplementer.setDebug(true);
-		EzyJpaRepositoriesImplementer implementer = new EzyJpaRepositoriesImplementer();
-		implementer.repositoryInterfaces(Object.class);
-		implementer.repositoryInterfaces(InterfaceA.class);
-		implementer.repositoryInterfaces(UserXRepo.class);
-		Map<Class<?>, Object> map = implementer.implement(databaseContext);
-		UserXRepo userRepo = (UserXRepo) map.get(UserXRepo.class); 
+		UserXRepo userRepo = (UserXRepo) databaseContext.getRepository(UserXRepo.class); 
 		System.out.println(userRepo.count());
 		System.out.println(userRepo.findByEmail("dzung@gmail.com"));
-		List<UserIdFullNameResult> list = userRepo.findIdAndFullName();
+		List<UserIdFullNameResult> list = userRepo.findListOfIdAndFullName();
 		System.out.println(list);
 	}
 	
@@ -48,8 +44,16 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 		@EzyQuery("select e from User e where e.email = ?0")
 		User findByEmail(String email);
 		
-		@EzyQuery(value = "select e.id, e.fullName from User e")
-		List<UserIdFullNameResult> findIdAndFullName();
+		@EzyQuery(
+				value = "select e.id, e.fullName from User e where e.email = ?0",
+				resultType = UserIdFullNameResult.class)
+		UserIdFullNameResult findByEmail2(String email);
+		
+		@EzyQuery(
+				value = "select e.id, e.fullName from User e",
+				resultType = UserIdFullNameResult.class
+		)
+		List<UserIdFullNameResult> findListOfIdAndFullName();
 		
 	}
 }

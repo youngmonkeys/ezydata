@@ -10,7 +10,10 @@ public interface EzyDatabaseRepository<I, E> extends
 		EzyEmptyRepository<I, E>, 
 		EzyCrudService<I, E> {
 	
-	String PREFIX_FIND = "find";
+	String PREFIX_FIND_ONE = "find";
+	String PREFIX_FIND_LIST = "findList";
+	String PREFIX_FETCH_ONE = "fetch";
+	String PREFIX_FETCH_LIST = "fetchList";
 	
 	@Deprecated
 	@Override

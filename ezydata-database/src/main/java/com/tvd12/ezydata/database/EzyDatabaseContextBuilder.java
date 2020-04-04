@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.codec.EzyBindResultDeserializer;
 import com.tvd12.ezydata.database.codec.EzyResultDeserializer;
@@ -19,6 +20,9 @@ import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.binding.impl.EzySimpleBindingContext;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.io.EzyStrings;
+import com.tvd12.ezyfox.reflect.EzyClass;
+import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
@@ -92,9 +96,10 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	public EzyDatabaseContext build() {
 		EzySimpleDatabaseContext context = newDatabaseContext();
 		context.setQueryManager(queryManager);
-		createResultDeserializers();
 		context.setDeserializers(resultDeserializers);
 		implementAutoImplRepositories(context);
+		registerQueries();
+		createResultDeserializers();
 		context.setRepositories((Map)repositories);
 		return context;
 	}
@@ -104,8 +109,11 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	private void createResultDeserializers() {
 		EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder();
 		Map<String, EzyQueryEntity> queries = queryManager.getQueries();
-		for(EzyQueryEntity query : queries.values())
-			bindResultType(bindingContextBuilder, query.getResultType());
+		for(EzyQueryEntity query : queries.values()) {
+			Class<?> resultType = query.getResultType();
+			if(resultType != Object.class)
+				bindResultType(bindingContextBuilder, query.getResultType());
+		}
 		EzySimpleBindingContext bindingContext = bindingContextBuilder.build();
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
 		for(EzyQueryEntity query : queries.values()) {
@@ -132,6 +140,39 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		for(EzyReflection reflection : reflections)
 			answer.repositoryInterfaces(reflection);
 		return answer;
+	}
+	
+	protected void registerQueries() {
+		registerQueriesFromRepoClasses();
+	}
+	
+	protected void registerQueriesFromRepoClasses() {
+		for(Class<?> repoClass : repositories.keySet()) {
+			EzyClass clazz = new EzyClass(repoClass);
+			List<EzyMethod> methods 
+				= clazz.getMethods(m -> m.isAnnotated(EzyQuery.class));
+			for(EzyMethod method : methods)
+				registerQuery(method);
+		}
+	}
+	
+	protected void registerQuery(EzyMethod method) {
+		EzyQuery queryAnno = method.getAnnotation(EzyQuery.class);
+		if(queryAnno == null)
+			return;
+		String queryValue = queryAnno.value();
+		if(EzyStrings.isNoContent(queryValue))
+			return;
+		String queryName = queryAnno.name();
+		if(EzyStrings.isNoContent(queryName))
+			queryName = method.toString();
+		EzyQueryEntity queryEntity = EzyQueryEntity.builder()
+				.name(queryName)
+				.value(queryValue)
+				.nativeQuery(queryAnno.nativeQuery())
+				.resultType(queryAnno.resultType())
+				.build();
+		queryManager.addQuery(queryEntity);
 	}
 	
 	protected abstract EzyAbstractRepositoriesImplementer newRepositoriesImplementer();
