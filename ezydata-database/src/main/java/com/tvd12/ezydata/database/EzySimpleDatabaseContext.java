@@ -19,10 +19,12 @@ public class EzySimpleDatabaseContext implements EzyDatabaseContext {
 
 	protected EzyQueryManager queryManager;
 	protected EzyResultDeserializers deserializers;
-	protected Map<Class, EzyDatabaseRepository> repositories;
+	protected Map<Class, Object> repositories;
+	protected Map<String, Object> repositoriesByName;
 	
 	protected EzySimpleDatabaseContext() {
 		this.repositories = new HashMap<>();
+		this.repositoriesByName = new HashMap<>();
 	}
 	
 	@Override
@@ -48,42 +50,65 @@ public class EzySimpleDatabaseContext implements EzyDatabaseContext {
 		}
 		return answer;
 	}
+	
+	@Override
+	public <T> T getRepository(String name) {
+		Object repo = repositoriesByName.get(name);
+		if(repo == null)
+			throw new IllegalArgumentException("has no repository with name: " + name);
+		return (T)repo;
+	}
 
 	@Override
-	public Map<Class, EzyDatabaseRepository> getRepositories() {
-		return repositories;
-	}
-	
-	public void setRepositories(Map<Class, EzyDatabaseRepository> repos) {
-		this.repositories.putAll(repos);
-	}
-	
-	@Override
 	public <T> T getRepository(Class<T> repoType) {
-		EzyDatabaseRepository repo = repositories.get(repoType);
+		Object repo = repositories.get(repoType);
 		if(repo == null)
 			throw new IllegalArgumentException("has no repository with type: " + repoType.getName());
 		return (T)repo;
 	}
 	
 	@Override
+	public Map<Class, Object> getRepositories() {
+		return new HashMap<>(repositories);
+	}
+	
+	@Override
+	public Map<String, Object> getRepositoriesByName() {
+		return new HashMap<>(repositoriesByName);
+	}
+	
+	public void setRepositories(Map<Class, Object> repos) {
+		for(Class repoType : repos.keySet()) {
+			Object repo = repos.get(repoType);
+			String repoName = EzyDatabaseRepositories.getRepoName(repoType);
+			repositories.put(repoType, repo);
+			repositoriesByName.put(repoName, repo);
+		}
+	}
+	
+	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("list of queries:");
 		Map<String, EzyQueryEntity> queries = queryManager.getQueries();
+		builder.append("list of queries:");
+		if(queries.isEmpty())
+			builder.append(" empty");
 		for(EzyQueryEntity query : queries.values()) {
 			builder.append("\n");
 			builder.append(query.getName()).append("=").append(query.getValue());
 		}
 		builder.append("\n\nlist of repositories:");
-		for(Class<?> repoType : repositories.keySet()) {
-			Object repo = repositories.get(repoType);
-			String repoName = EzyDatabaseRepositories.getRepoName(repoType);
+		if(repositoriesByName.isEmpty())
+			builder.append(" empty");
+		for(String repoName : repositoriesByName.keySet()) {
+			Object repo = repositoriesByName.get(repoName);
 			builder.append("\n");
 			builder.append(repoName).append("=").append(repo.getClass().getName());
 		}
-		builder.append("\n\nlist of result deserializers:");
 		Map<Class<?>, EzyResultDeserializer> resultDeserializers = deserializers.getDeserializers();
+		builder.append("\n\nlist of result deserializers:");
+		if(resultDeserializers.isEmpty())
+			builder.append(" empty");
 		for(Class<?> resultType : resultDeserializers.keySet()) {
 			builder.append("\n");
 			Object deserializer = resultDeserializers.get(resultType);

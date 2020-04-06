@@ -14,7 +14,7 @@ import lombok.Setter;
 public class Employee {
 
 	@Id
-	private int id;
+	private String employeeId;
 	private String firstName;
 	private String lastName;
 	
