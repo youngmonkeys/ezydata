@@ -14,6 +14,8 @@ public interface EzyDatabaseRepository<I, E> extends
 	String PREFIX_FIND_LIST = "findList";
 	String PREFIX_FETCH_ONE = "fetch";
 	String PREFIX_FETCH_LIST = "fetchList";
+	String PREFIX_UPDATE = "update";
+	String PREFIX_DELETE = "delete";
 	
 	@Deprecated
 	@Override

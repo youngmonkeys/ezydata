@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
@@ -46,13 +47,31 @@ public abstract class EzyJpaRepository<I,E>
 
 	@Override
 	public void save(E entity) {
-		entityManager.merge(entity);
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		try {
+			entityManager.merge(entity);
+			transaction.commit();
+		}
+		catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
 	}
 
 	@Override
 	public void save(Iterable<E> entities) {
-		for(E entity : entities)
-			entityManager.merge(entity);
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		try {
+			for(E entity : entities)
+				entityManager.merge(entity);
+			transaction.commit();
+		}
+		catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
 	}
 
 	@Override
@@ -159,7 +178,16 @@ public abstract class EzyJpaRepository<I,E>
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, id);
-		query.executeUpdate();
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		try {
+			query.executeUpdate();
+			transaction.commit();
+		}
+		catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
 	}
 
 	@Override
@@ -171,8 +199,17 @@ public abstract class EzyJpaRepository<I,E>
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, ids);
-		int deletedRows = query.executeUpdate();
-		return deletedRows;
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		try {
+			int deletedRows = query.executeUpdate();
+			transaction.commit();
+			return deletedRows;
+		}
+		catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
 	}
 	
 	@SuppressWarnings({ "rawtypes" })

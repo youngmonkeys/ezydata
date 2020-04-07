@@ -9,14 +9,18 @@ import com.tvd12.ezydata.database.codec.EzyResultDeserializer;
 import com.tvd12.ezydata.database.codec.EzyResultDeserializers;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryManager;
+import com.tvd12.ezydata.database.query.EzyQueryManagerFetcher;
 import com.tvd12.ezydata.database.util.EzyDatabaseRepositories;
 
+import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class EzySimpleDatabaseContext implements EzyDatabaseContext {
+public class EzySimpleDatabaseContext 
+		implements EzyDatabaseContext, EzyQueryManagerFetcher {
 
+	@Getter
 	protected EzyQueryManager queryManager;
 	protected EzyResultDeserializers deserializers;
 	protected Map<Class, Object> repositories;

@@ -5,9 +5,8 @@ import java.util.Map;
 
 import com.tvd12.ezyfox.util.EzyLoggable;
 
-public class EzySimpleQueryManager
-		extends EzyLoggable 
-		implements EzyQueryManager, EzyQueryRegister {
+public class EzySimpleQueryManager 
+		extends EzyLoggable implements EzyQueryRegister {
 
 	protected final Map<String, EzyQueryEntity> queries;
 	

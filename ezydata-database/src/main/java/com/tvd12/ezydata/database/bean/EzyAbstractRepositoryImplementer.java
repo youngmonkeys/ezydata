@@ -44,12 +44,15 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	
 	public Object implement(Object template) {
 		try {
+			this.preimplement(template);
 			return doimplement(template);
 		}
 		catch(Exception e) {
-			throw new IllegalStateException(e);
+			throw new IllegalStateException("error on repo interface: " + clazz.getName(), e);
 		}
 	}
+	
+	protected void preimplement(Object template) {}
 
 	protected Object doimplement(Object template) throws Exception {
 		Class[] idAndEntityTypes = getIdAndEntityTypes();
