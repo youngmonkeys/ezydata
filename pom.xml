@@ -70,5 +70,6 @@
     <module>ezydata-elasticsearch</module>
     <module>ezydata-jpa</module>
     <module>ezydata-database</module>
+    <module>ezydata-redis</module>
   </modules>
 </project>
