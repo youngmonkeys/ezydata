@@ -1,32 +1,32 @@
 package com.tvd12.ezydata.redis.factory;
 
+import com.tvd12.ezydata.redis.EzyRedisChannel;
 import com.tvd12.ezydata.redis.EzyRedisClient;
-import com.tvd12.ezydata.redis.EzyRedisMap;
-import com.tvd12.ezydata.redis.setting.EzyRedisMapSetting;
+import com.tvd12.ezydata.redis.setting.EzyRedisChannelSetting;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
 
-public class EzyRedisMapFactory {
+public class EzyRedisChannelFactory {
 
 	protected final EzyRedisSettings settings;
 	protected final EzyRedisClient redisClient;
 	protected final EzyEntityCodec entityCodec;
 	
-	protected EzyRedisMapFactory(Builder builder) {
+	protected EzyRedisChannelFactory(Builder builder) {
 		this.settings = builder.settings;
 		this.redisClient = builder.redisClient;
 		this.entityCodec = builder.entityCodec;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <K, V> EzyRedisMap<K, V> newMap(String name) {
-		EzyRedisMapSetting mapSetting = settings.getMapSeting(name);
-		if(mapSetting == null)
-			throw new IllegalArgumentException("has no setting for map: " + name);
-		return EzyRedisMap.builder()
-				.mapName(name)
-				.setting(mapSetting)
+	public <T> EzyRedisChannel<T> newChannel(String name) {
+		EzyRedisChannelSetting channelSetting = settings.getChannelSeting(name);
+		if(channelSetting == null)
+			throw new IllegalArgumentException("has no setting for channel: " + name);
+		return EzyRedisChannel.builder()
+				.channelName(name)
+				.setting(channelSetting)
 				.redisClient(redisClient)
 				.entityCodec(entityCodec)
 				.build();
@@ -36,7 +36,7 @@ public class EzyRedisMapFactory {
 		return new Builder();
 	}
 	
-	public static class Builder implements EzyBuilder<EzyRedisMapFactory> {
+	public static class Builder implements EzyBuilder<EzyRedisChannelFactory> {
 		
 		protected EzyRedisSettings settings;
 		protected EzyRedisClient redisClient;
@@ -58,8 +58,8 @@ public class EzyRedisMapFactory {
 		}
 		
 		@Override
-		public EzyRedisMapFactory build() {
-			return new EzyRedisMapFactory(this);
+		public EzyRedisChannelFactory build() {
+			return new EzyRedisChannelFactory(this);
 		}
 		
 	}
