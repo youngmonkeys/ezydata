@@ -40,13 +40,11 @@ public class EzyRedisChannel<T> {
 	}
 	
 	public Long publish(T message) {
-		System.out.println("publish: " + redisClient);
 		byte[] messageBytes = entityCodec.serialize(message);
 		return redisClient.publish(channelNameBytes, messageBytes);
 	}
 	
 	public void addSubscriber(Consumer<T> subscriber) {
-		System.out.println("addSubscriber: " + redisClient);
 		synchronized (this) {
 			if(!subscribed) {
 				this.subscribed = true;
