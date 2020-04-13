@@ -8,7 +8,7 @@ import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.morphia.EzyDataStoreBuilder;
-import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositories;
+import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoriesImplementer;
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyBeanContextBuilder;
 import com.tvd12.ezyfox.collect.Sets;
@@ -37,7 +37,7 @@ public class BaseMongoDBTest extends BaseTest {
 				.scan("com.tvd12.ezydata.morphia.testing.repo", "com.tvd12.ezydata.morphia.testing.service")
 				.scan(Sets.newHashSet("com.tvd12.ezydata.morphia.testing.service"));
 				
-		EzyRepositoriesImplementer implementer = EzyMorphiaRepositories.newRepositoriesImplementer()
+		EzyRepositoriesImplementer implementer = new EzyMorphiaRepositoriesImplementer()
 				.scan("com.tvd12.ezydata.morphia.testing.repo", "com.tvd12.ezydata.morphia.testing.repo1");
 		Map<Class<?>, Object> repos = implementer.implement(DATASTORE);
 		for(Class<?> key : repos.keySet()) {

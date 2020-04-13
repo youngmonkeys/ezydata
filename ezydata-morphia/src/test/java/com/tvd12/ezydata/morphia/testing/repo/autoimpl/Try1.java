@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.morphia.testing.repo.autoimpl;
 
-import com.tvd12.ezydata.morphia.impl.EzyMorphiaRepositoryImplementer;
+import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoryImplementer;
 import com.tvd12.ezydata.morphia.testing.BaseMongoDBTest;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 import com.tvd12.ezydata.morphia.testing.repo.CatRepo;

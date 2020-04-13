@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.jpa;
+package com.tvd12.ezydata.jpa.repository;
 
 import java.lang.reflect.Type;
 import java.util.Collection;
@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.jpa.EzyJpaDatabaseContext;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.util.EzyLoggable;

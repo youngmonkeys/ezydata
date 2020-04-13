@@ -5,7 +5,7 @@ import java.util.Map;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
-import com.tvd12.ezydata.morphia.impl.EzyMorphiaRepositoriesImplementer;
+import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoriesImplementer;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 
 public class EzySimpleRepositoriesImplementerTest extends BaseMongoDBTest {

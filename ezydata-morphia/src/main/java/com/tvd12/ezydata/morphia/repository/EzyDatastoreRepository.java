@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mongodb.WriteResult;
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
+import com.tvd12.ezydata.morphia.EzyMorphiaDatabaseContext;
 import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaFindAndModifyOptions;
 import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaUpdateOperations;
 import com.tvd12.ezyfox.bean.annotation.EzyAutoBind;
@@ -29,15 +32,22 @@ import lombok.Setter;
 
 public abstract class EzyDatastoreRepository<I, E> 
 		extends EzyLoggable
-		implements EzyMongoRepository<I, E>, EzyDatastoreAware {
+		implements EzyMongoRepository<I, E>, EzyDatastoreAware, EzyDatabaseContextAware {
 
 	@Setter
 	@EzyAutoBind
 	protected Datastore datastore;
 	protected final Class<E> entityType;
+	protected EzyMorphiaDatabaseContext databaseContext;
 	
 	public EzyDatastoreRepository() {
 		this.entityType = getEntityType();
+	}
+	
+	@Override
+	public void setDatabaseContext(EzyDatabaseContext context) {
+		this.databaseContext = (EzyMorphiaDatabaseContext)context;
+		this.datastore = databaseContext.getDatastore();
 	}
 	
 	@Override

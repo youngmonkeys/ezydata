@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.Query;
 
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
-import com.tvd12.ezydata.jpa.EzyJpaRepository;
+import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezydata.jpa.test.entity.User;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
 

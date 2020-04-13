@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.morphia.impl;
+package com.tvd12.ezydata.morphia.bean;
 
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
@@ -14,9 +14,10 @@ public class EzyMorphiaRepositoryImplementer extends EzyMongoRepositoryImplement
 
 	@Override
 	protected void setRepoComponent(Object repo, Object template) {
-		Datastore datastore = (Datastore)template;
-		EzyDatastoreAware datastoreAware = (EzyDatastoreAware)repo; 
-		datastoreAware.setDatastore(datastore);
+		if(template instanceof Datastore 
+				&& repo instanceof EzyDatastoreAware) {
+			((EzyDatastoreAware)repo).setDatastore((Datastore)template);
+		}
 	}
 	
 	@Override

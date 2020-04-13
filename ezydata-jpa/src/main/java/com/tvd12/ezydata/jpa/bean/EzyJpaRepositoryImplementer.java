@@ -6,14 +6,12 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import com.tvd12.ezydata.database.EzyDatabaseContext;
-import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.annotation.EzyTransactional;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
-import com.tvd12.ezydata.jpa.EzyJpaRepository;
+import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
@@ -148,13 +146,6 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 				.append("throw e"));
 		body.append(new EzyInstruction("\t", "\n", false)
 				.append("}"));
-	}
-	
-	@Override
-	protected void setRepoComponent(Object repo, Object template) {
-		EzyDatabaseContext databaseContext = (EzyDatabaseContext)template;
-		EzyDatabaseContextAware databaseContextAware = (EzyDatabaseContextAware)repo; 
-		databaseContextAware.setDatabaseContext(databaseContext);
 	}
 	
 	@Override

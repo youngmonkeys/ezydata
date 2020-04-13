@@ -2,7 +2,7 @@ package com.tvd12.ezydata.morphia.testing;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezydata.morphia.impl.EzyMorphiaRepositoryImplementer;
+import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoryImplementer;
 
 public class EzyRepositoryImplementerTest extends BaseMongoDBTest {
 

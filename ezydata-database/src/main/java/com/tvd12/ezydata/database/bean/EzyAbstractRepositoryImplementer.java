@@ -4,6 +4,8 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
@@ -76,11 +78,15 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		Class answerClass = implClass.toClass();
 		implClass.detach();
 		Object repo = answerClass.newInstance();
+		if(template instanceof EzyDatabaseContext 
+				&& repo instanceof EzyDatabaseContextAware) {
+			((EzyDatabaseContextAware)repo).setDatabaseContext((EzyDatabaseContext) template);
+		}
 		setRepoComponent(repo, template);
 		return repo;
 	}
 	
-	protected abstract void setRepoComponent(Object repo, Object template);
+	protected void setRepoComponent(Object repo, Object template) {}
 	
 	protected Collection<EzyMethod> getAbstractMethods() {
 		return clazz.getMethods(m -> m.isAnnotated(EzyQuery.class));

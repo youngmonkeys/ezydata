@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.morphia.impl;
+package com.tvd12.ezydata.morphia.bean;
 
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
 
