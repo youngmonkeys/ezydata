@@ -16,12 +16,14 @@ public class EzyQueryEntity {
 	protected boolean nativeQuery;
 	@Setter
 	protected Class<?> resultType;
+	protected final String storageName;
 	
 	protected EzyQueryEntity(Builder builder) {
 		this.name = builder.name;
 		this.value = builder.value;
-		this.nativeQuery = builder.nativeQuery;
 		this.resultType = builder.resultType;
+		this.storageName = builder.storageName;
+		this.nativeQuery = builder.nativeQuery;
 		if(EzyStrings.isNoContent(name))
 			throw new IllegalArgumentException("query name can't be null or empty");
 		if(EzyStrings.isNoContent(value))
@@ -57,6 +59,7 @@ public class EzyQueryEntity {
 		
 		protected String name;
 		protected String value;
+		protected String storageName;
 		protected boolean nativeQuery;
 		protected Class<?> resultType;
 		
@@ -67,6 +70,11 @@ public class EzyQueryEntity {
 		
 		public Builder value(String value) {
 			this.value = value;
+			return this;
+		}
+		
+		public Builder storageName(String storageName) {
+			this.storageName = storageName;
 			return this;
 		}
 		

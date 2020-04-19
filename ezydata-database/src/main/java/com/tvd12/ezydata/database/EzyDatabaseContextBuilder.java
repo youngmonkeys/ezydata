@@ -227,9 +227,14 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
 		for(Class<?> resultType : unknownDeserializerResultTypes) {
 			EzyResultDeserializer deserializer = 
-					new EzyBindResultDeserializer(resultType, unmarshaller);
+					newResultDeserializer(resultType, unmarshaller);
 			resultDeserializers.addDeserializer(resultType, deserializer);
 		}
+	}
+	
+	protected EzyResultDeserializer 
+			newResultDeserializer(Class<?> resultType, EzyUnmarshaller unmarshaller) {
+		return new EzyBindResultDeserializer(resultType, unmarshaller);
 	}
 	
 	protected void bindResultType(EzyBindingContextBuilder builder, Class<?> resultType) {
@@ -241,9 +246,12 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 			Object repo = EzyClasses.newInstance(repoClass);
 			if(repo instanceof EzyDatabaseContextAware)
 				((EzyDatabaseContextAware)repo).setDatabaseContext(context);
+			postCreateRepositoryFromClass(context, repo);
 			repositories.put(repoClass, repo);
 		}
 	}
+	
+	protected void postCreateRepositoryFromClass(EzyDatabaseContext context, Object repo) {}
 	
 	private void implementAutoImplRepositories(EzySimpleDatabaseContext context) {
 		EzyAbstractRepositoriesImplementer implementer = createRepositoriesImplementer();

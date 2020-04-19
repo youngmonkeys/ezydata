@@ -2,32 +2,29 @@ package com.tvd12.ezydata.mongodb.testing.bean;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
+import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
-import com.tvd12.test.base.BaseTest;
+import com.tvd12.ezydata.mongodb.testing.MongodbTest;
 
-public class EzySimpleRepositoryImplementerTest extends BaseTest {
+public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 
-	@Test(expectedExceptions = IllegalStateException.class)
+	@Test
 	public void test() {
-		ExEzySimpleRepositoryImplementer implementer = new ExEzySimpleRepositoryImplementer(PersonRepo.class);
-		implementer.implement(new MongoTemplate());
+		EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+				.mongoClient(mongoClient)
+				.databaseName(databaseName)
+				.scan("com.tvd12.ezydata.mongodb.testing.bean")
+				.build();
+		
+		EzyMongoRepositoryImplementer.setDebug(true);
+		EzyMongoRepositoryImplementer implementer = new EzyMongoRepositoryImplementer(PersonRepo.class);
+		PersonRepo repo = (PersonRepo) implementer.implement(databaseContext);
+		Person person = new Person();
+		person.setId(1);
+		person.setName("dzung");
+		repo.save(person);
 	}
 	
-	public static class ExEzySimpleRepositoryImplementer extends EzyMongoRepositoryImplementer {
-
-		public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
-			super(clazz);
-		}
-
-		@Override
-		protected void setRepoComponent(Object repo, Object template) {
-		}
-
-		@Override
-		protected Class<?> getSuperClass() {
-			throw new IllegalStateException("has no super class");
-		}
-		
-	}
 	
 }

@@ -7,14 +7,23 @@ import org.testng.annotations.Test;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
+import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
+import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
+import com.tvd12.ezydata.mongodb.testing.MongodbTest;
 import com.tvd12.ezyfox.collect.Sets;
-import com.tvd12.test.base.BaseTest;
 
-public class EzySimpleRepositoriesImplementerTest extends BaseTest {
+public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
 
 	@Test
 	public void test() {
+		EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+				.mongoClient(mongoClient)
+				.databaseName(databaseName)
+				.scan("com.tvd12.ezydata.mongodb.testing.bean")
+				.build();
+		
+		EzyMongoRepositoryImplementer.setDebug(true);
 		EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
 				.scan("com.tvd12.ezydata.mongodb.testing.bean")
 				.scan("com.tvd12.ezydata.mongodb.testing.bean", "com.tvd12.ezydata.mongodb.testing.bean")
@@ -25,13 +34,12 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 				.repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
 				.repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
 		
-		MongoTemplate template = new MongoTemplate();
-		Map<Class<?>, Object> repos = implementer.implement(template);
+		Map<Class<?>, Object> repos = implementer.implement(databaseContext);
 		System.out.println("repos: " + repos);
 		assert repos.size() == 2;
 		
 		implementer = new ExEzySimpleRepositoriesImplementer();
-		repos = implementer.implement(template);
+		repos = implementer.implement(databaseContext);
 		assert repos.isEmpty();
 	}
 	

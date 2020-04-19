@@ -1,12 +1,13 @@
 package com.tvd12.ezydata.morphia.bean;
 
-import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
+import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
+import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
 import com.tvd12.ezydata.morphia.repository.EzyDatastoreRepository;
 
 import dev.morphia.Datastore;
 
-public class EzyMorphiaRepositoryImplementer extends EzyMongoRepositoryImplementer {
+public class EzyMorphiaRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
 	public EzyMorphiaRepositoryImplementer(Class<?> clazz) {
 		super(clazz);
@@ -23,6 +24,11 @@ public class EzyMorphiaRepositoryImplementer extends EzyMongoRepositoryImplement
 	@Override
 	protected Class<?> getSuperClass() {
 		return EzyDatastoreRepository.class;
+	}
+	
+	@Override
+	protected Class<?> getBaseRepositoryInterface() {
+		return EzyMongoRepository.class;
 	}
 	
 }

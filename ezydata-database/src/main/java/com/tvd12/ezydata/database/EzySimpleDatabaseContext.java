@@ -97,6 +97,8 @@ public class EzySimpleDatabaseContext
 		builder.append("list of queries:");
 		if(queries.isEmpty())
 			builder.append(" empty");
+		else
+			builder.append(" ").append(queries.size());
 		for(EzyQueryEntity query : queries.values()) {
 			builder.append("\n");
 			builder.append(query.getName()).append("=").append(query.getValue());
@@ -104,6 +106,8 @@ public class EzySimpleDatabaseContext
 		builder.append("\n\nlist of repositories:");
 		if(repositoriesByName.isEmpty())
 			builder.append(" empty");
+		else
+			builder.append(" ").append(repositoriesByName.size());
 		for(String repoName : repositoriesByName.keySet()) {
 			Object repo = repositoriesByName.get(repoName);
 			builder.append("\n");
@@ -113,6 +117,8 @@ public class EzySimpleDatabaseContext
 		builder.append("\n\nlist of result deserializers:");
 		if(resultDeserializers.isEmpty())
 			builder.append(" empty");
+		else
+			builder.append(" ").append(resultDeserializers.size());
 		for(Class<?> resultType : resultDeserializers.keySet()) {
 			builder.append("\n");
 			Object deserializer = resultDeserializers.get(resultType);

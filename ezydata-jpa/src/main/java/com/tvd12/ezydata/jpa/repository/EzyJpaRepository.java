@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.jpa.EzyEntityManagerAware;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContext;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
@@ -19,7 +20,7 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 @SuppressWarnings("unchecked")
 public abstract class EzyJpaRepository<I,E> 
 		extends EzyLoggable
-		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware {
+		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware, EzyEntityManagerAware {
 
 	protected final Class<E> entityType;
 	protected EntityManager entityManager;
@@ -30,9 +31,17 @@ public abstract class EzyJpaRepository<I,E>
 	}
 	
 	@Override
+	public void setEntityManager(EntityManager entityManager) {
+		if(this.entityManager == null)
+			this.entityManager = entityManager;
+		else if(this.entityManager != entityManager)
+			throw new IllegalStateException("set entityManager twice");
+	}
+	
+	@Override
 	public void setDatabaseContext(EzyDatabaseContext context) {
 		this.databaseContext = (EzyJpaDatabaseContext)context;
-		this.entityManager = databaseContext.getEntityManager();
+		this.setEntityManager(databaseContext.getEntityManager());
 	}
 	
 	@Override

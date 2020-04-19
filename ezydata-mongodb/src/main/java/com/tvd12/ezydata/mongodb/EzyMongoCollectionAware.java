@@ -1,11 +1,10 @@
 package com.tvd12.ezydata.mongodb;
 
-import org.bson.Document;
-
 import com.mongodb.client.MongoCollection;
 
+@SuppressWarnings("rawtypes")
 public interface EzyMongoCollectionAware {
 
-	void setCollection(MongoCollection<Document> collection);
+	void setCollection(MongoCollection collection);
 	
 }

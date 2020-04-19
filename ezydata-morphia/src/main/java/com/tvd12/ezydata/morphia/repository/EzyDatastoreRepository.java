@@ -7,7 +7,7 @@ import java.util.List;
 import com.mongodb.WriteResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
-import com.tvd12.ezydata.mongodb.EzyMongoRepository;
+import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
 import com.tvd12.ezydata.morphia.EzyMorphiaDatabaseContext;
 import com.tvd12.ezydata.morphia.query.impl.EzyMorphiaFindAndModifyOptions;
@@ -28,13 +28,11 @@ import dev.morphia.query.FindOptions;
 import dev.morphia.query.Query;
 import dev.morphia.query.UpdateOperations;
 import dev.morphia.query.internal.MorphiaCursor;
-import lombok.Setter;
 
 public abstract class EzyDatastoreRepository<I, E> 
 		extends EzyLoggable
-		implements EzyMongoRepository<I, E>, EzyDatastoreAware, EzyDatabaseContextAware {
+		implements EzyDatabaseRepository<I, E>, EzyDatastoreAware, EzyDatabaseContextAware {
 
-	@Setter
 	@EzyAutoBind
 	protected Datastore datastore;
 	protected final Class<E> entityType;
@@ -45,9 +43,17 @@ public abstract class EzyDatastoreRepository<I, E>
 	}
 	
 	@Override
+	public void setDatastore(Datastore datastore) {
+		if(this.datastore == null)
+			this.datastore = datastore;
+		else if(this.datastore != datastore)
+			throw new IllegalStateException("set datastore twice");
+	}
+	
+	@Override
 	public void setDatabaseContext(EzyDatabaseContext context) {
 		this.databaseContext = (EzyMorphiaDatabaseContext)context;
-		this.datastore = databaseContext.getDatastore();
+		this.setDatastore(databaseContext.getDatastore());
 	}
 	
 	@Override
