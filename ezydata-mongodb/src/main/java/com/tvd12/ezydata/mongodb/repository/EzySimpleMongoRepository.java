@@ -9,16 +9,25 @@ import java.util.List;
 
 import org.bson.BsonArray;
 import org.bson.BsonDocument;
+import org.bson.BsonNull;
 import org.bson.BsonValue;
 
+import com.mongodb.bulk.BulkWriteResult;
+import com.mongodb.bulk.BulkWriteUpsert;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.InsertOneModel;
+import com.mongodb.client.model.ReplaceOneModel;
+import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.DeleteResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
+import com.tvd12.ezydata.database.query.EzyQLQuery;
+import com.tvd12.ezydata.database.reflect.EzyObjectProxy;
 import com.tvd12.ezydata.mongodb.EzyMongoCollectionAware;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
+import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -28,12 +37,15 @@ public class EzySimpleMongoRepository<I,E>
 		extends EzyLoggable
 		implements EzyMongoRepository<I, E>, EzyDatabaseContextAware, EzyMongoCollectionAware {
 
+	protected Class<I> idType;
 	protected final Class<E> entityType;
 	protected final String collectionName;
+	protected EzyObjectProxy objectProxy;
 	protected MongoCollection<BsonDocument> collection;
 	protected EzyMongoDatabaseContext databaseContext;
 	
 	public EzySimpleMongoRepository() {
+		this.idType = getIdType();
 		this.entityType = getEntityType();
 		this.collectionName = getCollectionName(entityType);
 	}
@@ -41,6 +53,8 @@ public class EzySimpleMongoRepository<I,E>
 	public void setDatabaseContext(EzyDatabaseContext databaseContext) {
 		this.databaseContext = (EzyMongoDatabaseContext) databaseContext;
 		this.collection = this.databaseContext.getCollection(collectionName, BsonDocument.class);
+		this.objectProxy = this.databaseContext.getObjectProxy(entityType);
+		this.idType = (Class<I>) objectProxy.getPropertyType("_id");
 	}
 	
 	@Override
@@ -57,18 +71,48 @@ public class EzySimpleMongoRepository<I,E>
 	@Override
 	public void save(E entity) {
 		BsonDocument document = entityToBsonDocument(entity);
-		collection.insertOne(document);
-//		BsonValue resultId = document.get("_id");
+		BsonValue id = document.get("_id");
+		if(id == BsonNull.VALUE) {
+			document.remove("_id");
+			collection.insertOne(document);
+			BsonValue resultId = document.get("_id");
+			Object idValue = bsonValueToData(resultId, idType);
+			objectProxy.setProperty(entity, "_id", idValue);
+		}
+		else {
+			BsonDocument filter = new BsonDocument("_id", id);
+			ReplaceOptions opts = new ReplaceOptions().upsert(true);
+			collection.replaceOne(filter, document, opts);
+		}
 	}
 
 	@Override
 	public void save(Iterable<E> entities) {
-		List<BsonDocument> documents = new ArrayList<>();
-		for(E entity : entities)
-			documents.add(entityToBsonDocument(entity));
-		collection.insertMany(documents);
+		List<E> entityList = iterableToList(entities);
+		List request = new ArrayList<>();
+		for(E entity : entityList) {
+			BsonDocument document = entityToBsonDocument(entity);
+			BsonValue id = document.get("_id");
+			if(id == BsonNull.VALUE) {
+				document.remove("_id");
+				request.add(new InsertOneModel<>(document));
+			}
+			else {
+				BsonDocument filter = new BsonDocument("_id", id);
+				ReplaceOptions opts = new ReplaceOptions().upsert(true);
+				request.add(new ReplaceOneModel<>(filter, document, opts));
+			}
+		}
+		BulkWriteResult result = collection.bulkWrite(request);
+		List<BulkWriteUpsert> upserts = result.getUpserts();
+		for(BulkWriteUpsert upsert : upserts) {
+			BsonValue id = upsert.getId();
+			Object idValue = bsonValueToData(id, idType);
+			E entity = entityList.get(upsert.getIndex());
+			objectProxy.setProperty(entity, "_id", idValue);
+		}
 	}
-
+	
 	@Override
 	public E findById(I id) {
 		BsonDocument filter = new BsonDocument();
@@ -175,19 +219,23 @@ public class EzySimpleMongoRepository<I,E>
 		return (int)result.getDeletedCount();
 	}
 	
-	protected E findOneWithQuery(String query) {
+	protected E findOneWithQuery(EzyQLQuery query) {
 		return null;
 	}
 	
-	protected List<E> findListWithQuery(String query) {
+	protected List<E> findListWithQuery(EzyQLQuery query) {
 		return null;
 	}
 	
-	protected int updateWithQuery(String query) {
+	protected List<E> fetchWithQuery(EzyQLQuery query) {
+		return null;
+	}
+	
+	protected int updateWithQuery(EzyQLQuery query) {
 		return 0;
 	}
 	
-	protected int deleteWithQuery(String query) {
+	protected int deleteWithQuery(EzyQLQuery query) {
 		return 0;
 	}
 	
@@ -195,15 +243,41 @@ public class EzySimpleMongoRepository<I,E>
 		return databaseContext.dataToBsonValue(data);
 	}
 	
+	protected <T> T bsonValueToData(BsonValue value, Class<T> dataType) {
+		return databaseContext.bsonValueToData(value, dataType);
+	}
+	
 	protected BsonDocument entityToBsonDocument(Object entity) {
-		return dataToBsonValue(entity);
+		BsonDocument document = dataToBsonValue(entity);
+		String idProperty = objectProxy.getPropertyName("_id");
+		document.put("_id", document.get(idProperty));
+		if(!idProperty.equals("_d"))
+			document.remove(idProperty);
+		return document;
 	}
 	
 	protected E bsonDocumentToEntity(BsonDocument document) {
 		return databaseContext.bsonValueToData(document, entityType);
 	}
 	
-	protected Class<E> getEntityType() {
+	private List iterableToList(Iterable<E> iterable) {
+		if(iterable instanceof List)
+			return (List)iterable;
+		return Lists.newArrayList(iterable);
+	}
+	
+	protected Class getIdType() {
+		try {
+			Type genericSuperclass = getClass().getGenericSuperclass();
+			Class[] genericArgs = EzyGenerics.getTwoGenericClassArguments(genericSuperclass);
+			return genericArgs[0];
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
+	
+	protected Class getEntityType() {
 		try {
 			Type genericSuperclass = getClass().getGenericSuperclass();
 			Class[] genericArgs = EzyGenerics.getTwoGenericClassArguments(genericSuperclass);

@@ -146,7 +146,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	
 	protected void printMethodContent(String methodContent) {
 		if(debug) 
-			logger.info("reader: method content \n{}", methodContent);
+			logger.info("method content \n{}", methodContent);
 	}
 	
 }

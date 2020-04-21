@@ -39,6 +39,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	protected List<EzyReflection> reflections;
 	protected Map<Class<?>, Object> repositories;
 	protected EzySimpleQueryManager queryManager;
+	protected EzyBindingContextBuilder bindingContextBuilder;
 	protected EzySimpleResultDeserializers resultDeserializers;
 	
 	public EzyDatabaseContextBuilder() {
@@ -128,6 +129,11 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		return (B)this;
 	}
 	
+	public B bindingContextBuilder(EzyBindingContextBuilder bindingContextBuilder) {
+		this.bindingContextBuilder = bindingContextBuilder;
+		return (B)this;
+	}
+	
 	public B addResultDeserializer(Class<?> resultType, EzyResultDeserializer deserializer) {
 		this.queryResultClasses.add(resultType);
 		this.resultDeserializers.addDeserializer(resultType, deserializer);
@@ -146,6 +152,10 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	public EzyDatabaseContext build() {
 		if(packagesToScan.size() > 0)
 			reflections.add(new EzyReflectionProxy(packagesToScan));
+		if(bindingContextBuilder == null)
+			bindingContextBuilder = EzyBindingContext.builder();
+		for(EzyReflection reflection : reflections)
+			bindingContextBuilder.addAllClasses(reflection);
 		preBuild();
 		scanAndAddQueries();
 		scanAndAddResultTypes();
@@ -207,7 +217,6 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	private void createResultDeserializers() {
-		EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder();
 		Map<String, EzyQueryEntity> queries = queryManager.getQueries();
 		for(EzyQueryEntity query : queries.values()) {
 			Class<?> resultType = query.getResultType();
@@ -238,7 +247,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	protected void bindResultType(EzyBindingContextBuilder builder, Class<?> resultType) {
-		builder.addArrayBindingClass(resultType);
+		builder.addClass(resultType);
 	}
 	
 	protected void addRepositoriesFromClasses(EzyDatabaseContext context) {

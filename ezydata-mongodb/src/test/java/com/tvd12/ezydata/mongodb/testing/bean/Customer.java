@@ -2,19 +2,19 @@ package com.tvd12.ezydata.mongodb.testing.bean;
 
 import com.tvd12.ezydata.database.annotation.EzyCollection;
 import com.tvd12.ezyfox.annotation.EzyId;
-import com.tvd12.ezyfox.binding.annotation.EzyValue;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
-@EzyCollection("test_mongo_bean_person")
-public class Person {
+@ToString
+@EzyCollection("test_mongo_bean_customer")
+public class Customer {
 
 	@EzyId
-	private Integer id;
-	@EzyValue("personName")
+	private String id;
 	private String name;
 	
 }

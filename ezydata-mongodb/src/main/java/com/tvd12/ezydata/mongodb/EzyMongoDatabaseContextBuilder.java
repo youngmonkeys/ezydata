@@ -13,7 +13,6 @@ import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
-import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
@@ -61,8 +60,9 @@ public class EzyMongoDatabaseContextBuilder
 	
 	@Override
 	protected EzySimpleDatabaseContext newDatabaseContext() {
-		EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder()
-				.addClasses(entityClasses);
+		if(bindingContextBuilder == null)
+			bindingContextBuilder = EzyBindingContext.builder();
+		bindingContextBuilder.addClasses(entityClasses);
 		for(EzyReflection reflection : reflections)
 			bindingContextBuilder.addAllClasses(reflection);
 		EzyBindingContext bindingContext = bindingContextBuilder.build();

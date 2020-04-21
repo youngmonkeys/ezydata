@@ -6,7 +6,10 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
+import com.tvd12.ezydata.database.reflect.EzyObjectProxy;
+import com.tvd12.ezydata.database.reflect.EzyObjectProxyProvider;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
+import com.tvd12.ezydata.mongodb.reflect.EzyMongoObjectProxyProvider;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 
@@ -25,6 +28,11 @@ public class EzySimpleMongoDatabaseContext
 	protected EzyMarshaller marshaller;
 	protected EzyUnmarshaller unmarshaller; 
 	protected EzyMongoDataConverter dataConverter;
+	protected EzyObjectProxyProvider objectProxyProvider;
+	
+	public EzySimpleMongoDatabaseContext() {
+		this.objectProxyProvider = new EzyMongoObjectProxyProvider();
+	}
 	
 	@Override
 	public void close() {
@@ -45,7 +53,13 @@ public class EzySimpleMongoDatabaseContext
 
 	@Override
 	public <T extends BsonValue> T dataToBsonValue(Object data) {
-		return dataConverter.dataToBsonValue(marshaller.marshal(data));
+		Object mdata = marshaller.marshal(data);
+		return dataConverter.dataToBsonValue(mdata);
+	}
+	
+	@Override
+	public EzyObjectProxy getObjectProxy(Class<?> objectType) {
+		return objectProxyProvider.getObjectProxy(objectType);
 	}
 	
 }

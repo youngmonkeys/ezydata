@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import org.bson.BsonArray;
+import org.bson.BsonBinary;
 import org.bson.BsonBoolean;
 import org.bson.BsonDocument;
 import org.bson.BsonDouble;
@@ -38,50 +39,50 @@ public class EzyMongoDataToBsonValue  {
 		this.converters.put(dataType, converter);
 	}
 	
-	public BsonValue convert(Object value) {
-		if(value == null)
-			return new BsonNull();
-		if(value instanceof BsonValue)
-			return (BsonValue) value;
-		Class<?> valueType = value.getClass();
+	public BsonValue convert(Object data) {
+		if(data == null)
+			return BsonNull.VALUE;
+		if(data instanceof BsonValue)
+			return (BsonValue) data;
+		Class<?> valueType = data.getClass();
 		Function<Object, BsonValue> converter = converters.get(valueType);
 		if(converter != null)
-			return converter.apply(value);
-		if(value instanceof Iterable) {
+			return converter.apply(data);
+		if(data instanceof Iterable) {
 			BsonArray array = new BsonArray();
-			for(Object item : (Iterable)value)
+			for(Object item : (Iterable)data)
 				array.add(convert(item));
 			return array;
 		}
-		if(value instanceof Map) {
-			Map map = (Map)value;
+		if(data instanceof Map) {
+			Map map = (Map)data;
 			BsonDocument document = new BsonDocument();
 			for(Object k : map.keySet())
 				putKeyValue(document, k, map.get(k));
 			return document;
 		}
-		if(value instanceof EzyArray) {
-			EzyArray coll = (EzyArray)value;
+		if(data instanceof EzyArray) {
+			EzyArray coll = (EzyArray)data;
 			BsonArray array = new BsonArray();
 			for(int i = 0 ; i < coll.size() ; ++i)
 				array.add(convert(coll.get(i)));
 			return array;
 		}
-		if(value instanceof EzyObject) {
-			EzyObject obj = (EzyObject)value;
+		if(data instanceof EzyObject) {
+			EzyObject obj = (EzyObject)data;
 			BsonDocument document = new BsonDocument();
 			for(Object k : obj.keySet())
 				putKeyValue(document, k, obj.get(k));
 			return document;
 		}
-		if(value instanceof Object[]) {
+		if(data instanceof Object[]) {
 			BsonArray array = new BsonArray();
-			for(Object item : (Object[])value)
+			for(Object item : (Object[])data)
 				array.add(convert(item));
 			return array;
 		}
 		if(valueType.isEnum())
-			return new BsonString(value.toString());
+			return new BsonString(data.toString());
 		throw new IllegalArgumentException("has no converter for: " + valueType.getName());
 	}
 	
@@ -128,7 +129,7 @@ public class EzyMongoDataToBsonValue  {
 			return array;
 				
 		});
-		map.put(byte[].class, v -> new BsonString(new String((byte[])v)));
+		map.put(byte[].class, v -> new BsonBinary((byte[])v));
 		map.put(char[].class, v -> new BsonString(new String((char[])v)));
 		map.put(double[].class, v -> {
 			BsonArray array = new BsonArray();
