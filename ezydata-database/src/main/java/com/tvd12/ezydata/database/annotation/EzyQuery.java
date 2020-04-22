@@ -13,6 +13,7 @@ public @interface EzyQuery {
 
 	String name() default "";
 	String value() default "";
+	String type() default "";
 	boolean nativeQuery() default false;
 	Class<?> resultType() default Object.class;
 	

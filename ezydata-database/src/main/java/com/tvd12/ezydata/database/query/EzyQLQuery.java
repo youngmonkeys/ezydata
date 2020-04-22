@@ -11,6 +11,8 @@ import lombok.Getter;
 public class EzyQLQuery {
 
 	@Getter
+	protected final String type;
+	@Getter
 	protected final String query;
 	@Getter
 	protected final String value;
@@ -18,15 +20,16 @@ public class EzyQLQuery {
 	protected final Function<Object, Object> parameterConveter;
 	protected final static Object[] EMPTY_ARRAY = new Object[0];
 	
-	public EzyQLQuery(
-			String query,
-			Object[] parameters, 
-			Function<Object, Object> parameterConveter) {
-		this.query = query;
-		this.parameterConveter = parameterConveter;
-		this.parameters = parameters != null ? parameters : EMPTY_ARRAY;
+	protected EzyQLQuery(Builder builder) {
+		this.type = builder.type;
+		this.query = builder.query;
+		this.parameterConveter = builder.parameterConveter;
+		this.parameters = builder.parameters != null ? builder.parameters : EMPTY_ARRAY;
+		this.init(builder);
 		this.value = createValue();
 	}
+	
+	protected void init(Builder builder) {}
 	
 	public int getPrameterCount() {
 		return parameters.length;
@@ -77,10 +80,10 @@ public class EzyQLQuery {
 		Object value = parameter;
 		if(parameterConveter != null)
 			value = parameterConveter.apply(parameter);
-		if(value == null)
-			return null;
-		if(value instanceof String)
-			return "'" + value + "'";
+		return parseParameterValue(value);
+	}
+	
+	protected String parseParameterValue(Object value) {
 		return String.valueOf(value);
 	}
 	
@@ -98,9 +101,15 @@ public class EzyQLQuery {
 	
 	public static class Builder implements EzyBuilder<EzyQLQuery> {
 		
+		protected String type;
 		protected String query;
 		protected Object[] parameters;
 		protected Function<Object, Object> parameterConveter;
+		
+		public Builder type(String type) {
+			this.type = type;
+			return this;
+		}
 		
 		public Builder query(String query) {
 			this.query = query;
@@ -120,9 +129,41 @@ public class EzyQLQuery {
 			return this;
 		}
 		
+		public Builder parameter(int index, boolean value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, byte value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, char value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, double value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, float value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, int value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, long value) {
+			return parameter(index, (Object)value);
+		}
+		
+		public Builder parameter(int index, short value) {
+			return parameter(index, (Object)value);
+		}
+		
 		public Builder parameter(int index, Object value) {
 			parameterCount(index + 1);
-			parameters[index] = 1;
+			parameters[index] = value;
 			return this;
 		}
 		
@@ -133,7 +174,7 @@ public class EzyQLQuery {
 		
 		@Override
 		public EzyQLQuery build() {
-			return new EzyQLQuery(query, parameters, parameterConveter);
+			return new EzyQLQuery(this);
 		}
 		
 	}

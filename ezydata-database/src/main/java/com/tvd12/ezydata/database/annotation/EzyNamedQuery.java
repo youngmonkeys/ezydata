@@ -13,6 +13,7 @@ public @interface EzyNamedQuery {
 
 	String name() default "";
 	String value() default "";
+	String type() default "";
 	String storageName() default "";
 	boolean nativeQuery() default false;
 }

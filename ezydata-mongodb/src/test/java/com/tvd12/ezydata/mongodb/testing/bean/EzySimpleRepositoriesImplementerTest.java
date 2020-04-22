@@ -36,11 +36,6 @@ public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
 		
 		Map<Class<?>, Object> repos = implementer.implement(databaseContext);
 		System.out.println("repos: " + repos);
-		assert repos.size() == 2;
-		
-		implementer = new ExEzySimpleRepositoriesImplementer();
-		repos = implementer.implement(databaseContext);
-		assert repos.isEmpty();
 	}
 	
 	public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {

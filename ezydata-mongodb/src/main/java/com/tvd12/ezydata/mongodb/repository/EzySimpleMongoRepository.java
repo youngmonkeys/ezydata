@@ -11,15 +11,18 @@ import org.bson.BsonArray;
 import org.bson.BsonDocument;
 import org.bson.BsonNull;
 import org.bson.BsonValue;
+import org.bson.conversions.Bson;
 
 import com.mongodb.bulk.BulkWriteResult;
 import com.mongodb.bulk.BulkWriteUpsert;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.mongodb.client.model.ReplaceOptions;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
@@ -219,8 +222,9 @@ public class EzySimpleMongoRepository<I,E>
 		return (int)result.getDeletedCount();
 	}
 	
-	public E findOneWithQuery(EzyQLQuery query) {
+	protected E findOneWithQuery(EzyQLQuery query) {
 		String queryString = query.getValue();
+		logger.debug("find one with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
 		BsonDocument filter = queryDocument;
 		if(queryDocument.containsKey("$query"))
@@ -232,6 +236,7 @@ public class EzySimpleMongoRepository<I,E>
 	
 	protected List<E> findListWithQuery(EzyQLQuery query) {
 		String queryString = query.getValue();
+		logger.debug("find list with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
 		BsonDocument filter = queryDocument;
 		if(queryDocument.containsKey("$query"))
@@ -252,19 +257,57 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	protected <R> R fetchOneWithQuery(EzyQLQuery query, Class<R> resultType) {
-		return null;
+		String queryString = query.getValue();
+		logger.debug("fetch one with query: {}", queryString);
+		List pipeline = BsonArray.parse(queryString); 
+		AggregateIterable<BsonDocument> aggregate = collection.aggregate(pipeline);
+		BsonDocument result = aggregate.first();
+		if(result == null)
+			return null;
+		R answer = bsonValueToData(result, resultType);
+		return answer;
 	}
 	
 	protected <R> List<R> fetchListWithQuery(EzyQLQuery query, Class<R> resultType) {
-		return null;
+		String queryString = query.getValue();
+		logger.debug("fetch list with query: {}", queryString);
+		List pipeline = BsonArray.parse(queryString); 
+		AggregateIterable<BsonDocument> aggregate = collection.aggregate(pipeline);
+		List<R> answer = new ArrayList<>();
+		for(BsonDocument item : aggregate)
+			answer.add(bsonValueToData(item, resultType));
+		return answer;
 	}
 	
 	protected int updateWithQuery(EzyQLQuery query) {
-		return 0;
+		String queryString = query.getValue();
+		logger.debug("update with query: {}", queryString);
+		BsonDocument queryDocument = BsonDocument.parse(queryString);
+		BsonDocument filter = queryDocument;
+		if(queryDocument.containsKey("$query"))
+			filter = queryDocument.getDocument("$query");
+		BsonValue update = null;
+		if(queryDocument.containsKey("$update"))
+			update = queryDocument.get("$update");
+		if(update == null)
+			throw new IllegalArgumentException("missing $update information");
+		UpdateResult result = collection.updateMany(filter, (Bson)update);
+		return (int)result.getModifiedCount();
 	}
 	
 	protected int deleteWithQuery(EzyQLQuery query) {
-		return 0;
+		String queryString = query.getValue();
+		logger.debug("delete with query: {}", queryString);
+		BsonDocument queryDocument = BsonDocument.parse(queryString);
+		BsonDocument filter = queryDocument;
+		if(queryDocument.containsKey("$query"))
+			filter = queryDocument.getDocument("$query");
+		DeleteResult result = collection.deleteMany(filter);
+		return (int) result.getDeletedCount();
+	}
+	
+	protected EzyQLQuery.Builder newQueryBuilder() {
+		return databaseContext.newQueryBuilder();
 	}
 	
 	protected <T extends BsonValue> T dataToBsonValue(Object data) {
@@ -286,6 +329,8 @@ public class EzySimpleMongoRepository<I,E>
 	
 	protected E bsonDocumentToEntity(BsonDocument document) {
 		E entity = databaseContext.bsonValueToData(document, entityType);
+		if(entity == null)
+			return null;
 		BsonValue documentId = document.get("_id");
 		Object idValue = bsonValueToData(documentId, idType);
 		objectProxy.setProperty(entity, "_id", idValue);

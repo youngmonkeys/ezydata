@@ -6,9 +6,11 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
+import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.database.reflect.EzyObjectProxy;
 import com.tvd12.ezydata.database.reflect.EzyObjectProxyProvider;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
+import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
 import com.tvd12.ezydata.mongodb.reflect.EzyMongoObjectProxyProvider;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
@@ -26,7 +28,8 @@ public class EzySimpleMongoDatabaseContext
 	@Getter
 	protected MongoDatabase database;
 	protected EzyMarshaller marshaller;
-	protected EzyUnmarshaller unmarshaller; 
+	protected EzyUnmarshaller unmarshaller;
+	protected EzyMongoQueryFactory queryFactory;
 	protected EzyMongoDataConverter dataConverter;
 	protected EzyObjectProxyProvider objectProxyProvider;
 	
@@ -44,6 +47,16 @@ public class EzySimpleMongoDatabaseContext
 			getCollection(String name, Class<T> documentType) {
 		return database.getCollection(name, documentType);
 	}
+	
+	@Override
+	public EzyQLQuery.Builder newQueryBuilder() {
+		return queryFactory.newQueryBuilder();
+	}
+	
+	@Override
+	public EzyObjectProxy getObjectProxy(Class<?> objectType) {
+		return objectProxyProvider.getObjectProxy(objectType);
+	}
 
 	@Override
 	public <T> T bsonValueToData(BsonValue value, Class<T> dataType) {
@@ -55,11 +68,6 @@ public class EzySimpleMongoDatabaseContext
 	public <T extends BsonValue> T dataToBsonValue(Object data) {
 		Object mdata = marshaller.marshal(data);
 		return dataConverter.dataToBsonValue(mdata);
-	}
-	
-	@Override
-	public EzyObjectProxy getObjectProxy(Class<?> objectType) {
-		return objectProxyProvider.getObjectProxy(objectType);
 	}
 	
 }

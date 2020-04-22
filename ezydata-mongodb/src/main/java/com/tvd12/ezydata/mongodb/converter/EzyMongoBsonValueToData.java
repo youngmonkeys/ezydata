@@ -13,7 +13,6 @@ import org.bson.BsonDocument;
 import org.bson.BsonDouble;
 import org.bson.BsonInt32;
 import org.bson.BsonInt64;
-import org.bson.BsonNull;
 import org.bson.BsonObjectId;
 import org.bson.BsonRegularExpression;
 import org.bson.BsonString;
@@ -40,7 +39,7 @@ public class EzyMongoBsonValueToData  {
 	
 	public Object convert(BsonValue value) {
 		if(value == null)
-			return new BsonNull();
+			return null;
 		BsonType type = value.getBsonType();
 		Function<BsonValue, Object> converter = converters.get(type);
 		if(converter != null)

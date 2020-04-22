@@ -8,10 +8,17 @@ public class EzyMongoDataConverter {
 	
 	protected final EzyMongoDataToBsonValue dataToBsonValue;
 	protected final EzyMongoBsonValueToData bsonValueToData;
+	protected final EzyMongoBsonValueToString bsonValueToString;
 
 	protected EzyMongoDataConverter(Builder builder) {
 		this.dataToBsonValue = builder.dataToBsonValue;
 		this.bsonValueToData = builder.bsonValueToData;
+		this.bsonValueToString = builder.bsonValueToString;
+	}
+	
+	public String bsonValueToString(BsonValue value) {
+		String str = bsonValueToString.convert(value);
+		return str;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -34,6 +41,7 @@ public class EzyMongoDataConverter {
 		
 		protected EzyMongoDataToBsonValue dataToBsonValue;
 		protected EzyMongoBsonValueToData bsonValueToData;
+		protected EzyMongoBsonValueToString bsonValueToString;
 		
 		public Builder dataToBsonValue(EzyMongoDataToBsonValue dataToBsonValue) {
 			this.dataToBsonValue = dataToBsonValue;
@@ -45,8 +53,15 @@ public class EzyMongoDataConverter {
 			return this;
 		}
 		
+		public Builder bsonValueToString(EzyMongoBsonValueToString bsonValueToString) {
+			this.bsonValueToString = bsonValueToString;
+			return this;
+		}
+		
 		@Override
 		public EzyMongoDataConverter build() {
+			if(bsonValueToString == null)
+				bsonValueToString = new EzyMongoBsonValueToString();
 			if(dataToBsonValue == null)
 				dataToBsonValue = new EzyMongoDataToBsonValue();
 			if(bsonValueToData == null)

@@ -8,23 +8,22 @@ public class EzyQLQueryFactory {
 
 	protected final Function<Object, Object> parameterConveter;
 	
-	public EzyQLQueryFactory() {
-		this(null);
-	}
-	
-	public EzyQLQueryFactory(Function<Object, Object> parameterConveter) {
-		this.parameterConveter = parameterConveter;
+	protected EzyQLQueryFactory(Builder builder) {
+		this.parameterConveter = builder.parameterConveter;
 	}
 	
 	public EzyQLQuery.Builder newQueryBuilder() {
-		return EzyQLQuery.builder()
+		return newEmptyQueryBuilder()
 				.parameterConveter(parameterConveter);
 	}
 	
+	protected EzyQLQuery.Builder newEmptyQueryBuilder() {
+		return EzyQLQuery.builder();
+	}
+	
 	public EzyQLQuery.Builder newQueryBuilder(int parameterCount) {
-		return EzyQLQuery.builder()
-				.parameterCount(parameterCount)
-				.parameterConveter(parameterConveter);
+		return newQueryBuilder()
+				.parameterCount(parameterCount);
 	}
 	
 	public EzyQLQuery newQuery(String query, Object... parameters) {
@@ -48,7 +47,7 @@ public class EzyQLQueryFactory {
 		
 		@Override
 		public EzyQLQueryFactory build() {
-			return new EzyQLQueryFactory(parameterConveter);
+			return new EzyQLQueryFactory(this);
 		}
 		
 	}
