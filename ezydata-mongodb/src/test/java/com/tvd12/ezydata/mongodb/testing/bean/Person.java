@@ -6,9 +6,11 @@ import com.tvd12.ezyfox.binding.annotation.EzyValue;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @EzyCollection("test_mongo_bean_person")
 public class Person {
 

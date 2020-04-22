@@ -219,15 +219,43 @@ public class EzySimpleMongoRepository<I,E>
 		return (int)result.getDeletedCount();
 	}
 	
-	protected E findOneWithQuery(EzyQLQuery query) {
-		return null;
+	public E findOneWithQuery(EzyQLQuery query) {
+		String queryString = query.getValue();
+		BsonDocument queryDocument = BsonDocument.parse(queryString);
+		BsonDocument filter = queryDocument;
+		if(queryDocument.containsKey("$query"))
+			filter = queryDocument.getDocument("$query");
+		BsonDocument result = collection.find(filter).first();
+		E entity = bsonDocumentToEntity(result);
+		return entity;
 	}
 	
 	protected List<E> findListWithQuery(EzyQLQuery query) {
+		String queryString = query.getValue();
+		BsonDocument queryDocument = BsonDocument.parse(queryString);
+		BsonDocument filter = queryDocument;
+		if(queryDocument.containsKey("$query"))
+			filter = queryDocument.getDocument("$query");
+		FindIterable<BsonDocument> find = collection.find(filter);
+		if(queryDocument.containsKey("sort"))
+			find.sort(queryDocument.getDocument("$sort"));
+		if(queryDocument.containsKey("$skip"))
+			find.skip(queryDocument.getInt32("$skip").getValue());
+		if(queryDocument.containsKey("$limit"))
+			find.limit(queryDocument.getInt32("$limit").getValue());
+		List<E> entities = new ArrayList<>();
+		for(BsonDocument item : find) {
+			E entity = bsonDocumentToEntity(item);
+			entities.add(entity);
+		}
+		return entities;
+	}
+	
+	protected <R> R fetchOneWithQuery(EzyQLQuery query, Class<R> resultType) {
 		return null;
 	}
 	
-	protected List<E> fetchWithQuery(EzyQLQuery query) {
+	protected <R> List<R> fetchListWithQuery(EzyQLQuery query, Class<R> resultType) {
 		return null;
 	}
 	
@@ -257,7 +285,11 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	protected E bsonDocumentToEntity(BsonDocument document) {
-		return databaseContext.bsonValueToData(document, entityType);
+		E entity = databaseContext.bsonValueToData(document, entityType);
+		BsonValue documentId = document.get("_id");
+		Object idValue = bsonValueToData(documentId, idType);
+		objectProxy.setProperty(entity, "_id", idValue);
+		return entity;
 	}
 	
 	private List iterableToList(Iterable<E> iterable) {

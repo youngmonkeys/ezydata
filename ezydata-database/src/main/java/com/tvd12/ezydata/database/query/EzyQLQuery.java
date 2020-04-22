@@ -16,14 +16,15 @@ public class EzyQLQuery {
 	protected final String value;
 	protected final Object[] parameters;
 	protected final Function<Object, Object> parameterConveter;
+	protected final static Object[] EMPTY_ARRAY = new Object[0];
 	
 	public EzyQLQuery(
 			String query,
 			Object[] parameters, 
 			Function<Object, Object> parameterConveter) {
 		this.query = query;
-		this.parameters = parameters;
 		this.parameterConveter = parameterConveter;
+		this.parameters = parameters != null ? parameters : EMPTY_ARRAY;
 		this.value = createValue();
 	}
 	
