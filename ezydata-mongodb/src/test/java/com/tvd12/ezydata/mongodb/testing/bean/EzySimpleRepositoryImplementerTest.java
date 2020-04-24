@@ -17,15 +17,19 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 				.databaseName(databaseName)
 				.scan("com.tvd12.ezydata.mongodb.testing.bean")
 				.build();
-		
-		EzyMongoRepositoryImplementer implementer = new EzyMongoRepositoryImplementer(PersonRepo.class);
-		PersonRepo repo = (PersonRepo) implementer.implement(databaseContext);
+		PersonRepo repo = databaseContext.getRepository(PersonRepo.class);
 		Person person = new Person();
 		person.setId(1);
 		person.setName("dzung");
 		repo.save(person);
 		System.out.println(repo.findById(1));
 		System.out.println(repo.findByName("dzung"));
+		
+		FoodRepo foodRepo = databaseContext.getRepository(FoodRepo.class);
+		System.out.println(foodRepo.fetchListMatch());
+		
+		foodRepo.updateCategory("hello");
+		foodRepo.delete(4);
 	}
 	
 	

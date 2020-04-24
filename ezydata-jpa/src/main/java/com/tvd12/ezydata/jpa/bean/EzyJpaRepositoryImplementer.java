@@ -92,7 +92,7 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		}
 		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_DELETE)) {
-			if(returnType != int.class && resultType != void.class)
+			if(returnType != int.class && returnType != void.class)
 				throw new IllegalArgumentException("update or delete method must return int or void, error method: " + method);
 			body.append(new EzyInstruction("\t", "\n")
 					.variable(int.class, "answer").equal().append("0"));

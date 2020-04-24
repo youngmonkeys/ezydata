@@ -50,7 +50,6 @@ public class EzyMongoRepositoryImplementer
 		body.append(new EzyInstruction("\t\t", "\n").append(".build()"));
 
 		String methodName = method.getName();
-		Class<?> resultType = anno.resultType();
 		Class<?> returnType = method.getReturnType();
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
 		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE) ||
@@ -62,6 +61,9 @@ public class EzyMongoRepositoryImplementer
 		}
 		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST)) {
+			Class<?> resultType = anno.resultType();
+			if(resultType == Object.class)
+				resultType = entityType;
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST))
 				answerInstruction.answer().cast(returnType, 
 						"this.fetchListWithQuery(query," + resultType.getName() + ".class)");
@@ -71,17 +73,17 @@ public class EzyMongoRepositoryImplementer
 		}
 		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_DELETE)) {
-			if(returnType != int.class && resultType != void.class)
+			if(returnType != int.class && returnType != void.class)
 				throw new IllegalArgumentException("update or delete method must return int or void, error method: " + method);
 			body.append(new EzyInstruction("\t", "\n")
 					.variable(int.class, "answer").equal().append("0"));
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE)) {
 				body.append(new EzyInstruction("\t", "\n")
-						.append("answer = query.updateWithQuery()"));
+						.append("answer = this.updateWithQuery(query)"));
 			}
 			else {
 				body.append(new EzyInstruction("\t", "\n")
-						.append("answer = query.deleteWithQuery()"));
+						.append("answer = this.deleteWithQuery(query)"));
 			}
 			answerInstruction.answer().append("answer");
 		}
