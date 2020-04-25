@@ -17,9 +17,12 @@ public interface FoodRepo extends EzyMongoRepository<Integer, Food> {
 	List<Food> fetchListMatch();
 	
 	@EzyQuery("{$query: {_id : 4}, $update: {$set: {category: ?0}}}")
-	void updateCategory(String query);
+	void updateCategory(String category);
 	
 	@EzyQuery("{_id : ?0}")
 	void deleteById(int id);
+	
+	@EzyQuery("{_id : {$gt: ?0}}")
+	int countById(int gtId);
 	
 }

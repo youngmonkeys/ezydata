@@ -104,6 +104,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 			queryName = method.toString();
 		EzyQueryEntity queryEntity = EzyQueryEntity.builder()
 				.name(queryName)
+				.type(queryAnno.type())
 				.value(queryValue)
 				.nativeQuery(queryAnno.nativeQuery())
 				.resultType(queryAnno.resultType())

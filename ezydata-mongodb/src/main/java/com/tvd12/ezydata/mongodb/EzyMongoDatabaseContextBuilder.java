@@ -10,16 +10,13 @@ import com.mongodb.MongoClient;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.annotation.EzyCollection;
-import com.tvd12.ezydata.database.annotation.EzyNamedQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.query.EzyQLQueryFactory;
-import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
-import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
 @SuppressWarnings("rawtypes")
@@ -93,40 +90,6 @@ public class EzyMongoDatabaseContextBuilder
 	@Override
 	protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
 		return new EzyMongoRepositoriesImplementer();
-	}
-	
-	@Override
-	protected void scanAndAddQueries(EzyReflection reflection) {
-		Set<Class<?>> resultClasses = reflection.getAnnotatedClasses(EzyNamedQuery.class);
-		for(Class<?> resultClass : resultClasses) {
-			EzyNamedQuery anno = resultClass.getAnnotation(EzyNamedQuery.class);
-			String queryName = anno.name();
-			EzyQueryEntity queryEntity = getQuery(queryName, anno.value(), resultClass);
-			queryEntity.setNativeQuery(false);
-		}
-	}
-	
-	protected EzyQueryEntity getQuery(String name, String value, Class<?> resultClass) {
-		String queryName = name;
-		String queryValue = value;
-		if(EzyStrings.isNoContent(name))
-			queryName = resultClass.getName();
-		EzyQueryEntity queryEntity = queryManager.getQuery(queryName);
-		if(queryEntity != null) {
-			if(queryEntity.getResultType() != resultClass)
-				throw new IllegalStateException("too many result type of query: " + queryName + "(" + queryEntity.getResultType().getName() + ", " + resultClass.getName() + ")");
-		}
-		else {
-			if(EzyStrings.isNoContent(queryValue))
-				throw new IllegalStateException("has no query with name: " + queryName);
-			queryEntity = EzyQueryEntity.builder()
-					.name(queryName)
-					.value(queryValue)
-					.resultType(resultClass)
-					.build();
-			queryManager.addQuery(queryEntity);
-		}
-		return queryEntity;
 	}
 	
 	protected Function<Object, Object> newQueryParameterConveter(EzyMarshaller marshaller) {

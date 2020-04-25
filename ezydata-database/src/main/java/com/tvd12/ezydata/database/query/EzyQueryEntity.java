@@ -11,6 +11,7 @@ import lombok.Setter;
 public class EzyQueryEntity {
 
 	protected final String name;
+	protected final String type;
 	protected final String value;
 	@Setter
 	protected boolean nativeQuery;
@@ -20,6 +21,7 @@ public class EzyQueryEntity {
 	
 	protected EzyQueryEntity(Builder builder) {
 		this.name = builder.name;
+		this.type = builder.type;
 		this.value = builder.value;
 		this.resultType = builder.resultType;
 		this.storageName = builder.storageName;
@@ -58,6 +60,7 @@ public class EzyQueryEntity {
 	public static class Builder implements EzyBuilder<EzyQueryEntity> {
 		
 		protected String name;
+		protected String type;
 		protected String value;
 		protected String storageName;
 		protected boolean nativeQuery;
@@ -65,6 +68,11 @@ public class EzyQueryEntity {
 		
 		public Builder name(String name) {
 			this.name = name;
+			return this;
+		}
+		
+		public Builder type(String type) {
+			this.type = type;
 			return this;
 		}
 		

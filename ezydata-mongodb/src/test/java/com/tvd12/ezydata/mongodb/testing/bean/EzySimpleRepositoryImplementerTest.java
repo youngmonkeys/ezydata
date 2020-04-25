@@ -30,6 +30,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		
 		foodRepo.updateCategory("hello");
 		foodRepo.delete(4);
+		System.out.println(foodRepo.countById(0));
 	}
 	
 	

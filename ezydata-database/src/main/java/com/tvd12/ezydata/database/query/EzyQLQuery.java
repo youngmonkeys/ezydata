@@ -69,7 +69,8 @@ public class EzyQLQuery {
 		StringBuilder builder = new StringBuilder();
 		for(int i = 0 ; i < paramCount ; ++i) {
 			String value = getParameterValue(parameters[i]);
-			builder.append(strs[i].replace("?" + i, value));
+			if(strs[i] != null)
+				builder.append(strs[i].replace("?" + i, value));
 		}
 		if(startStr < length)
 			builder.append(query.substring(startStr));

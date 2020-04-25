@@ -18,6 +18,7 @@ import com.mongodb.bulk.BulkWriteUpsert;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.CountOptions;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.mongodb.client.model.ReplaceOptions;
@@ -256,7 +257,23 @@ public class EzySimpleMongoRepository<I,E>
 		return entities;
 	}
 	
-	protected <R> R fetchOneWithQuery(EzyQLQuery query, Class<R> resultType) {
+	protected long countWithQuery(EzyQLQuery query) {
+		String queryString = query.getValue();
+		logger.debug("find list with query: {}", queryString);
+		BsonDocument queryDocument = BsonDocument.parse(queryString);
+		BsonDocument filter = queryDocument;
+		CountOptions opts = new CountOptions();
+		if(queryDocument.containsKey("$query"))
+			filter = queryDocument.getDocument("$query");
+		if(queryDocument.containsKey("$skip"))
+			opts.skip(queryDocument.getInt32("$skip").getValue());
+		if(queryDocument.containsKey("$limit"))
+			opts.limit(queryDocument.getInt32("$limit").getValue());
+		long count = collection.countDocuments(filter, opts);
+		return count;
+	}
+	
+	protected <R> R aggregateOneWithQuery(EzyQLQuery query, Class<R> resultType) {
 		String queryString = query.getValue();
 		logger.debug("fetch one with query: {}", queryString);
 		List pipeline = BsonArray.parse(queryString); 
@@ -268,7 +285,7 @@ public class EzySimpleMongoRepository<I,E>
 		return answer;
 	}
 	
-	protected <R> List<R> fetchListWithQuery(EzyQLQuery query, Class<R> resultType) {
+	protected <R> List<R> aggregateListWithQuery(EzyQLQuery query, Class<R> resultType) {
 		String queryString = query.getValue();
 		logger.debug("fetch list with query: {}", queryString);
 		List pipeline = BsonArray.parse(queryString); 

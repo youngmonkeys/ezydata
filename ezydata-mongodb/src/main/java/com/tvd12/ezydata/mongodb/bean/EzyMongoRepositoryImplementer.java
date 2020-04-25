@@ -66,10 +66,20 @@ public class EzyMongoRepositoryImplementer
 				resultType = entityType;
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST))
 				answerInstruction.answer().cast(returnType, 
-						"this.fetchListWithQuery(query," + resultType.getName() + ".class)");
+						"this.aggregateListWithQuery(query," + resultType.getName() + ".class)");
 			else	
 				answerInstruction.answer().cast(resultType, 
-						"this.fetchOneWithQuery(query," + resultType.getName() + ".class)");
+						"this.aggregateOneWithQuery(query," + resultType.getName() + ".class)");
+		}
+		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_COUNT)) {
+			if(returnType != int.class && returnType != long.class)
+				throw new IllegalArgumentException("count method must return int or long, error method: " + method);
+			body.append(new EzyInstruction("\t", "\n")
+					.variable(long.class, "answer").equal().append("0L"));
+				body.append(new EzyInstruction("\t", "\n")
+						.append("answer = this.countWithQuery(query)"));
+				answerInstruction.answer()
+					.append(returnType == long.class ? "answer" : "(int)answer");
 		}
 		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_DELETE)) {
@@ -93,6 +103,7 @@ public class EzyMongoRepositoryImplementer
 					EzyDatabaseRepository.PREFIX_FIND_LIST + ", " + 
 					EzyDatabaseRepository.PREFIX_FETCH_ONE  + ", " +
 					EzyDatabaseRepository.PREFIX_FETCH_LIST + ", " +
+					EzyDatabaseRepository.PREFIX_COUNT + ", " +
 					EzyDatabaseRepository.PREFIX_UPDATE + " or " +
 					EzyDatabaseRepository.PREFIX_DELETE);
 		}
