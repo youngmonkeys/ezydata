@@ -14,4 +14,10 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	@EzyQuery("update Employee e set e.firstName = ?1 where e.id = ?0")
 	int updateEmployee(String id, String firstName);
 	
+	@EzyQuery("select count(e) from Employee e")
+	int countAll();
+	
+	@EzyQuery("select count(e) from Employee e")
+	long countAll2();
+	
 }

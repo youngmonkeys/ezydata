@@ -27,4 +27,8 @@ public class UserRepo extends EzyJpaRepository<String, User> {
 		return databaseContext.deserializeResultList(result, queryEntity.getResultType());
 	}
 	
+	public int countAll(String email) {
+		Query query = entityManager.createQuery("select count(e) from User e");
+		return (int)(long)query.getSingleResult();
+	}
 }

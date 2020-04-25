@@ -90,6 +90,18 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 						.answer().cast(returnType, "answer");
 			}
 		}
+		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_COUNT)) {
+			if(returnType != int.class && returnType != long.class)
+				throw new IllegalArgumentException("count method must return int or long, error method: " + method);
+			body.append(new EzyInstruction("\t", "\n")
+					.variable(Object.class, "answer")
+						.equal()
+					.append("query.getSingleResult()"));
+			answerInstruction.answer()
+				.cast(Number.class, "answer").dot()
+				.append(returnType == long.class ? "longValue()" : "intValue()");
+			
+		}
 		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_DELETE)) {
 			if(returnType != int.class && returnType != void.class)

@@ -29,6 +29,7 @@ public class AppTest extends BaseJpaTest {
 		System.out.println(userRepo.findByEmail("dzung@gmail.com"));
 		System.out.println(userRepo.findByField("email", "dzung@gmail.com"));
 		System.out.println("findListByEmail2: " + userRepo.findListByEmail2("dzung@gmail.com"));
+		System.out.println("countAll: " + userRepo.countAll(""));
 		EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
 		Employee employee = new Employee();
 		employee.setEmployeeId("dzung");
@@ -36,6 +37,8 @@ public class AppTest extends BaseJpaTest {
 		employee.setLastName("Trai");
 		employeeRepo.save(employee);
 		System.out.println(employeeRepo.updateEmployee("dzung", "Dung"));
+		System.out.println("countAll employeeRepo: " + employeeRepo.countAll());
+		System.out.println("countAll2 employeeRepo: " + employeeRepo.countAll2());
 		Thread.sleep(2000L);
 		databaseContext.close();
 	}

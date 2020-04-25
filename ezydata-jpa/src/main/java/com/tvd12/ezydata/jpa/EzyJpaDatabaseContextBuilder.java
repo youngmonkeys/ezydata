@@ -12,7 +12,6 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
-import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
 public class EzyJpaDatabaseContextBuilder 
@@ -57,26 +56,7 @@ public class EzyJpaDatabaseContextBuilder
 	}
 	
 	protected EzyQueryEntity getQuery(String name, String value, Class<?> resultClass) {
-		String queryName = name;
-		String queryValue = value;
-		if(EzyStrings.isNoContent(name))
-			queryName = resultClass.getName();
-		EzyQueryEntity queryEntity = queryManager.getQuery(queryName);
-		if(queryEntity != null) {
-			if(queryEntity.getResultType() != resultClass)
-				throw new IllegalStateException("too many result type of query: " + queryName + "(" + queryEntity.getResultType().getName() + ", " + resultClass.getName() + ")");
-		}
-		else {
-			if(EzyStrings.isNoContent(queryValue))
-				throw new IllegalStateException("has no query with name: " + queryName);
-			queryEntity = EzyQueryEntity.builder()
-					.name(queryName)
-					.value(queryValue)
-					.resultType(resultClass)
-					.build();
-			queryManager.addQuery(queryEntity);
-		}
-		return queryEntity;
+		return super.getQuery(name, "", value, resultClass);
 	}
 	
 	@Override
