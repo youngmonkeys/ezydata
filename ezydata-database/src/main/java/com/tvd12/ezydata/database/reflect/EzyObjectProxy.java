@@ -32,12 +32,15 @@ public class EzyObjectProxy {
 	@SuppressWarnings("unchecked")
 	public <T> T getProperty(Object object, String property) {
 		Function<Object, Object> getter = getters.get(property);
-		return (T) getter.apply(object);
+		if(getter != null)
+			return (T) getter.apply(object);
+		return null;
 	}
 	
 	public void setProperty(Object object, String property, Object value) {
 		BiConsumer<Object, Object> setter = setters.get(property);
-		setter.accept(object, value);
+		if(setter != null)
+			setter.accept(object, value);
 	}
 	
 	public static Builder builder() {

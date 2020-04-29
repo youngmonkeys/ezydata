@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface EzyResultDeserializers {
 
-	Object deserialize(Object result, Class<?> resultType); 
+	Object deserialize(Object data, Class<?> resultType); 
 	
 	EzyResultDeserializer getDeserializer(Class<?> resultType);
 	

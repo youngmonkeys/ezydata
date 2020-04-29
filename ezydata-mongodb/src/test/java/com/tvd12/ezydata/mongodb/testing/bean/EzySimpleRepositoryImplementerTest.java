@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.mongodb.testing.bean;
 
+import java.util.Arrays;
+
 import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
@@ -31,6 +33,22 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		foodRepo.updateCategory("hello");
 		foodRepo.delete(4);
 		System.out.println(foodRepo.countById(0));
+		
+		DuckRepo duckRepo = databaseContext.getRepository(DuckRepo.class);
+		DuckId duckId1 = new DuckId(1, "foo");
+		Duck duck1 = new Duck();
+		duck1.setId(duckId1);
+		duck1.setAge(10);
+		duck1.setDescription("test");
+		DuckId duckId2 = new DuckId(2, "bar");
+		Duck duck2 = new Duck();
+		duck2.setId(duckId2);
+		duck2.setAge(11);
+		duck2.setDescription("hello");
+		duckRepo.save(Arrays.asList(duck1, duck2));
+		
+		System.out.println("found duck1: " + duckRepo.findById(duckId1));
+		System.out.println("found duck2: " + duckRepo.findDuckById(duckId1));
 	}
 	
 	

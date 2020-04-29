@@ -14,6 +14,7 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 
 	@Test
 	public void test() {
+		EzyAbstractRepositoryImplementer.setDebug(true);
 		EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
 				.scan("com.tvd12.ezydata.database.test.bean")
 				.scan("com.tvd12.ezydata.database.test.bean", "com.tvd12.ezydata.database.test.bean")
@@ -27,7 +28,7 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 		MongoTemplate template = new MongoTemplate();
 		Map<Class<?>, Object> repos = implementer.implement(template);
 		System.out.println("repos: " + repos);
-		assert repos.size() == 2;
+		assert repos.size() == 3;
 		
 		implementer = new ExEzySimpleRepositoriesImplementer();
 		repos = implementer.implement(template);

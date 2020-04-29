@@ -16,11 +16,11 @@ public class EzySimpleResultDeserializers
 	}
 	
 	@Override
-	public Object deserialize(Object result, Class<?> resultType) {
+	public Object deserialize(Object data, Class<?> resultType) {
 		EzyResultDeserializer deserializer = deserializers.get(resultType);
 		if(deserializer == null)
 			throw new IllegalArgumentException("has no deserializer with type: " + resultType.getName());
-		Object answer = deserializer.deserialize(result);
+		Object answer = deserializer.deserialize(data);
 		return answer;
 	}
 	
