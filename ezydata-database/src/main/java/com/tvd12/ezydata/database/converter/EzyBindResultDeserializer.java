@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.database.codec;
+package com.tvd12.ezydata.database.converter;
 
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;

@@ -8,7 +8,7 @@ import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
-import com.tvd12.ezydata.database.codec.EzyResultDeserializer;
+import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.test.bean.FindResult;
 import com.tvd12.ezydata.database.test.bean.PersonRepo;

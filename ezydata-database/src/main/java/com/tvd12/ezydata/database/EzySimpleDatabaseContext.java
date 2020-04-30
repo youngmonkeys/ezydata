@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tvd12.ezydata.database.codec.EzyResultDeserializer;
-import com.tvd12.ezydata.database.codec.EzyResultDeserializers;
+import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
+import com.tvd12.ezydata.database.converter.EzyResultDeserializers;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryManager;
 import com.tvd12.ezydata.database.query.EzyQueryManagerFetcher;
