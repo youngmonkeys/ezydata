@@ -3,10 +3,17 @@ package com.tvd12.ezydata.database.test;
 import java.util.Collection;
 import java.util.List;
 
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 
-public class DbRepository<I,E> implements EzyDatabaseRepository<I, E> {
+public class DbRepository<I,E> 
+		implements EzyDatabaseRepository<I, E>, EzyDatabaseContextAware {
 
+	@Override
+	public void setDatabaseContext(EzyDatabaseContext context) {
+	}
+	
 	@Override
 	public long count() {
 		return 0;

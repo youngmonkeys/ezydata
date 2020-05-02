@@ -6,6 +6,7 @@
 			<package name="com.tvd12.ezydata.database.test"></package>
 			<package name="com.tvd12.ezydata.database.test.bean"></package>
 			<package name="com.tvd12.ezydata.database.test.reflect"></package>
+			<package name="com.tvd12.ezydata.database.test.query"></package>
 		</packages>
 	</test>
 </suite>

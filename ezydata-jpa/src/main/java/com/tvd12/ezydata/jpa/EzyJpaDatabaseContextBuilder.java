@@ -9,7 +9,6 @@ import javax.persistence.NamedQuery;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
-import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.reflect.EzyReflection;
@@ -42,21 +41,18 @@ public class EzyJpaDatabaseContextBuilder
 		Set<Class<?>> resultClasses = reflection.getAnnotatedClasses(NamedQuery.class);
 		for(Class<?> resultClass : resultClasses) {
 			NamedQuery anno = resultClass.getAnnotation(NamedQuery.class);
-			String queryName = anno.name();
-			EzyQueryEntity queryEntity = getQuery(queryName, anno.query(), resultClass);
-			queryEntity.setNativeQuery(false);
+			addQuery(anno.name(), anno.query(), resultClass, false);
 		}
 		resultClasses = reflection.getAnnotatedClasses(NamedNativeQuery.class);
 		for(Class<?> resultClass : resultClasses) {
 			NamedNativeQuery anno = resultClass.getAnnotation(NamedNativeQuery.class);
-			String queryName = anno.name();
-			EzyQueryEntity queryEntity = getQuery(queryName, anno.query(), resultClass);
-			queryEntity.setNativeQuery(true);
+			addQuery(anno.name(), anno.query(), resultClass, true);
 		}
 	}
 	
-	protected EzyQueryEntity getQuery(String name, String value, Class<?> resultClass) {
-		return super.getQuery(name, "", value, resultClass);
+	protected void addQuery(
+			String name, String value, Class<?> resultClass, boolean nativeQuery) {
+		super.addQuery(name, "", value, resultClass, nativeQuery);
 	}
 	
 	@Override

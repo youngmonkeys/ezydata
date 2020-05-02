@@ -3,13 +3,20 @@ package com.tvd12.ezydata.database.test.bean;
 import java.util.Collection;
 import java.util.List;
 
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezyfox.database.query.EzyFindAndModifyOptions;
 import com.tvd12.ezyfox.database.query.EzyUpdateOperations;
 import com.tvd12.ezyfox.function.EzyApply;
 
-public class ExEzyDatabaseRepository implements EzyDatabaseRepository<Integer, Person> {
+public class ExEzyDatabaseRepository 
+		implements EzyDatabaseRepository<Integer, Person>, EzyDatabaseContextAware {
 
+	@Override
+	public void setDatabaseContext(EzyDatabaseContext context) {
+	}
+	
 	@Override
 	public long count() {
 		return 0;

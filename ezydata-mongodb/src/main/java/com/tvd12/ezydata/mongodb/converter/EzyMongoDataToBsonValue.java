@@ -119,7 +119,7 @@ public class EzyMongoDataToBsonValue  {
 		map.put(BigDecimal.class, v -> new BsonString(v.toString()));
 		map.put(BigInteger.class, v -> new BsonString(v.toString()));
 		map.put(Date.class, v -> new BsonString(EzyDates.format((Date)v)));
-		map.put(LocalDate.class, v -> new BsonString(EzyDates.format((LocalDate)v)));
+		map.put(LocalDate.class, v -> new BsonString(EzyDates.format((LocalDate)v, "yyyy-MM-dd")));
 		map.put(LocalDateTime.class, v -> new BsonString(EzyDates.format((LocalDateTime)v)));
 		
 		map.put(boolean[].class, v -> {

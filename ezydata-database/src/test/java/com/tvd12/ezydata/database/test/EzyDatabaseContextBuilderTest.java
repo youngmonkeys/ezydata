@@ -11,6 +11,7 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.test.bean.FindResult;
+import com.tvd12.ezydata.database.test.bean.Person;
 import com.tvd12.ezydata.database.test.bean.PersonRepo;
 import com.tvd12.ezydata.database.test.bean.PersonRepo2;
 import com.tvd12.ezydata.database.test.bean.PersonRepo3;
@@ -25,6 +26,7 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyDatabaseContextBuilderTest extends BaseTest {
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		EzyQueryEntity queryEntity1 = EzyQueryEntity.builder()
@@ -42,7 +44,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 				.value("select a from b")
 				.build();
 		EzyAbstractRepositoryImplementer.setDebug(true);
-		new Builder()
+		DbContext dbContext = new Builder()
 				.addQuery(queryEntity1)
 				.addQueries(Lists.newArrayList(queryEntity1, queryEntity2))
 				.scan("com.tvd12.ezydata.database.test.bean")
@@ -59,10 +61,109 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 				.queryResultClasses(FindResult.class, FindResult.class)
 				.queryResultClasses(Sets.newHashSet(FindResult.class))
 				.addResultDeserializer(FindResult.class, new EzyResultDeserializer() {
+					@Override
+					public Object deserialize(Object data) {
+						return new FindResult();
+					}
 				})
 				.addResultDeserializers(EzyMaps.newHashMap(FindResult.class, new EzyResultDeserializer() {
 				}))
 				.build();
+		assert dbContext.getQueryManager().getQuery("test1") == queryEntity1;
+		assert dbContext.getQuery("test1") == queryEntity1;
+		assert dbContext.deserializeResult(new Object[0], FindResult.class) instanceof FindResult;
+		assert dbContext.deserializeResultList(Arrays.asList(new Object[0], new Object[0]), FindResult.class).size() == 2;
+		assert dbContext.getRepository(PersonRepo.class) instanceof PersonRepo;
+		assert dbContext.getRepository("personRepo") instanceof PersonRepo;
+		assert dbContext.getRepositories().size() > 0;
+		assert dbContext.getRepositoriesByName().size() > 0;
+		PersonRepo personRepo = dbContext.getRepository(PersonRepo.class);
+		try {
+			personRepo.updateOneById(1, new Person());
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneById(1, new Person(), true);
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneByField("value", 1, new Person());
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneByField("hello", 1, new Person(), false);
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneById(1, e -> {});
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneById(1, e -> {}, false);
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneByField("value", 1, e -> {});
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateOneByField("value", 1, e -> {}, false);
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.updateManyByField("value", 1, e -> {});
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.findAndModifyById(1, e -> {});
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.findAndModifyById(1, o -> {}, e -> {});
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.findAndModifyByField("value", 1, e ->{});
+		}
+		catch (Exception e) {
+		}
+		try {
+			personRepo.findAndModifyByField("value", 1, o -> {}, e -> {});
+		}
+		catch (Exception e) {
+		}
+		try {
+			dbContext.getQuery("no one");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			dbContext.getRepository("no one");
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			dbContext.getRepository(getClass());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		dbContext = new Builder().build();
+		System.out.println(dbContext);
 	}
 	
 	@Test

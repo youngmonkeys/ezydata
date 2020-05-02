@@ -23,8 +23,8 @@ public class EzySimpleDatabaseContext
 	@Getter
 	protected EzyQueryManager queryManager;
 	protected EzyResultDeserializers deserializers;
-	protected Map<Class, Object> repositories;
-	protected Map<String, Object> repositoriesByName;
+	protected final Map<Class, Object> repositories;
+	protected final Map<String, Object> repositoriesByName;
 	
 	protected EzySimpleDatabaseContext() {
 		this.repositories = new HashMap<>();

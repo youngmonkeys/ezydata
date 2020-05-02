@@ -9,7 +9,7 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 
 public class EzyObjectProxy {
 
-	protected Map<String, String> propertyKeys;
+	protected final Map<String, String> propertyKeys;
 	protected final Map<String, Class<?>> propertyTypes;
 	protected final Map<String, Function<Object, Object>> getters;
 	protected final Map<String, BiConsumer<Object, Object>> setters;
@@ -105,6 +105,7 @@ public class EzyObjectProxy {
 		public EzyObjectProxy build() {
 			for(String key : propertyKeys.keySet()) {
 				String property = propertyKeys.get(key);
+				getters.put(key, getters.get(property));
 				setters.put(key, setters.get(property));
 				propertyTypes.put(key, propertyTypes.get(property));
 			}

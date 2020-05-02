@@ -27,9 +27,11 @@ public class EzyQLQueryFactory {
 	}
 	
 	public EzyQLQuery newQuery(String query, Object... parameters) {
-		return newQueryBuilder(parameters.length)
-				.query(query)
-				.build();
+		EzyQLQuery.Builder builder = newQueryBuilder(parameters.length)
+				.query(query);
+		for(int i = 0 ; i < parameters.length ; ++i)
+			builder.parameter(i, parameters[i]);
+		return builder.build();
 	}
 	
 	public static Builder builder() {

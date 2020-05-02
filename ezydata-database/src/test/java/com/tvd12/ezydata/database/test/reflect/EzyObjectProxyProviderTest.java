@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.database.test.reflect;
 
+import org.testng.annotations.Test;
+
 import com.tvd12.ezydata.database.reflect.EzyGetterBuilder;
 import com.tvd12.ezydata.database.reflect.EzyObjectProxy;
 import com.tvd12.ezydata.database.reflect.EzyObjectProxyProvider;
@@ -9,6 +11,7 @@ import lombok.Setter;
 
 public class EzyObjectProxyProviderTest {
 
+	@Test
 	public void test() {
 		EzyGetterBuilder.setDebug(true);
 		EzyObjectProxyProvider provider = new EzyObjectProxyProvider();
@@ -32,6 +35,25 @@ public class EzyObjectProxyProviderTest {
 		System.out.println((long)objectProxy.getProperty(a, "f"));
 		System.out.println((short)objectProxy.getProperty(a, "g"));
 		System.out.println((String)objectProxy.getProperty(a, "value"));
+		assert objectProxy.getPropertyType("id") == int.class;
+		assert objectProxy.getProperty(a, "no one") == null;
+		objectProxy.setProperty(a, "no one", "no one");
+		
+		EzyObjectProxy aProxy = EzyObjectProxy.builder()
+				.propertyKey("_id", "id")
+				.addPropertyType("id", int.class)
+				.addGetter("id", o ->  {
+					return ((A)o).getId();
+				})
+				.addSetter("id", (o, v) -> {
+					((A)o).setId((int)v);
+				})
+				.build();
+		A aa = new A();
+		assert aProxy.getPropertyName("_id").equals("id");
+		assert aProxy.getPropertyType("_id") == int.class;
+		aProxy.setProperty(aa, "_id", 100);
+		assert aProxy.getProperty(aa, "_id").equals(100);
 	}
 	
 	public static void main(String[] args) {

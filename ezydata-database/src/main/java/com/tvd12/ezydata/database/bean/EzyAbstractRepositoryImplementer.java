@@ -12,6 +12,7 @@ import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyInstruction;
+import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
@@ -113,7 +114,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	}
 	
 	protected String makeAbstractMethodContent(EzyMethod method) {
-		return "";
+		EzyBody body = new EzyFunction(method).body();
+		return body.function().toString();
 	}
 	
 	protected String makeGetEntityTypeMethodContent(Class entityType) {

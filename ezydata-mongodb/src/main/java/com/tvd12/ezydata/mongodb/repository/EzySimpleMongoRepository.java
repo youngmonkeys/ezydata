@@ -339,7 +339,7 @@ public class EzySimpleMongoRepository<I,E>
 		BsonDocument document = dataToBsonValue(entity);
 		String idProperty = objectProxy.getPropertyName("_id");
 		document.put("_id", document.get(idProperty));
-		if(!idProperty.equals("_d"))
+		if(!idProperty.equals("_id")) // remove duplicate id field
 			document.remove(idProperty);
 		return document;
 	}

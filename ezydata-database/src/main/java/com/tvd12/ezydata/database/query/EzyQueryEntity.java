@@ -2,10 +2,8 @@ package com.tvd12.ezydata.database.query;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.io.EzyStrings;
-import com.tvd12.ezyfox.util.EzyPair;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class EzyQueryEntity {
@@ -13,9 +11,7 @@ public class EzyQueryEntity {
 	protected final String name;
 	protected final String type;
 	protected final String value;
-	@Setter
 	protected boolean nativeQuery;
-	@Setter
 	protected Class<?> resultType;
 	
 	protected EzyQueryEntity(Builder builder) {
@@ -36,7 +32,7 @@ public class EzyQueryEntity {
 			return false;
 		if(obj == this)
 			return true;
-		if(obj instanceof EzyPair)
+		if(obj instanceof EzyQueryEntity)
 			return name.equals(((EzyQueryEntity)obj).name);
 		return false;
 	}

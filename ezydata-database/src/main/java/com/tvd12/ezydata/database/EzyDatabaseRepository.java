@@ -42,48 +42,57 @@ public interface EzyDatabaseRepository<I, E> extends
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 	
+	@Deprecated
 	@Override
 	default void updateOneById(I id, EzyApply<EzyUpdateOperations<E>> operations) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default void updateOneById(I id, EzyApply<EzyUpdateOperations<E>> operations, boolean upsert) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default void updateOneByField(String field, Object value, EzyApply<EzyUpdateOperations<E>> operations) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default void updateOneByField(String field, Object value, EzyApply<EzyUpdateOperations<E>> operations,
 	        boolean upsert) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default void updateManyByField(String field, Object value, EzyApply<EzyUpdateOperations<E>> operations) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default E findAndModifyById(I id, EzyApply<EzyUpdateOperations<E>> operations) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default E findAndModifyById(I id, EzyApply<EzyUpdateOperations<E>> operations,
 	        EzyApply<EzyFindAndModifyOptions> options) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default E findAndModifyByField(String field, Object value, EzyApply<EzyUpdateOperations<E>> operations) {
 		throw new UnsupportedOperationException("unsupport this operation");
 	}
 
+	@Deprecated
 	@Override
 	default E findAndModifyByField(String field, Object value, EzyApply<EzyUpdateOperations<E>> operations,
 	        EzyApply<EzyFindAndModifyOptions> options) {

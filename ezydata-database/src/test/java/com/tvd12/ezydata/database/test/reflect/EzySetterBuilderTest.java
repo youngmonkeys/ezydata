@@ -2,6 +2,8 @@ package com.tvd12.ezydata.database.test.reflect;
 
 import java.util.function.BiConsumer;
 
+import org.testng.annotations.Test;
+
 import com.tvd12.ezydata.database.reflect.EzySetterBuilder;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
@@ -10,6 +12,7 @@ import lombok.Setter;
 
 public class EzySetterBuilderTest {
 
+	@Test
 	@SuppressWarnings("unchecked")
 	public void test() {
 		EzyClass clazz = new EzyClass(A.class);

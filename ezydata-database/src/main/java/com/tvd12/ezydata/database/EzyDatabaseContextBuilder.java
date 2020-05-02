@@ -194,13 +194,13 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		Set<Class<?>> resultClasses = reflection.getAnnotatedClasses(EzyNamedQuery.class);
 		for(Class<?> resultClass : resultClasses) {
 			EzyNamedQuery anno = resultClass.getAnnotation(EzyNamedQuery.class);
-			String queryName = anno.name();
-			EzyQueryEntity queryEntity = getQuery(queryName, anno.type(), anno.value(), resultClass);
-			queryEntity.setNativeQuery(anno.nativeQuery());
+			addQuery(anno.name(), anno.type(), anno.value(), resultClass, anno.nativeQuery());
 		}
 	}
 	
-	protected EzyQueryEntity getQuery(String name, String type, String value, Class<?> resultClass) {
+	protected void addQuery(
+			String name, 
+			String type, String value, Class<?> resultClass, boolean nativeQuery) {
 		String queryName = name;
 		String queryType = type;
 		String queryValue = value;
@@ -219,10 +219,10 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 					.type(queryType)
 					.value(queryValue)
 					.resultType(resultClass)
+					.nativeQuery(nativeQuery)
 					.build();
 			queryManager.addQuery(queryEntity);
 		}
-		return queryEntity;
 	}
 	
 	protected void scanAndAddRepoClasses() {

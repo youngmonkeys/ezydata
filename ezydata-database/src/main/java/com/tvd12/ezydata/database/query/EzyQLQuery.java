@@ -11,8 +11,6 @@ import lombok.Getter;
 public class EzyQLQuery {
 
 	@Getter
-	protected final String type;
-	@Getter
 	protected final String query;
 	@Getter
 	protected final String value;
@@ -21,7 +19,6 @@ public class EzyQLQuery {
 	protected final static Object[] EMPTY_ARRAY = new Object[0];
 	
 	protected EzyQLQuery(Builder builder) {
-		this.type = builder.type;
 		this.query = builder.query;
 		this.parameterConveter = builder.parameterConveter;
 		this.parameters = builder.parameters != null ? builder.parameters : EMPTY_ARRAY;
@@ -52,14 +49,14 @@ public class EzyQLQuery {
 				ch = query.charAt(i);
 				while(ch >= '0' && ch <= '9') {
 					numberChars[numberCharCount ++] = ch;
-					if((++i) > length)
+					if((++i) >= length)
 						break;
 					ch = query.charAt(i);
 				}
 				if(numberCharCount > 0) {
 					String paramStr = new String(numberChars, 0, numberCharCount);
 					int paramIndex = Integer.parseInt(paramStr);
-					if(paramIndex > paramCount)
+					if(paramIndex >= paramCount)
 						throw new EzyCreateQueryException("not enough parameter values, required: " + paramIndex);
 					strs[paramIndex] = query.substring(startStr, i);
 					startStr = i;
@@ -102,15 +99,9 @@ public class EzyQLQuery {
 	
 	public static class Builder implements EzyBuilder<EzyQLQuery> {
 		
-		protected String type;
 		protected String query;
 		protected Object[] parameters;
 		protected Function<Object, Object> parameterConveter;
-		
-		public Builder type(String type) {
-			this.type = type;
-			return this;
-		}
 		
 		public Builder query(String query) {
 			this.query = query;
@@ -125,7 +116,7 @@ public class EzyQLQuery {
 				Object[] old = parameters;
 				parameters = new Object[count];
 				for(int i = 0 ; i < old.length ; ++i)
-					parameters[i] = old;
+					parameters[i] = old[i];
 			}
 			return this;
 		}
