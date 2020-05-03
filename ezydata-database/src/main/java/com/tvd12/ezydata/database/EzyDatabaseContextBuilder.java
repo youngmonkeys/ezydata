@@ -27,7 +27,6 @@ import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClasses;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
-import com.tvd12.ezyfox.reflect.EzyTypes;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -268,7 +267,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		Set<Class<?>> unknownDeserializerResultTypes = new HashSet<>();
 		for(Class<?> resultType : queryResultClasses) {
 			EzyResultDeserializer ds = resultDeserializers.getDeserializer(resultType);
-			if(ds == null && !isBasicResultType(resultType)) {
+			if(ds == null) {
 				unknownDeserializerResultTypes.add(resultType);
 				bindResultType(bindingContextBuilder, resultType);
 			}
@@ -285,10 +284,6 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	protected EzyResultDeserializer 
 			newResultDeserializer(Class<?> resultType, EzyUnmarshaller unmarshaller) {
 		return new EzyBindResultDeserializer(resultType, unmarshaller);
-	}
-	
-	protected boolean isBasicResultType(Class<?> resultType) {
-		return EzyTypes.ALL_TYPES.contains(resultType);
 	}
 	
 	protected void bindResultType(EzyBindingContextBuilder builder, Class<?> resultType) {

@@ -3,6 +3,7 @@ package com.tvd12.ezydata.database.converter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tvd12.ezydata.database.reflect.EzyDatabaseTypes;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzySimpleResultDeserializers 
@@ -12,7 +13,7 @@ public class EzySimpleResultDeserializers
 	protected final Map<Class<?>, EzyResultDeserializer> deserializers;
 	
 	public EzySimpleResultDeserializers() {
-		this.deserializers = new HashMap<>();
+		this.deserializers = defaultDeserializers();
 	}
 	
 	@Override
@@ -38,6 +39,13 @@ public class EzySimpleResultDeserializers
 	public void addDeserializer(Class<?> resultType, EzyResultDeserializer deserializer) {
 		if(!deserializers.containsKey(resultType))
 			deserializers.put(resultType, deserializer);
+	}
+	
+	protected Map<Class<?>, EzyResultDeserializer> defaultDeserializers() {
+		Map<Class<?>, EzyResultDeserializer> map = new HashMap<>();
+		for(Class<?> type : EzyDatabaseTypes.DEFAULT_TYPES)
+			map.put(type, EzyResultDeserializer.DEFAULT);
+		return map;
 	}
 	
 }

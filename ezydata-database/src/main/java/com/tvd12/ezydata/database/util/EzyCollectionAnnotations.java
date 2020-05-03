@@ -16,8 +16,11 @@ public final class EzyCollectionAnnotations {
 	
 	public static String getCollectionName(Class<?> entityClass) {
 		EzyCollection anno = entityClass.getAnnotation(EzyCollection.class);
+		String name = null;
 		if(anno != null)
-			return getCollectionName(anno);
-		return entityClass.getSimpleName();
+			name = getCollectionName(anno);
+		if(EzyStrings.isNoContent(name))
+			name = entityClass.getSimpleName();
+		return name;
 	}
 }

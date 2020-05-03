@@ -10,7 +10,6 @@ import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
-import com.tvd12.ezyfox.reflect.EzyTypes;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 import javassist.ClassPool;
@@ -69,17 +68,9 @@ public class EzyGetterBuilder extends EzyLoggable implements EzyBuilder<Function
 							.bracketclose())
 					.append(new EzyInstruction("\t", "\n")
 							.answer()
-							.append(castToWrapper("answer")))
+							.valueOf(field.getType(), "answer"))
 					.function()
 				.toString();
-	}
-	
-	protected String castToWrapper(String expression) {
-		Class type = field.getType();
-		Class wrapperType = EzyTypes.PRIMITIVE_WRAPPER_TYPES_MAP.get(type);
-		if(wrapperType == null)
-			return expression;
-		return "new " + wrapperType.getName() + "(" + expression + ")";
 	}
 	
 	protected EzyMethod getEntityTypeMethod() {
