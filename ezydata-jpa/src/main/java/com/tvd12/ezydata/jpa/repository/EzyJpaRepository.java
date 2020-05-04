@@ -175,8 +175,16 @@ public abstract class EzyJpaRepository<I,E>
 				.append(entityType.getName()).append(" e ")
 				.toString();
 		Query query = entityManager.createQuery(queryString);
-		int deletedRows = query.executeUpdate();
-		return deletedRows;
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		try {
+			int deletedRows = query.executeUpdate();
+			return deletedRows;
+		}
+		catch (Exception e) {
+			transaction.rollback();
+			throw e;
+		}
 	}
 
 	@Override

@@ -90,7 +90,11 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	protected void setRepoComponent(Object repo, Object template) {}
 	
 	protected Collection<EzyMethod> getAbstractMethods() {
-		return clazz.getMethods(m -> m.isAnnotated(EzyQuery.class));
+		return clazz.getMethods(m -> isAbstractMethod(m));
+	}
+	
+	protected boolean isAbstractMethod(EzyMethod method) {
+		return method.isAnnotated(EzyQuery.class);
 	}
 	
 	protected void registerQuery(EzyMethod method) {

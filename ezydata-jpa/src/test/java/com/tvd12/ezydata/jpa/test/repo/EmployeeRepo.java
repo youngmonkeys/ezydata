@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.jpa.test.repo;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
@@ -19,5 +21,20 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	
 	@EzyQuery("select count(e) from Employee e")
 	long countAll2();
+	
+	@EzyQuery("select e from Employee e where e.firstName = ?0")
+	List<Employee> fetchListByFirstName(String firstName);
+	
+	@EzyQuery(value = "select e from Employee e where e.firstName = ?0", resultType = Employee.class)
+	List<Employee> fetchListByFirstName2(String firstName);
+	
+	@EzyQuery("select e from Employee e where e.firstName = ?0")
+	Employee fetchByFirstName(String firstName);
+	
+	@EzyQuery(value = "select e from Employee e where e.firstName = ?0", resultType = Employee.class)
+	Employee fetchByFirstName2(String firstName);
+	
+	@EzyQuery("delete frome Employee where e.firstName = ?0")
+	void deleteByFirstName(String firstName);
 	
 }

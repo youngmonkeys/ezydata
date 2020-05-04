@@ -124,10 +124,10 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		}
 		else {
 			throw new IllegalArgumentException("method name must start with: " + 
-					EzyDatabaseRepository.PREFIX_FIND_ONE + " or " +
-					EzyDatabaseRepository.PREFIX_FIND_LIST + " or " + 
-					EzyDatabaseRepository.PREFIX_FETCH_ONE  + " or " +
-					EzyDatabaseRepository.PREFIX_FETCH_LIST + " or " +
+					EzyDatabaseRepository.PREFIX_FIND_ONE + ", " +
+					EzyDatabaseRepository.PREFIX_FIND_LIST + ", " + 
+					EzyDatabaseRepository.PREFIX_FETCH_ONE  + ", " +
+					EzyDatabaseRepository.PREFIX_FETCH_LIST + ", " +
 					EzyDatabaseRepository.PREFIX_UPDATE + " or " +
 					EzyDatabaseRepository.PREFIX_DELETE);
 		}
