@@ -2,6 +2,9 @@ package com.tvd12.ezydata.jpa.test;
 
 import java.util.List;
 
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
@@ -17,12 +20,13 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 	protected EzyDatabaseContext databaseContext;
 	
 	protected EzyJpaRepositoriesImplementerTest() {
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("UsersDB");
 		databaseContext = new EzyJpaDatabaseContextBuilder()
 				.repositoryInterfaces(Object.class)
 				.repositoryInterfaces(InterfaceA.class)
 				.repositoryInterfaces(UserXRepo.class)
 				.scan("com.tvd12.ezydata.jpa.test.result")
-				.entityManagerFactory(ENTITY_MANAGER_FACTORY)
+				.entityManagerFactory(entityManagerFactory)
 				.build();
 	}
 
@@ -34,6 +38,7 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 		System.out.println(userRepo.findByEmail("dzung@gmail.com"));
 		List<UserIdFullNameResult> list = userRepo.findListOfIdAndFullName();
 		System.out.println(list);
+		databaseContext.close();
 	}
 	
 	public static interface InterfaceA {

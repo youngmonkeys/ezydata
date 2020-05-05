@@ -4,13 +4,11 @@ import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
-import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezydata.mongodb.repository.EzySimpleMongoRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
-import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
 public class EzyMongoRepositoryImplementer 
@@ -23,16 +21,7 @@ public class EzyMongoRepositoryImplementer
 	@Override
 	protected String makeAbstractMethodContent(EzyMethod method) {
 		EzyQuery anno = method.getAnnotation(EzyQuery.class);
-		String queryString = anno.value();
-		if(EzyStrings.isNoContent(queryString)) {
-			String queryName = anno.name();
-			if(EzyStrings.isNoContent(queryName))
-				throw new IllegalArgumentException("query name can not be null on method: " + method.getName());
-			EzyQueryEntity query = queryManager.getQuery(queryName);
-			if(query == null)
-				throw new IllegalArgumentException("not found query with name: " + queryName + " on method: " + method.getName());
-			queryString = query.getValue();
-		}
+		String queryString = getQueryString(method);
 		EzyBody body = new EzyFunction(method).body();
 		EzyInstruction createQueryInstruction = new EzyInstruction("\t", "\n", false)
 				.variable(EzyQLQuery.class, "query")
@@ -98,14 +87,7 @@ public class EzyMongoRepositoryImplementer
 			answerInstruction.answer().append("answer");
 		}
 		else {
-			throw new IllegalArgumentException("method name must start with: " + 
-					EzyDatabaseRepository.PREFIX_FIND_ONE + ", " +
-					EzyDatabaseRepository.PREFIX_FIND_LIST + ", " + 
-					EzyDatabaseRepository.PREFIX_FETCH_ONE  + ", " +
-					EzyDatabaseRepository.PREFIX_FETCH_LIST + ", " +
-					EzyDatabaseRepository.PREFIX_COUNT + ", " +
-					EzyDatabaseRepository.PREFIX_UPDATE + " or " +
-					EzyDatabaseRepository.PREFIX_DELETE);
+			processInvalidMethod(method);
 		}
 		if(returnType != void.class)
 			body.append(answerInstruction);

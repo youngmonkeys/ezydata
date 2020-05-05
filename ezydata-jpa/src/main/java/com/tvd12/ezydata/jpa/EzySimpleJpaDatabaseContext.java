@@ -11,12 +11,12 @@ import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 
 import lombok.Setter;
 
-@Setter
 public class EzySimpleJpaDatabaseContext 
 		extends EzySimpleDatabaseContext
 		implements EzyJpaDatabaseContext {
 
 	protected Set<EntityManager> entityManagers;
+	@Setter
 	protected EntityManagerFactory entityManagerFactory;
 	
 	public EzySimpleJpaDatabaseContext() {

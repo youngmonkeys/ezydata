@@ -122,6 +122,31 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		return body.function().toString();
 	}
 	
+	protected String getQueryString(EzyMethod method) {
+		EzyQuery anno = method.getAnnotation(EzyQuery.class);
+		String queryString = anno.value();
+		if(EzyStrings.isNoContent(queryString)) {
+			String queryName = anno.name();
+			if(EzyStrings.isNoContent(queryName))
+				throw new IllegalArgumentException("query name can not be null on method: " + method.getName());
+			EzyQueryEntity query = queryManager.getQuery(queryName);
+			if(query == null)
+				throw new IllegalArgumentException("not found query with name: " + queryName + " on method: " + method.getName());
+			queryString = query.getValue();
+		}
+		return queryString;
+	}
+	
+	protected void processInvalidMethod(EzyMethod method) {
+		throw new IllegalArgumentException("method name must start with: " + 
+				EzyDatabaseRepository.PREFIX_FIND_ONE + ", " +
+				EzyDatabaseRepository.PREFIX_FIND_LIST + ", " + 
+				EzyDatabaseRepository.PREFIX_FETCH_ONE  + ", " +
+				EzyDatabaseRepository.PREFIX_FETCH_LIST + ", " +
+				EzyDatabaseRepository.PREFIX_UPDATE + " or " +
+				EzyDatabaseRepository.PREFIX_DELETE);
+	}
+	
 	protected String makeGetEntityTypeMethodContent(Class entityType) {
 		return new EzyFunction(getEntityTypeMethod())
 				.body()
