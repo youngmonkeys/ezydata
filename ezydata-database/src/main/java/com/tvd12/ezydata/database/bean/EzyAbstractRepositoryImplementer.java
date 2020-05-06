@@ -137,8 +137,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		return queryString;
 	}
 	
-	protected void processInvalidMethod(EzyMethod method) {
-		throw new IllegalArgumentException("method name must start with: " + 
+	protected RuntimeException newInvalidMethodException(EzyMethod method) {
+		return new IllegalArgumentException("method name must start with: " + 
 				EzyDatabaseRepository.PREFIX_FIND_ONE + ", " +
 				EzyDatabaseRepository.PREFIX_FIND_LIST + ", " + 
 				EzyDatabaseRepository.PREFIX_FETCH_ONE  + ", " +

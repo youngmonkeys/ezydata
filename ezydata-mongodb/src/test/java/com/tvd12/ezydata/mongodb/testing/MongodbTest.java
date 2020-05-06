@@ -13,6 +13,7 @@ public class MongodbTest extends BaseTest {
 
 	protected static String databaseName;
 	protected static MongoClient mongoClient;
+	protected static EzyInputStreamMongoClientLoader mongoClientLoader;
 	
 	static {
 		databaseName = "test";
@@ -28,6 +29,7 @@ public class MongodbTest extends BaseTest {
 						.put(EzyMongoClientLoader.PASSWORD, "123456")
 						.put(EzyMongoClientLoader.DATABASE, databaseName)
 						.build());
+		mongoClientLoader = loader;
 		mongoClient = loader.load();
 	}
 	

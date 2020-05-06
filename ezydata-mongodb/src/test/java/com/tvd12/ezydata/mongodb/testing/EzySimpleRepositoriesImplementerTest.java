@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.mongodb.testing.bean;
+package com.tvd12.ezydata.mongodb.testing;
 
 import java.util.Map;
 
@@ -10,7 +10,8 @@ import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
-import com.tvd12.ezydata.mongodb.testing.MongodbTest;
+import com.tvd12.ezydata.mongodb.testing.bean.NothingInterface;
+import com.tvd12.ezydata.mongodb.testing.bean.PersonRepo2;
 import com.tvd12.ezyfox.collect.Sets;
 
 public class EzySimpleRepositoriesImplementerTest extends MongodbTest {

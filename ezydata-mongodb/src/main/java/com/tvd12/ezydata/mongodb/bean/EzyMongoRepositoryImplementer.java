@@ -41,15 +41,13 @@ public class EzyMongoRepositoryImplementer
 		String methodName = method.getName();
 		Class<?> returnType = method.getReturnType();
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
-		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE) ||
-				methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST)) {
+		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE)) {
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST))
 				answerInstruction.answer().cast(returnType, "this.findListWithQuery(query)");
 			else	
 				answerInstruction.answer().cast(entityType, "this.findOneWithQuery(query)");
 		}
-		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE) ||
-				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST)) {
+		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE)) {
 			Class<?> resultType = anno.resultType();
 			if(resultType == Object.class)
 				resultType = entityType;
@@ -87,7 +85,7 @@ public class EzyMongoRepositoryImplementer
 			answerInstruction.answer().append("answer");
 		}
 		else {
-			processInvalidMethod(method);
+			throw newInvalidMethodException(method);
 		}
 		if(returnType != void.class)
 			body.append(answerInstruction);

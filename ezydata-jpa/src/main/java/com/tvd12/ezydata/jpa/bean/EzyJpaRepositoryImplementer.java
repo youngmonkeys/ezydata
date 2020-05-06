@@ -112,7 +112,7 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 			answerInstruction.answer().append("answer");
 		}
 		else {
-			processInvalidMethod(method);
+			throw newInvalidMethodException(method);
 		}
 		if(returnType != void.class)
 			body.append(answerInstruction);

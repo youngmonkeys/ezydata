@@ -81,9 +81,8 @@ public class EzyAbstractRepositoryImplementerTest {
 			return super.getQueryString(method);
 		}
 		
-		@Override
 		protected void processInvalidMethod(EzyMethod method) {
-			super.processInvalidMethod(method);
+			throw newInvalidMethodException(method);
 		}
 		
 	}

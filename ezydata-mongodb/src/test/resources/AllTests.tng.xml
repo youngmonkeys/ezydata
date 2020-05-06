@@ -5,6 +5,7 @@
 		<packages>
 			<package name="com.tvd12.ezydata.mongodb.testing"></package>
 			<package name="com.tvd12.ezydata.mongodb.testing.bean"></package>
+			<package name="com.tvd12.ezydata.mongodb.testing.converter"></package>
 			<package name="com.tvd12.ezydata.mongodb.testing.loader"></package>
 		</packages>
 	</test>

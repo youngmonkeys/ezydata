@@ -31,7 +31,7 @@ public class EzySimpleMongoDatabaseContext
 	protected EzyUnmarshaller unmarshaller;
 	protected EzyMongoQueryFactory queryFactory;
 	protected EzyMongoDataConverter dataConverter;
-	protected EzyObjectProxyProvider objectProxyProvider;
+	protected final EzyObjectProxyProvider objectProxyProvider;
 	
 	public EzySimpleMongoDatabaseContext() {
 		this.objectProxyProvider = new EzyMongoObjectProxyProvider();

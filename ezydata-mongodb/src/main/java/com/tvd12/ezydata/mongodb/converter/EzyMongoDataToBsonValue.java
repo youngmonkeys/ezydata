@@ -88,11 +88,9 @@ public class EzyMongoDataToBsonValue  {
 	
 	protected void putKeyValue(
 			BsonDocument document, Object key, Object value) {
+		String keyString = null;
 		BsonValue ck = convert(key);
-		String keyString;
-		if(ck == null)
-			keyString = null;
-		else if(ck instanceof BsonDocument)
+		if(ck instanceof BsonDocument)
 			keyString = ((BsonDocument)ck).toJson();
 		else if(ck instanceof BsonString)
 			keyString = ((BsonString)ck).getValue();
@@ -115,7 +113,6 @@ public class EzyMongoDataToBsonValue  {
 		map.put(String.class, v -> new BsonString((String) v));
 		map.put(Class.class, v -> new BsonString(((Class)v).getName()));
 		map.put(UUID.class, v -> new BsonString(((UUID)v).toString()));
-		map.put(BigInteger.class, v -> new BsonString(v.toString()));
 		map.put(BigDecimal.class, v -> new BsonString(v.toString()));
 		map.put(BigInteger.class, v -> new BsonString(v.toString()));
 		map.put(Date.class, v -> new BsonString(EzyDates.format((Date)v)));

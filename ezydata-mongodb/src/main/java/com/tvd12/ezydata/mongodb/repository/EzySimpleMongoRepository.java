@@ -13,8 +13,6 @@ import org.bson.BsonNull;
 import org.bson.BsonValue;
 import org.bson.conversions.Bson;
 
-import com.mongodb.bulk.BulkWriteResult;
-import com.mongodb.bulk.BulkWriteUpsert;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -22,6 +20,7 @@ import com.mongodb.client.model.CountOptions;
 import com.mongodb.client.model.InsertOneModel;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.mongodb.client.model.ReplaceOptions;
+import com.mongodb.client.model.WriteModel;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
@@ -56,9 +55,9 @@ public class EzySimpleMongoRepository<I,E>
 	
 	public void setDatabaseContext(EzyDatabaseContext databaseContext) {
 		this.databaseContext = (EzyMongoDatabaseContext) databaseContext;
-		this.collection = this.databaseContext.getCollection(collectionName, BsonDocument.class);
 		this.objectProxy = this.databaseContext.getObjectProxy(entityType);
 		this.idType = (Class<I>) objectProxy.getPropertyType("_id");
+		this.setCollection(this.databaseContext.getCollection(collectionName, BsonDocument.class));
 	}
 	
 	@Override
@@ -93,7 +92,7 @@ public class EzySimpleMongoRepository<I,E>
 	@Override
 	public void save(Iterable<E> entities) {
 		List<E> entityList = iterableToList(entities);
-		List request = new ArrayList<>();
+		List<WriteModel<BsonDocument>> request = new ArrayList<>();
 		for(E entity : entityList) {
 			BsonDocument document = entityToBsonDocument(entity);
 			BsonValue id = document.get("_id");
@@ -107,13 +106,15 @@ public class EzySimpleMongoRepository<I,E>
 				request.add(new ReplaceOneModel<>(filter, document, opts));
 			}
 		}
-		BulkWriteResult result = collection.bulkWrite(request);
-		List<BulkWriteUpsert> upserts = result.getUpserts();
-		for(BulkWriteUpsert upsert : upserts) {
-			BsonValue id = upsert.getId();
-			Object idValue = bsonValueToData(id, idType);
-			E entity = entityList.get(upsert.getIndex());
-			objectProxy.setProperty(entity, "_id", idValue);
+		collection.bulkWrite(request);
+		for(int i = 0 ; i< request.size() ; ++i) {
+			WriteModel<BsonDocument> model = request.get(i);
+			if(model instanceof InsertOneModel) {
+				InsertOneModel<BsonDocument> m = (InsertOneModel)model;
+				BsonDocument document = m.getDocument();
+				Object idValue = bsonValueToData(document.get("_id"), idType);
+				objectProxy.setProperty(entityList.get(i), "_id", idValue);
+			}
 		}
 	}
 	
@@ -243,8 +244,8 @@ public class EzySimpleMongoRepository<I,E>
 		if(queryDocument.containsKey("$query"))
 			filter = queryDocument.getDocument("$query");
 		FindIterable<BsonDocument> find = collection.find(filter);
-		if(queryDocument.containsKey("sort"))
-			find.sort(queryDocument.getDocument("$sort"));
+		if(queryDocument.containsKey("$orderby"))
+			find.sort(queryDocument.getDocument("$orderby"));
 		if(queryDocument.containsKey("$skip"))
 			find.skip(queryDocument.getInt32("$skip").getValue());
 		if(queryDocument.containsKey("$limit"))
