@@ -71,6 +71,8 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
 		int k = 0;
 		for(K key : keys) {
 			byte[] valueBytes = valueBytesList.get(k ++);
+			if(valueBytes == null)
+				continue;
 			V value = entityCodec.deserialize(valueBytes, valueType);
 			answer.put(key, value);
 		}

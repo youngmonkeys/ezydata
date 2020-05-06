@@ -18,6 +18,11 @@ public class EzyRedisAtomicLong {
 		this.redisClient = builder.redisClient;
 	}
 	
+	public long get() {
+		Long answer = redisClient.hincrBy(mapNameBytes, nameBytes, 0);
+		return answer;
+	}
+	
 	public long addAndGet(long delta) {
 		Long answer = redisClient.hincrBy(mapNameBytes, nameBytes, delta);
 		return answer;
