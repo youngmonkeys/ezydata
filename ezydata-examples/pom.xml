@@ -19,9 +19,20 @@
 	
 	<properties>
 		<ezydata.version>1.1.2</ezydata.version>
+		<ezy.tools.version>1.1.2d</ezy.tools.version>
 	</properties>
 	
 	<modules>
 		<module>ezydata-jpa-example</module>
 	</modules>
+	
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezyfox-tools</artifactId>
+			<version>${ezy.tools.version}</version>
+		</dependency>
+	</dependencies>
+	
 </project>

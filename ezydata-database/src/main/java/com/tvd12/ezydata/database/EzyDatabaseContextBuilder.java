@@ -291,12 +291,20 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	protected void addRepositoriesFromClasses(EzyDatabaseContext context) {
-		for(Class<?> repoClass : repositoryClasses) {
+		for(Class<?> repoClass : repositoryClasses)
+			addRepositoriesFromClass(context, repoClass);
+	}
+	
+	protected void addRepositoriesFromClass(EzyDatabaseContext context, Class<?> repoClass) {
+		try {
 			Object repo = EzyClasses.newInstance(repoClass);
 			if(repo instanceof EzyDatabaseContextAware)
 				((EzyDatabaseContextAware)repo).setDatabaseContext(context);
 			postCreateRepositoryFromClass(context, repo);
 			repositories.put(repoClass, repo);
+		}
+		catch (Exception e) {
+			throw new IllegalArgumentException("create repo of class: " + repoClass.getName() + " error", e);
 		}
 	}
 	

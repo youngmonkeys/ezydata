@@ -3,31 +3,46 @@ package com.tvd12.ezydata.jpa.repository;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Id;
 import javax.persistence.Query;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.database.reflect.EzyGetterBuilder;
+import com.tvd12.ezydata.database.reflect.EzySetterBuilder;
 import com.tvd12.ezydata.jpa.EzyEntityManagerAware;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContext;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
+import com.tvd12.ezyfox.reflect.EzyClass;
+import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class EzyJpaRepository<I,E> 
 		extends EzyLoggable
 		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware, EzyEntityManagerAware {
 
+	protected final EzyField idField;
+	protected final Function idGetter;
+	protected final BiConsumer idSetter;
 	protected final Class<E> entityType;
+	protected final EzyClass entityClass;
 	protected EntityManager entityManager;
 	protected EzyJpaDatabaseContext databaseContext;
 	
 	public EzyJpaRepository() {
 		this.entityType = getEntityType();
+		this.entityClass = new EzyClass(entityType);
+		this.idField = this.entityClass.getField(f -> f.isAnnotated(Id.class)).orElse(null);
+		this.idGetter = new EzyGetterBuilder().field(idField).build(); 
+		this.idSetter = new EzySetterBuilder().field(idField).build();
 	}
 	
 	@Override
@@ -60,8 +75,9 @@ public abstract class EzyJpaRepository<I,E>
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		try {
-			entityManager.merge(entity);
+			E result = entityManager.merge(entity);
 			transaction.commit();
+			idSetter.accept(entity, idGetter.apply(result));
 		}
 		catch (Exception e) {
 			transaction.rollback();
@@ -74,8 +90,10 @@ public abstract class EzyJpaRepository<I,E>
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		try {
-			for(E entity : entities)
-				entityManager.merge(entity);
+			for(E entity : entities) {
+				E result = entityManager.merge(entity);
+				idSetter.accept(entity, idGetter.apply(result));
+			}
 			transaction.commit();
 		}
 		catch (Exception e) {
@@ -230,7 +248,6 @@ public abstract class EzyJpaRepository<I,E>
 		}
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	protected Class<E> getEntityType() {
 		try {
 			Type genericSuperclass = getClass().getGenericSuperclass();
