@@ -11,7 +11,6 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.test.bean.FindResult;
-import com.tvd12.ezydata.database.test.bean.Person;
 import com.tvd12.ezydata.database.test.bean.PersonRepo;
 import com.tvd12.ezydata.database.test.bean.PersonRepo2;
 import com.tvd12.ezydata.database.test.bean.PersonRepo3;
@@ -26,7 +25,6 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyDatabaseContextBuilderTest extends BaseTest {
 
-	@SuppressWarnings("deprecation")
 	@Test
 	public void test() {
 		EzyQueryEntity queryEntity1 = EzyQueryEntity.builder()
@@ -77,72 +75,6 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 		assert dbContext.getRepository("personRepo") instanceof PersonRepo;
 		assert dbContext.getRepositories().size() > 0;
 		assert dbContext.getRepositoriesByName().size() > 0;
-		PersonRepo personRepo = dbContext.getRepository(PersonRepo.class);
-		try {
-			personRepo.updateOneById(1, new Person());
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneById(1, new Person(), true);
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneByField("value", 1, new Person());
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneByField("hello", 1, new Person(), false);
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneById(1, e -> {});
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneById(1, e -> {}, false);
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneByField("value", 1, e -> {});
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateOneByField("value", 1, e -> {}, false);
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.updateManyByField("value", 1, e -> {});
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.findAndModifyById(1, e -> {});
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.findAndModifyById(1, o -> {}, e -> {});
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.findAndModifyByField("value", 1, e ->{});
-		}
-		catch (Exception e) {
-		}
-		try {
-			personRepo.findAndModifyByField("value", 1, o -> {}, e -> {});
-		}
-		catch (Exception e) {
-		}
 		try {
 			dbContext.getQuery("no one");
 		}

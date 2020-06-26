@@ -1,10 +1,19 @@
 package com.tvd12.ezydata.database.test.reflect;
 
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+
 import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.database.reflect.EzyGetterBuilder;
 import com.tvd12.ezydata.database.reflect.EzyObjectProxy;
+import com.tvd12.ezydata.database.reflect.EzyObjectProxy.Builder;
 import com.tvd12.ezydata.database.reflect.EzyObjectProxyProvider;
+import com.tvd12.ezydata.database.reflect.EzySetterBuilder;
+import com.tvd12.ezyfox.annotation.EzyId;
+import com.tvd12.ezyfox.reflect.EzyClass;
+import com.tvd12.ezyfox.reflect.EzyMethod;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +23,7 @@ public class EzyObjectProxyProviderTest {
 	@Test
 	public void test() {
 		EzyGetterBuilder.setDebug(true);
+		EzySetterBuilder.setDebug(true);
 		EzyObjectProxyProvider provider = new EzyObjectProxyProvider();
 		EzyObjectProxy objectProxy = provider.getObjectProxy(A.class);
 		A a = new A();
@@ -54,15 +64,47 @@ public class EzyObjectProxyProviderTest {
 		assert aProxy.getPropertyType("_id") == int.class;
 		aProxy.setProperty(aa, "_id", 100);
 		assert aProxy.getProperty(aa, "_id").equals(100);
+		
+		provider = new TestObjectProxyProvider();
+		objectProxy = provider.getObjectProxy(A.class);
+		a = new A();
+		objectProxy.setProperty(a, "email", "foo@bar");
+		assert objectProxy.getProperty(a, "email").equals("foo@bar");
+		System.out.println("email: " + objectProxy.getProperty(a, "email"));
 	}
 	
 	public static void main(String[] args) {
 		new EzyObjectProxyProviderTest().test();
 	}
 	
+	public static class TestObjectProxyProvider extends EzyObjectProxyProvider {
+		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		protected void preBuildObjectProxy(EzyClass clazz, Builder builder) {
+			List<EzyMethod> methods = clazz.getAnnotationedMethods(EzyId.class);
+			for(EzyMethod method : methods) {
+				if(method.isGetter()) {
+					Function getter = new EzyGetterBuilder()
+						.method(method)
+						.build();
+					builder.addGetter(method.getFieldName(), getter);
+				}
+				else if(method.isSetter()) {
+					BiConsumer setter = new EzySetterBuilder()
+							.method(method)
+							.build();
+					builder.addSetter(method.getFieldName(), setter);
+				}
+			}
+		}
+		
+	}
+	
 	@Getter
 	@Setter
 	public static class A {
+		private String em;
 		private boolean a;
 		private byte b;
 		private char c;
@@ -72,6 +114,16 @@ public class EzyObjectProxyProviderTest {
 		private long f;
 		private short g;
 		protected String value;
+		
+		@EzyId
+		public void setEmail(String email) {
+			this.em = email;
+		}
+		
+		@EzyId
+		public String getEmail() {
+			return this.em;
+		}
 	}
 	
 }

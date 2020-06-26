@@ -38,12 +38,17 @@ public class EzyObjectProxyProvider {
 			propertyTypes.put(field.getName(), field.getType());
 		}
 		Map<String, String> fieldKeys = getFieldKeys(fields);
-		return newObjectProxyBuilder(clazz)
+		EzyObjectProxy.Builder builder = newObjectProxyBuilder(clazz)
 				.propertyKey(fieldKeys)
 				.addSetters((Map)setters)
 				.addGetters((Map)getters)
-				.addPropertyTypes(propertyTypes)
-				.build();
+				.addPropertyTypes(propertyTypes);
+		preBuildObjectProxy(clazz, builder);
+		return builder.build();
+	}
+	
+	protected void preBuildObjectProxy(
+			EzyClass clazz, EzyObjectProxy.Builder builder) {
 	}
 	
 	protected Collection<EzyField> getFields(EzyClass clazz) {

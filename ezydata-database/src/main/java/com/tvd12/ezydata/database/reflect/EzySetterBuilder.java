@@ -21,6 +21,7 @@ import lombok.Setter;
 public class EzySetterBuilder extends EzyLoggable implements EzyBuilder<BiConsumer> {
 
 	protected EzyField field;
+	protected EzyMethod method;
 	protected Class<?> declaringClass;
 	@Setter
 	protected static boolean debug; 
@@ -29,6 +30,12 @@ public class EzySetterBuilder extends EzyLoggable implements EzyBuilder<BiConsum
 	public EzySetterBuilder field(EzyField field) {
 		this.field = field;
 		this.declaringClass = field.getField().getDeclaringClass();
+		return this;
+	}
+	
+	public EzySetterBuilder method(EzyMethod method) {
+		this.method = method;
+		this.declaringClass = method.getMethod().getDeclaringClass();
 		return this;
 	}
 	
@@ -56,14 +63,24 @@ public class EzySetterBuilder extends EzyLoggable implements EzyBuilder<BiConsum
 	}
 	
 	protected String makeAcceptMethodContent() {
+		Class<?> type = null;
+		String methodName = null;
+		if(field != null) {
+			type = field.getType();
+			methodName = field.getSetterMethod();
+		}
+		else {
+			type = method.getParameterTypes()[0];
+			methodName = method.getName();
+		}
 		return new EzyFunction(getEntityTypeMethod())
 				.body()
 					.append(new EzyInstruction("\t", "\n")
 							.cast(declaringClass, "arg0")
 							.dot()
-							.append(field.getSetterMethod())
+							.append(methodName)
 							.bracketopen()
-							.cast(field.getType(), "arg1")
+							.cast(type, "arg1")
 							.bracketclose())
 					.function()
 				.toString();
@@ -75,7 +92,8 @@ public class EzySetterBuilder extends EzyLoggable implements EzyBuilder<BiConsum
 	}
 
 	protected String getImplClassName() {
-		return declaringClass.getName() + "$" + field.getName() + "$EzyObjectProxy$SetterImpl$" + COUNT.incrementAndGet();
+		String name = field != null ? field.getName() : method.getFieldName();
+		return declaringClass.getName() + "$" + name + "$EzyObjectProxy$SetterImpl$" + COUNT.incrementAndGet();
 	}
 	
 	protected void printMethodContent(String methodContent) {

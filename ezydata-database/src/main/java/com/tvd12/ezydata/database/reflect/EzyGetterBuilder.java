@@ -21,6 +21,7 @@ import lombok.Setter;
 public class EzyGetterBuilder extends EzyLoggable implements EzyBuilder<Function> {
 
 	protected EzyField field;
+	protected EzyMethod method;
 	protected Class<?> declaringClass;
 	@Setter
 	protected static boolean debug; 
@@ -29,6 +30,12 @@ public class EzyGetterBuilder extends EzyLoggable implements EzyBuilder<Function
 	public EzyGetterBuilder field(EzyField field) {
 		this.field = field;
 		this.declaringClass = field.getField().getDeclaringClass();
+		return this;
+	}
+	
+	public EzyGetterBuilder method(EzyMethod method) {
+		this.method = method;
+		this.declaringClass = method.getMethod().getDeclaringClass();
 		return this;
 	}
 	
@@ -56,19 +63,29 @@ public class EzyGetterBuilder extends EzyLoggable implements EzyBuilder<Function
 	}
 	
 	protected String makeApplyMethodContent() {
+		Class<?> type = null;
+		String methodName = null;
+		if(field != null) {
+			type = field.getType();
+			methodName = field.getGetterMethod();
+		}
+		else {
+			type = method.getReturnType();
+			methodName = method.getName();
+		}
 		return new EzyFunction(getEntityTypeMethod())
 				.body()
 					.append(new EzyInstruction("\t", "\n")
-							.append(field.getTypeName())
+							.append(type.getTypeName())
 							.append(" answer = ")
 							.cast(declaringClass, "arg0")
 							.dot()
-							.append(field.getGetterMethod())
+							.append(methodName)
 							.bracketopen()
 							.bracketclose())
 					.append(new EzyInstruction("\t", "\n")
 							.answer()
-							.valueOf(field.getType(), "answer"))
+							.valueOf(type, "answer"))
 					.function()
 				.toString();
 	}
@@ -79,7 +96,8 @@ public class EzyGetterBuilder extends EzyLoggable implements EzyBuilder<Function
 	}
 
 	protected String getImplClassName() {
-		return declaringClass.getName() + "$" + field.getName() + "$EzyObjectProxy$GetterImpl$" + COUNT.incrementAndGet();
+		String name = field != null ? field.getName() : method.getFieldName();
+		return declaringClass.getName() + "$" + name + "$EzyObjectProxy$GetterImpl$" + COUNT.incrementAndGet();
 	}
 	
 	protected void printMethodContent(String methodContent) {

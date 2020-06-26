@@ -6,9 +6,6 @@ import java.util.List;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezyfox.database.query.EzyFindAndModifyOptions;
-import com.tvd12.ezyfox.database.query.EzyUpdateOperations;
-import com.tvd12.ezyfox.function.EzyApply;
 
 public class ExEzyDatabaseRepository 
 		implements EzyDatabaseRepository<Integer, Person>, EzyDatabaseContextAware {
@@ -77,28 +74,6 @@ public class ExEzyDatabaseRepository
 	@Override
 	public int deleteByIds(Collection<Integer> ids) {
 		return 0;
-	}
-
-	@Override
-	public Person findAndModifyById(Integer id, EzyApply<EzyUpdateOperations<Person>> operations) {
-		return null;
-	}
-
-	@Override
-	public Person findAndModifyById(Integer id, EzyApply<EzyUpdateOperations<Person>> operations,
-	        EzyApply<EzyFindAndModifyOptions> options) {
-		return null;
-	}
-
-	@Override
-	public Person findAndModifyByField(String field, Object value, EzyApply<EzyUpdateOperations<Person>> operations) {
-		return null;
-	}
-
-	@Override
-	public Person findAndModifyByField(String field, Object value, EzyApply<EzyUpdateOperations<Person>> operations,
-	        EzyApply<EzyFindAndModifyOptions> options) {
-		return null;
 	}
 
 	protected Class<Person> getEntityType() {
