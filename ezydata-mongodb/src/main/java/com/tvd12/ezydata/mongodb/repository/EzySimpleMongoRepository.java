@@ -26,13 +26,13 @@ import com.mongodb.client.result.UpdateResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
-import com.tvd12.ezydata.database.reflect.EzyObjectProxy;
 import com.tvd12.ezydata.mongodb.EzyMongoCollectionAware;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
+import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })

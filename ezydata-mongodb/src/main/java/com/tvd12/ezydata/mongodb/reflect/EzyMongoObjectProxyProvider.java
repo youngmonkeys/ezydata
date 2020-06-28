@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tvd12.ezydata.database.reflect.EzyObjectProxyProvider;
 import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.binding.annotation.EzyValue;
 import com.tvd12.ezyfox.reflect.EzyField;
+import com.tvd12.ezyfox.reflect.EzyObjectProxyProvider;
 
 public class EzyMongoObjectProxyProvider extends EzyObjectProxyProvider {
 

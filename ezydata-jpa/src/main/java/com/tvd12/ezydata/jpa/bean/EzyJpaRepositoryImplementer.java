@@ -61,14 +61,22 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		}
 		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE)) {
+			body.append(new EzyInstruction("\t", "\n")
+					.variable(List.class, "result")
+						.equal()
+					.append("query.getResultList()"));
 			if(resultType == Object.class || resultType == entityType) {
-				answerInstruction.answer().cast(returnType, "query.getSingleResult()");
+				body.append(new EzyInstruction("\t", "\n")
+					.variable(Object.class, "answer")
+					.append(" = null"));
+				body.append(new EzyInstruction("\t", "\n", false)
+					.append("if(result.size() > 0)"));
+				body.append(new EzyInstruction("\t\t", "\n")
+						.append("answer = result.get(0)"));
+				answerInstruction = new EzyInstruction("\t", "\n")
+						.answer().cast(returnType, "answer");
 			}
 			else {
-				body.append(new EzyInstruction("\t", "\n")
-						.variable(List.class, "result")
-							.equal()
-						.append("query.getResultList()"));
 				answerInstruction
 					.variable(Object.class, "answer")
 						.equal()

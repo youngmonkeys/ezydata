@@ -18,8 +18,8 @@
 	</description>
 	
 	<properties>
-		<ezydata.version>1.1.2</ezydata.version>
-		<ezy.tools.version>1.1.2d</ezy.tools.version>
+		<ezydata.version>1.1.3</ezydata.version>
+		<ezy.tools.version>1.1.3</ezy.tools.version>
 	</properties>
 	
 	<modules>

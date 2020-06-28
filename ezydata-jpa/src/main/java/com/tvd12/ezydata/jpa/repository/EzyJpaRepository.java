@@ -1,26 +1,22 @@
 package com.tvd12.ezydata.jpa.repository;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Id;
 import javax.persistence.Query;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.reflect.EzyGetterBuilder;
-import com.tvd12.ezydata.database.reflect.EzySetterBuilder;
 import com.tvd12.ezydata.jpa.EzyEntityManagerAware;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContext;
+import com.tvd12.ezydata.jpa.reflect.EzyJpaIdProxy;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyClass;
-import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
@@ -29,20 +25,16 @@ public abstract class EzyJpaRepository<I,E>
 		extends EzyLoggable
 		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware, EzyEntityManagerAware {
 
-	protected final EzyField idField;
-	protected final Function idGetter;
-	protected final BiConsumer idSetter;
 	protected final Class<E> entityType;
 	protected final EzyClass entityClass;
+	protected final EzyJpaIdProxy idProxy;
 	protected EntityManager entityManager;
 	protected EzyJpaDatabaseContext databaseContext;
 	
 	public EzyJpaRepository() {
 		this.entityType = getEntityType();
 		this.entityClass = new EzyClass(entityType);
-		this.idField = this.entityClass.getField(f -> f.isAnnotated(Id.class)).orElse(null);
-		this.idGetter = new EzyGetterBuilder().field(idField).build(); 
-		this.idSetter = new EzySetterBuilder().field(idField).build();
+		this.idProxy = new EzyJpaIdProxy(entityClass);
 	}
 	
 	@Override
@@ -77,7 +69,7 @@ public abstract class EzyJpaRepository<I,E>
 		try {
 			E result = entityManager.merge(entity);
 			transaction.commit();
-			idSetter.accept(entity, idGetter.apply(result));
+			idProxy.setId(result, entity);
 		}
 		catch (Exception e) {
 			transaction.rollback();
@@ -90,11 +82,16 @@ public abstract class EzyJpaRepository<I,E>
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		try {
+			List<E> results = new ArrayList<>();
 			for(E entity : entities) {
 				E result = entityManager.merge(entity);
-				idSetter.accept(entity, idGetter.apply(result));
+				results.add(result);
 			}
 			transaction.commit();
+			int i = 0;
+			for(E entity : entities) {
+				idProxy.setId(results.get(i ++), entity);
+			}
 		}
 		catch (Exception e) {
 			transaction.rollback();
