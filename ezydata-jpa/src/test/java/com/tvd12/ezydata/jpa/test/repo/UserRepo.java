@@ -23,6 +23,8 @@ public class UserRepo extends EzyJpaRepository<String, User> {
 	public Object findListByEmail2(String email) {
 		EzyQueryEntity queryEntity = databaseContext.getQuery("findListByEmail");
 		Query query = entityManager.createQuery(queryEntity.getValue());
+		query.setFirstResult(0);
+		query.setMaxResults(100);
 		List result = query.getResultList();
 		return databaseContext.deserializeResultList(result, queryEntity.getResultType());
 	}

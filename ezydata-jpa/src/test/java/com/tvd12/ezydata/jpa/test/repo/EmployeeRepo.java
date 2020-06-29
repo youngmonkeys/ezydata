@@ -8,6 +8,7 @@ import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
+import com.tvd12.ezyfox.util.EzyNext;
 
 @EzyAutoImpl
 public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
@@ -36,5 +37,8 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	
 	@EzyQuery("delete frome Employee where e.firstName = ?0")
 	void deleteByFirstName(String firstName);
+	
+	@EzyQuery("select e from Employee e")
+	List<Employee> findList(EzyNext next);
 	
 }

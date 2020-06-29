@@ -9,15 +9,18 @@ import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
+import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoryImplementer;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
 import com.tvd12.ezydata.jpa.test.repo.EmployeeRepo;
 import com.tvd12.ezydata.jpa.test.repo.UserRepo;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
+import com.tvd12.ezyfox.util.EzyNext;
 
 public class EzyJpaRepositoryTest extends BaseJpaTest {
 
 	@Test
 	public void test() throws Exception {
+		EzyJpaRepositoryImplementer.setDebug(true);
 		EzyQueryEntity query1 = EzyQueryEntity.builder()
 				.name("findListByEmail")
 				.value("select e.id, e.fullName from User e")
@@ -59,6 +62,7 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
 		assert employeeRepo.findByField("firstName", "Foo") != null;
 		assert employeeRepo.findListByField("firstName", "Hello").size() >= 1;
 		assert employeeRepo.findListByField("firstName", "Hello", 0, 2).size() >= 1;
+		assert employeeRepo.findList(EzyNext.fromSkipLimit(0, 100)).size() >= 1;
 		assert employeeRepo.findAll().size() >= 0;
 		assert employeeRepo.findAll(0, 1).size() == 1;
 		long count = employeeRepo.count();

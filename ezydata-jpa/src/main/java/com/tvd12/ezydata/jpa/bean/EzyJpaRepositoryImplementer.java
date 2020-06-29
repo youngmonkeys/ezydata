@@ -15,6 +15,7 @@ import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyMethod;
+import com.tvd12.ezyfox.util.Next;
 
 public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
@@ -33,7 +34,16 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 				.append("this.entityManager.createQuery(").string(queryString)
 				.append(")");
 		body.append(createQueryInstruction);
-		for(int i = 0 ; i < method.getParameterCount() ; ++i) {
+		boolean paging = false;
+		int paramCount = method.getParameterCount();
+		if(paramCount > 0) {
+			Class<?> lastParamType = method.getParameterTypes()[paramCount - 1];
+			if(Next.class.isAssignableFrom(lastParamType)) {
+				-- paramCount;
+				paging = true;
+			}
+		}
+		for(int i = 0 ; i < paramCount ; ++i) {
 			body.append(new EzyInstruction("\t", "\n")
 					.append("query.setParameter(")
 						.append(i).append(",").append("arg").append(i)
@@ -46,6 +56,13 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
 		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST) ||
 				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST)) {
+			if(paging) {
+				String nextArg = "arg" + paramCount;
+				body.append(new EzyInstruction("\t", "\n")
+						.append("query.setFirstResult((int)" + nextArg + ".getSkip())"));
+				body.append(new EzyInstruction("\t", "\n")
+						.append("query.setMaxResults((int)" + nextArg + ".getLimit())"));
+			}
 			if(resultType == Object.class || resultType == entityType) {
 				answerInstruction.answer().cast(returnType, "query.getResultList()");
 			}
