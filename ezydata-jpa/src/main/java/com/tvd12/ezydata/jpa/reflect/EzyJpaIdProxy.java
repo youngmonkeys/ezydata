@@ -21,15 +21,16 @@ public class EzyJpaIdProxy {
 	public EzyJpaIdProxy(EzyClass entityClass) {
 		EzyGetterBuilder getterBuilder = new EzyGetterBuilder();
 		EzySetterBuilder setterBuilder = new EzySetterBuilder();
-		Optional<EzyField> idField = entityClass.getAnnotationedField(Id.class);
+		Optional<EzyField> idField = entityClass.getAnnotatedField(Id.class);
 		if(idField.isPresent()) {
 			getterBuilder.field(idField.get());
 			setterBuilder.field(idField.get());
 		}
 		else {
-			Optional<EzyMethod> idMethod = entityClass.getAnnotationedMethod(Id.class);
-			getterBuilder.method(idMethod.get());
-			setterBuilder.method(idMethod.get());
+			Optional<EzyMethod> idGetterMethod = entityClass.getAnnotatedGetterMethod(Id.class);
+			Optional<EzyMethod> idSetterMethod = entityClass.getAnnotatedSetterMethod(Id.class);
+			getterBuilder.method(idGetterMethod.get());
+			setterBuilder.method(idSetterMethod.get());
 		}
 		this.idGetter = getterBuilder.build();
 		this.idSetter = setterBuilder.build();
