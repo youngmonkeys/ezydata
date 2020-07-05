@@ -14,6 +14,7 @@ import com.tvd12.ezydata.mongodb.testing.bean.FoodRepo;
 import com.tvd12.ezydata.mongodb.testing.bean.Person;
 import com.tvd12.ezydata.mongodb.testing.bean.PersonRepo;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.util.Next;
 
 public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 
@@ -68,10 +69,10 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		assert duckRepo.findListByField("age", 10, 0, 1).size() == 1;
 		assert duckRepo.findAll().size() >= 2;
 		assert duckRepo.findAll(0, 1).size() == 1;
-		assert duckRepo.findListByAge(10).size() >= 2;
+		assert duckRepo.findListByAge(10, Next.fromSkipLimit(0, 10)).size() >= 2;
 		assert duckRepo.findListByAge2(10).size() >= 2;
-		System.out.println("findListByAge: " + duckRepo.findListByAge(10));
-		assert duckRepo.countByAge(10) >= 2;
+		System.out.println("findListByAge: " + duckRepo.findListByAge(10, Next.fromSkipLimit(0, 2)));
+		assert duckRepo.countByAge(10, Next.fromSkipLimit(0, 2)) >= 2;
 		long count = duckRepo.count();
 		assert duckRepo.deleteByAge(12) == 1;
 		assert duckRepo.deleteByAge2(12) == 0;

@@ -10,6 +10,7 @@ import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyMethod;
+import com.tvd12.ezyfox.util.Next;
 
 public class EzyMongoRepositoryImplementer 
 		extends EzyAbstractRepositoryImplementer  {
@@ -30,7 +31,16 @@ public class EzyMongoRepositoryImplementer
 				.append("\n\t\t.parameterCount(").append(method.getParameterCount()).append(")")
 				.append("\n\t\t.query(").string(queryString).append(")");
 		body.append(createQueryInstruction);
-		for(int i = 0 ; i < method.getParameterCount() ; ++i) {
+		String nextArg = null;
+		int paramCount = method.getParameterCount();
+		if(paramCount > 0) {
+			Class<?> lastParamType = method.getParameterTypes()[paramCount - 1];
+			if(Next.class.isAssignableFrom(lastParamType)) {
+				-- paramCount;
+				nextArg = "arg" + paramCount;
+			}
+		}
+		for(int i = 0 ; i < paramCount ; ++i) {
 			body.append(new EzyInstruction("\t\t", "\n", false)
 					.append(".parameter(")
 						.append(i).append(",").append("arg").append(i)
@@ -43,7 +53,7 @@ public class EzyMongoRepositoryImplementer
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
 		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE)) {
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST))
-				answerInstruction.answer().cast(returnType, "this.findListWithQuery(query)");
+				answerInstruction.answer().cast(returnType, "this.findListWithQuery(query, " + nextArg + ")");
 			else	
 				answerInstruction.answer().cast(entityType, "this.findOneWithQuery(query)");
 		}
@@ -64,7 +74,7 @@ public class EzyMongoRepositoryImplementer
 			body.append(new EzyInstruction("\t", "\n")
 					.variable(long.class, "answer").equal().append("0L"));
 				body.append(new EzyInstruction("\t", "\n")
-						.append("answer = this.countWithQuery(query)"));
+						.append("answer = this.countWithQuery(query, " + nextArg + ")"));
 				answerInstruction.answer()
 					.append(returnType == long.class ? "answer" : "(int)answer");
 		}

@@ -34,6 +34,7 @@ import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfox.util.Next;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class EzySimpleMongoRepository<I,E>
@@ -237,6 +238,10 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	protected List<E> findListWithQuery(EzyQLQuery query) {
+		return findListWithQuery(query, null);
+	}
+	
+	protected List<E> findListWithQuery(EzyQLQuery query, Next next) {
 		String queryString = query.getValue();
 		logger.debug("find list with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
@@ -246,10 +251,10 @@ public class EzySimpleMongoRepository<I,E>
 		FindIterable<BsonDocument> find = collection.find(filter);
 		if(queryDocument.containsKey("$orderby"))
 			find.sort(queryDocument.getDocument("$orderby"));
-		if(queryDocument.containsKey("$skip"))
-			find.skip(queryDocument.getInt32("$skip").getValue());
-		if(queryDocument.containsKey("$limit"))
-			find.limit(queryDocument.getInt32("$limit").getValue());
+		if(next != null) {
+			find.skip((int)next.getSkip());
+			find.limit((int)next.getLimit());
+		}
 		List<E> entities = new ArrayList<>();
 		for(BsonDocument item : find) {
 			E entity = bsonDocumentToEntity(item);
@@ -259,6 +264,10 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	protected long countWithQuery(EzyQLQuery query) {
+		return countWithQuery(query, null);
+	}
+	
+	protected long countWithQuery(EzyQLQuery query, Next next) {
 		String queryString = query.getValue();
 		logger.debug("find list with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
@@ -266,10 +275,10 @@ public class EzySimpleMongoRepository<I,E>
 		CountOptions opts = new CountOptions();
 		if(queryDocument.containsKey("$query"))
 			filter = queryDocument.getDocument("$query");
-		if(queryDocument.containsKey("$skip"))
-			opts.skip(queryDocument.getInt32("$skip").getValue());
-		if(queryDocument.containsKey("$limit"))
-			opts.limit(queryDocument.getInt32("$limit").getValue());
+		if(next != null) {
+			opts.skip((int)next.getSkip());
+			opts.limit((int)next.getLimit());
+		}
 		long count = collection.countDocuments(filter, opts);
 		return count;
 	}
