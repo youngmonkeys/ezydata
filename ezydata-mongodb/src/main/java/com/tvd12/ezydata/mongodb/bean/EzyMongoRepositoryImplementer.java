@@ -63,7 +63,7 @@ public class EzyMongoRepositoryImplementer
 				resultType = entityType;
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST))
 				answerInstruction.answer().cast(returnType, 
-						"this.aggregateListWithQuery(query," + resultType.getName() + ".class)");
+						"this.aggregateListWithQuery(query," + resultType.getName() + ".class, " + nextArg + ")");
 			else	
 				answerInstruction.answer().cast(resultType, 
 						"this.aggregateOneWithQuery(query," + resultType.getName() + ".class)");

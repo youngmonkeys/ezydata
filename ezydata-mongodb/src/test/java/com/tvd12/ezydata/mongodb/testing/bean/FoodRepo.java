@@ -5,6 +5,7 @@ import java.util.List;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
+import com.tvd12.ezyfox.util.Next;
 
 @EzyAutoImpl
 public interface FoodRepo extends EzyMongoRepository<Integer, Food> {
@@ -15,6 +16,13 @@ public interface FoodRepo extends EzyMongoRepository<Integer, Food> {
 		"{ $sort: { type: -1 } }" + 
 	"]")
 	List<Food> fetchListMatch();
+	
+	@EzyQuery("[" + 
+			"{ $sort: { qty: 1 }}," + 
+			"{ $match: { category: 'cake', qty: 10  } }," + 
+			"{ $sort: { type: -1 } }" + 
+		"]")
+		List<Food> fetchListMatch2(Next next);
 	
 	@EzyQuery("[" + 
 			"{ $sort: { qty: 1 }}," + 

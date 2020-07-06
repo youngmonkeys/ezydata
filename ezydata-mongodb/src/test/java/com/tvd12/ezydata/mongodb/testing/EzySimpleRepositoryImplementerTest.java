@@ -35,9 +35,10 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		System.out.println(repo.findByName("dzung"));
 		
 		FoodRepo foodRepo = databaseContext.getRepository(FoodRepo.class);
-		System.out.println(foodRepo.fetchListMatch());
-		System.out.println(foodRepo.fetchOneMatch());
-		System.out.println(foodRepo.fetchOneMatch2());
+		System.out.println("fetchListMatch: " + foodRepo.fetchListMatch());
+		System.out.println("fetchListMatch2: " + foodRepo.fetchListMatch2(Next.fromSkipLimit(0, 1)));
+		System.out.println("fetchOneMatch: " + foodRepo.fetchOneMatch());
+		System.out.println("fetchOneMatch2: " + foodRepo.fetchOneMatch2());
 		
 		foodRepo.updateCategory("hello");
 		foodRepo.delete(4);

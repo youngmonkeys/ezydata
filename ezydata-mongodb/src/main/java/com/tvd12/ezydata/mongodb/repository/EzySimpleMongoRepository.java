@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.bson.BsonArray;
 import org.bson.BsonDocument;
+import org.bson.BsonInt32;
 import org.bson.BsonNull;
 import org.bson.BsonValue;
 import org.bson.conversions.Bson;
@@ -296,9 +297,17 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	protected <R> List<R> aggregateListWithQuery(EzyQLQuery query, Class<R> resultType) {
+		return aggregateListWithQuery(query, resultType, null);
+	}
+	
+	protected <R> List<R> aggregateListWithQuery(EzyQLQuery query, Class<R> resultType, Next next) {
 		String queryString = query.getValue();
 		logger.debug("fetch list with query: {}", queryString);
 		List pipeline = BsonArray.parse(queryString); 
+		if(next != null) {
+			pipeline.add(new BsonDocument("$skip", new BsonInt32((int)next.getSkip())));
+			pipeline.add(new BsonDocument("$limit", new BsonInt32((int)next.getLimit())));
+		}
 		AggregateIterable<BsonDocument> aggregate = collection.aggregate(pipeline);
 		List<R> answer = new ArrayList<>();
 		for(BsonDocument item : aggregate)
