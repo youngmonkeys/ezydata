@@ -76,7 +76,7 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
 		
 		databaseContext = new EzyMongoDatabaseContextBuilder()
 			.repositoryInterface(RepoD.class)
-			.mongoClient(mongoClientLoader.load())
+			.mongoClient(mongoClientLoader().load())
 			.databaseName(databaseName)
 			.dataConverter(EzyMongoDataConverter.builder().build())
 			.build();

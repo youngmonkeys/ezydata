@@ -13,10 +13,13 @@ public class MongodbTest extends BaseTest {
 
 	protected static String databaseName;
 	protected static MongoClient mongoClient;
-	protected static EzyInputStreamMongoClientLoader mongoClientLoader;
 	
 	static {
 		databaseName = "test";
+		mongoClient = mongoClientLoader().load();
+	}
+	
+	protected static EzyInputStreamMongoClientLoader mongoClientLoader() {
 		InputStream inputStream = EzyAnywayInputStreamLoader.builder()
 				.build()
 				.load("mongodb_config.properties");
@@ -29,8 +32,7 @@ public class MongodbTest extends BaseTest {
 						.put(EzyMongoClientLoader.PASSWORD, "123456")
 						.put(EzyMongoClientLoader.DATABASE, databaseName)
 						.build());
-		mongoClientLoader = loader;
-		mongoClient = loader.load();
+		return loader;
 	}
 	
 	
