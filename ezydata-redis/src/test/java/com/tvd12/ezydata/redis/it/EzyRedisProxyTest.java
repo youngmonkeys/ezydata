@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.redis.test;
+package com.tvd12.ezydata.redis.it;
 
 import org.testng.annotations.Test;
 
