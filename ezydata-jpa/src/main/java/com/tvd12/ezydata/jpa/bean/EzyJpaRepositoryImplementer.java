@@ -7,7 +7,6 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.annotation.EzyTransactional;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
@@ -15,7 +14,6 @@ import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyMethod;
-import com.tvd12.ezyfox.util.Next;
 
 public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
@@ -25,7 +23,6 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 	
 	@Override
 	protected String makeAbstractMethodContent(EzyMethod method) {
-		EzyQuery anno = method.getAnnotation(EzyQuery.class);
 		String queryString = getQueryString(method);
 		EzyBody body = new EzyFunction(method).body();
 		EzyInstruction createQueryInstruction = new EzyInstruction("\t", "\n")
@@ -34,15 +31,10 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 				.append("this.entityManager.createQuery(").string(queryString)
 				.append(")");
 		body.append(createQueryInstruction);
-		boolean paging = false;
+		boolean isPagination = isPaginationMethod(method);
 		int paramCount = method.getParameterCount();
-		if(paramCount > 0) {
-			Class<?> lastParamType = method.getParameterTypes()[paramCount - 1];
-			if(Next.class.isAssignableFrom(lastParamType)) {
-				-- paramCount;
-				paging = true;
-			}
-		}
+		if(isPagination)
+			-- paramCount;
 		for(int i = 0 ; i < paramCount ; ++i) {
 			body.append(new EzyInstruction("\t", "\n")
 					.append("query.setParameter(")
@@ -51,60 +43,10 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		}
 
 		String methodName = method.getName();
-		Class<?> resultType = anno.resultType();
 		Class<?> returnType = method.getReturnType();
+		
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
-		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST) ||
-				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST)) {
-			if(paging) {
-				String nextArg = "arg" + paramCount;
-				body.append(new EzyInstruction("\t", "\n")
-						.append("query.setFirstResult((int)" + nextArg + ".getSkip())"));
-				body.append(new EzyInstruction("\t", "\n")
-						.append("query.setMaxResults((int)" + nextArg + ".getLimit())"));
-			}
-			if(resultType == Object.class || resultType == entityType) {
-				answerInstruction.answer().cast(returnType, "query.getResultList()");
-			}
-			else {	
-				body.append(new EzyInstruction("\t", "\n")
-						.variable(List.class, "result")
-							.equal()
-						.append("query.getResultList()"));
-				answerInstruction.answer()
-					.append("this.databaseContext.deserializeResultList(result,")
-					.clazz(resultType, true).append(")");
-			}
-		}
-		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE) ||
-				methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE)) {
-			body.append(new EzyInstruction("\t", "\n")
-					.variable(List.class, "result")
-						.equal()
-					.append("query.getResultList()"));
-			if(resultType == Object.class || resultType == entityType) {
-				body.append(new EzyInstruction("\t", "\n")
-					.variable(Object.class, "answer")
-					.append(" = null"));
-				body.append(new EzyInstruction("\t", "\n", false)
-					.append("if(result.size() > 0)"));
-				body.append(new EzyInstruction("\t\t", "\n")
-						.append("answer = result.get(0)"));
-				answerInstruction = new EzyInstruction("\t", "\n")
-						.answer().cast(returnType, "answer");
-			}
-			else {
-				answerInstruction
-					.variable(Object.class, "answer")
-						.equal()
-					.append("this.databaseContext.deserializeResult(result,")
-						.clazz(resultType, true).append(")");
-				body.append(answerInstruction);
-				answerInstruction = new EzyInstruction("\t", "\n")
-						.answer().cast(returnType, "answer");
-			}
-		}
-		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_COUNT)) {
+		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_COUNT)) {
 			if(returnType != int.class && returnType != long.class)
 				throw new IllegalArgumentException("count method must return int or long, error method: " + method);
 			body.append(new EzyInstruction("\t", "\n")
@@ -137,7 +79,55 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 			answerInstruction.answer().append("answer");
 		}
 		else {
-			throw newInvalidMethodException(method);
+			Class<?> resultType = getResultType(method);
+			if(Iterable.class.isAssignableFrom(returnType)) {
+				if(isPagination) {
+					String nextArg = "arg" + paramCount;
+					body.append(new EzyInstruction("\t", "\n")
+							.append("query.setFirstResult((int)" + nextArg + ".getSkip())"));
+					body.append(new EzyInstruction("\t", "\n")
+							.append("query.setMaxResults((int)" + nextArg + ".getLimit())"));
+				}
+				if(resultType == Object.class || resultType == entityType) {
+					answerInstruction.answer().cast(returnType, "query.getResultList()");
+				}
+				else {	
+					body.append(new EzyInstruction("\t", "\n")
+							.variable(List.class, "result")
+								.equal()
+							.append("query.getResultList()"));
+					answerInstruction.answer()
+						.append("this.databaseContext.deserializeResultList(result,")
+						.clazz(resultType, true).append(")");
+				}
+			}
+			else {
+				body.append(new EzyInstruction("\t", "\n")
+						.variable(List.class, "result")
+							.equal()
+						.append("query.getResultList()"));
+				if(resultType == Object.class || resultType == entityType) {
+					body.append(new EzyInstruction("\t", "\n")
+						.variable(Object.class, "answer")
+						.append(" = null"));
+					body.append(new EzyInstruction("\t", "\n", false)
+						.append("if(result.size() > 0)"));
+					body.append(new EzyInstruction("\t\t", "\n")
+							.append("answer = result.get(0)"));
+					answerInstruction = new EzyInstruction("\t", "\n")
+							.answer().cast(returnType, "answer");
+				}
+				else {
+					answerInstruction
+						.variable(Object.class, "answer")
+							.equal()
+						.append("this.databaseContext.deserializeResult(result,")
+							.clazz(resultType, true).append(")");
+					body.append(answerInstruction);
+					answerInstruction = new EzyInstruction("\t", "\n")
+							.answer().cast(returnType, "answer");
+				}
+			}
 		}
 		if(returnType != void.class)
 			body.append(answerInstruction);

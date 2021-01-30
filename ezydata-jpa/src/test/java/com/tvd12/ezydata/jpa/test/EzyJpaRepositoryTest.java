@@ -65,7 +65,19 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
 		assert employeeRepo.findList(EzyNext.fromSkipLimit(0, 100)).size() >= 1;
 		assert employeeRepo.findAll().size() >= 0;
 		assert employeeRepo.findAll(0, 1).size() == 1;
+		assert employeeRepo.findByEmail("dzung@youngmokeys.org") != null;
+		assert employeeRepo.findByEmailAndPhoneNumber(
+				"dzung@youngmokeys.org", 
+				"123456789"
+				) != null;
 		long count = employeeRepo.count();
+		assert employeeRepo.findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo(
+				"dzung", 
+				Arrays.asList("dzung@youngmokeys.org"), 
+				Arrays.asList("123456789"), 
+				"abcdefgh", 
+				EzyNext.fromSkipLimit(0, 100)
+				).size() == count;
 		employeeRepo.delete("employee2");
 		assert employeeRepo.count() == (count - 1);
 		assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;

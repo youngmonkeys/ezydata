@@ -56,7 +56,7 @@ public class EzySimpleServiceImplementer {
 		String getMapNameMethodContent = makeGetMapNameMethodContent(mapName);
 		implClass.setInterfaces(new CtClass[] { pool.get(clazz.getName()) });
 		implClass.setSuperclass(pool.get(superClass.getName()));
-		CtConstructor constructorMethod = makeContructorMethod(pool, implClass);
+		CtConstructor constructorMethod = makeConstructorMethod(pool, implClass);
 		implClass.addConstructor(constructorMethod);
 		implClass.addMethod(CtNewMethod.make(getMapNameMethodContent, implClass));
 		Class answerClass = implClass.toClass();
@@ -66,7 +66,7 @@ public class EzySimpleServiceImplementer {
 		return service;
 	}
 	
-	protected CtConstructor makeContructorMethod(
+	protected CtConstructor makeConstructorMethod(
 			ClassPool pool, CtClass implClass) throws Exception{
 		CtConstructor constructor = new CtConstructor(
 			new CtClass[] {

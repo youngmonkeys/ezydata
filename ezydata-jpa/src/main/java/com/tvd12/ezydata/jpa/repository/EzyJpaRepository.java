@@ -31,6 +31,8 @@ public abstract class EzyJpaRepository<I,E>
 	protected EntityManager entityManager;
 	protected EzyJpaDatabaseContext databaseContext;
 	
+	protected final static Object[] NO_PARAMETERS = new Object[0];
+	
 	public EzyJpaRepository() {
 		this.entityType = getEntityType();
 		this.entityClass = new EzyClass(entityType);
@@ -106,19 +108,6 @@ public abstract class EzyJpaRepository<I,E>
 	}
 
 	@Override
-	public List<E> findListByIds(Collection<I> ids) {
-		String queryString = new StringBuilder()
-				.append("select e from ")
-				.append(entityType.getName()).append(" e ")
-				.append("where e.id in ?0")
-				.toString();
-		Query query = entityManager.createQuery(queryString);
-		query.setParameter(0, ids);
-		List<E> list = query.getResultList();
-		return list;
-	}
-
-	@Override
 	public E findByField(String field, Object value) {
 		String queryString = new StringBuilder()
 				.append("select e from ")
@@ -130,6 +119,24 @@ public abstract class EzyJpaRepository<I,E>
 		Object entity = query.getSingleResult();
 		return (E)entity;
 	}
+	
+	protected E findByQueryString(String queryString, Object[] parameters) {
+		Query query = entityManager.createQuery(queryString);
+		for(int i = 0 ; i < parameters.length ; ++i)
+			query.setParameter(i, parameters[i]);
+		Object entity = query.getSingleResult();
+		return (E)entity;
+	}
+	
+	@Override
+	public List<E> findListByIds(Collection<I> ids) {
+		String queryString = new StringBuilder()
+				.append("select e from ")
+				.append(entityType.getName()).append(" e ")
+				.append("where e.id in ?0")
+				.toString();
+		return findListByQueryString(queryString, new Object[] {ids});
+	}
 
 	@Override
 	public List<E> findListByField(String field, Object value) {
@@ -138,8 +145,13 @@ public abstract class EzyJpaRepository<I,E>
 				.append(entityType.getName()).append(" e ")
 				.append("where e.").append(field).append(" = ?0")
 				.toString();
+		return findListByQueryString(queryString, new Object[] {value});
+	}
+	
+	protected List<E> findListByQueryString(String queryString, Object[] parameters) {
 		Query query = entityManager.createQuery(queryString);
-		query.setParameter(0, value);
+		for(int i = 0 ; i < parameters.length ; ++i)
+			query.setParameter(i, parameters[i]);
 		List<E> list = query.getResultList();
 		return list;
 	}
@@ -151,8 +163,15 @@ public abstract class EzyJpaRepository<I,E>
 				.append(entityType.getName()).append(" e ")
 				.append("where e.").append(field).append(" = ?0")
 				.toString();
+		return findListByQueryString(queryString, new Object[] {value}, skip, limit);
+	}
+	
+	protected List<E> findListByQueryString(
+			String queryString, 
+			Object[] parameters, int skip, int limit) {
 		Query query = entityManager.createQuery(queryString);
-		query.setParameter(0, value);
+		for(int i = 0 ; i < parameters.length ; ++i)
+			query.setParameter(i, parameters[i]);
 		query.setFirstResult(skip);
 		query.setMaxResults(limit);
 		List<E> list = query.getResultList();
@@ -189,17 +208,7 @@ public abstract class EzyJpaRepository<I,E>
 				.append("delete from ")
 				.append(entityType.getName()).append(" e ")
 				.toString();
-		Query query = entityManager.createQuery(queryString);
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		try {
-			int deletedRows = query.executeUpdate();
-			return deletedRows;
-		}
-		catch (Exception e) {
-			transaction.rollback();
-			throw e;
-		}
+		return deleteByQueryString(queryString, NO_PARAMETERS);
 	}
 
 	@Override
@@ -209,18 +218,7 @@ public abstract class EzyJpaRepository<I,E>
 				.append(entityType.getName()).append(" e ")
 				.append("where e.id = ?0")
 				.toString();
-		Query query = entityManager.createQuery(queryString);
-		query.setParameter(0, id);
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		try {
-			query.executeUpdate();
-			transaction.commit();
-		}
-		catch (Exception e) {
-			transaction.rollback();
-			throw e;
-		}
+		deleteByQueryString(queryString, new Object[] {id});
 	}
 
 	@Override
@@ -230,8 +228,13 @@ public abstract class EzyJpaRepository<I,E>
 				.append(entityType.getName()).append(" e ")
 				.append("where e.id in ?0")
 				.toString();
+		return deleteByQueryString(queryString, new Object[] {ids});
+	}
+	
+	protected int deleteByQueryString(String queryString, Object[] parameters) {
 		Query query = entityManager.createQuery(queryString);
-		query.setParameter(0, ids);
+		for(int i = 0 ; i < parameters.length ; ++i)
+			query.setParameter(i, parameters[i]);
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		try {

@@ -21,7 +21,7 @@ public interface EzyDatabaseContext extends EzyCloseable {
 
 	Object deserializeResult(Object result, Class<?> resultType);
 	
-	List deserializeResultList(Object result, Class<?> resultType);
+	List deserializeResultList(Object result, Class<?> resultItemType);
 	
 	@Override
 	default void close() {}

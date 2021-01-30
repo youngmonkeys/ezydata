@@ -46,10 +46,10 @@ public class EzySimpleDatabaseContext
 	}
 	
 	@Override
-	public List deserializeResultList(Object result, Class<?> resultType) {
+	public List deserializeResultList(Object result, Class<?> resultItemType) {
 		List answer = new ArrayList<>();
 		for(Object item : (Iterable)result) {
-			Object data = deserializers.deserialize(item, resultType);
+			Object data = deserializers.deserialize(item, resultItemType);
 			answer.add(data);
 		}
 		return answer;

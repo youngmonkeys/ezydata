@@ -51,7 +51,7 @@ public class EzyMongoRepositoryImplementer
 		String methodName = method.getName();
 		Class<?> returnType = method.getReturnType();
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
-		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_ONE)) {
+		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND)) {
 			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST))
 				answerInstruction.answer().cast(returnType, "this.findListWithQuery(query, " + nextArg + ")");
 			else	

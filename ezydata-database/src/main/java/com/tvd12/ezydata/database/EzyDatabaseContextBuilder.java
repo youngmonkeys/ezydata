@@ -15,6 +15,7 @@ import com.tvd12.ezydata.database.converter.EzyBindResultDeserializer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
 import com.tvd12.ezydata.database.converter.EzySimpleResultDeserializers;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
+import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzySimpleQueryManager;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
@@ -41,6 +42,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	protected List<EzyReflection> reflections;
 	protected Map<Class<?>, Object> repositories;
 	protected EzySimpleQueryManager queryManager;
+	protected EzyQueryMethodConverter queryMethodConverter;
 	protected EzyBindingContextBuilder bindingContextBuilder;
 	protected EzySimpleResultDeserializers resultDeserializers;
 	
@@ -52,7 +54,12 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		this.queryResultClasses = new HashSet<>();
 		this.repositories = new HashMap<>();
 		this.queryManager = new EzySimpleQueryManager();
+		this.queryMethodConverter = newQueryMethodConverter();
 		this.resultDeserializers = new EzySimpleResultDeserializers();
+	}
+	
+	protected EzyQueryMethodConverter newQueryMethodConverter() {
+		return null;
 	}
 	
 	public B addQuery(EzyQueryEntity query) {
@@ -319,6 +326,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	private EzyAbstractRepositoriesImplementer createRepositoriesImplementer() {
 		EzyAbstractRepositoriesImplementer answer = newRepositoriesImplementer();
 		answer.queryManager(queryManager);
+		answer.queryMethodConverter(queryMethodConverter);
 		for(EzyReflection reflection : reflections)
 			answer.repositoryInterfaces(reflection);
 		answer.repositoryInterfaces(autoImplInterfaces);
@@ -328,7 +336,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	protected abstract EzyAbstractRepositoriesImplementer newRepositoriesImplementer();
-
+	
 	protected void printDatabaseContextInformation(EzyDatabaseContext context) {
 		logger.debug("\n{}\n{}\n{}",
 				"====================== DATABASE CONTEXT ===============",

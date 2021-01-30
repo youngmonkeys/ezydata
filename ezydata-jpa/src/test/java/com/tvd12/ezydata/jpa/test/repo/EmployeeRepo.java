@@ -41,4 +41,18 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	@EzyQuery("select e from Employee e")
 	List<Employee> findList(EzyNext next);
 	
+	Employee findByEmail(String email);
+	
+	Employee findBy();
+	
+	Employee findByEmailAndPhoneNumber(String email, String phoneNumber);
+	
+	List<Employee> findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo(
+			String employeeId,
+			List<String> emails,
+			List<String> phoneNumbers,
+			String bankAccountNo,
+			EzyNext next
+	);
+	
 }

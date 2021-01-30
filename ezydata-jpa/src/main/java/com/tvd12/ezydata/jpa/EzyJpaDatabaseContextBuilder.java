@@ -9,7 +9,9 @@ import javax.persistence.NamedQuery;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
+import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
+import com.tvd12.ezydata.jpa.query.EzyJpaQueryMethodConverter;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
@@ -29,6 +31,11 @@ public class EzyJpaDatabaseContextBuilder
 		EzySimpleJpaDatabaseContext context = new EzySimpleJpaDatabaseContext();
 		context.setEntityManagerFactory(entityManagerFactory);
 		return context;
+	}
+	
+	@Override
+	protected EzyQueryMethodConverter newQueryMethodConverter() {
+		return new EzyJpaQueryMethodConverter();
 	}
 	
 	@Override
