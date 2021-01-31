@@ -2,6 +2,7 @@ package com.tvd12.ezydata.database.bean;
 
 import java.util.Map;
 
+import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.reflect.EzyReflection;
@@ -25,6 +26,8 @@ public interface EzyRepositoriesImplementer {
 	EzyRepositoriesImplementer queryManager(EzyQueryRegister queryManager);
 	
 	EzyRepositoriesImplementer queryMethodConverter(EzyQueryMethodConverter queryMethodConverter);
+	
+	EzyRepositoriesImplementer repositoryWrapper(EzyDatabaseRepositoryWrapper repositoryWrapper);
 	
 	public abstract Map<Class<?>, Object> implement(Object template);
 	

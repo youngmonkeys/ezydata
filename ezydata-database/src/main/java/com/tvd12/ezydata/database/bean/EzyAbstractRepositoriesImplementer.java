@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
@@ -28,11 +29,13 @@ public abstract class EzyAbstractRepositoriesImplementer
 	protected List<EzyReflection> reflections;
 	protected EzyQueryRegister queryManager;
 	protected EzyQueryMethodConverter queryMethodConverter;
+	protected EzyDatabaseRepositoryWrapper repositoryWrapper;
 	
 	public EzyAbstractRepositoriesImplementer() {
 		this.reflections = new ArrayList<>();
 		this.packagesToScan = new HashSet<>();
 		this.autoImplInterfaces = new HashSet<>();
+		this.repositoryWrapper = EzyDatabaseRepositoryWrapper.DEFAULT;
 	}
 	
 	public EzyRepositoriesImplementer scan(String packageName) {
@@ -97,6 +100,12 @@ public abstract class EzyAbstractRepositoriesImplementer
 	}
 	
 	@Override
+	public EzyRepositoriesImplementer repositoryWrapper(EzyDatabaseRepositoryWrapper repositoryWrapper) {
+		this.repositoryWrapper = repositoryWrapper;
+		return this;
+	}
+	
+	@Override
 	public Map<Class<?>, Object> implement(Object template) {
 		Collection<Class<?>> scannedInterfaces = getAutoImplRepoInterfaces();
 		autoImplInterfaces.addAll(scannedInterfaces);
@@ -112,6 +121,7 @@ public abstract class EzyAbstractRepositoriesImplementer
 		EzyAbstractRepositoryImplementer implementer = newRepoImplementer(itf);
 		implementer.setQueryManager(queryManager);
 		implementer.setQueryMethodConverter(queryMethodConverter);
+		implementer.setRepositoryWrapper(repositoryWrapper);
 		return implementer.implement(template);
 	}
 	

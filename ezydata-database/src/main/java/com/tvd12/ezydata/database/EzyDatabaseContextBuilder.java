@@ -45,6 +45,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	protected EzyQueryMethodConverter queryMethodConverter;
 	protected EzyBindingContextBuilder bindingContextBuilder;
 	protected EzySimpleResultDeserializers resultDeserializers;
+	protected EzyDatabaseRepositoryWrapper repositoryWrapper;
 	
 	public EzyDatabaseContextBuilder() {
 		this.reflections = new ArrayList<>();
@@ -56,6 +57,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		this.queryManager = new EzySimpleQueryManager();
 		this.queryMethodConverter = newQueryMethodConverter();
 		this.resultDeserializers = new EzySimpleResultDeserializers();
+		this.repositoryWrapper = EzyDatabaseRepositoryWrapper.DEFAULT;
 	}
 	
 	protected EzyQueryMethodConverter newQueryMethodConverter() {
@@ -327,6 +329,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		EzyAbstractRepositoriesImplementer answer = newRepositoriesImplementer();
 		answer.queryManager(queryManager);
 		answer.queryMethodConverter(queryMethodConverter);
+		answer.repositoryWrapper(repositoryWrapper);
 		for(EzyReflection reflection : reflections)
 			answer.repositoryInterfaces(reflection);
 		answer.repositoryInterfaces(autoImplInterfaces);

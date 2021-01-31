@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
+import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryMethod;
@@ -38,6 +39,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	protected EzyQueryRegister queryManager;
 	@Setter
 	protected EzyQueryMethodConverter queryMethodConverter;
+	@Setter
+	protected EzyDatabaseRepositoryWrapper repositoryWrapper;
 	@Setter
 	protected static boolean debug; 
 	protected static final AtomicInteger COUNT = new AtomicInteger(0);
@@ -89,7 +92,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 			((EzyDatabaseContextAware)repo).setDatabaseContext((EzyDatabaseContext) template);
 		}
 		setRepoComponent(repo, template);
-		return repo;
+		return repositoryWrapper.wrap(repo);
 	}
 	
 	protected void setRepoComponent(Object repo, Object template) {}
