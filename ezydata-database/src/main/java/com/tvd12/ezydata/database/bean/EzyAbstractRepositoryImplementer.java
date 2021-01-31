@@ -197,16 +197,6 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		return resultType;
 	}
 	
-	protected RuntimeException newInvalidMethodException(EzyMethod method) {
-		return new IllegalArgumentException("method name must start with: " + 
-				EzyDatabaseRepository.PREFIX_FIND + ", " +
-				EzyDatabaseRepository.PREFIX_FIND_LIST + ", " + 
-				EzyDatabaseRepository.PREFIX_FETCH_ONE  + ", " +
-				EzyDatabaseRepository.PREFIX_FETCH_LIST + ", " +
-				EzyDatabaseRepository.PREFIX_UPDATE + " or " +
-				EzyDatabaseRepository.PREFIX_DELETE);
-	}
-	
 	protected String makeGetEntityTypeMethodContent(Class entityType) {
 		return new EzyFunction(getEntityTypeMethod())
 				.body()

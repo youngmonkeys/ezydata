@@ -10,10 +10,13 @@ import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
 import com.tvd12.ezydata.mongodb.testing.bean.Duck;
 import com.tvd12.ezydata.mongodb.testing.bean.DuckId;
 import com.tvd12.ezydata.mongodb.testing.bean.DuckRepo;
+import com.tvd12.ezydata.mongodb.testing.bean.Employee;
+import com.tvd12.ezydata.mongodb.testing.bean.EmployeeRepo;
 import com.tvd12.ezydata.mongodb.testing.bean.FoodRepo;
 import com.tvd12.ezydata.mongodb.testing.bean.Person;
 import com.tvd12.ezydata.mongodb.testing.bean.PersonRepo;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.util.EzyNext;
 import com.tvd12.ezyfox.util.Next;
 
 public class EzySimpleRepositoryImplementerTest extends MongodbTest {
@@ -90,5 +93,56 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		}
 	}
 	
-	
+	@Test
+	public void testEmployee() throws Exception {
+		EzyMongoRepositoryImplementer.setDebug(true);
+		EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+				.mongoClient(mongoClient)
+				.databaseName(databaseName)
+				.repositoryInterface(EmployeeRepo.class)
+				.scan("com.tvd12.ezydata.mongodb.testing.bean")
+				.build();
+		EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
+		Employee employee = new Employee();
+		employee.setEmployeeId("dzung");
+		employee.setFirstName("Dep");
+		employee.setLastName("Trai");
+		employeeRepo.save(employee);
+
+		Employee employee2 = new Employee();
+		employee2.setEmployeeId("employee2");
+		employee2.setFirstName("Foo");
+		employee2.setLastName("Bar");
+		Employee employee3 = new Employee();
+		employee3.setEmployeeId("employee3");
+		employee3.setFirstName("Hello");
+		employee3.setLastName("World");
+		employeeRepo.save(Arrays.asList(employee2, employee3));
+		assert employeeRepo.findById("employee2") != null;
+		assert employeeRepo.findListByIds(Arrays.asList("employee2", "employee3")).size() >= 2;
+		assert employeeRepo.findByField("firstName", "Foo") != null;
+		assert employeeRepo.findListByField("firstName", "Hello").size() >= 1;
+		assert employeeRepo.findListByField("firstName", "Hello", 0, 2).size() >= 1;
+		assert employeeRepo.findAll().size() >= 0;
+		assert employeeRepo.findAll(0, 1).size() == 1;
+		assert employeeRepo.findByEmail("dzung@youngmokeys.org") != null;
+		assert employeeRepo.findByEmailAndPhoneNumber(
+				"dzung@youngmokeys.org", 
+				"123456789"
+				) != null;
+		long count = employeeRepo.count();
+		assert employeeRepo.findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo(
+				"dzung", 
+				Arrays.asList("dzung@youngmokeys.org"), 
+				Arrays.asList("123456789"), 
+				"abcdefgh", 
+				EzyNext.fromSkipLimit(0, 100)
+				).size() == count;
+		employeeRepo.delete("employee2");
+		assert employeeRepo.count() == (count - 1);
+		assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;
+		employeeRepo.deleteAll();
+		assert employeeRepo.count() == 0;
+		Thread.sleep(1000L);
+	}
 }

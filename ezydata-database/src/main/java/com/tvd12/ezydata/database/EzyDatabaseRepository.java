@@ -9,9 +9,7 @@ public interface EzyDatabaseRepository<I, E> extends
 		EzyCrudService<I, E> {
 	
 	String PREFIX_FIND = "find";
-	String PREFIX_FIND_LIST = "findList";
-	String PREFIX_FETCH_ONE = "fetch";
-	String PREFIX_FETCH_LIST = "fetchList";
+	String PREFIX_FETCH = "fetch";
 	String PREFIX_UPDATE = "update";
 	String PREFIX_DELETE = "delete";
 	String PREFIX_COUNT = "count";

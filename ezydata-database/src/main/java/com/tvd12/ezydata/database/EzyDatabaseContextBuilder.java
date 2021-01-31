@@ -301,10 +301,10 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	protected void addRepositoriesFromClasses(EzyDatabaseContext context) {
 		for(Class<?> repoClass : repositoryClasses)
-			addRepositoriesFromClass(context, repoClass);
+			addRepositoryFromClass(context, repoClass);
 	}
 	
-	protected void addRepositoriesFromClass(EzyDatabaseContext context, Class<?> repoClass) {
+	protected void addRepositoryFromClass(EzyDatabaseContext context, Class<?> repoClass) {
 		try {
 			Object repo = EzyClasses.newInstance(repoClass);
 			if(repo instanceof EzyDatabaseContextAware)

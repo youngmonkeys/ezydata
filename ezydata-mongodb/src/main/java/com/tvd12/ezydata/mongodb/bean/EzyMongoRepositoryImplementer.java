@@ -1,7 +1,6 @@
 package com.tvd12.ezydata.mongodb.bean;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
@@ -10,7 +9,6 @@ import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyMethod;
-import com.tvd12.ezyfox.util.Next;
 
 public class EzyMongoRepositoryImplementer 
 		extends EzyAbstractRepositoryImplementer  {
@@ -21,7 +19,6 @@ public class EzyMongoRepositoryImplementer
 	
 	@Override
 	protected String makeAbstractMethodContent(EzyMethod method) {
-		EzyQuery anno = method.getAnnotation(EzyQuery.class);
 		String queryString = getQueryString(method).getQueryString();
 		EzyBody body = new EzyFunction(method).body();
 		EzyInstruction createQueryInstruction = new EzyInstruction("\t", "\n", false)
@@ -32,13 +29,11 @@ public class EzyMongoRepositoryImplementer
 				.append("\n\t\t.query(").string(queryString).append(")");
 		body.append(createQueryInstruction);
 		String nextArg = null;
+		boolean isPagination = isPaginationMethod(method);
 		int paramCount = method.getParameterCount();
-		if(paramCount > 0) {
-			Class<?> lastParamType = method.getParameterTypes()[paramCount - 1];
-			if(Next.class.isAssignableFrom(lastParamType)) {
-				-- paramCount;
-				nextArg = "arg" + paramCount;
-			}
+		if(isPagination) {
+			-- paramCount;
+			nextArg = "arg" + paramCount;
 		}
 		for(int i = 0 ; i < paramCount ; ++i) {
 			body.append(new EzyInstruction("\t\t", "\n", false)
@@ -51,24 +46,7 @@ public class EzyMongoRepositoryImplementer
 		String methodName = method.getName();
 		Class<?> returnType = method.getReturnType();
 		EzyInstruction answerInstruction = new EzyInstruction("\t", "\n");
-		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND)) {
-			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FIND_LIST))
-				answerInstruction.answer().cast(returnType, "this.findListWithQuery(query, " + nextArg + ")");
-			else	
-				answerInstruction.answer().cast(entityType, "this.findOneWithQuery(query)");
-		}
-		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_ONE)) {
-			Class<?> resultType = anno.resultType();
-			if(resultType == Object.class)
-				resultType = entityType;
-			if(methodName.startsWith(EzyDatabaseRepository.PREFIX_FETCH_LIST))
-				answerInstruction.answer().cast(returnType, 
-						"this.aggregateListWithQuery(query," + resultType.getName() + ".class, " + nextArg + ")");
-			else	
-				answerInstruction.answer().cast(resultType, 
-						"this.aggregateOneWithQuery(query," + resultType.getName() + ".class)");
-		}
-		else if(methodName.startsWith(EzyDatabaseRepository.PREFIX_COUNT)) {
+		if(methodName.startsWith(EzyDatabaseRepository.PREFIX_COUNT)) {
 			if(returnType != int.class && returnType != long.class)
 				throw new IllegalArgumentException("count method must return int or long, error method: " + method);
 			body.append(new EzyInstruction("\t", "\n")
@@ -95,7 +73,40 @@ public class EzyMongoRepositoryImplementer
 			answerInstruction.answer().append("answer");
 		}
 		else {
-			throw newInvalidMethodException(method);
+			Class<?> resultType = getResultType(method);
+			if(Iterable.class.isAssignableFrom(returnType)) {
+				if(methodName.startsWith(EzyMongoRepository.PREFIX_FETCH) ||
+					resultType != entityType
+				) {
+					answerInstruction.answer()
+					.cast(
+						returnType, 
+						"this.aggregateListWithQuery(query," + resultType.getName() + ".class, " + nextArg + ")"
+					);
+				}
+				else {
+					answerInstruction.answer()
+						.cast(
+							returnType, 
+							"this.findListWithQuery(query, " + nextArg + ")"
+						);
+				}
+			}
+			else {
+				if(methodName.startsWith(EzyMongoRepository.PREFIX_FETCH) ||
+					resultType != entityType
+				) {
+					answerInstruction.answer()
+						.cast(
+							resultType, 
+							"this.aggregateOneWithQuery(query," + resultType.getName() + ".class)"
+						);
+				}
+				else {
+					answerInstruction.answer()
+						.cast(entityType, "this.findOneWithQuery(query)");
+				}
+			}
 		}
 		if(returnType != void.class)
 			body.append(answerInstruction);

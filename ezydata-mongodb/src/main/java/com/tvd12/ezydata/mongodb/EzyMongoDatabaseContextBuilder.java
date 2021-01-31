@@ -12,9 +12,11 @@ import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.annotation.EzyCollection;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.query.EzyQLQueryFactory;
+import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
+import com.tvd12.ezydata.mongodb.query.EzyMongoQueryMethodConverter;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.reflect.EzyReflection;
@@ -60,6 +62,11 @@ public class EzyMongoDatabaseContextBuilder
 	protected void preBuild() {
 		for(EzyReflection reflection : reflections)
 			entityClasses.addAll(reflection.getAnnotatedClasses(EzyCollection.class));
+	}
+	
+	@Override
+	protected EzyQueryMethodConverter newQueryMethodConverter() {
+		return new EzyMongoQueryMethodConverter();
 	}
 	
 	@Override

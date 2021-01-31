@@ -22,7 +22,7 @@ public interface FoodRepo extends EzyMongoRepository<Integer, Food> {
 			"{ $match: { category: 'cake', qty: 10  } }," + 
 			"{ $sort: { type: -1 } }" + 
 		"]")
-		List<Food> fetchListMatch2(Next next);
+	List<Food> fetchListMatch2(Next next);
 	
 	@EzyQuery("[" + 
 			"{ $sort: { qty: 1 }}," + 

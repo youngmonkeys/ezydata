@@ -39,12 +39,6 @@ public class EzyAbstractRepositoryImplementerTest {
 		catch (Exception e) {
 			assert e instanceof IllegalArgumentException;
 		}
-		try {
-			impl.processInvalidMethod(clazz.getMethod("helloWorld"));
-		}
-		catch (Exception e) {
-			assert e instanceof IllegalArgumentException;
-		}
 	}
 	
 	public static interface RepoA extends EzyDatabaseRepository<Integer, Person> {
@@ -81,10 +75,5 @@ public class EzyAbstractRepositoryImplementerTest {
 		protected EzyQueryString getQueryString(EzyMethod method) {
 			return super.getQueryString(method);
 		}
-		
-		protected void processInvalidMethod(EzyMethod method) {
-			throw newInvalidMethodException(method);
-		}
-		
 	}
 }
