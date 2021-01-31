@@ -82,6 +82,7 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
 		assert employeeRepo.findByEmployeeId("dzung") == employeeRepo.findById("dzung");
 		assert employeeRepo.findListByEmail("dzung@youngmokeys.org").get(0) instanceof Employee;
 		assert employeeRepo.findEmployeeIdByEmployeeId("dzung").getEmployeeId().equals("dzung");
+		assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
 		employeeRepo.delete("employee2");
 		assert employeeRepo.count() == (count - 1);
 		assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;

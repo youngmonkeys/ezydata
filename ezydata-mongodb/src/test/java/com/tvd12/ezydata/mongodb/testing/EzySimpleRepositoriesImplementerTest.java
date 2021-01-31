@@ -10,6 +10,7 @@ import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
+import com.tvd12.ezydata.mongodb.query.EzyMongoQueryMethodConverter;
 import com.tvd12.ezydata.mongodb.testing.bean.NothingInterface;
 import com.tvd12.ezydata.mongodb.testing.bean.PersonRepo2;
 import com.tvd12.ezyfox.collect.Sets;
@@ -26,6 +27,7 @@ public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
 		
 		EzyMongoRepositoryImplementer.setDebug(true);
 		EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
+				.queryMethodConverter(new EzyMongoQueryMethodConverter())
 				.scan("com.tvd12.ezydata.mongodb.testing.bean")
 				.scan("com.tvd12.ezydata.mongodb.testing.bean", "com.tvd12.ezydata.mongodb.testing.bean")
 				.scan(Sets.newHashSet("com.tvd12.ezydata.mongodb.testing.bean"))

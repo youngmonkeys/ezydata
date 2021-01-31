@@ -21,4 +21,6 @@ public interface EmployeeRepo extends EzyMongoRepository<String, Employee> {
 			String bankAccountNo,
 			EzyNext next
 	);
+	
+	int countByEmail(String email);
 }

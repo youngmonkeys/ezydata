@@ -56,6 +56,8 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 			EzyNext next
 	);
 	
+	int countByEmail(String email);
+	
 	@EzyQuery(
 			value = "select * from ezyfox_jpa_employee where employeeId = ?0",
 			nativeQuery = true

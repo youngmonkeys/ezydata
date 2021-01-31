@@ -138,6 +138,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 				"abcdefgh", 
 				EzyNext.fromSkipLimit(0, 100)
 				).size() == count;
+		assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
 		employeeRepo.delete("employee2");
 		assert employeeRepo.count() == (count - 1);
 		assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;
