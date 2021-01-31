@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyTransactional;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
+import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
@@ -23,13 +24,29 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 	
 	@Override
 	protected String makeAbstractMethodContent(EzyMethod method) {
-		String queryString = getQueryString(method);
+		EzyQueryString queryString = getQueryString(method);
 		EzyBody body = new EzyFunction(method).body();
 		EzyInstruction createQueryInstruction = new EzyInstruction("\t", "\n")
 				.variable(Query.class)
-				.equal()
-				.append("this.entityManager.createQuery(").string(queryString)
-				.append(")");
+				.equal();
+		if(queryString.isNativeQuery()) {
+			createQueryInstruction
+				.append("this.entityManager.createNativeQuery(");
+		}
+		else {
+			createQueryInstruction
+				.append("this.entityManager.createQuery(");
+		}
+		createQueryInstruction
+			.string(queryString.getQueryString());
+		
+		Class<?> resultType = getResultType(method);
+		
+		if(queryString.isNativeQuery() && resultType.equals(entityType)) {
+			createQueryInstruction.append(",")
+				.clazz(resultType, true);
+		}
+		createQueryInstruction.append(")");
 		body.append(createQueryInstruction);
 		boolean isPagination = isPaginationMethod(method);
 		int paramCount = method.getParameterCount();
@@ -79,7 +96,6 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 			answerInstruction.answer().append("answer");
 		}
 		else {
-			Class<?> resultType = getResultType(method);
 			if(Iterable.class.isAssignableFrom(returnType)) {
 				if(isPagination) {
 					String nextArg = "arg" + paramCount;

@@ -58,13 +58,13 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 				.queryResultClass(FindResult.class)
 				.queryResultClasses(FindResult.class, FindResult.class)
 				.queryResultClasses(Sets.newHashSet(FindResult.class))
-				.addResultDeserializer(FindResult.class, new EzyResultDeserializer() {
+				.addResultDeserializer(FindResult.class, new EzyResultDeserializer<FindResult>() {
 					@Override
-					public Object deserialize(Object data) {
+					public FindResult deserialize(Object data) {
 						return new FindResult();
 					}
 				})
-				.addResultDeserializers(EzyMaps.newHashMap(FindResult.class, new EzyResultDeserializer() {
+				.addResultDeserializers(EzyMaps.newHashMap(FindResult.class, new EzyResultDeserializer<FindResult>() {
 				}))
 				.build();
 		assert dbContext.getQueryManager().getQuery("test1") == queryEntity1;
@@ -113,9 +113,9 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 				.queryResultClass(FindResult.class)
 				.queryResultClasses(FindResult.class, FindResult.class)
 				.queryResultClasses(Sets.newHashSet(FindResult.class))
-				.addResultDeserializer(FindResult.class, new EzyResultDeserializer() {
+				.addResultDeserializer(FindResult.class, new EzyResultDeserializer<FindResult>() {
 				})
-				.addResultDeserializers(EzyMaps.newHashMap(FindResult.class, new EzyResultDeserializer() {
+				.addResultDeserializers(EzyMaps.newHashMap(FindResult.class, new EzyResultDeserializer<FindResult>() {
 				}))
 				.build();
 	}

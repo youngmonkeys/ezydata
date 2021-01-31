@@ -22,7 +22,7 @@ public class EzyMongoRepositoryImplementer
 	@Override
 	protected String makeAbstractMethodContent(EzyMethod method) {
 		EzyQuery anno = method.getAnnotation(EzyQuery.class);
-		String queryString = getQueryString(method);
+		String queryString = getQueryString(method).getQueryString();
 		EzyBody body = new EzyFunction(method).body();
 		EzyInstruction createQueryInstruction = new EzyInstruction("\t", "\n", false)
 				.variable(EzyQLQuery.class, "query")

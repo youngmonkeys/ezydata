@@ -30,6 +30,7 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
 				.addQuery(query1)
 				.repositoryClass(UserRepo.class)
 				.scan("com.tvd12.ezydata.jpa.test.repo")
+				.scan("com.tvd12.ezydata.jpa.test.result")
 				.entityManagerFactory(ENTITY_MANAGER_FACTORY)
 				.build();
 		UserRepo userRepo = databaseContext.getRepository(UserRepo.class);
@@ -78,6 +79,9 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
 				"abcdefgh", 
 				EzyNext.fromSkipLimit(0, 100)
 				).size() == count;
+		assert employeeRepo.findByEmployeeId("dzung") == employeeRepo.findById("dzung");
+		assert employeeRepo.findListByEmail("dzung@youngmokeys.org").get(0) instanceof Employee;
+		assert employeeRepo.findEmployeeIdByEmployeeId("dzung").getEmployeeId().equals("dzung");
 		employeeRepo.delete("employee2");
 		assert employeeRepo.count() == (count - 1);
 		assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;

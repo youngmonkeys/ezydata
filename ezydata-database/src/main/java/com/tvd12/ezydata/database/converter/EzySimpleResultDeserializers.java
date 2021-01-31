@@ -6,6 +6,7 @@ import java.util.Map;
 import com.tvd12.ezydata.database.reflect.EzyDatabaseTypes;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
+@SuppressWarnings("rawtypes")
 public class EzySimpleResultDeserializers 
 		extends EzyLoggable 
 		implements EzyResultDeserializers {

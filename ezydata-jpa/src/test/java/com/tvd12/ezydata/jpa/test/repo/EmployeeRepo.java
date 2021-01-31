@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
+import com.tvd12.ezydata.jpa.test.result.EmployeeIdResult;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.util.EzyNext;
 
@@ -54,5 +55,23 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 			String bankAccountNo,
 			EzyNext next
 	);
+	
+	@EzyQuery(
+			value = "select * from ezyfox_jpa_employee where employeeId = ?0",
+			nativeQuery = true
+	)
+	Employee findByEmployeeId(String employeeId);
+	
+	@EzyQuery(
+			value = "select employeeId from ezyfox_jpa_employee where employeeId = ?0",
+			nativeQuery = true
+	)
+	EmployeeIdResult findEmployeeIdByEmployeeId(String employeeId);
+	
+	@EzyQuery(
+			value = "select * from ezyfox_jpa_employee where email = ?0",
+			nativeQuery = true
+	)
+	List<Employee> findListByEmail(String email);
 	
 }

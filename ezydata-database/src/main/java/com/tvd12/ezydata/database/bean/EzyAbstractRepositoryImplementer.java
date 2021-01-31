@@ -12,6 +12,7 @@ import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryMethod;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzyQueryRegister;
+import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
@@ -142,15 +143,16 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		return body.function().toString();
 	}
 	
-	protected String getQueryString(EzyMethod method) {
+	protected EzyQueryString getQueryString(EzyMethod method) {
 		EzyQuery anno = method.getAnnotation(EzyQuery.class);
 		if(anno != null)
 			return getQueryString(method, anno);
 		return convertQueryMethodToQueryString(method);
 	}
 	
-	protected String getQueryString(EzyMethod method, EzyQuery queryAnnotation) {
+	protected EzyQueryString getQueryString(EzyMethod method, EzyQuery queryAnnotation) {
 		String queryString = queryAnnotation.value();
+		boolean nativeQuery = queryAnnotation.nativeQuery();
 		if(EzyStrings.isNoContent(queryString)) {
 			String queryName = queryAnnotation.name();
 			if(EzyStrings.isNoContent(queryName))
@@ -159,13 +161,14 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 			if(query == null)
 				throw new IllegalArgumentException("not found query with name: " + queryName + " on method: " + method.getName());
 			queryString = query.getValue();
+			nativeQuery = query.isNativeQuery();
 		}
-		return queryString;
+		return new EzyQueryString(queryString, nativeQuery);
 	}
 	
-	protected String convertQueryMethodToQueryString(EzyMethod method) {
+	protected EzyQueryString convertQueryMethodToQueryString(EzyMethod method) {
 		EzyQueryMethod queryMethod = new EzyQueryMethod(method);
-		return queryMethodConverter.toQueryString(entityType, queryMethod);
+		return new EzyQueryString(queryMethodConverter.toQueryString(entityType, queryMethod));
 	}
 	
 	protected boolean isPaginationMethod(EzyMethod method) {
@@ -173,15 +176,22 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 	}
 	
 	protected Class<?> getResultType(EzyMethod method) {
-		try {
-			return EzyGenerics.getOneGenericClassArgument(
-				method.getGenericReturnType()
-			);
+		Class<?> resultType = Object.class;
+		EzyQuery anno = method.getAnnotation(EzyQuery.class);
+		if(anno != null)
+			resultType = anno.resultType();
+		if(resultType == Object.class) {
+			resultType = method.getReturnType();
+			if(Iterable.class.isAssignableFrom(resultType)) {
+				try {
+					resultType = EzyGenerics.getOneGenericClassArgument(
+						method.getGenericReturnType()
+					);
+				}
+				catch (Exception e) {}
+			}
 		}
-		catch (Exception e) {
-			EzyQuery anno = method.getAnnotation(EzyQuery.class);
-			return anno != null ? anno.resultType() : Object.class;
-		}
+		return resultType;
 	}
 	
 	protected RuntimeException newInvalidMethodException(EzyMethod method) {

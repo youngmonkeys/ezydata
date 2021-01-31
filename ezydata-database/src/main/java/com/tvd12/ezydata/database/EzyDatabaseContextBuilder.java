@@ -9,7 +9,7 @@ import java.util.Set;
 
 import com.tvd12.ezydata.database.annotation.EzyNamedQuery;
 import com.tvd12.ezydata.database.annotation.EzyResultDeserialize;
-import com.tvd12.ezydata.database.annotation.EzyResultType;
+import com.tvd12.ezydata.database.annotation.EzyQueryResult;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.converter.EzyBindResultDeserializer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
@@ -239,7 +239,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	protected void scanAndAddResultTypes() {
 		for(EzyReflection reflection: reflections) {
-			queryResultClasses.addAll(reflection.getAnnotatedClasses(EzyResultType.class));
+			queryResultClasses.addAll(reflection.getAnnotatedClasses(EzyQueryResult.class));
 		}
 	}
 	

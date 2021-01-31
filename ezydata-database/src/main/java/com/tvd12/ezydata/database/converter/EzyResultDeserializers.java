@@ -2,6 +2,7 @@ package com.tvd12.ezydata.database.converter;
 
 import java.util.Map;
 
+@SuppressWarnings("rawtypes")
 public interface EzyResultDeserializers {
 
 	Object deserialize(Object data, Class<?> resultType); 
