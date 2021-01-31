@@ -11,7 +11,7 @@
 	<name>ezydata-morphia</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<morphia.version>1.5.8</morphia.version>
+		<morphia.version>1.6.1</morphia.version>
 	</properties>
 	<dependencies>
 		<dependency>
