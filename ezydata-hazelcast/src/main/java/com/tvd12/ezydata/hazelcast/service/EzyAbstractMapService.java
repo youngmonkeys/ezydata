@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.TransactionalMap;
+import com.hazelcast.map.IMap;
+import com.hazelcast.transaction.TransactionalMap;
 import com.tvd12.ezydata.hazelcast.factory.EzyMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.factory.EzyMapTransactionFactoryAware;
 import com.tvd12.ezydata.hazelcast.transaction.EzyMapApplyTransaction;
@@ -27,8 +27,7 @@ public abstract class EzyAbstractMapService<K,V>
 	@Setter
 	protected EzyMapTransactionFactory mapTransactionFactory;
 	
-	public EzyAbstractMapService() {
-	}
+	public EzyAbstractMapService() {}
 	
 	public EzyAbstractMapService(HazelcastInstance hazelcastInstance) {
 		super(hazelcastInstance);

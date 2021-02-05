@@ -7,9 +7,9 @@ import java.util.Map;
 
 import com.tvd12.ezyfox.collect.Sets;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.query.EntryObject;
 import com.hazelcast.query.Predicate;
-import com.hazelcast.query.PredicateBuilder;
+import com.hazelcast.query.PredicateBuilder.EntryObject;
+import com.hazelcast.query.impl.PredicateBuilderImpl;
 import com.tvd12.ezyfox.util.EzyHasIdEntity;
 
 public abstract class EzySimpleHazelcastMapService<K,V>
@@ -140,13 +140,13 @@ public abstract class EzySimpleHazelcastMapService<K,V>
 		return getList(predicate);
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected List<V> getList(Predicate predicate) {
 		return new ArrayList<>(map.values(predicate));
 	}
 	
 	protected final EntryObject getEntryObject() {
-		return new PredicateBuilder().getEntryObject();
+		return new PredicateBuilderImpl().getEntryObject();
 	}
 	
 }

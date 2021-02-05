@@ -16,6 +16,4 @@ public class EzySimpleMapConfigsFetcherTest extends BaseTest {
 		fetcher.get();
 	}
 	
-	
-	
 }

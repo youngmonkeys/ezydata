@@ -1,7 +1,7 @@
 package com.tvd12.ezydata.hazelcast.transaction.impl;
 
-import com.hazelcast.core.TransactionalMap;
 import com.hazelcast.transaction.TransactionContext;
+import com.hazelcast.transaction.TransactionalMap;
 import com.tvd12.ezydata.hazelcast.transaction.EzyMapApplyTransaction;
 import com.tvd12.ezyfox.function.EzyExceptionApply;
 

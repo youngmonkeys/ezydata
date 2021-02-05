@@ -14,8 +14,7 @@ public abstract class EzyAbstractMaxIdEntryProcessor implements DataSerializable
 	
 	protected int delta;
 	
-	public EzyAbstractMaxIdEntryProcessor() {
-	}
+	public EzyAbstractMaxIdEntryProcessor() {}
 	
 	public EzyAbstractMaxIdEntryProcessor(int delta) {
 		this.delta = delta;

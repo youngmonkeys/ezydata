@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.testng.annotations.Test;
 
-import com.hazelcast.core.MapStore;
+import com.hazelcast.map.MapStore;
 import com.tvd12.ezydata.hazelcast.factory.EzyAbstractMapstoreFactory;
 
 public class EzyAbstractMapstoreFactoryTest {

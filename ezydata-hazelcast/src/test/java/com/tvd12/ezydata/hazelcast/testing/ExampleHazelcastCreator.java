@@ -13,8 +13,10 @@ import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoresFetcher;
 import com.tvd12.ezydata.hazelcast.util.EzyHazelcastConfigs;
 import com.tvd12.ezyfox.collect.Sets;
 import com.hazelcast.config.Config;
+import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.EvictionPolicy;
 import com.hazelcast.config.MapStoreConfig.InitialLoadMode;
+import com.hazelcast.config.MaxSizePolicy;
 import com.hazelcast.core.HazelcastInstance;
 import com.tvd12.ezyfox.function.EzyCreation;
 import com.tvd12.ezyfox.io.EzyMaps;
@@ -35,11 +37,15 @@ public class ExampleHazelcastCreator implements EzyCreation<HazelcastInstance> {
 			protected void applyMapConfigs(Builder builder) {
 				builder
 				.mapConfigApply("example_users", mc -> {
-					mc.setEvictionPolicy(EvictionPolicy.LFU);
+					mc.setEvictionConfig(new EvictionConfig()
+							.setEvictionPolicy(EvictionPolicy.LFU)
+							.setMaxSizePolicy(MaxSizePolicy.FREE_HEAP_PERCENTAGE));
 					mc.setMaxIdleSeconds(100);
 				})
 				.mapConfigApplies(EzyMaps.newHashMap("example_users", mc -> {
-					mc.setEvictionPolicy(EvictionPolicy.LFU);
+					mc.setEvictionConfig(new EvictionConfig()
+							.setEvictionPolicy(EvictionPolicy.LFU)
+							.setMaxSizePolicy(MaxSizePolicy.FREE_HEAP_PERCENTAGE));
 					mc.setMaxIdleSeconds(100);
 				}));
 			}

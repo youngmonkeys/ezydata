@@ -10,7 +10,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.tvd12.ezydata.hazelcast.service.EzyEntryProcessorMaxIdService;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
 

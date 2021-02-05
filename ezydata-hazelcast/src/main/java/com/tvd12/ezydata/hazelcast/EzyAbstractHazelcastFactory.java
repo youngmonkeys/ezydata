@@ -8,7 +8,7 @@ import com.hazelcast.config.Config;
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MapStoreFactory;
+import com.hazelcast.map.MapStoreFactory;
 import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
 import com.tvd12.ezydata.hazelcast.factory.EzySimpleMapstoreFactory;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoreCreator;
@@ -39,9 +39,9 @@ public abstract class EzyAbstractHazelcastFactory
     }
     
     protected void addMapConfigs(Config config, Iterable<MapConfig> mapConfigs) {
-	    	Iterator<MapConfig> iterator = mapConfigs.iterator();
-	    	while(iterator.hasNext())
-	    		config.addMapConfig(iterator.next());
+    	Iterator<MapConfig> iterator = mapConfigs.iterator();
+    	while(iterator.hasNext())
+    		config.addMapConfig(iterator.next());
     }
 	
 	protected Iterable<MapConfig> getMapConfigs() {

@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Properties;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.MapLoaderLifecycleSupport;
-import com.hazelcast.core.MapStore;
+import com.hazelcast.map.MapLoaderLifecycleSupport;
+import com.hazelcast.map.MapStore;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyPostInit;
 
@@ -51,8 +51,11 @@ public abstract class EzyAbstractMapstore<K, V>
 	@Override
 	public Map<K, V> loadAll(Collection<K> keys) {
 		Map<K, V> map = new HashMap<>();
-		for (K key : keys)
-			map.put(key, load(key));
+		for (K key : keys) {
+			V value = load(key);
+			if(value != null)
+				map.put(key, value);
+		}
 		return map;
 	}
 

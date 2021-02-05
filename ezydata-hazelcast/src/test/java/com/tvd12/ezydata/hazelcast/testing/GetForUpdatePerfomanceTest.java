@@ -4,10 +4,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.hazelcast.core.TransactionalMap;
 import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionOptions;
 import com.hazelcast.transaction.TransactionOptions.TransactionType;
+import com.hazelcast.transaction.TransactionalMap;
 
 public class GetForUpdatePerfomanceTest extends HazelcastBaseTest {
 	

@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import com.hazelcast.core.MapStore;
+import com.hazelcast.map.MapStore;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
 import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoreCreator;

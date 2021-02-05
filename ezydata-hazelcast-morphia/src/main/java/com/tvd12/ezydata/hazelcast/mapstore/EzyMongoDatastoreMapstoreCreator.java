@@ -2,7 +2,7 @@ package com.tvd12.ezydata.hazelcast.mapstore;
 
 import java.util.Properties;
 
-import com.hazelcast.core.MapStore;
+import com.hazelcast.map.MapStore;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMongoDatabaseMapstoreCreator;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
 

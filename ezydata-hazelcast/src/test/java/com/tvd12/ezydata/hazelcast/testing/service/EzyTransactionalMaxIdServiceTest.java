@@ -10,8 +10,8 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IMap;
-import com.hazelcast.core.TransactionalMap;
+import com.hazelcast.map.IMap;
+import com.hazelcast.transaction.TransactionalMap;
 import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
 import com.tvd12.ezydata.hazelcast.factory.EzyMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;

@@ -5,8 +5,8 @@ package com.tvd12.ezydata.hazelcast.factory;
 
 import java.util.Properties;
 
-import com.hazelcast.core.MapLoader;
-import com.hazelcast.core.MapStoreFactory;
+import com.hazelcast.map.MapLoader;
+import com.hazelcast.map.MapStoreFactory;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyPostInit;
 

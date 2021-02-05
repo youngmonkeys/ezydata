@@ -9,7 +9,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.hazelcast.core.MapStore;
+import com.hazelcast.map.MapStore;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoreCreator;
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.ezyfox.bean.EzyBeanContextAware;

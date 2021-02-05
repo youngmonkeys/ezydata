@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.function.Supplier;
 import com.tvd12.ezyfox.collect.Sets;
-import com.hazelcast.core.MapStore;
+import com.hazelcast.map.MapStore;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.database.annotation.EzyMapstore;
 import com.tvd12.ezyfox.reflect.EzyClasses;

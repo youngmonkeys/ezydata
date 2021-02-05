@@ -2,7 +2,7 @@ package com.tvd12.ezydata.hazelcast.testing.service;
 
 import org.testng.annotations.Test;
 
-import com.hazelcast.core.IMap;
+import com.hazelcast.map.IMap;
 import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezydata.hazelcast.testing.constant.Entities;

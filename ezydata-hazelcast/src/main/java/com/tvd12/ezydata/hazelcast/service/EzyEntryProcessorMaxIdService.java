@@ -19,7 +19,7 @@ public class EzyEntryProcessorMaxIdService
 		extends EzyAbstractMapService<String, Long>
 		implements EzyMaxIdService {
 	
-	protected final EntryProcessor<String, Long> onEntryProcessor;
+	protected final EntryProcessor<String, Long, Long> onEntryProcessor;
 	
 	public EzyEntryProcessorMaxIdService() {
 		this.onEntryProcessor = newOneEntryProcessor();
@@ -50,11 +50,11 @@ public class EzyEntryProcessorMaxIdService
 		return EzyMapNames.MAX_ID;
 	}
 	
-	protected EntryProcessor<String, Long> newOneEntryProcessor() {
+	protected EntryProcessor<String, Long, Long> newOneEntryProcessor() {
 		return new EzyMaxIdOneEntryProcessor();
 	}
 	
-	protected EntryProcessor<String, Long> newEntryProcessor(int delta) {
+	protected EntryProcessor<String, Long, Long> newEntryProcessor(int delta) {
 		return new EzyMaxIdEntryProcessor(delta);
 	}
 	
