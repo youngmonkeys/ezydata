@@ -8,6 +8,7 @@ import org.bson.Document;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
+import com.mongodb.client.model.ReturnDocument;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 
 public class EzyMongoMaxIdRepository implements EzyMaxIdRepository {
@@ -35,7 +36,8 @@ public class EzyMongoMaxIdRepository implements EzyMaxIdRepository {
 		BsonDocument update = new BsonDocument();
 		update.put("$inc", updateValue);
 		FindOneAndUpdateOptions opts = new FindOneAndUpdateOptions()
-				.upsert(true);
+				.upsert(true)
+				.returnDocument(ReturnDocument.AFTER);
 		Document result = collection.findOneAndUpdate(filter, update, opts);
 		return ((Number)result.get("value")).longValue();
 	}

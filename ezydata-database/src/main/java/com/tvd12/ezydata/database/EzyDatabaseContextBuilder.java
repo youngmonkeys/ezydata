@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.database;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,6 +23,7 @@ import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.binding.impl.EzySimpleBindingContext;
+import com.tvd12.ezyfox.binding.writer.EzyToStringWriter;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
@@ -163,8 +166,11 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	public EzyDatabaseContext build() {
 		if(packagesToScan.size() > 0)
 			reflections.add(new EzyReflectionProxy(packagesToScan));
-		if(bindingContextBuilder == null)
-			bindingContextBuilder = EzyBindingContext.builder();
+		if(bindingContextBuilder == null) {
+			bindingContextBuilder = EzyBindingContext.builder()
+					.addTemplate(BigDecimal.class, EzyToStringWriter.getInstance())
+					.addTemplate(BigInteger.class, EzyToStringWriter.getInstance());
+		}
 		for(EzyReflection reflection : reflections)
 			bindingContextBuilder.addAllClasses(reflection);
 		preBuild();

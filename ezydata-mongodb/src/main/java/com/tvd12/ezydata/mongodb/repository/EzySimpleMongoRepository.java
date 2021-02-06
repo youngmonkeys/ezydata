@@ -247,11 +247,15 @@ public class EzySimpleMongoRepository<I,E>
 		logger.debug("find list with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
 		BsonDocument filter = queryDocument;
+		boolean hasOrderBy = queryDocument.containsKey("$orderby");
 		if(queryDocument.containsKey("$query"))
 			filter = queryDocument.getDocument("$query");
+		else if(hasOrderBy)
+			filter = new BsonDocument();
 		FindIterable<BsonDocument> find = collection.find(filter);
-		if(queryDocument.containsKey("$orderby"))
+		if(hasOrderBy) {
 			find.sort(queryDocument.getDocument("$orderby"));
+		}
 		if(next != null) {
 			find.skip((int)next.getSkip());
 			find.limit((int)next.getLimit());

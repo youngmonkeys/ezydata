@@ -83,8 +83,6 @@ public class EzyMongoDatabaseContextBuilder
 	
 	@Override
 	protected EzySimpleDatabaseContext newDatabaseContext() {
-		if(bindingContextBuilder == null)
-			bindingContextBuilder = EzyBindingContext.builder();
 		bindingContextBuilder.addClasses(entityClasses);
 		for(EzyReflection reflection : reflections)
 			bindingContextBuilder.addAllClasses(reflection);
