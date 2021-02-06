@@ -29,6 +29,31 @@ public class EzyPropertiesMongoClientLoader
     			.load();
     }
     
+    public EzyPropertiesMongoClientLoader host(String host) {
+        this.properties.put(EzyMongoClientLoader.HOST, host);
+        return this;
+    }
+    
+    public EzyPropertiesMongoClientLoader port(int port) {
+        this.properties.put(EzyMongoClientLoader.PORT, port);
+        return this;
+    }
+    
+    public EzyPropertiesMongoClientLoader username(String username) {
+        this.properties.put(EzyMongoClientLoader.USERNAME, username);
+        return this;
+    }
+    
+    public EzyPropertiesMongoClientLoader password(String password) {
+        this.properties.put(EzyMongoClientLoader.PASSWORD, password);
+        return this;
+    }
+    
+    public EzyPropertiesMongoClientLoader uri(String uri) {
+        this.properties.put(EzyMongoClientLoader.URI, uri);
+        return this;
+    }
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
 	public EzyPropertiesMongoClientLoader properties(Map map) {
         this.properties.putAll(map);

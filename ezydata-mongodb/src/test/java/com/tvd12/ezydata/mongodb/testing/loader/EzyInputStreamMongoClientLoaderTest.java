@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
+import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
 import com.tvd12.ezyfox.util.EzyMapBuilder;
@@ -18,7 +18,7 @@ public class EzyInputStreamMongoClientLoaderTest extends BaseTest {
 				.context(getClass())
 				.build()
 				.load("mongodb_config.properties");
-		EzyInputStreamMongoClientLoader loader = new EzyInputStreamMongoClientLoader()
+		EzySimpleMongoClientLoader loader = new EzySimpleMongoClientLoader()
 				.inputStream(inputStream)
 				.property(EzyMongoClientLoader.HOST, "127.0.0.1")
 				.property(EzyMongoClientLoader.PORT, "27017")

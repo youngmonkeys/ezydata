@@ -14,7 +14,7 @@ import com.tvd12.ezydata.hazelcast.factory.EzySimpleMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;
 import com.tvd12.ezydata.hazelcast.testing.ExampleHazelcastCreator;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
-import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
+import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 import com.tvd12.ezyfox.io.EzyMaps;
@@ -56,7 +56,7 @@ public abstract class HazelcastBaseTest extends BaseTest {
 	}
 	
 	private static MongoClient newMongoClient() {
-		return new EzyInputStreamMongoClientLoader()
+		return new EzySimpleMongoClientLoader()
 				.inputStream(getMongoConfigInputStream())
 				.property(EzyMongoClientLoader.DATABASE, "test")
 				.properties(EzyMaps.newHashMap(EzyMongoClientLoader.DATABASE, "test"))

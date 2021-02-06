@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.mongodb.MongoClient;
 import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
-import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
+import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.morphia.EzyDataStoreBuilder;
 import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoriesImplementer;
@@ -58,7 +58,7 @@ public class BaseMongoDBTest extends BaseTest {
 	}
 			
 	private static MongoClient newMongoClient() {
-		return new EzyInputStreamMongoClientLoader()
+		return new EzySimpleMongoClientLoader()
 				.inputStream(getMongoConfigInputStream())
 				.property(EzyMongoClientLoader.DATABASE, "test")
 				.properties(EzyMaps.newHashMap(EzyMongoClientLoader.DATABASE, "test"))

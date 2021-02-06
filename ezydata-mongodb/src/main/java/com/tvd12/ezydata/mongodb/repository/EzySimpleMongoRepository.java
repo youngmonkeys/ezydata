@@ -357,7 +357,9 @@ public class EzySimpleMongoRepository<I,E>
 	protected BsonDocument entityToBsonDocument(Object entity) {
 		BsonDocument document = dataToBsonValue(entity);
 		String idProperty = objectProxy.getPropertyName("_id");
-		document.put("_id", document.get(idProperty));
+		BsonValue idValue = document.get(idProperty);
+		if(idValue != null)
+			document.put("_id", idValue);
 		if(!idProperty.equals("_id")) // remove duplicate id field
 			document.remove(idProperty);
 		return document;

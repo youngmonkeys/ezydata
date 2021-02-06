@@ -10,7 +10,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.mongodb.MongoClient;
 import com.tvd12.ezydata.hazelcast.EzyMongoDatastoreHazelcastFactory;
 import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;
-import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
+import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 import com.tvd12.test.base.BaseTest;
 
@@ -32,7 +32,7 @@ public abstract class HazelcastBaseTest extends BaseTest {
 	}
 	
 	private static MongoClient newMongoClient() {
-		return new EzyInputStreamMongoClientLoader()
+		return new EzySimpleMongoClientLoader()
 				.inputStream(getConfigStream())
 				.load();
 	}

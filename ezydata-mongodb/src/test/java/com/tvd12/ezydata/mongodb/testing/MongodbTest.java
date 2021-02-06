@@ -3,7 +3,7 @@ package com.tvd12.ezydata.mongodb.testing;
 import java.io.InputStream;
 
 import com.mongodb.MongoClient;
-import com.tvd12.ezydata.mongodb.loader.EzyInputStreamMongoClientLoader;
+import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
 import com.tvd12.ezyfox.util.EzyMapBuilder;
@@ -19,11 +19,11 @@ public class MongodbTest extends BaseTest {
 		mongoClient = mongoClientLoader().load();
 	}
 	
-	protected static EzyInputStreamMongoClientLoader mongoClientLoader() {
+	protected static EzySimpleMongoClientLoader mongoClientLoader() {
 		InputStream inputStream = EzyAnywayInputStreamLoader.builder()
 				.build()
 				.load("mongodb_config.properties");
-		EzyInputStreamMongoClientLoader loader = new EzyInputStreamMongoClientLoader()
+		EzySimpleMongoClientLoader loader = new EzySimpleMongoClientLoader()
 				.inputStream(inputStream)
 				.property(EzyMongoClientLoader.HOST, "127.0.0.1")
 				.property(EzyMongoClientLoader.PORT, "27017")

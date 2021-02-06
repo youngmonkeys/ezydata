@@ -11,7 +11,7 @@
 	<name>ezydata-mongodb</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<mongodb.version>3.10.2</mongodb.version>
+		<mongodb.version>3.12.7</mongodb.version>
 	</properties>
 	<dependencies>
 		<dependency>
