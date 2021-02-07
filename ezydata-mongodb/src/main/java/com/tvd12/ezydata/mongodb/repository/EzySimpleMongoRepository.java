@@ -26,6 +26,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
+import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoCollectionAware;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
@@ -44,10 +45,11 @@ public class EzySimpleMongoRepository<I,E>
 
 	protected Class<I> idType;
 	protected final Class<E> entityType;
-	protected final String collectionName;
+	protected String collectionName;
 	protected EzyObjectProxy objectProxy;
 	protected MongoCollection<BsonDocument> collection;
 	protected EzyMongoDatabaseContext databaseContext;
+	protected EzyNameTranslator collectionNameTransalator;
 	
 	public EzySimpleMongoRepository() {
 		this.idType = getIdType();
@@ -57,6 +59,8 @@ public class EzySimpleMongoRepository<I,E>
 	
 	public void setDatabaseContext(EzyDatabaseContext databaseContext) {
 		this.databaseContext = (EzyMongoDatabaseContext) databaseContext;
+		this.collectionNameTransalator = this.databaseContext.getCollectionNameTranslator();
+		this.collectionName = collectionNameTransalator.translate(collectionName);
 		this.objectProxy = this.databaseContext.getObjectProxy(entityType);
 		this.idType = (Class<I>) objectProxy.getPropertyType("_id");
 		this.setCollection(this.databaseContext.getCollection(collectionName, BsonDocument.class));

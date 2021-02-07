@@ -13,7 +13,8 @@ public interface EzyMongoClientLoader {
     String USERNAME     	= "database.mongo.username";
     String PASSWORD     	= "database.mongo.password";
     String DATABASE     	= "database.mongo.database";
-    String COLLECTION   	= "database.mongo.collection";
+    String COLLECTION_NAMING_CASE   				= "database.mongo.collection.naming.case";
+    String COLLECTION_NAMING_IGNORED_SUFFIX   		= "database.mongo.collection.naming.ignored_suffix";
     
     MongoClient load();
     

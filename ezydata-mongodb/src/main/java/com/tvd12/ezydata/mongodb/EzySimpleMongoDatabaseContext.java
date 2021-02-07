@@ -6,6 +6,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
+import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
@@ -31,6 +32,8 @@ public class EzySimpleMongoDatabaseContext
 	protected EzyUnmarshaller unmarshaller;
 	protected EzyMongoQueryFactory queryFactory;
 	protected EzyMongoDataConverter dataConverter;
+	@Getter
+	protected EzyNameTranslator collectionNameTranslator;
 	protected final EzyObjectProxyProvider objectProxyProvider;
 	
 	public EzySimpleMongoDatabaseContext() {

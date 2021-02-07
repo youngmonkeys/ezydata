@@ -1,5 +1,8 @@
 package com.tvd12.ezydata.mongodb;
 
+import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_CASE;
+import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_IGNORED_SUFFIX;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Function;
@@ -12,6 +15,9 @@ import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.annotation.EzyCollection;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
+import com.tvd12.ezydata.database.naming.EzyNameTranslator;
+import com.tvd12.ezydata.database.naming.EzyNamingCase;
+import com.tvd12.ezydata.database.naming.EzySimpleNameTranslator;
 import com.tvd12.ezydata.database.query.EzyQLQueryFactory;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
@@ -34,6 +40,7 @@ public class EzyMongoDatabaseContextBuilder
 	protected Set<Class> entityClasses;
 	protected EzyQLQueryFactory queryFactory;
 	protected EzyMongoDataConverter dataConverter;
+	protected EzyNameTranslator collectionNameTranslator;
 	
 	protected static final String DEFAULT_MAX_ID_COLLECTION_NAME = "___max_id___";
 	
@@ -60,6 +67,19 @@ public class EzyMongoDatabaseContextBuilder
 	
 	public EzyMongoDatabaseContextBuilder dataConverter(EzyMongoDataConverter dataConverter) {
 		this.dataConverter = dataConverter;
+		return this;
+	}
+	
+	public EzyMongoDatabaseContextBuilder collectionNameTranslator(EzyNameTranslator collectionNameTranslator) {
+		this.collectionNameTranslator = collectionNameTranslator;
+		return this;
+	}
+	
+	public EzyMongoDatabaseContextBuilder collectionNaming(EzyNamingCase namingCase, String ignoredSuffix) {
+		this.collectionNameTranslator = EzySimpleNameTranslator.builder()
+				.namingCase(namingCase)
+				.ignoredSuffix(ignoredSuffix)
+				.build();
 		return this;
 	}
 	
@@ -96,6 +116,7 @@ public class EzyMongoDatabaseContextBuilder
 		context.setMarshaller(bindingContext.newMarshaller());
 		context.setUnmarshaller(bindingContext.newUnmarshaller());
 		context.setQueryFactory(newQueryFactory(bindingContext.newMarshaller()));
+		context.setCollectionNameTranslator(getOrCreateCollectionNameTranslator());
 		return context;
 	}
 	
@@ -129,6 +150,17 @@ public class EzyMongoDatabaseContextBuilder
 			BsonValue value = dataConverter.dataToBsonValue(data);
 			return value;
 		};
+	}
+	
+	protected EzyNameTranslator getOrCreateCollectionNameTranslator() {
+		if(collectionNameTranslator == null) {
+			EzyNamingCase namingCase = 
+					EzyNamingCase.of(properties.getProperty(COLLECTION_NAMING_CASE));
+			String ignoredSuffix = 
+					properties.getProperty(COLLECTION_NAMING_IGNORED_SUFFIX);
+			collectionNaming(namingCase, ignoredSuffix);
+		}
+		return collectionNameTranslator;
 	}
 	
 }

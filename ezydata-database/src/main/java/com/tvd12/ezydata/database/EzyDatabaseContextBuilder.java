@@ -7,11 +7,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import com.tvd12.ezydata.database.annotation.EzyNamedQuery;
-import com.tvd12.ezydata.database.annotation.EzyResultDeserialize;
 import com.tvd12.ezydata.database.annotation.EzyQueryResult;
+import com.tvd12.ezydata.database.annotation.EzyResultDeserialize;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.converter.EzyBindResultDeserializer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
@@ -39,6 +40,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		implements EzyBuilder<EzyDatabaseContext> {
 
 	protected Set<String> packagesToScan;
+	protected Properties properties;
 	protected Set<Class<?>> repositoryClasses;
 	protected Set<Class<?>> autoImplInterfaces;
 	protected Set<Class<?>> queryResultClasses;
@@ -95,6 +97,11 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	public B scan(EzyReflection reflection) {
 		reflections.add(reflection);
+		return (B)this;
+	}
+	
+	public B properties(Properties properties) {
+		this.properties = properties;
 		return (B)this;
 	}
 	
@@ -164,6 +171,8 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	@Override
 	public EzyDatabaseContext build() {
+		if(properties == null)
+			properties = new Properties();
 		if(packagesToScan.size() > 0)
 			reflections.add(new EzyReflectionProxy(packagesToScan));
 		if(bindingContextBuilder == null) {
