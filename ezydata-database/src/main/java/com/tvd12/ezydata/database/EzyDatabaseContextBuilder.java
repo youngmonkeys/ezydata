@@ -23,8 +23,7 @@ import com.tvd12.ezydata.database.query.EzySimpleQueryManager;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
-import com.tvd12.ezyfox.binding.impl.EzySimpleBindingContext;
-import com.tvd12.ezyfox.binding.writer.EzyToStringWriter;
+import com.tvd12.ezyfox.binding.writer.EzyDefaultWriter;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
@@ -177,8 +176,8 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 			reflections.add(new EzyReflectionProxy(packagesToScan));
 		if(bindingContextBuilder == null) {
 			bindingContextBuilder = EzyBindingContext.builder()
-					.addTemplate(BigDecimal.class, EzyToStringWriter.getInstance())
-					.addTemplate(BigInteger.class, EzyToStringWriter.getInstance());
+					.addTemplate(BigDecimal.class, EzyDefaultWriter.getInstance())
+					.addTemplate(BigInteger.class, EzyDefaultWriter.getInstance());
 		}
 		for(EzyReflection reflection : reflections)
 			bindingContextBuilder.addAllClasses(reflection);
@@ -192,17 +191,25 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		addRepositoriesFromClasses(context);
 		implementAutoImplRepositories(context);
 		scanAndAddResultDeserializers();
-		createResultDeserializers();
+		addQueryResultClassesFromQueryManager();
+		Set<Class<?>> unknownDeserializerResultTypes = getUnknownDeserializerResultClasses();
+		bindUnknownDeserializerResultClasses(unknownDeserializerResultTypes);
+		EzyBindingContext bindingContext = bindingContextBuilder.build();
+		createUnknownResultDeserializers(bindingContext, unknownDeserializerResultTypes);
 		context.setRepositories((Map)repositories);
 		printDatabaseContextInformation(context);
-		postBuild();
+		postBuild(context, bindingContext);
 		return context;
 	}
 	
 	protected abstract EzySimpleDatabaseContext newDatabaseContext();
 
 	protected void preBuild() {}
-	protected void postBuild() {}
+	
+	protected void postBuild(
+			EzySimpleDatabaseContext context,
+			EzyBindingContext bindingContext
+	) {}
 	
 	protected void scanAndAddQueries() {
 		for(EzyReflection reflection : reflections) {
@@ -280,7 +287,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 		}
 	}
 	
-	private void createResultDeserializers() {
+	private void addQueryResultClassesFromQueryManager() {
 		Map<String, EzyQueryEntity> queries = queryManager.getQueries();
 		for(EzyQueryEntity query : queries.values()) {
 			Class<?> resultType = query.getResultType();
@@ -288,30 +295,42 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 				continue;
 			queryResultClasses.add(resultType);
 		}
+	}
+	
+	private Set<Class<?>> getUnknownDeserializerResultClasses() {
 		Set<Class<?>> unknownDeserializerResultTypes = new HashSet<>();
 		for(Class<?> resultType : queryResultClasses) {
 			EzyResultDeserializer ds = resultDeserializers.getDeserializer(resultType);
-			if(ds == null) {
+			if(ds == null)
 				unknownDeserializerResultTypes.add(resultType);
-				bindResultType(bindingContextBuilder, resultType);
-			}
 		}
-		EzySimpleBindingContext bindingContext = bindingContextBuilder.build();
+		return unknownDeserializerResultTypes;
+	}
+	
+	private void bindUnknownDeserializerResultClasses(
+			Set<Class<?>> unknownDeserializerResultTypes) {
+		for(Class<?> resultType : unknownDeserializerResultTypes)
+			bindResultType(resultType);
+	}
+	
+	private void createUnknownResultDeserializers(
+			EzyBindingContext bindingContext,
+			Set<Class<?>> unknownDeserializerResultTypes) {
 		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
 		for(Class<?> resultType : unknownDeserializerResultTypes) {
 			EzyResultDeserializer deserializer = 
-					newResultDeserializer(resultType, unmarshaller);
+					newUnknownResultDeserializer(resultType, unmarshaller);
 			resultDeserializers.addDeserializer(resultType, deserializer);
 		}
 	}
 	
 	protected EzyResultDeserializer 
-			newResultDeserializer(Class<?> resultType, EzyUnmarshaller unmarshaller) {
+			newUnknownResultDeserializer(Class<?> resultType, EzyUnmarshaller unmarshaller) {
 		return new EzyBindResultDeserializer(resultType, unmarshaller);
 	}
 	
-	protected void bindResultType(EzyBindingContextBuilder builder, Class<?> resultType) {
-		builder.addClass(resultType);
+	protected void bindResultType(Class<?> resultType) {
+		bindingContextBuilder.addClass(resultType);
 	}
 	
 	protected void addRepositoriesFromClasses(EzyDatabaseContext context) {

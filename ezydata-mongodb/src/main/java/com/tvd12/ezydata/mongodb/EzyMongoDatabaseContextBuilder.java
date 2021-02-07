@@ -28,6 +28,7 @@ import com.tvd12.ezydata.mongodb.query.EzyMongoQueryMethodConverter;
 import com.tvd12.ezydata.mongodb.repository.EzyMongoMaxIdRepository;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
+import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
 @SuppressWarnings("rawtypes")
@@ -92,8 +93,11 @@ public class EzyMongoDatabaseContextBuilder
 	
 	@Override
 	protected void preBuild() {
-		for(EzyReflection reflection : reflections)
+		for(EzyReflection reflection : reflections) {
 			entityClasses.addAll(reflection.getAnnotatedClasses(EzyCollection.class));
+			bindingContextBuilder.addAllClasses(reflection);
+		}
+		bindingContextBuilder.addClasses(entityClasses);
 	}
 	
 	@Override
@@ -103,21 +107,27 @@ public class EzyMongoDatabaseContextBuilder
 	
 	@Override
 	protected EzySimpleDatabaseContext newDatabaseContext() {
-		bindingContextBuilder.addClasses(entityClasses);
-		for(EzyReflection reflection : reflections)
-			bindingContextBuilder.addAllClasses(reflection);
 		MongoDatabase database = mongoClient.getDatabase(databaseName);
 		addMaxIdRepository(database);
-		EzyBindingContext bindingContext = bindingContextBuilder.build();
 		EzySimpleMongoDatabaseContext context = new EzySimpleMongoDatabaseContext();
 		context.setClient(mongoClient);
 		context.setDatabase(database);
 		context.setDataConverter(dataConverter);
-		context.setMarshaller(bindingContext.newMarshaller());
-		context.setUnmarshaller(bindingContext.newUnmarshaller());
-		context.setQueryFactory(newQueryFactory(bindingContext.newMarshaller()));
 		context.setCollectionNameTranslator(getOrCreateCollectionNameTranslator());
 		return context;
+	}
+	
+
+	@Override
+	protected void postBuild(
+			EzySimpleDatabaseContext ctx, 
+			EzyBindingContext bindingContext) {
+		EzySimpleMongoDatabaseContext context = (EzySimpleMongoDatabaseContext)ctx;
+		EzyMarshaller marshaller = bindingContext.newMarshaller();
+		EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
+		context.setMarshaller(marshaller);
+		context.setUnmarshaller(unmarshaller);
+		context.setQueryFactory(newQueryFactory(marshaller));
 	}
 	
 	protected void addMaxIdRepository(MongoDatabase database) {

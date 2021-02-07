@@ -12,7 +12,6 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
 import com.tvd12.ezydata.jpa.query.EzyJpaQueryMethodConverter;
-import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
 public class EzyJpaDatabaseContextBuilder 
@@ -63,8 +62,8 @@ public class EzyJpaDatabaseContextBuilder
 	}
 	
 	@Override
-	protected void bindResultType(EzyBindingContextBuilder builder, Class<?> resultType) {
-		builder.addArrayBindingClass(resultType);
+	protected void bindResultType(Class<?> resultType) {
+		bindingContextBuilder.addArrayBindingClass(resultType);
 	}
 	
 }

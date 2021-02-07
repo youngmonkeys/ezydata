@@ -13,6 +13,8 @@ import java.util.function.Function;
 import org.bson.BsonArray;
 import org.bson.BsonBinary;
 import org.bson.BsonBoolean;
+import org.bson.BsonDateTime;
+import org.bson.BsonDecimal128;
 import org.bson.BsonDocument;
 import org.bson.BsonDouble;
 import org.bson.BsonInt32;
@@ -20,6 +22,7 @@ import org.bson.BsonInt64;
 import org.bson.BsonNull;
 import org.bson.BsonString;
 import org.bson.BsonValue;
+import org.bson.types.Decimal128;
 
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyObject;
@@ -113,9 +116,9 @@ public class EzyMongoDataToBsonValue  {
 		map.put(String.class, v -> new BsonString((String) v));
 		map.put(Class.class, v -> new BsonString(((Class)v).getName()));
 		map.put(UUID.class, v -> new BsonString(((UUID)v).toString()));
-		map.put(BigDecimal.class, v -> new BsonString(v.toString()));
-		map.put(BigInteger.class, v -> new BsonString(v.toString()));
-		map.put(Date.class, v -> new BsonString(EzyDates.format((Date)v)));
+		map.put(BigDecimal.class, v -> new BsonDecimal128(new Decimal128((BigDecimal)v)));
+		map.put(BigInteger.class, v -> new BsonDecimal128(new Decimal128(new BigDecimal((BigInteger)v))));
+		map.put(Date.class, v -> new BsonDateTime(((Date)v).getTime()));
 		map.put(LocalDate.class, v -> new BsonString(EzyDates.format((LocalDate)v, "yyyy-MM-dd")));
 		map.put(LocalDateTime.class, v -> new BsonString(EzyDates.format((LocalDateTime)v)));
 		
