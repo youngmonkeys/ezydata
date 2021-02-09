@@ -1,5 +1,6 @@
 package com.tvd12.ezydata.jpa.bean;
 
+import java.lang.reflect.Parameter;
 import java.util.List;
 
 import javax.persistence.EntityTransaction;
@@ -52,10 +53,13 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 		int paramCount = method.getParameterCount();
 		if(isPagination)
 			-- paramCount;
+		
+		Parameter[] parameters = method.getParameters();
 		for(int i = 0 ; i < paramCount ; ++i) {
+			Class<?> paramType = parameters[i].getType();
 			body.append(new EzyInstruction("\t", "\n")
 					.append("query.setParameter(")
-						.append(i).append(",").append("arg").append(i)
+						.append(i).append(",").valueOf(paramType, "arg" + i)
 					.append(")"));
 		}
 
