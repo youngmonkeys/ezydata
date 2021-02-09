@@ -14,6 +14,7 @@
 		<javax.persistence.version>2.2</javax.persistence.version>
 		<javax.transaction.version>1.3</javax.transaction.version>
 		<hibernate.version>5.4.12.Final</hibernate.version>
+		<hikaricp.version>4.0.1</hikaricp.version>
 		<mysql.connector.version>8.0.19</mysql.connector.version>
 	</properties>
 	<dependencies>
@@ -38,7 +39,12 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
-			<scope>test</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikaricp.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
