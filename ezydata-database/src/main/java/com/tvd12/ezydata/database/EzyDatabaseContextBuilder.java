@@ -12,7 +12,7 @@ import java.util.Set;
 
 import com.tvd12.ezydata.database.annotation.EzyNamedQuery;
 import com.tvd12.ezydata.database.annotation.EzyQueryResult;
-import com.tvd12.ezydata.database.annotation.EzyResultDeserialize;
+import com.tvd12.ezydata.database.annotation.EzyResultDeserialized;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.converter.EzyBindResultDeserializer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
@@ -273,9 +273,9 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	protected void scanAndAddResultDeserializers(EzyReflection reflection) {
-		Set<Class> classes = (Set)reflection.getAnnotatedClasses(EzyResultDeserialize.class);
+		Set<Class> classes = (Set)reflection.getAnnotatedClasses(EzyResultDeserialized.class);
 		for(Class<EzyResultDeserializer> clazz : classes) {
-			EzyResultDeserialize anno = clazz.getAnnotation(EzyResultDeserialize.class);
+			EzyResultDeserialized anno = clazz.getAnnotation(EzyResultDeserialized.class);
 			Class<?> resultType = anno.value();
 			if(EzyResultDeserializer.class.isAssignableFrom(clazz)) {
 				EzyResultDeserializer deserializer = EzyClasses.newInstance(clazz);

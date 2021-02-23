@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.database.converter;
 
-import com.tvd12.ezydata.database.annotation.EzyResultDeserialize;
+import com.tvd12.ezydata.database.annotation.EzyResultDeserialized;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 
 public interface EzyResultDeserializer<T> {
@@ -26,8 +26,8 @@ public interface EzyResultDeserializer<T> {
 			return args[0];
 		}
 		catch(Exception e) {
-			EzyResultDeserialize anno = 
-					getClass().getAnnotation(EzyResultDeserialize.class);
+			EzyResultDeserialized anno = 
+					getClass().getAnnotation(EzyResultDeserialized.class);
 			return anno != null ? anno.value() : null;
 		}
 	}
