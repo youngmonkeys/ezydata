@@ -25,11 +25,29 @@ public class EzyRedisChannelProvider {
 		return channel;
 	}
 	
+	public <T> EzyRedisChannel<T> getChannel(String name, Class<T> messageType) {
+		EzyRedisChannel<T> channel = channels.get(name);
+		if(channel == null)
+			channel = newChannel(name, messageType);
+		return channel;
+	}
+	
 	protected <T> EzyRedisChannel<T> newChannel(String name) {
 		synchronized (channels) {
 			EzyRedisChannel<T> channel = channels.get(name);
 			if(channel == null) {
 				channel = channelFactory.newChannel(name);
+				channels.put(name, channel);
+			}
+			return channel;
+		}
+	}
+	
+	protected <T> EzyRedisChannel<T> newChannel(String name, Class<T> messageType) {
+		synchronized (channels) {
+			EzyRedisChannel<T> channel = channels.get(name);
+			if(channel == null) {
+				channel = channelFactory.newChannel(name, messageType);
 				channels.put(name, channel);
 			}
 			return channel;

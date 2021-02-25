@@ -13,9 +13,15 @@
 	
 	<properties>
 		<jedis.version>3.2.0</jedis.version>
+		<javax.persistence.version>2.2</javax.persistence.version>
 	</properties>
 	
 	<dependencies>
+		<dependency>
+			<groupId>com.tvd12</groupId>
+			<artifactId>ezydata-database</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-binding-codec</artifactId>
@@ -30,6 +36,12 @@
 			<groupId>redis.clients</groupId>
 			<artifactId>jedis</artifactId>
 			<version>${jedis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.persistence</groupId>
+			<artifactId>javax.persistence-api</artifactId>
+			<version>${javax.persistence.version}</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>

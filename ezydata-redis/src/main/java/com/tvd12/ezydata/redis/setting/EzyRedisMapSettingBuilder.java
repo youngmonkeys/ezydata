@@ -1,6 +1,7 @@
 package com.tvd12.ezydata.redis.setting;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.reflect.EzyClasses;
 
 public class EzyRedisMapSettingBuilder implements EzyBuilder<EzyRedisMapSetting> {
 
@@ -15,12 +16,26 @@ public class EzyRedisMapSettingBuilder implements EzyBuilder<EzyRedisMapSetting>
 	}
 	
 	public EzyRedisMapSettingBuilder keyType(Class<?> keyType) {
-		this.keyType = keyType;
+		if(keyType != null)
+			this.keyType = keyType;
+		return this;
+	}
+	
+	public EzyRedisMapSettingBuilder keyType(String keyType) {
+		if(keyType != null)
+			this.keyType = EzyClasses.getClass(keyType);
 		return this;
 	}
 	
 	public EzyRedisMapSettingBuilder valueType(Class<?> valueType) {
-		this.valueType = valueType;
+		if(valueType != null)
+			this.valueType = valueType;
+		return this;
+	}
+	
+	public EzyRedisMapSettingBuilder valueType(String valueType) {
+		if(valueType != null)
+			this.valueType = EzyClasses.getClass(valueType);
 		return this;
 	}
 	

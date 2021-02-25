@@ -1,4 +1,4 @@
-package com.tvd12.ezydata.redis.it;
+package com.tvd12.ezydata.redis.test;
 
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.codec.EzyBindingEntityCodec;
@@ -25,7 +25,7 @@ public class EzyRedisBaseTest {
 	
 	private static EzyEntityCodec newEntityCodec() {
 		EzyBindingContext bindingContext = EzyBindingContext.builder()
-				.scan("com.tvd12.ezydata.redis.it")
+				.scan("com.tvd12.ezydata.redis.test")
 				.build();
 		EzyEntityCodec codec = EzyBindingEntityCodec.builder()
 				.marshaller(bindingContext.newMarshaller())

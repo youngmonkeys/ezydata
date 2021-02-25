@@ -25,11 +25,31 @@ public class EzyRedisMapProvider {
 		return map;
 	}
 	
+	public <K, V> EzyRedisMap<K, V> getMap(
+			String name, Class<K> keyType, Class<V> valueType) {
+		EzyRedisMap<K, V> map = maps.get(name);
+		if(map == null)
+			map = newMap(name, keyType, valueType);
+		return map;
+	}
+	
 	protected <K, V> EzyRedisMap<K, V> newMap(String name) {
 		synchronized (maps) {
 			EzyRedisMap<K, V> map = maps.get(name);
 			if(map == null) {
 				map = mapFactory.newMap(name);
+				maps.put(name, map);
+			}
+			return map;
+		}
+	}
+	
+	protected <K, V> EzyRedisMap<K, V> newMap(
+			String name, Class<K> keyType, Class<V> valueType) {
+		synchronized (maps) {
+			EzyRedisMap<K, V> map = maps.get(name);
+			if(map == null) {
+				map = mapFactory.newMap(name, keyType, valueType);
 				maps.put(name, map);
 			}
 			return map;

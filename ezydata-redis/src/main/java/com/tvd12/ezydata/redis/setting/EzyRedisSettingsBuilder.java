@@ -2,8 +2,10 @@ package com.tvd12.ezydata.redis.setting;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.properties.file.util.PropertiesUtil;
 
 public class EzyRedisSettingsBuilder implements EzyBuilder<EzyRedisSettings> {
 
@@ -21,8 +23,22 @@ public class EzyRedisSettingsBuilder implements EzyBuilder<EzyRedisSettings> {
 		this.atomicLongMapName = "___ezydata.atomic_longs___";
 	}
 	
-	public void addMapSetting(String mapName, EzyRedisMapSetting setting) {
-		this.mapSettings.put(mapName, setting);
+	public EzyRedisSettingsBuilder atomicLongMapName(String atomicLongMapName) {
+		if(atomicLongMapName != null)
+			this.atomicLongMapName = atomicLongMapName;
+		return this;
+	}
+	
+	public EzyRedisSettingsBuilder addMapSetting(String mapName, EzyRedisMapSetting setting) {
+		this.mapSettings.compute(mapName, (k, v) -> {
+			if(v == null)
+				return setting;
+			return new EzyRedisMapSettingBuilder()
+					.keyType(setting.getKeyType())
+					.valueType(setting.getValueType())
+					.build();
+		});
+		return this;
 	}
 	
 	public EzyRedisMapSettingBuilder mapSettingBuilder(String mapName) {
@@ -34,8 +50,16 @@ public class EzyRedisSettingsBuilder implements EzyBuilder<EzyRedisSettings> {
 		return builder;
 	}
 	
-	public void addChannelSetting(String channelName, EzyRedisChannelSetting setting) {
-		this.channelSettings.put(channelName, setting);
+	public EzyRedisSettingsBuilder addChannelSetting(String channelName, EzyRedisChannelSetting setting) {
+		this.channelSettings.compute(channelName, (k, v) -> {
+			if(v == null)
+				return setting;
+			return new EzyRedisChannelSettingBuilder()
+					.messageType(setting.getMessageType())
+					.subThreadPoolSize(setting.getSubThreadPoolSize())
+					.build();
+		});
+		return this;
 	}
 	
 	public EzyRedisChannelSettingBuilder channelSettingBuilder(String channelName) {
@@ -45,6 +69,29 @@ public class EzyRedisSettingsBuilder implements EzyBuilder<EzyRedisSettings> {
 			channelSettingBuilders.put(channelName, builder);
 		}
 		return builder;
+	}
+	
+	public EzyRedisSettingsBuilder properties(Properties properties) {
+		atomicLongMapName(properties.getProperty(EzyRedisSettings.ATOMIC_LONG_MAP_NAME));
+		Map<String, Properties> mapsProperties = 
+				PropertiesUtil.getPropertiesMap(
+						PropertiesUtil.getPropertiesByPrefix(properties, EzyRedisSettings.MAPS));
+		for(String mapName : mapsProperties.keySet()) {
+			Properties mapProperties = mapsProperties.get(mapName);	
+			mapSettingBuilder((String)mapName)
+				.keyType(mapProperties.getProperty(EzyRedisSettings.MAP_KEY_TYPE))
+				.valueType(mapProperties.getProperty(EzyRedisSettings.MAP_VALUE_TYPE));
+		}
+		Map<String, Properties> channelsProperties = 
+				PropertiesUtil.getPropertiesMap(
+						PropertiesUtil.getPropertiesByPrefix(properties, EzyRedisSettings.CHANNELS));
+		for(String channelName : channelsProperties.keySet()) {
+			Properties channelProperties = channelsProperties.get(channelName);
+			channelSettingBuilder((String)channelName)
+				.messageType(channelProperties.getProperty(EzyRedisSettings.CHANNEL_MESSAGE_TYPE))
+				.subThreadPoolSize(channelProperties.getProperty(EzyRedisSettings.CHANNEL_THREAD_POOL_SIZE));
+		}
+		return this;
 	}
 	
 	@Override
@@ -61,14 +108,14 @@ public class EzyRedisSettingsBuilder implements EzyBuilder<EzyRedisSettings> {
 	protected void buildMapSettings() {
 		for(String mapName : mapSettingBuilders.keySet()) {
 			EzyRedisMapSettingBuilder b = mapSettingBuilders.get(mapName);
-			mapSettings.put(mapName, b.build());
+			addMapSetting(mapName, b.build());
 		}
 	}
 	
 	protected void buildChannelSettings() {
 		for(String channelName : channelSettingBuilders.keySet()) {
 			EzyRedisChannelSettingBuilder b = channelSettingBuilders.get(channelName);
-			channelSettings.put(channelName, b.build());
+			addChannelSetting(channelName, b.build());
 		}
 	}
 	

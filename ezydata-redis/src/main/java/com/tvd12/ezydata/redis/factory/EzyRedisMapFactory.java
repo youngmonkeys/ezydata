@@ -3,6 +3,7 @@ package com.tvd12.ezydata.redis.factory;
 import com.tvd12.ezydata.redis.EzyRedisClient;
 import com.tvd12.ezydata.redis.EzyRedisMap;
 import com.tvd12.ezydata.redis.setting.EzyRedisMapSetting;
+import com.tvd12.ezydata.redis.setting.EzyRedisMapSettingBuilder;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
@@ -19,9 +20,23 @@ public class EzyRedisMapFactory {
 		this.entityCodec = builder.entityCodec;
 	}
 	
-	@SuppressWarnings("unchecked")
+	public <K, V> EzyRedisMap<K, V> newMap(
+			String name, Class<K> keyType, Class<V> valueType) {
+		EzyRedisMapSetting mapSetting = new EzyRedisMapSettingBuilder()
+				.keyType(keyType)
+				.valueType(valueType)
+				.build();
+		return newMap(name, mapSetting);
+	}
+	
 	public <K, V> EzyRedisMap<K, V> newMap(String name) {
 		EzyRedisMapSetting mapSetting = settings.getMapSeting(name);
+		return newMap(name, mapSetting);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <K, V> EzyRedisMap<K, V> newMap(
+			String name, EzyRedisMapSetting mapSetting) {
 		if(mapSetting == null)
 			throw new IllegalArgumentException("has no setting for map: " + name);
 		return EzyRedisMap.builder()

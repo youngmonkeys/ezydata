@@ -4,6 +4,7 @@
 	<test name="All">
 		<packages>
 			<package name="com.tvd12.ezydata.redis.test"></package>
+			<package name="com.tvd12.ezydata.redis.test.setting"></package>
 		</packages>
 	</test>
 </suite>

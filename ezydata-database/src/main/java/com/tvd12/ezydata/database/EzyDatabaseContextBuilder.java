@@ -80,7 +80,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	public B scan(String packageName) {
-		packagesToScan.add(packageName);
+		this.packagesToScan.add(packageName);
 		return (B)this;
 	}
 	
@@ -95,7 +95,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	}
 	
 	public B scan(EzyReflection reflection) {
-		reflections.add(reflection);
+		this.reflections.add(reflection);
 		return (B)this;
 	}
 	

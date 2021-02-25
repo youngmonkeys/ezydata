@@ -1,4 +1,7 @@
-package com.tvd12.ezydata.redis.it;
+package com.tvd12.ezydata.redis.test;
+
+import java.util.Arrays;
+import java.util.Map;
 
 import org.testng.annotations.Test;
 
@@ -10,8 +13,10 @@ import com.tvd12.ezydata.redis.EzyRedisMap;
 import com.tvd12.ezydata.redis.EzyRedisProxy;
 import com.tvd12.ezydata.redis.EzyRedisProxyFactory;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
+import com.tvd12.ezydata.redis.test.entity.Author;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.util.EzyMapBuilder;
+import com.tvd12.properties.file.reader.BaseFileReader;
 
 import redis.clients.jedis.JedisPool;
 
@@ -86,8 +91,38 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		Thread.sleep(1000);
 	}
 	
+	@Test
+	public void testWithProperties() {
+		EzyRedisProxyFactory factory = EzyRedisProxyFactory.builder()
+				.properties(new BaseFileReader().read("application_test.yaml"))
+				.scan("com.tvd12.ezydata.redis.test.entity")
+				.scan("com.tvd12.ezydata.redis.test.entity", "com.tvd12.ezydata.redis.test.entity")
+				.scan(Arrays.asList("com.tvd12.ezydata.redis.test.entity", "com.tvd12.ezydata.redis.test.entity"))
+				.build();
+		EzyRedisProxy proxy = factory.newRedisProxy();
+		EzyRedisMap<String, Integer> map = proxy.getMap("ezydata_key_value2");
+		map.clear();
+		map.put("hello", 1);
+		System.out.println(map.get("hello"));
+		assert map.get("hello").equals(1);
+		
+		EzyRedisMap<String, String> map3 = proxy.getMap("ezydata_key_value3", String.class, String.class);
+		map3.clear();
+		map3.put("hello", "world");
+		System.out.println(map3.get("hello"));
+		assert map3.get("hello").equals("world");
+		
+		Map<Long, Author> authorMap = proxy.getMap("ezydata_author");
+		authorMap.clear();
+		EzyRedisAtomicLong atomicLong = proxy.getAtomicLong("ezydata_author");
+		Long authorId = atomicLong.incrementAndGet();
+		authorMap.put(authorId, new Author(authorId, "Author1"));
+		System.out.println(authorMap.get(authorId));
+		assert authorMap.get(authorId).equals(new Author(authorId, "Author1"));
+	}
+	
 	public static void main(String[] args) throws Exception {
-		new EzyRedisProxyTest().test();
+		new EzyRedisProxyTest().testWithProperties();
 	}
 	
 }

@@ -3,6 +3,7 @@ package com.tvd12.ezydata.redis.factory;
 import com.tvd12.ezydata.redis.EzyRedisChannel;
 import com.tvd12.ezydata.redis.EzyRedisClient;
 import com.tvd12.ezydata.redis.setting.EzyRedisChannelSetting;
+import com.tvd12.ezydata.redis.setting.EzyRedisChannelSettingBuilder;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
@@ -19,9 +20,21 @@ public class EzyRedisChannelFactory {
 		this.entityCodec = builder.entityCodec;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <T> EzyRedisChannel<T> newChannel(String name) {
 		EzyRedisChannelSetting channelSetting = settings.getChannelSeting(name);
+		return newChannel(name, channelSetting);
+	}
+	
+	public <T> EzyRedisChannel<T> newChannel(String name, Class<T> messageType) {
+		EzyRedisChannelSetting channelSetting = new EzyRedisChannelSettingBuilder()
+				.messageType(messageType)
+				.build();
+		return newChannel(name, channelSetting);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public <T> EzyRedisChannel<T> newChannel(
+			String name, EzyRedisChannelSetting channelSetting) {
 		if(channelSetting == null)
 			throw new IllegalArgumentException("has no setting for channel: " + name);
 		return EzyRedisChannel.builder()

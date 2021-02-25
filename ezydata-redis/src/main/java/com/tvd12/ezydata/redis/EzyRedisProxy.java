@@ -79,8 +79,17 @@ public class EzyRedisProxy {
 		return mapProvider.getMap(name);
 	}
 	
+	public <K,V> EzyRedisMap<K, V> getMap(
+			String name, Class<K> keyType, Class<V> valueType) {
+		return mapProvider.getMap(name, keyType, valueType);
+	}
+	
 	public <T> EzyRedisChannel<T> getChannel(String name) {
 		return channelProvider.getChannel(name);
+	}
+	
+	public <T> EzyRedisChannel<T> getChannel(String name, Class<T> messageType) {
+		return channelProvider.getChannel(name, messageType);
 	}
 	
 	public EzyRedisAtomicLong getAtomicLong(String name) {

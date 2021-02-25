@@ -1,0 +1,10 @@
+redis:
+   uri: redis://localhost:6379
+   maps:
+      ezydata_key_value2:
+         key_type: java.lang.String
+         value_type: java.lang.Integer
+   channels:
+      ezydata_channel1:
+         thread_pool_size: 2
+         message_type: java.lang.String

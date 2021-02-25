@@ -1,6 +1,7 @@
 package com.tvd12.ezydata.redis.setting;
 
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.reflect.EzyClasses;
 
 public class EzyRedisChannelSettingBuilder implements EzyBuilder<EzyRedisChannelSetting> {
 
@@ -19,8 +20,20 @@ public class EzyRedisChannelSettingBuilder implements EzyBuilder<EzyRedisChannel
 		return this;
 	}
 	
+	public EzyRedisChannelSettingBuilder messageType(String messageType) {
+		if(messageType != null)
+			this.messageType = EzyClasses.getClass(messageType);
+		return this;
+	}
+	
 	public EzyRedisChannelSettingBuilder subThreadPoolSize(int subThreadPoolSize) {
 		this.subThreadPoolSize = subThreadPoolSize;
+		return this;
+	}
+	
+	public EzyRedisChannelSettingBuilder subThreadPoolSize(String subThreadPoolSize) {
+		if(subThreadPoolSize != null)
+			this.subThreadPoolSize = Integer.parseInt(subThreadPoolSize);
 		return this;
 	}
 	
@@ -35,6 +48,5 @@ public class EzyRedisChannelSettingBuilder implements EzyBuilder<EzyRedisChannel
 		setting.setSubThreadPoolSize(subThreadPoolSize);
 		return setting;
 	}
-
 
 }
