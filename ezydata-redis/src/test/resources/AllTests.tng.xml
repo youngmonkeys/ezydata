@@ -5,6 +5,7 @@
 		<packages>
 			<package name="com.tvd12.ezydata.redis.test"></package>
 			<package name="com.tvd12.ezydata.redis.test.setting"></package>
+			<package name="com.tvd12.ezydata.redis.test.loader"></package>
 		</packages>
 	</test>
 </suite>

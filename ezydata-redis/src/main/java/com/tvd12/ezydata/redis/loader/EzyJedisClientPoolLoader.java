@@ -5,7 +5,8 @@ import com.tvd12.ezydata.redis.EzyRedisClientPool;
 
 import redis.clients.jedis.JedisPool;
 
-public class EzyJedisClientPoolLoader extends EzyRedisAbstractClientPoolLoader {
+public class EzyJedisClientPoolLoader 
+		extends EzyRedisAbstractClientPoolLoader<EzyJedisClientPoolLoader> {
 	
 	@Override
 	protected EzyRedisClientPool doLoad() {

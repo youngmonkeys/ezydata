@@ -13,7 +13,7 @@ public class EzyRedisSettingsBuilderTest {
 
 	@Test
 	public void testAll() {
-		// when
+		// give
 		String atomicLongMapName = "atomicLongMapNameTest";
 		EzyRedisSettings redisSettings = new EzyRedisSettingsBuilder()
 				.atomicLongMapName(atomicLongMapName)
@@ -36,6 +36,9 @@ public class EzyRedisSettingsBuilderTest {
 				.channelSettingBuilder("ezydata_channel_x2")
 					.parent()
 				.build();
+		
+		// when
+		// then
 		assert redisSettings.getAtomicLongMapName().equals(atomicLongMapName);
 		EzyRedisChannelSetting channelSeting = redisSettings.getChannelSeting("ezydata_channel1");
 		assert channelSeting.getSubThreadPoolSize() == 2;

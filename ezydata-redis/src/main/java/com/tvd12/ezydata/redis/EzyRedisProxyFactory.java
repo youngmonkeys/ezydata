@@ -16,6 +16,7 @@ import com.tvd12.ezydata.redis.setting.EzyRedisSettingsBuilder;
 import com.tvd12.ezydata.redis.util.EzyRedisMessageAnnotations;
 import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
+import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.codec.EzyBindingEntityCodec;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
@@ -62,6 +63,7 @@ public class EzyRedisProxyFactory {
 		protected EzyRedisSettingsBuilder settingsBuilder;
 		
 		public Builder() {
+			this.properties = new Properties();
 			this.packagesToScan = new HashSet<>();
 		}
 		
@@ -81,7 +83,7 @@ public class EzyRedisProxyFactory {
 		}
 		
 		public Builder properties(Properties properties) {
-			this.properties = properties;
+			this.properties.putAll(properties);
 			return this;
 		}
 		
@@ -153,10 +155,14 @@ public class EzyRedisProxyFactory {
 		private void prepareEntityCodec() {
 			if(entityCodec != null)
 				return;
-			EzyBindingContext bindingContext = EzyBindingContext.builder()
+			EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder();
+			if(reflection != null) {
+				bindingContextBuilder
 					.addAllClasses(reflection)
 					.addClasses((Set)reflection.getAnnotatedClasses(EzyCachedValue.class))
 					.build();
+			}
+			EzyBindingContext bindingContext = bindingContextBuilder.build();
 			entityCodec = EzyBindingEntityCodec.builder()
 					.marshaller(bindingContext.newMarshaller())
 					.unmarshaller(bindingContext.newUnmarshaller())

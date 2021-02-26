@@ -3,27 +3,28 @@ package com.tvd12.ezydata.redis.loader;
 import com.tvd12.ezydata.database.util.EzyDatabasePropertiesKeeper;
 import com.tvd12.ezydata.redis.EzyRedisClientPool;
 
-public abstract class EzyRedisAbstractClientPoolLoader
-	extends EzyDatabasePropertiesKeeper<EzyRedisAbstractClientPoolLoader> 
+@SuppressWarnings("unchecked")
+public abstract class EzyRedisAbstractClientPoolLoader<T extends EzyRedisAbstractClientPoolLoader<T>>
+	extends EzyDatabasePropertiesKeeper<T> 
 	implements EzyRedisClientPoolLoader {
 	
 	protected String host;
 	protected int port;
 	protected String uri;
 	
-	public EzyRedisAbstractClientPoolLoader host(String host) {
+	public T host(String host) {
 		this.host = host;
-		return this;
+		return (T)this;
 	}
 	
-	public EzyRedisAbstractClientPoolLoader port(int port) {
+	public T port(int port) {
 		this.port = port;
-		return this;
+		return (T)this;
 	}
 	
-	public EzyRedisAbstractClientPoolLoader uri(String uri) {
+	public T uri(String uri) {
 		this.uri = uri;
-		return this;
+		return (T)this;
 	}
 	
 	@Override

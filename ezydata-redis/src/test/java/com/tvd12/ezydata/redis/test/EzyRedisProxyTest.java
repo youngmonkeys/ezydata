@@ -14,6 +14,7 @@ import com.tvd12.ezydata.redis.EzyRedisProxy;
 import com.tvd12.ezydata.redis.EzyRedisProxyFactory;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
 import com.tvd12.ezydata.redis.test.entity.Author;
+import com.tvd12.ezydata.redis.test.entity.ChatMessage3;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.util.EzyMapBuilder;
 import com.tvd12.properties.file.reader.BaseFileReader;
@@ -43,6 +44,7 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		EzyRedisProxy proxy = factory.newRedisProxy();
 		EzyRedisProxy proxy2 = factory.newRedisProxy();
 		EzyRedisMap<String, Integer> map = proxy.getMap("ezydata.key_value");
+		map = proxy.getMap("ezydata.key_value");
 		map.clear();
 		map.put("a", 1);
 		map.put("b", 2);
@@ -80,6 +82,8 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		System.out.println(atomicLong.incrementAndGet());
 		System.out.println("hello: " + atomicLong.addAndGet(3));
 		EzyRedisChannel<String> channel2 = proxy2.getChannel("ezydata.simple_channel");
+		channel2 = proxy2.getChannel("ezydata.simple_channel");
+		proxy2.getChannel("ezydata.simple_channel");
 		channel2.addSubscriber(m -> {
 			System.out.println("received message: " + m);
 		});
@@ -113,12 +117,17 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		assert map3.get("hello").equals("world");
 		
 		Map<Long, Author> authorMap = proxy.getMap("ezydata_author");
+		authorMap = proxy.getMap("ezydata_author");
 		authorMap.clear();
 		EzyRedisAtomicLong atomicLong = proxy.getAtomicLong("ezydata_author");
 		Long authorId = atomicLong.incrementAndGet();
 		authorMap.put(authorId, new Author(authorId, "Author1"));
 		System.out.println(authorMap.get(authorId));
 		assert authorMap.get(authorId).equals(new Author(authorId, "Author1"));
+		
+		EzyRedisChannel<ChatMessage3> channel = proxy.getChannel("ezydata_chat_message3", ChatMessage3.class);
+		channel = proxy.getChannel("ezydata_chat_message3", ChatMessage3.class);
+		channel.publish(new ChatMessage3("Hello World"));
 	}
 	
 	public static void main(String[] args) throws Exception {
