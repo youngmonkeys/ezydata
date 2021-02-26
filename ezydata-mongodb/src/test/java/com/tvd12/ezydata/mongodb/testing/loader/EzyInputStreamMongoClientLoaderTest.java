@@ -22,6 +22,7 @@ public class EzyInputStreamMongoClientLoaderTest extends BaseTest {
 				.inputStream(inputStream)
 				.property(EzyMongoClientLoader.HOST, "127.0.0.1")
 				.property(EzyMongoClientLoader.PORT, "27017")
+				.configFile("mongodb_config.properties")
 				.properties(EzyMapBuilder.mapBuilder()
 						.put(EzyMongoClientLoader.USERNAME, "root")
 						.put(EzyMongoClientLoader.PASSWORD, "123456")

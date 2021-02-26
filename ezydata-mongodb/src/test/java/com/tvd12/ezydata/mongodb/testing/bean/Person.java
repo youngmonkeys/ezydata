@@ -19,4 +19,14 @@ public class Person {
 	@EzyValue("personName")
 	private String name;
 	
+	@EzyId
+	public Integer getId() {
+		return id;
+	}
+	
+	@EzyId
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	
 }

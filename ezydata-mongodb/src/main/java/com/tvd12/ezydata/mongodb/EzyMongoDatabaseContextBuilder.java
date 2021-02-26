@@ -14,6 +14,7 @@ import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.annotation.EzyCollection;
+import com.tvd12.ezydata.database.annotation.EzyCollectionId;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.naming.EzyNamingCase;
@@ -26,9 +27,12 @@ import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryMethodConverter;
 import com.tvd12.ezydata.mongodb.repository.EzyMongoMaxIdRepository;
+import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
+import com.tvd12.ezyfox.reflect.EzyClass;
+import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
 @SuppressWarnings("rawtypes")
@@ -77,11 +81,11 @@ public class EzyMongoDatabaseContextBuilder
 	}
 	
 	public EzyMongoDatabaseContextBuilder collectionNameTranslator(EzyNamingCase namingCase, String ignoredSuffix) {
-		this.collectionNameTranslator = EzySimpleNameTranslator.builder()
+		return collectionNameTranslator(EzySimpleNameTranslator.builder()
 				.namingCase(namingCase)
 				.ignoredSuffix(ignoredSuffix)
-				.build();
-		return this;
+				.build()
+		);
 	}
 	
 	@Override
@@ -91,13 +95,35 @@ public class EzyMongoDatabaseContextBuilder
 		return (EzyMongoDatabaseContext)super.build();
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void preBuild() {
 		for(EzyReflection reflection : reflections) {
 			entityClasses.addAll(reflection.getAnnotatedClasses(EzyCollection.class));
-			bindingContextBuilder.addAllClasses(reflection);
+			bindingContextBuilder
+				.addAllClasses(reflection)
+				.addClasses((Set)reflection.getAnnotatedClasses(EzyCollectionId.class));
 		}
 		bindingContextBuilder.addClasses(entityClasses);
+		for(Class<?> entityClass : entityClasses) {
+			EzyField idField = getCollectionIdFieldOf(entityClass);
+			EzyCollectionId collectionIdAnno = idField.getAnnotation(EzyCollectionId.class);
+			if(collectionIdAnno != null && collectionIdAnno.composite())
+				bindingContextBuilder.addClass(idField.getType());
+		}
+	}
+	
+	private EzyField getCollectionIdFieldOf(Class<?> entityClass) {
+		EzyClass clazz = new EzyClass(entityClass);
+		return clazz.getField(f ->
+			f.isAnnotated(EzyCollectionId.class) ||
+			f.isAnnotated(EzyId.class)
+		)
+				.orElseThrow(() ->
+					new IllegalArgumentException(
+						"there is no Id field in entity class: " + entityClass.getName() +
+						", please annotated Id field with @EzyCollectionId or @EzyId")
+				);
 	}
 	
 	@Override

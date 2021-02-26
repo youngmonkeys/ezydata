@@ -23,6 +23,7 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
 		EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
 				.mongoClient(mongoClient)
 				.databaseName(databaseName)
+				.maxIdCollectionName("___max_id___")
 				.scan("com.tvd12.ezydata.mongodb.testing.bean")
 				.build();
 		assert databaseContext.getClient() == mongoClient;

@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
@@ -36,6 +37,13 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		repo.save(person);
 		System.out.println(repo.findById(1));
 		System.out.println(repo.findByName("dzung"));
+		
+		EzyMaxIdRepository repository = databaseContext.getRepository(EzyMaxIdRepository.class);
+		int nextPersonId = repository.incrementAndGet("test_mongo_bean_person").intValue();
+		Person nextPerson = new Person();
+		nextPerson.setId(nextPersonId);
+		nextPerson.setName("Chad");
+		repo.save(nextPerson);
 		
 		FoodRepo foodRepo = databaseContext.getRepository(FoodRepo.class);
 		System.out.println("fetchListMatch: " + foodRepo.fetchListMatch());
