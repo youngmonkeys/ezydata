@@ -57,6 +57,8 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
 	public V get(Object key) {
 		byte[] keyBytes = entityCodec.serialize(key);
 		byte[] valueBytes = redisClient.hget(mapNameBytes, keyBytes);
+		if(valueBytes == null)
+			return null;
 		V value = entityCodec.deserialize(valueBytes, valueType);
 		return value;
 	}

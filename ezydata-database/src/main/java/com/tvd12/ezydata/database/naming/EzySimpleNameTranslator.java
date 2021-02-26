@@ -60,7 +60,8 @@ public class EzySimpleNameTranslator implements EzyNameTranslator {
 		protected String ignoredSuffix = "";
 		
 		public Builder namingCase(EzyNamingCase namingCase) {
-			this.namingCase = namingCase;
+			if(namingCase != null)
+				this.namingCase = namingCase;
 			return this;
 		}
 		

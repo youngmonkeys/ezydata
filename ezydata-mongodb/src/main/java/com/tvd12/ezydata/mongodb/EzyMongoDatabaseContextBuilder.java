@@ -76,7 +76,7 @@ public class EzyMongoDatabaseContextBuilder
 		return this;
 	}
 	
-	public EzyMongoDatabaseContextBuilder collectionNaming(EzyNamingCase namingCase, String ignoredSuffix) {
+	public EzyMongoDatabaseContextBuilder collectionNameTranslator(EzyNamingCase namingCase, String ignoredSuffix) {
 		this.collectionNameTranslator = EzySimpleNameTranslator.builder()
 				.namingCase(namingCase)
 				.ignoredSuffix(ignoredSuffix)
@@ -168,7 +168,7 @@ public class EzyMongoDatabaseContextBuilder
 					EzyNamingCase.of(properties.getProperty(COLLECTION_NAMING_CASE));
 			String ignoredSuffix = 
 					properties.getProperty(COLLECTION_NAMING_IGNORED_SUFFIX);
-			collectionNaming(namingCase, ignoredSuffix);
+			collectionNameTranslator(namingCase, ignoredSuffix);
 		}
 		return collectionNameTranslator;
 	}
