@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import com.tvd12.ezydata.database.annotation.EzyNamedQuery;
@@ -20,6 +19,7 @@ import com.tvd12.ezydata.database.converter.EzySimpleResultDeserializers;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzySimpleQueryManager;
+import com.tvd12.ezydata.database.util.EzyDatabasePropertiesKeeper;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
@@ -31,15 +31,13 @@ import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClasses;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
-import com.tvd12.ezyfox.util.EzyLoggable;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuilder<B>>
-		extends EzyLoggable
+		extends EzyDatabasePropertiesKeeper<B>
 		implements EzyBuilder<EzyDatabaseContext> {
 
 	protected Set<String> packagesToScan;
-	protected Properties properties;
 	protected Set<Class<?>> repositoryClasses;
 	protected Set<Class<?>> autoImplInterfaces;
 	protected Set<Class<?>> queryResultClasses;
@@ -96,11 +94,6 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	public B scan(EzyReflection reflection) {
 		this.reflections.add(reflection);
-		return (B)this;
-	}
-	
-	public B properties(Properties properties) {
-		this.properties = properties;
 		return (B)this;
 	}
 	
@@ -170,8 +163,6 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	@Override
 	public EzyDatabaseContext build() {
-		if(properties == null)
-			properties = new Properties();
 		if(packagesToScan.size() > 0)
 			reflections.add(new EzyReflectionProxy(packagesToScan));
 		if(bindingContextBuilder == null) {

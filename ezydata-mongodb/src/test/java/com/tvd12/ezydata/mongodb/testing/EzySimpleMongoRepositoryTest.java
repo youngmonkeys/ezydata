@@ -8,6 +8,7 @@ import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.repository.EzySimpleMongoRepository;
 import com.tvd12.ezydata.mongodb.testing.bean.Duck;
 import com.tvd12.ezydata.mongodb.testing.bean.DuckId;
+import com.tvd12.properties.file.reader.BaseFileReader;
 
 public class EzySimpleMongoRepositoryTest extends MongodbTest {
 
@@ -15,7 +16,7 @@ public class EzySimpleMongoRepositoryTest extends MongodbTest {
 	public void test() {
 		EzyMongoDatabaseContext ctx = new EzyMongoDatabaseContextBuilder()
 				.mongoClient(mongoClient)
-				.databaseName("test")
+				.properties(new BaseFileReader().read("mongodb_config.properties"))
 				.build();
 		RepoImpl repo = new RepoImpl();
 		repo.setDatabaseContext(ctx);

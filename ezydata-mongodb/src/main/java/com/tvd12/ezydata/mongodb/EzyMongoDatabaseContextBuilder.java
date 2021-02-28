@@ -24,6 +24,7 @@ import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
+import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryMethodConverter;
 import com.tvd12.ezydata.mongodb.repository.EzyMongoMaxIdRepository;
@@ -90,6 +91,8 @@ public class EzyMongoDatabaseContextBuilder
 	
 	@Override
 	public EzyMongoDatabaseContext build() {
+		if(databaseName == null)
+			databaseName = properties.getProperty(EzyMongoClientLoader.DATABASE);
 		if(dataConverter == null)
 			dataConverter = EzyMongoDataConverter.builder().build();
 		return (EzyMongoDatabaseContext)super.build();

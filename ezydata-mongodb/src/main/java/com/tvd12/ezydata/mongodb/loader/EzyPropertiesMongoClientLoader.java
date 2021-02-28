@@ -71,8 +71,7 @@ public class EzyPropertiesMongoClientLoader
         return this.createMongoClient();
     }
     
-    protected void preload() {
-    }
+    protected void preload() {}
     
     protected MongoClient createMongoClient() {
     	String uri = properties.getProperty(URI);
