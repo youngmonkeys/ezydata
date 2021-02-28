@@ -22,12 +22,12 @@ public class EzyJedisProxyTest {
 		EzyJedisProxy sut = new EzyJedisProxy(jedis);
 		
 		// when
-		sut.subscribe(new EzyRedisSubscriber() {
+		sut.subscribe("testChannel".getBytes(), new EzyRedisSubscriber() {
 			
 			@Override
 			public void onMessage(byte[] channel, byte[] messageBytes) {
 			}
-		}, "testChannel".getBytes());
+		});
 		
 		// then
 		sut.close();

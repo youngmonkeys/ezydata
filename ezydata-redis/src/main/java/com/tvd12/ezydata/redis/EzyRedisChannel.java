@@ -76,7 +76,7 @@ public class EzyRedisChannel<T> {
 			}
 		};
 		for(int i = 0 ; i < subThreadPoolSize ; ++i) {
-			subExecutorService.execute(() -> redisClient.subscribe(subscriber, channelNameBytes));
+			subExecutorService.execute(() -> redisClient.subscribe(channelNameBytes, subscriber));
 		}
 	}
 	

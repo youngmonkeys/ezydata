@@ -76,7 +76,7 @@ public class EzyJedisProxy implements EzyRedisClient {
 	}
 
 	@Override
-	public void subscribe(EzyRedisSubscriber subscriber, byte[] channelName) {
+	public void subscribe(byte[] channelName, EzyRedisSubscriber subscriber) {
 		BinaryJedisPubSub pubSub = new BinaryJedisPubSub() {
 			@Override
 			public void onMessage(byte[] channel, byte[] message) {

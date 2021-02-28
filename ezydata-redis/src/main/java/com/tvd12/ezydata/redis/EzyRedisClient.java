@@ -32,7 +32,7 @@ public interface EzyRedisClient extends EzyCloseable {
 	
 	Long publish(byte[] channelName, byte[] message);
 	
-	void subscribe(EzyRedisSubscriber subscriber, byte[] channelName);
+	void subscribe(byte[] channelName, EzyRedisSubscriber subscriber);
 	
 	void close();
 
