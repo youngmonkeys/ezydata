@@ -116,7 +116,8 @@ public abstract class EzyJpaRepository<I,E>
 				.toString();
 		Query query = entityManager.createQuery(queryString);
 		query.setParameter(0, value);
-		Object entity = query.getSingleResult();
+		List resultList = query.getResultList();
+		Object entity = resultList.isEmpty() ? null : resultList.get(0);
 		return (E)entity;
 	}
 	
@@ -124,7 +125,8 @@ public abstract class EzyJpaRepository<I,E>
 		Query query = entityManager.createQuery(queryString);
 		for(int i = 0 ; i < parameters.length ; ++i)
 			query.setParameter(i, parameters[i]);
-		Object entity = query.getSingleResult();
+		List resultList = query.getResultList();
+		Object entity = resultList.isEmpty() ? null : resultList.get(0);
 		return (E)entity;
 	}
 	

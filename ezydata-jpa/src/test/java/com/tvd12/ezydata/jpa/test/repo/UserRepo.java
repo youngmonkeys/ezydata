@@ -14,9 +14,14 @@ public class UserRepo extends EzyJpaRepository<String, User> {
 	public UserIdFullNameResult findByEmail(String email) {
 		Query query = entityManager.createQuery("select e.id, e.fullName from User e where e.email = ?0");
 		query.setParameter(0, "dzung@gmail.com");
-		Object result = query.getSingleResult();
-		Object answer = databaseContext.deserializeResult(result, UserIdFullNameResult.class);
-		return (UserIdFullNameResult)answer;
+		try {
+			Object result = query.getSingleResult();
+			Object answer = databaseContext.deserializeResult(result, UserIdFullNameResult.class);
+			return (UserIdFullNameResult)answer;
+		}
+		catch(Exception e) {
+			return null;
+		}
 	}
 	
 	@SuppressWarnings({"rawtypes"})

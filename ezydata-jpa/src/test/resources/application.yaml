@@ -1,5 +1,5 @@
 datasource:
-   jdbcUrl: jdbc:mysql://root:123@localhost:3306/test
+   jdbcUrl: jdbc:mysql://root:12345678@localhost:3306/test
    driverClassName: com.mysql.cj.jdbc.Driver
 hibernate:
    show_sql: true
