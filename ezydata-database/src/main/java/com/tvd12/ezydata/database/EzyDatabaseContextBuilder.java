@@ -27,6 +27,7 @@ import com.tvd12.ezyfox.binding.writer.EzyDefaultWriter;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
+import com.tvd12.ezyfox.io.EzyLists;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClasses;
 import com.tvd12.ezyfox.reflect.EzyReflection;
@@ -248,7 +249,12 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	
 	protected void scanAndAddRepoClasses() {
 		for(EzyReflection reflection: reflections) {
-			repositoryClasses.addAll(reflection.getAnnotatedClasses(EzyRepository.class));
+			repositoryClasses.addAll(
+				EzyLists.filter(
+					reflection.getAnnotatedClasses(EzyRepository.class),
+					it -> !it.isInterface()
+				)
+			);
 		}
 	}
 	

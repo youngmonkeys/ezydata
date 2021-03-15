@@ -15,6 +15,7 @@ import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.database.annotation.EzyRepository;
 import com.tvd12.ezyfox.io.EzySets;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
@@ -144,7 +145,8 @@ public abstract class EzyAbstractRepositoriesImplementer
 	}
 	
 	private boolean isAutoImplRepoInterface(Class<?> clazz) {
-		return  clazz.isAnnotationPresent(EzyAutoImpl.class) &&
+		return (clazz.isAnnotationPresent(EzyAutoImpl.class) ||
+				clazz.isAnnotationPresent(EzyRepository.class)) &&
 				Modifier.isPublic(clazz.getModifiers()) &&
 				Modifier.isInterface(clazz.getModifiers());
 				
