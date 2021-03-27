@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox</artifactId>
-		<version>0.0.2</version>
+		<version>0.0.3</version>
 	</parent>
 	<artifactId>ezydata-examples</artifactId>
 	<version>1.0.0</version>
@@ -18,8 +18,8 @@
 	</description>
 	
 	<properties>
-		<ezydata.version>1.1.3</ezydata.version>
-		<ezy.tools.version>1.1.3</ezy.tools.version>
+		<ezydata.version>1.1.4</ezydata.version>
+		<ezy.tools.version>1.1.4</ezy.tools.version>
 	</properties>
 	
 	<modules>
