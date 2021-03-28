@@ -22,8 +22,19 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
+			<artifactId>ezydata-common-example</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
 			<artifactId>ezydata-jpa</artifactId>
 			<version>${ezydata.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
