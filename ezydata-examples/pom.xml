@@ -11,7 +11,7 @@
 	<packaging>pom</packaging>
 
 	<name>ezydata-examples</name>
-	<url>http://www.tvd12.com/java/projects/ezydata</url>
+	<url>https://youngmonkeys.org/project/ezydata/</url>
 	
 	<description>
 		Demo for ezydata
@@ -19,20 +19,28 @@
 	
 	<properties>
 		<ezydata.version>1.1.4</ezydata.version>
+		<ezyhttp.version>0.1.0</ezyhttp.version>
 		<ezy.tools.version>1.1.4</ezy.tools.version>
 	</properties>
-	
-	<modules>
-		<module>ezydata-jpa-example</module>
-	</modules>
-	
 	
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
+			<artifactId>ezyhttp-server-boot</artifactId>
+			<version>${ezyhttp.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-tools</artifactId>
 			<version>${ezy.tools.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+	<modules>
+		<module>ezydata-jpa-example</module>
+		<module>ezydata-mongo-example</module>
+		<module>ezydata-common-example</module>
+	</modules>
 	
 </project>

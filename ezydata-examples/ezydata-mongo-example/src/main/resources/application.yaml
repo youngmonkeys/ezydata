@@ -1,0 +1,8 @@
+database:
+  mongo:
+    uri: mongodb://ezydata_mongo:ezydata_mongo@localhost:27017/ezydata-mongo
+    database: ezydata-mongo
+    collection:
+      naming:
+        case: UNDERSCORE
+        ignored_suffix: Entity

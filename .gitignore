@@ -1,3 +1,5 @@
+.DS_Store
+*.DS_Storee
 .project
 *.project
 .classpath
