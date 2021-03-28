@@ -1,12 +1,12 @@
-package com.tvd12.kotlin.examples.mongo.controller;
+package com.tvd12.ezydata.example.mongo.controller;
 
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
+import com.tvd12.ezydata.example.mongo.entity.Author;
+import com.tvd12.ezydata.example.mongo.repository.AuthorRepository;
+import com.tvd12.ezydata.example.mongo.request.AddAuthorRequest;
 import com.tvd12.ezyhttp.server.core.annotation.Controller;
 import com.tvd12.ezyhttp.server.core.annotation.DoPost;
 import com.tvd12.ezyhttp.server.core.annotation.RequestBody;
-import com.tvd12.kotlin.examples.mongo.entity.Author;
-import com.tvd12.kotlin.examples.mongo.repository.AuthorRepository;
-import com.tvd12.kotlin.examples.mongo.request.AddAuthorRequest;
 
 import lombok.AllArgsConstructor;
 

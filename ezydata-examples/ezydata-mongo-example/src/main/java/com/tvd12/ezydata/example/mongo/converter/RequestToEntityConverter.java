@@ -1,9 +1,9 @@
-package com.tvd12.kotlin.examples.mongo.converter;
+package com.tvd12.ezydata.example.mongo.converter;
 
 import com.tvd12.ezydata.example.common.DateConverter;
+import com.tvd12.ezydata.example.mongo.entity.Book;
+import com.tvd12.ezydata.example.mongo.request.AddBookRequest;
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
-import com.tvd12.kotlin.examples.mongo.entity.Book;
-import com.tvd12.kotlin.examples.mongo.request.AddBookRequest;
 
 @EzySingleton
 public class RequestToEntityConverter {

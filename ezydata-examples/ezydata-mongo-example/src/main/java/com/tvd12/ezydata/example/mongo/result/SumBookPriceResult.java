@@ -1,4 +1,4 @@
-package com.tvd12.kotlin.examples.mongo.result;
+package com.tvd12.ezydata.example.mongo.result;
 
 import com.tvd12.ezydata.database.annotation.EzyQueryResult;
 

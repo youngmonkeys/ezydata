@@ -1,4 +1,4 @@
-package com.tvd12.kotlin.examples.mongo.request;
+package com.tvd12.ezydata.example.mongo.request;
 
 import lombok.Getter;
 import lombok.Setter;

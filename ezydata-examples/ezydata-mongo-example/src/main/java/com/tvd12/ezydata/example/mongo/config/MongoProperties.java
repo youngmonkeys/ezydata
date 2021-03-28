@@ -1,4 +1,4 @@
-package com.tvd12.kotlin.examples.mongo.config;
+package com.tvd12.ezydata.example.mongo.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

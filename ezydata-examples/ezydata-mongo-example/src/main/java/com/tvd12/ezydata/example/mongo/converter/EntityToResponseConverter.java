@@ -1,15 +1,15 @@
-package com.tvd12.kotlin.examples.mongo.converter;
+package com.tvd12.ezydata.example.mongo.converter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.tvd12.ezydata.example.common.DateConverter;
+import com.tvd12.ezydata.example.mongo.entity.Author;
+import com.tvd12.ezydata.example.mongo.entity.Book;
+import com.tvd12.ezydata.example.mongo.entity.Category;
+import com.tvd12.ezydata.example.mongo.response.BookResponse;
 import com.tvd12.ezyfox.bean.annotation.EzySingleton;
-import com.tvd12.kotlin.examples.mongo.entity.Author;
-import com.tvd12.kotlin.examples.mongo.entity.Book;
-import com.tvd12.kotlin.examples.mongo.entity.Category;
-import com.tvd12.kotlin.examples.mongo.response.BookResponse;
 
 @EzySingleton
 public class EntityToResponseConverter {

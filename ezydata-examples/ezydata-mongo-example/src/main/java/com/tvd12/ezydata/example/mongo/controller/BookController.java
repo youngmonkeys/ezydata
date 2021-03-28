@@ -1,4 +1,4 @@
-package com.tvd12.kotlin.examples.mongo.controller;
+package com.tvd12.ezydata.example.mongo.controller;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -6,6 +6,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
+import com.tvd12.ezydata.example.mongo.converter.EntityToResponseConverter;
+import com.tvd12.ezydata.example.mongo.converter.RequestToEntityConverter;
+import com.tvd12.ezydata.example.mongo.entity.Author;
+import com.tvd12.ezydata.example.mongo.entity.Book;
+import com.tvd12.ezydata.example.mongo.entity.Category;
+import com.tvd12.ezydata.example.mongo.repository.AuthorRepository;
+import com.tvd12.ezydata.example.mongo.repository.BookRepository;
+import com.tvd12.ezydata.example.mongo.repository.CategoryRepository;
+import com.tvd12.ezydata.example.mongo.request.AddBookRequest;
+import com.tvd12.ezydata.example.mongo.response.BookResponse;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.util.Next;
 import com.tvd12.ezyhttp.core.exception.HttpBadRequestException;
@@ -16,16 +26,6 @@ import com.tvd12.ezyhttp.server.core.annotation.DoPost;
 import com.tvd12.ezyhttp.server.core.annotation.PathVariable;
 import com.tvd12.ezyhttp.server.core.annotation.RequestBody;
 import com.tvd12.ezyhttp.server.core.annotation.RequestParam;
-import com.tvd12.kotlin.examples.mongo.converter.EntityToResponseConverter;
-import com.tvd12.kotlin.examples.mongo.converter.RequestToEntityConverter;
-import com.tvd12.kotlin.examples.mongo.entity.Author;
-import com.tvd12.kotlin.examples.mongo.entity.Book;
-import com.tvd12.kotlin.examples.mongo.entity.Category;
-import com.tvd12.kotlin.examples.mongo.repository.AuthorRepository;
-import com.tvd12.kotlin.examples.mongo.repository.BookRepository;
-import com.tvd12.kotlin.examples.mongo.repository.CategoryRepository;
-import com.tvd12.kotlin.examples.mongo.request.AddBookRequest;
-import com.tvd12.kotlin.examples.mongo.response.BookResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.val;

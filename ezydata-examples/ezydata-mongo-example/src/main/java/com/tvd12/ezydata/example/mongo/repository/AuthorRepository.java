@@ -1,8 +1,8 @@
-package com.tvd12.kotlin.examples.mongo.repository;
+package com.tvd12.ezydata.example.mongo.repository;
 
+import com.tvd12.ezydata.example.mongo.entity.Author;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
-import com.tvd12.kotlin.examples.mongo.entity.Author;
 
 @EzyAutoImpl
 public interface AuthorRepository extends EzyMongoRepository<Long, Author> {

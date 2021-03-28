@@ -1,13 +1,13 @@
-package com.tvd12.kotlin.examples.mongo.controller;
+package com.tvd12.ezydata.example.mongo.controller;
 
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
+import com.tvd12.ezydata.example.mongo.entity.Category;
+import com.tvd12.ezydata.example.mongo.repository.CategoryRepository;
+import com.tvd12.ezydata.example.mongo.request.AddCategoryRequest;
 import com.tvd12.ezyhttp.core.exception.HttpBadRequestException;
 import com.tvd12.ezyhttp.server.core.annotation.Controller;
 import com.tvd12.ezyhttp.server.core.annotation.DoPost;
 import com.tvd12.ezyhttp.server.core.annotation.RequestBody;
-import com.tvd12.kotlin.examples.mongo.entity.Category;
-import com.tvd12.kotlin.examples.mongo.repository.CategoryRepository;
-import com.tvd12.kotlin.examples.mongo.request.AddCategoryRequest;
 
 import lombok.AllArgsConstructor;
 

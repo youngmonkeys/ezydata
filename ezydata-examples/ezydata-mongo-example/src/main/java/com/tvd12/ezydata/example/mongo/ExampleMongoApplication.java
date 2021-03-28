@@ -1,4 +1,4 @@
-package com.tvd12.kotlin.example.mongo;
+package com.tvd12.ezydata.example.mongo;
 
 import com.tvd12.ezyhttp.core.boot.EzyHttpApplicationBootstrap;
 

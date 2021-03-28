@@ -1,8 +1,8 @@
-package com.tvd12.kotlin.examples.mongo.repository;
+package com.tvd12.ezydata.example.mongo.repository;
 
+import com.tvd12.ezydata.example.mongo.entity.Category;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
-import com.tvd12.kotlin.examples.mongo.entity.Category;
 
 @EzyRepository
 public interface CategoryRepository extends EzyMongoRepository<Long, Category> {

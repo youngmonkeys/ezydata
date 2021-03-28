@@ -1,4 +1,4 @@
-package com.tvd12.kotlin.examples.mongo.entity;
+package com.tvd12.ezydata.example.mongo.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
