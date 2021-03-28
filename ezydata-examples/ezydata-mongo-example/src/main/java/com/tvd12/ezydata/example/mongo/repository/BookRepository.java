@@ -6,10 +6,10 @@ import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.example.mongo.entity.Book;
 import com.tvd12.ezydata.example.mongo.result.SumBookPriceResult;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
-import com.tvd12.ezyfox.annotation.EzyAutoImpl;
+import com.tvd12.ezyfox.database.annotation.EzyRepository;
 import com.tvd12.ezyfox.util.Next;
 
-@EzyAutoImpl
+@EzyRepository
 public interface BookRepository extends EzyMongoRepository<Long, Book> {
 
     Book findByNameAndAuthorId(String name, Long authorId);
