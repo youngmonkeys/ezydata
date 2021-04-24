@@ -38,9 +38,10 @@
 	</dependencies>
 	
 	<modules>
+		<module>ezydata-common-example</module>
 		<module>ezydata-jpa-example</module>
 		<module>ezydata-mongo-example</module>
-		<module>ezydata-common-example</module>
+		<module>ezydata-redis-example</module>
 	</modules>
 	
 </project>

@@ -1,0 +1,5 @@
+redis:
+  uri: redis://localhost:6379/
+  map_naming:
+    case: CAMEL
+    ingored_suffix: Entity
