@@ -4,21 +4,21 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox</artifactId>
-		<version>0.0.2</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>ezydata</artifactId>
-    <version>1.1.4</version>
+    <version>1.1.5</version>
 	<packaging>pom</packaging>
 
 	<name>ezydata</name>
-	<url>http://www.tvd12.com/java/projects/ezydata</url>
+	<url>https://youngmonkeys.org/project/ezydata/</url>
 	<description>
 		Support for data, database interaction 
 	</description>
 
 	<organization>
 		<name>Young Monkeys</name>
-		<url>http://www.tvd12.com</url>
+		<url>https://youngmonkeys.org/</url>
 	</organization>
 
 	<licenses>

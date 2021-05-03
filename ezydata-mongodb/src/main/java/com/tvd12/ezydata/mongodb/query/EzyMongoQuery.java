@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.mongodb.query;
 
+import java.util.function.Function;
+
 import org.bson.BsonValue;
 
 import com.tvd12.ezydata.database.query.EzyQLQuery;
@@ -7,20 +9,17 @@ import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 
 public class EzyMongoQuery extends EzyQLQuery {
 
-	protected EzyMongoDataConverter dataConverter;
-	
 	public EzyMongoQuery(Builder builder) {
 		super(builder);
 	}
 	
 	@Override
-	protected void init(EzyQLQuery.Builder builder) {
-		this.dataConverter = ((Builder)builder).dataConverter;
-	}
-
-	@Override
-	protected String parseParameterValue(Object value) {
-		return dataConverter.bsonValueToString((BsonValue) value);
+	protected Function<Object, Object> getParameterConveter(
+			EzyQLQuery.Builder builder) {
+		Function<Object, Object> firstConverter = super.getParameterConveter(builder);
+		EzyMongoDataConverter secondConverter = ((Builder)builder).dataConverter;
+		return it -> 
+			secondConverter.bsonValueToString((BsonValue) firstConverter.apply(it));
 	}
 	
 	public static Builder builder() {

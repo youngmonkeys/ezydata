@@ -20,69 +20,22 @@ public class EzyQLQuery {
 	
 	protected EzyQLQuery(Builder builder) {
 		this.query = builder.query;
-		this.parameterConveter = builder.parameterConveter;
+		this.parameterConveter = getParameterConveter(builder);
 		this.parameters = builder.parameters != null ? builder.parameters : EMPTY_ARRAY;
-		this.init(builder);
 		this.value = createValue();
 	}
 	
-	protected void init(Builder builder) {}
-	
-	public int getPrameterCount() {
-		return parameters.length;
-	}
-	
-	public Object getParameter(int index) {
-		return parameters[index];
-	}
-	
 	protected String createValue() {
-		int paramCount = parameters.length;
-		String[] strs = new String[paramCount];
-		int startStr = 0;
-		int length = query.length();
-		for(int i = 0 ; i < length ; ) {
-			char ch = query.charAt(i ++);
-			if(i < length && ch == '?') {
-				int numberCharCount = 0;
-				char[] numberChars = new char[3];
-				ch = query.charAt(i);
-				while(ch >= '0' && ch <= '9') {
-					numberChars[numberCharCount ++] = ch;
-					if((++i) >= length)
-						break;
-					ch = query.charAt(i);
-				}
-				if(numberCharCount > 0) {
-					String paramStr = new String(numberChars, 0, numberCharCount);
-					int paramIndex = Integer.parseInt(paramStr);
-					if(paramIndex >= paramCount)
-						throw new EzyCreateQueryException("not enough parameter values, required: " + paramIndex);
-					strs[paramIndex] = query.substring(startStr, i);
-					startStr = i;
-				}
-			}
+		try {
+			return EzyStrings.replace(query, parameters, parameterConveter);
 		}
-		StringBuilder builder = new StringBuilder();
-		for(int i = 0 ; i < paramCount ; ++i) {
-			String value = getParameterValue(parameters[i]);
-			if(strs[i] != null)
-				builder.append(strs[i].replace("?" + i, value));
+		catch (Exception e) {
+			throw new EzyCreateQueryException("can not create query", e);
 		}
-		if(startStr < length)
-			builder.append(query.substring(startStr));
-		return builder.toString();
 	}
 	
-	protected String getParameterValue(Object parameter) {
-		Object value = parameter;
-		if(parameterConveter != null)
-			value = parameterConveter.apply(parameter);
-		return parseParameterValue(value);
-	}
-	
-	protected String parseParameterValue(Object value) {
-		return String.valueOf(value);
+	protected Function<Object, Object> getParameterConveter(Builder builder) {
+		return builder.parameterConveter;
 	}
 	
 	public String toString() {

@@ -16,9 +16,6 @@ public class EzyQLQueryTest {
 		String queryString = "select e from E e where id = ?0 and name = ?1";
 		EzyQLQuery query = factory.newQuery(queryString, 1, "dung");
 		assert query.getQuery().equals(queryString);
-		assert query.getPrameterCount() == 2;
-		assert query.getParameter(0).equals(1);
-		assert query.getParameter(1).equals("dung");
 		assert query.getValue().equals("select e from E e where id = 1 and name = dung");
 		System.out.println(query);
 		
