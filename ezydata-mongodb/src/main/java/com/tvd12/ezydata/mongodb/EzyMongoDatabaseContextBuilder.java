@@ -13,8 +13,6 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
-import com.tvd12.ezydata.database.annotation.EzyCollection;
-import com.tvd12.ezydata.database.annotation.EzyCollectionId;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.naming.EzyNamingCase;
@@ -32,6 +30,8 @@ import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
+import com.tvd12.ezyfox.database.annotation.EzyCollection;
+import com.tvd12.ezyfox.database.annotation.EzyCollectionId;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
@@ -105,11 +105,15 @@ public class EzyMongoDatabaseContextBuilder
 			entityClasses.addAll(reflection.getAnnotatedClasses(EzyCollection.class));
 			bindingContextBuilder
 				.addAllClasses(reflection)
+				.addClasses((Set)reflection.getAnnotatedClasses(EzyId.class))
 				.addClasses((Set)reflection.getAnnotatedClasses(EzyCollectionId.class));
 		}
 		bindingContextBuilder.addClasses(entityClasses);
 		for(Class<?> entityClass : entityClasses) {
 			EzyField idField = getCollectionIdFieldOf(entityClass);
+			EzyId idAnno = idField.getAnnotation(EzyId.class);
+			if(idAnno != null && idAnno.composite())
+				bindingContextBuilder.addClass(idField.getType());
 			EzyCollectionId collectionIdAnno = idField.getAnnotation(EzyCollectionId.class);
 			if(collectionIdAnno != null && collectionIdAnno.composite())
 				bindingContextBuilder.addClass(idField.getType());

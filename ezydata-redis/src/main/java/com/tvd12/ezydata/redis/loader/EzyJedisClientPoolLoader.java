@@ -16,7 +16,7 @@ public class EzyJedisClientPoolLoader
 		else if(host != null && port > 0)
 			jedisPool = new JedisPool(host, port);
 		else if(host != null)
-			jedisPool = new JedisPool(host);
+			jedisPool = new JedisPool(host, DEFAULT_PORT);
 		else
 			jedisPool = new JedisPool();
 		return new EzyJedisClientPool(jedisPool);

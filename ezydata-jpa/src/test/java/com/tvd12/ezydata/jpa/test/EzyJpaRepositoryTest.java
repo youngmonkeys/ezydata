@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
 import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoryImplementer;
@@ -14,6 +13,7 @@ import com.tvd12.ezydata.jpa.test.entity.Employee;
 import com.tvd12.ezydata.jpa.test.repo.EmployeeRepo;
 import com.tvd12.ezydata.jpa.test.repo.UserRepo;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.util.EzyNext;
 
 public class EzyJpaRepositoryTest extends BaseJpaTest {

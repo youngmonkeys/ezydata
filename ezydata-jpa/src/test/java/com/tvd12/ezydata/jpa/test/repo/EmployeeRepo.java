@@ -5,10 +5,10 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
 import com.tvd12.ezydata.jpa.test.result.EmployeeIdResult;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.util.EzyNext;
 
 @EzyAutoImpl

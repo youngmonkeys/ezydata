@@ -2,7 +2,7 @@ package com.tvd12.ezydata.redis.test.entity;
 
 import javax.persistence.Id;
 
-import com.tvd12.ezydata.database.annotation.EzyCachedValue;
+import com.tvd12.ezyfox.data.annotation.EzyCachedValue;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

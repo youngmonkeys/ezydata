@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
@@ -15,6 +14,7 @@ import com.tvd12.ezydata.mongodb.testing.bean.CategoryRepo;
 import com.tvd12.ezydata.mongodb.testing.bean.Customer;
 import com.tvd12.ezydata.mongodb.testing.bean.CustomerRepo;
 import com.tvd12.ezydata.mongodb.testing.bean.Person;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 
 public class EzyMongoDatabaseContextTest extends MongodbTest {
 

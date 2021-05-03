@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.database.converter;
 
-import com.tvd12.ezydata.database.annotation.EzyResultDeserialized;
+import com.tvd12.ezyfox.database.annotation.EzyResultDeserialized;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 
 public interface EzyResultDeserializer<T> {

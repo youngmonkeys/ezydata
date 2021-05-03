@@ -8,12 +8,12 @@ import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyTransactional;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
+import com.tvd12.ezyfox.database.annotation.EzyTransactional;
 import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 

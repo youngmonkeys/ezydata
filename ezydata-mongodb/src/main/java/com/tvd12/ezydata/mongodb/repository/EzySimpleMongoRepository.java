@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.mongodb.repository;
 
-import static com.tvd12.ezydata.database.util.EzyCollectionAnnotations.getCollectionName;
+import static com.tvd12.ezyfox.database.util.EzyCollectionAnnotations.getCollectionName;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -278,7 +278,7 @@ public class EzySimpleMongoRepository<I,E>
 	
 	protected long countWithQuery(EzyQLQuery query, Next next) {
 		String queryString = query.getValue();
-		logger.debug("find list with query: {}", queryString);
+		logger.debug("count with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
 		BsonDocument filter = queryDocument;
 		CountOptions opts = new CountOptions();

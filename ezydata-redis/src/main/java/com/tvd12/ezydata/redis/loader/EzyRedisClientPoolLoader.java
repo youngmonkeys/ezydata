@@ -8,6 +8,8 @@ public interface EzyRedisClientPoolLoader {
 	String PORT = "redis.port";
 	String URI = "redis.uri";
 	
+	int DEFAULT_PORT = 6379;
+	
 	EzyRedisClientPool load();
 	
 }

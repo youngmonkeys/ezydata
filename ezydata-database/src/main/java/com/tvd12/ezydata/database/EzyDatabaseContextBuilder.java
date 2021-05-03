@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.database;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,9 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.tvd12.ezydata.database.annotation.EzyNamedQuery;
-import com.tvd12.ezydata.database.annotation.EzyQueryResult;
-import com.tvd12.ezydata.database.annotation.EzyResultDeserialized;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.converter.EzyBindResultDeserializer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
@@ -23,10 +18,12 @@ import com.tvd12.ezydata.database.util.EzyDatabasePropertiesKeeper;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
-import com.tvd12.ezyfox.binding.writer.EzyDefaultWriter;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.database.annotation.EzyNamedQuery;
+import com.tvd12.ezyfox.database.annotation.EzyQueryResult;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
+import com.tvd12.ezyfox.database.annotation.EzyResultDeserialized;
 import com.tvd12.ezyfox.io.EzyLists;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClasses;
@@ -166,11 +163,8 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 	public EzyDatabaseContext build() {
 		if(packagesToScan.size() > 0)
 			reflections.add(new EzyReflectionProxy(packagesToScan));
-		if(bindingContextBuilder == null) {
-			bindingContextBuilder = EzyBindingContext.builder()
-					.addTemplate(BigDecimal.class, EzyDefaultWriter.getInstance())
-					.addTemplate(BigInteger.class, EzyDefaultWriter.getInstance());
-		}
+		if(bindingContextBuilder == null)
+			bindingContextBuilder = EzyBindingContext.builder();
 		for(EzyReflection reflection : reflections)
 			bindingContextBuilder.addAllClasses(reflection);
 		preBuild();

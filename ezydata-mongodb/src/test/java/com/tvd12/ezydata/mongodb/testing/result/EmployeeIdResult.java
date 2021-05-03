@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.mongodb.testing.result;
 
-import com.tvd12.ezydata.database.annotation.EzyQueryResult;
+import com.tvd12.ezyfox.database.annotation.EzyQueryResult;
 
 import lombok.Getter;
 import lombok.Setter;

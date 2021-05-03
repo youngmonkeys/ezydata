@@ -2,9 +2,9 @@ package com.tvd12.ezydata.mongodb.testing.bean;
 
 import java.util.List;
 
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.util.Next;
 
 @EzyAutoImpl

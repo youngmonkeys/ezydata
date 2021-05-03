@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.tvd12.ezydata.database.annotation.EzyCollectionId;
 import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.binding.annotation.EzyValue;
+import com.tvd12.ezyfox.database.annotation.EzyCollectionId;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyGetterBuilder;

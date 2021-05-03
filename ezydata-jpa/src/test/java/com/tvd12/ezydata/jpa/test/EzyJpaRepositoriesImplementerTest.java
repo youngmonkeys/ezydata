@@ -9,11 +9,11 @@ import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
 import com.tvd12.ezydata.jpa.test.entity.User;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 
 public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 

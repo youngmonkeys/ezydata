@@ -3,12 +3,12 @@ package com.tvd12.ezydata.database.test;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezydata.database.query.EzySimpleQueryManager;
 import com.tvd12.ezydata.database.test.bean.Person;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
