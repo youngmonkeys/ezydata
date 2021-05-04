@@ -15,6 +15,7 @@ import com.tvd12.ezydata.redis.EzyRedisProxyFactory;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
 import com.tvd12.ezydata.redis.test.entity.Author;
 import com.tvd12.ezydata.redis.test.entity.ChatMessage3;
+import com.tvd12.ezydata.redis.test.entity.ChatMessage4;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.util.EzyMapBuilder;
 import com.tvd12.properties.file.reader.BaseFileReader;
@@ -128,6 +129,10 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		EzyRedisChannel<ChatMessage3> channel = proxy.getChannel("ezydata_chat_message3", ChatMessage3.class);
 		channel = proxy.getChannel("ezydata_chat_message3", ChatMessage3.class);
 		channel.publish(new ChatMessage3("Hello World"));
+		
+		EzyRedisChannel<ChatMessage4> channel4 = proxy.getChannel("ezydata_chat_message4", ChatMessage4.class);
+		channel4 = proxy.getChannel("ezydata_chat_message4", ChatMessage4.class);
+		channel4.publish(new ChatMessage4("Hello World"));
 	}
 	
 	public static void main(String[] args) throws Exception {

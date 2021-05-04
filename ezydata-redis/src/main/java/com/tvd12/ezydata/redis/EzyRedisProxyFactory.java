@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.redis;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
@@ -20,7 +18,6 @@ import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyBindingContextBuilder;
 import com.tvd12.ezyfox.binding.codec.EzyBindingEntityCodec;
-import com.tvd12.ezyfox.binding.writer.EzyDefaultWriter;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
 import com.tvd12.ezyfox.codec.MsgPackSimpleDeserializer;
@@ -171,14 +168,14 @@ public class EzyRedisProxyFactory {
 		private void prepareEntityCodec() {
 			if(entityCodec != null)
 				return;
-			EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder()
-					.addTemplate(BigDecimal.class, EzyDefaultWriter.getInstance())
-					.addTemplate(BigInteger.class, EzyDefaultWriter.getInstance());
+			EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder();
 			if(reflection != null) {
 				Set<Class<?>> valueClasses = reflection.getAnnotatedClasses(EzyCachedValue.class);
 				bindingContextBuilder
 					.addAllClasses(reflection)
 					.addClasses((Set)valueClasses)
+					.addClasses((Set)reflection.getAnnotatedClasses(EzyMessage.class))
+					.addClasses((Set)reflection.getAnnotatedClasses(EzyRedisMessage.class))
 					.addClasses((Set)reflection.getAnnotatedClasses(EzyCachedKey.class));
 				for(Class<?> valueClass : valueClasses) {
 					EzyField keyField = getMapKeyFieldOf(valueClass);
