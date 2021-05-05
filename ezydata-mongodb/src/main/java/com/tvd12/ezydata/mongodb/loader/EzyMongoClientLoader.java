@@ -7,6 +7,7 @@ import com.mongodb.MongoClient;
 
 public interface EzyMongoClientLoader {
 
+	String PROPERTY_NAME_PREFIX = "database.mongo";
 	String URI				= "database.mongo.uri";
     String HOST         	= "database.mongo.host";
     String PORT         	= "database.mongo.port";
