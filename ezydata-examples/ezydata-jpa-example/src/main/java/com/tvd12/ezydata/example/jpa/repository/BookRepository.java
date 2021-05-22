@@ -3,10 +3,10 @@ package com.tvd12.ezydata.example.jpa.repository;
 import java.util.List;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.example.jpa.entity.Book;
 import com.tvd12.ezydata.example.jpa.result.SumBookPriceResult;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.util.Next;
 
 @EzyAutoImpl

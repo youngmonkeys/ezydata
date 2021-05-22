@@ -2,10 +2,10 @@ package com.tvd12.ezydata.example.mongo.repository;
 
 import java.util.List;
 
-import com.tvd12.ezydata.database.annotation.EzyQuery;
 import com.tvd12.ezydata.example.mongo.entity.Book;
 import com.tvd12.ezydata.example.mongo.result.SumBookPriceResult;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.database.annotation.EzyRepository;
 import com.tvd12.ezyfox.util.Next;
 

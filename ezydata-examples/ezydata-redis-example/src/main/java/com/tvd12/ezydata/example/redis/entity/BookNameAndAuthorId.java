@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.example.redis.entity;
 
-import com.tvd12.ezydata.database.annotation.EzyCachedKey;
+import com.tvd12.ezyfox.data.annotation.EzyCachedKey;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
