@@ -7,13 +7,13 @@
 		<version>1.0.0</version>
 	</parent>
 	<artifactId>ezydata</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
 	<packaging>pom</packaging>
 
 	<name>ezydata</name>
 	<url>https://youngmonkeys.org/project/ezydata/</url>
 	<description>
-		Support for data, database interaction 
+		Support for data, memory caching and database interaction 
 	</description>
 
 	<organization>
