@@ -2,7 +2,7 @@
 
 # Documentation
 
-[https://tvd12.com/](https://tvd12.com/)
+[https://youngmonkeys.org/project/ezydata/](https://youngmonkeys.org/project/ezydata/)
 
 # Synopsis
 
@@ -16,16 +16,11 @@ In an effort to bring data interaction to EzyFox ecosystem and help everyone stu
 
 # API Reference
 
-[https://tvd12.com/](https://tvd12.com/)
+[https://youngmonkeys.org/project/ezydata/](https://youngmonkeys.org/project/ezydata/)
 
 # Tests
 
 mvn test
-
-# Contributors
-
-- Project development
-  - [DungTV](mailto:itprono3@gmail.com)
 
 # License
 
