@@ -1,4 +1,4 @@
-# ezydata
+# ezydata <img src="https://github.com/youngmonkeys/ezyfox/blob/master/logo.png" width="64" />
 
 # Documentation
 
