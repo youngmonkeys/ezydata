@@ -7,22 +7,24 @@
 		<artifactId>ezydata</artifactId>
 		<version>1.1.9</version>
 	</parent>
+	<version>1.1.9a</version>
 	<artifactId>ezydata-mongodb</artifactId>
 	<name>ezydata-mongodb</name>
 	<url>https://youngmonkeys.org/</url>
 	<properties>
 		<mongodb.version>3.12.8</mongodb.version>
+		<ezy.version>1.1.9</ezy.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezydata-database</artifactId>
-			<version>${project.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-io</artifactId>
-			<version>${project.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.mongodb</groupId>
@@ -32,7 +34,7 @@
 		<dependency>
 			<groupId>com.tvd12</groupId>
 			<artifactId>ezyfox-bean</artifactId>
-			<version>${project.version}</version>
+			<version>${ezy.version}</version>
 		</dependency>
 	</dependencies>
 </project>

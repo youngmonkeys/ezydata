@@ -21,7 +21,9 @@ import com.tvd12.ezydata.database.query.EzyQLQueryFactory;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
+import com.tvd12.ezydata.mongodb.converter.EzyBsonObjectIdConverter;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
+import com.tvd12.ezydata.mongodb.converter.EzyObjectIdConverter;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryMethodConverter;
@@ -109,6 +111,8 @@ public class EzyMongoDatabaseContextBuilder
 				.addClasses((Set)reflection.getAnnotatedClasses(EzyCollectionId.class));
 		}
 		bindingContextBuilder.addClasses(entityClasses);
+		bindingContextBuilder.addTemplate(EzyObjectIdConverter.getInstance());
+		bindingContextBuilder.addTemplate(EzyBsonObjectIdConverter.getInstance());
 		for(Class<?> entityClass : entityClasses) {
 			EzyField idField = getCollectionIdFieldOf(entityClass);
 			EzyId idAnno = idField.getAnnotation(EzyId.class);
