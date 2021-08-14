@@ -20,9 +20,11 @@ import org.bson.BsonDouble;
 import org.bson.BsonInt32;
 import org.bson.BsonInt64;
 import org.bson.BsonNull;
+import org.bson.BsonObjectId;
 import org.bson.BsonString;
 import org.bson.BsonValue;
 import org.bson.types.Decimal128;
+import org.bson.types.ObjectId;
 
 import com.tvd12.ezyfox.entity.EzyArray;
 import com.tvd12.ezyfox.entity.EzyObject;
@@ -45,6 +47,8 @@ public class EzyMongoDataToBsonValue  {
 	public BsonValue convert(Object data) {
 		if(data == null)
 			return BsonNull.VALUE;
+		if(data instanceof ObjectId)
+			return new BsonObjectId((ObjectId)data);
 		if(data instanceof BsonValue)
 			return (BsonValue) data;
 		Class<?> valueType = data.getClass();
