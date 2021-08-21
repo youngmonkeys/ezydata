@@ -103,8 +103,7 @@ public abstract class EzyJpaRepository<I,E>
 
 	@Override
 	public E findById(I id) {
-		E entity = entityManager.find(entityType, id);
-		return entity;
+		return findByField("id", id);
 	}
 
 	@Override
