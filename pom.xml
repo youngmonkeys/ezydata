@@ -4,10 +4,10 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezyfox</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1</version>
 	</parent>
 	<artifactId>ezydata</artifactId>
-    <version>1.1.9</version>
+    <version>1.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>ezydata</name>
