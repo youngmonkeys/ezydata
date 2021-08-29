@@ -96,7 +96,7 @@ public class EzyJpaEntityManagerFactoryLoader
 			entityManagerFactory = loadByHibernate(persistenceUnitName);
 		}
 		catch (Throwable e) {
-			logger.debug("can't load EntityManagerFactory by hibernate: {}", e.getMessage());
+			logger.warn("can't load EntityManagerFactory by hibernate (you can disable this warning by config log level to ERROR)", e);
 		}
 		if(entityManagerFactory == null)
 			entityManagerFactory = loadByDefaultJpa(persistenceUnitName);
