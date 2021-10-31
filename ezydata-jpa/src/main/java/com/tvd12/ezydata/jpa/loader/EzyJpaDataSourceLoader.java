@@ -6,6 +6,8 @@ import java.util.function.Function;
 import javax.sql.DataSource;
 
 import com.tvd12.ezydata.database.util.EzyDatabasePropertiesKeeper;
+import com.tvd12.ezyfox.io.EzyStrings;
+import com.tvd12.properties.file.mapping.PropertiesMapper;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -14,7 +16,7 @@ public class EzyJpaDataSourceLoader
 	
 	public DataSource load() {
 		return load(props ->
-			new HikariDataSource(new HikariConfig(props))
+			new HikariDataSource(newConfig(props))
 		);
 	}
 	
@@ -22,4 +24,14 @@ public class EzyJpaDataSourceLoader
 		return supplier.apply(properties);
 	}
 	
+	private HikariConfig newConfig(Properties properties) {
+	    Properties newProps = new Properties();
+	    for (String name : properties.stringPropertyNames()) {
+	        String camelCaseName = EzyStrings.underscoreToCamelCase(name);
+	        newProps.put(camelCaseName, properties.get(name));
+	    }
+	    return new PropertiesMapper()
+	            .data(newProps)
+	            .map(HikariConfig.class);
+	}
 }

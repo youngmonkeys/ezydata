@@ -12,7 +12,6 @@ import javax.persistence.Query;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
-import com.tvd12.ezydata.jpa.EzyEntityManagerAware;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContext;
 import com.tvd12.ezydata.jpa.reflect.EzyJpaIdProxy;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
@@ -23,12 +22,11 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class EzyJpaRepository<I,E> 
 		extends EzyLoggable
-		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware, EzyEntityManagerAware {
+		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware {
 
 	protected final Class<E> entityType;
 	protected final EzyClass entityClass;
 	protected final EzyJpaIdProxy idProxy;
-	protected EntityManager entityManager;
 	protected EzyJpaDatabaseContext databaseContext;
 	
 	protected final static Object[] NO_PARAMETERS = new Object[0];
@@ -40,65 +38,57 @@ public abstract class EzyJpaRepository<I,E>
 	}
 	
 	@Override
-	public void setEntityManager(EntityManager entityManager) {
-		if(this.entityManager == null)
-			this.entityManager = entityManager;
-		else if(this.entityManager != entityManager)
-			throw new IllegalStateException("set entityManager twice");
-	}
-	
-	@Override
 	public void setDatabaseContext(EzyDatabaseContext context) {
 		this.databaseContext = (EzyJpaDatabaseContext)context;
-		this.setEntityManager(databaseContext.getEntityManager());
 	}
 	
 	@Override
-	public long count() {
-		String queryString = new StringBuilder()
-				.append("select count(e.id) from ")
-				.append(entityType.getName()).append(" e ")
-				.toString();
-		Query query = entityManager.createQuery(queryString);
-		long count = (long)query.getSingleResult();
-		return count;
-	}
-
-	@Override
 	public void save(E entity) {
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+	    EntityManager entityManager = databaseContext.createEntityManager();
 		try {
-			E result = entityManager.merge(entity);
-			transaction.commit();
-			idProxy.setId(result, entity);
+		    EntityTransaction transaction = entityManager.getTransaction();
+	        transaction.begin();
+	        try {
+	            E result = entityManager.merge(entity);
+	            transaction.commit();
+	            idProxy.setId(result, entity);
+	        }
+	        catch (Exception e) {
+	            transaction.rollback();
+	            throw e;
+	        }
 		}
-		catch (Exception e) {
-			transaction.rollback();
-			throw e;
-		}
+		finally {
+		    entityManager.close();
+        }
 	}
 
 	@Override
 	public void save(Iterable<E> entities) {
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
-		try {
-			List<E> results = new ArrayList<>();
-			for(E entity : entities) {
-				E result = entityManager.merge(entity);
-				results.add(result);
-			}
-			transaction.commit();
-			int i = 0;
-			for(E entity : entities) {
-				idProxy.setId(results.get(i ++), entity);
-			}
-		}
-		catch (Exception e) {
-			transaction.rollback();
-			throw e;
-		}
+	    EntityManager entityManager = databaseContext.createEntityManager();
+	    try {
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
+            try {
+    			List<E> results = new ArrayList<>();
+    			for(E entity : entities) {
+    				E result = entityManager.merge(entity);
+    				results.add(result);
+    			}
+    			transaction.commit();
+    			int i = 0;
+    			for(E entity : entities) {
+    				idProxy.setId(results.get(i ++), entity);
+    			}
+    		}
+    		catch (Exception e) {
+    			transaction.rollback();
+    			throw e;
+    		}
+	    }
+	    finally {
+            entityManager.close();
+        }
 	}
 
 	@Override
@@ -113,18 +103,34 @@ public abstract class EzyJpaRepository<I,E>
 				.append(entityType.getName()).append(" e ")
 				.append("where e.").append(field).append(" = ?0")
 				.toString();
-		Query query = entityManager.createQuery(queryString);
-		query.setParameter(0, value);
-		List resultList = query.getResultList();
+		EntityManager entityManager = databaseContext.createEntityManager();
+		List resultList;
+		try {
+    		Query query = entityManager.createQuery(queryString);
+    		query.setParameter(0, value);
+    		query.setMaxResults(1);
+    		resultList = query.getResultList();
+		}
+		finally {
+            entityManager.close();
+        }
 		Object entity = resultList.isEmpty() ? null : resultList.get(0);
 		return (E)entity;
 	}
 	
 	protected E findByQueryString(String queryString, Object[] parameters) {
-		Query query = entityManager.createQuery(queryString);
-		for(int i = 0 ; i < parameters.length ; ++i)
-			query.setParameter(i, parameters[i]);
-		List resultList = query.getResultList();
+	    EntityManager entityManager = databaseContext.createEntityManager();
+	    List resultList;
+	    try {
+    		Query query = entityManager.createQuery(queryString);
+    		for(int i = 0 ; i < parameters.length ; ++i)
+    			query.setParameter(i, parameters[i]);
+    		query.setMaxResults(1);
+    		resultList = query.getResultList();
+	    }
+	    finally {
+            entityManager.close();
+        }
 		Object entity = resultList.isEmpty() ? null : resultList.get(0);
 		return (E)entity;
 	}
@@ -150,11 +156,16 @@ public abstract class EzyJpaRepository<I,E>
 	}
 	
 	protected List<E> findListByQueryString(String queryString, Object[] parameters) {
-		Query query = entityManager.createQuery(queryString);
-		for(int i = 0 ; i < parameters.length ; ++i)
-			query.setParameter(i, parameters[i]);
-		List<E> list = query.getResultList();
-		return list;
+	    EntityManager entityManager = databaseContext.createEntityManager();
+	    try {
+    		Query query = entityManager.createQuery(queryString);
+    		for(int i = 0 ; i < parameters.length ; ++i)
+    			query.setParameter(i, parameters[i]);
+    		return query.getResultList();
+	    }
+	    finally {
+            entityManager.close();
+        }
 	}
 
 	@Override
@@ -170,13 +181,18 @@ public abstract class EzyJpaRepository<I,E>
 	protected List<E> findListByQueryString(
 			String queryString, 
 			Object[] parameters, int skip, int limit) {
-		Query query = entityManager.createQuery(queryString);
-		for(int i = 0 ; i < parameters.length ; ++i)
-			query.setParameter(i, parameters[i]);
-		query.setFirstResult(skip);
-		query.setMaxResults(limit);
-		List<E> list = query.getResultList();
-		return list;
+	    EntityManager entityManager = databaseContext.createEntityManager();
+	    try {
+    		Query query = entityManager.createQuery(queryString);
+    		for(int i = 0 ; i < parameters.length ; ++i)
+    			query.setParameter(i, parameters[i]);
+    		query.setFirstResult(skip);
+    		query.setMaxResults(limit);
+    		return query.getResultList();
+	    }
+	    finally {
+            entityManager.close();
+        }
 	}
 
 	@Override
@@ -185,9 +201,14 @@ public abstract class EzyJpaRepository<I,E>
 				.append("select e from ")
 				.append(entityType.getName()).append(" e ")
 				.toString();
-		Query query = entityManager.createQuery(queryString);
-		List<E> list = query.getResultList();
-		return list;
+		EntityManager entityManager = databaseContext.createEntityManager();
+		try {
+		    Query query = entityManager.createQuery(queryString);
+		    return query.getResultList();
+		}
+		finally {
+            entityManager.close();
+        }
 	}
 
 	@Override
@@ -196,11 +217,16 @@ public abstract class EzyJpaRepository<I,E>
 				.append("select e from ")
 				.append(entityType.getName()).append(" e ")
 				.toString();
-		Query query = entityManager.createQuery(queryString);
-		query.setFirstResult(skip);
-		query.setMaxResults(limit);
-		List<E> list = query.getResultList();
-		return list;
+		EntityManager entityManager = databaseContext.createEntityManager();
+		try {
+    		Query query = entityManager.createQuery(queryString);
+    		query.setFirstResult(skip);
+    		query.setMaxResults(limit);
+    		return query.getResultList();
+		}
+		finally {
+            entityManager.close();
+        }
 	}
 
 	@Override
@@ -233,21 +259,43 @@ public abstract class EzyJpaRepository<I,E>
 	}
 	
 	protected int deleteByQueryString(String queryString, Object[] parameters) {
-		Query query = entityManager.createQuery(queryString);
-		for(int i = 0 ; i < parameters.length ; ++i)
-			query.setParameter(i, parameters[i]);
-		EntityTransaction transaction = entityManager.getTransaction();
-		transaction.begin();
+	    EntityManager entityManager = databaseContext.createEntityManager();
 		try {
-			int deletedRows = query.executeUpdate();
-			transaction.commit();
-			return deletedRows;
+		    Query query = entityManager.createQuery(queryString);
+	        for(int i = 0 ; i < parameters.length ; ++i)
+	            query.setParameter(i, parameters[i]);
+            EntityTransaction transaction = entityManager.getTransaction();
+            transaction.begin();
+    		try {
+    			int deletedRows = query.executeUpdate();
+    			transaction.commit();
+    			return deletedRows;
+    		}
+    		catch (Exception e) {
+    			transaction.rollback();
+    			throw e;
+    		}
 		}
-		catch (Exception e) {
-			transaction.rollback();
-			throw e;
-		}
+		finally {
+            entityManager.close();
+        }
 	}
+	
+	@Override
+    public long count() {
+        String queryString = new StringBuilder()
+                .append("select count(e.id) from ")
+                .append(entityType.getName()).append(" e ")
+                .toString();
+        EntityManager entityManager = databaseContext.createEntityManager();
+        try {
+            Query query = entityManager.createQuery(queryString);
+            return (long)query.getSingleResult();
+        }
+        finally {
+            entityManager.close();
+        }
+    }
 	
 	protected Class<E> getEntityType() {
 		try {

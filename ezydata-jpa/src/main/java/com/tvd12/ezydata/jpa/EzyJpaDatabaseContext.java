@@ -6,6 +6,6 @@ import com.tvd12.ezydata.database.EzyDatabaseContext;
 
 public interface EzyJpaDatabaseContext extends EzyDatabaseContext {
 	
-	EntityManager getEntityManager();
+	EntityManager createEntityManager();
 	
 }

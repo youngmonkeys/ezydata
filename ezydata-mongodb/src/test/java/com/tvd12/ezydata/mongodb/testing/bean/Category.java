@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.mongodb.testing.bean;
 
+import java.util.Date;
+
 import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.database.annotation.EzyCollection;
 
@@ -16,6 +18,7 @@ public class Category {
 	@EzyId
 	private String name;
 	private String value;
+	private Date createdDate = new Date();
 	
 	public Category() {}
 	

@@ -54,6 +54,7 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
 		categoryRepo.save(Arrays.asList(category1, category2));
 		assert category1.getName() != null;
 		assert category2.getName() != null;
+		System.out.println("category is: " + categoryRepo.findByField("value", "category1"));
 		
 		EzyIdCollectionRepo1 idCollectionRepo1 = databaseContext.getRepository(EzyIdCollectionRepo1.class);
 		idCollectionRepo1.save(new EzyIdCollection1(new EzyIdCompositeId1("Hello"), "World"));

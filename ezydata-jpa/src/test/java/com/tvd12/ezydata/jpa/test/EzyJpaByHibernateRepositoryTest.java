@@ -20,6 +20,7 @@ import com.tvd12.ezydata.jpa.test.repo.UserRepo;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
 import com.tvd12.ezyfox.util.EzyNext;
 import com.tvd12.properties.file.reader.BaseFileReader;
+import com.tvd12.test.assertion.Asserts;
 
 public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
 
@@ -81,7 +82,7 @@ public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
 				"abcdefgh", 
 				EzyNext.fromSkipLimit(0, 100)
 				).size() == count;
-		assert employeeRepo.findByEmployeeId("dzung") == employeeRepo.findById("dzung");
+		Asserts.assertEquals(employeeRepo.findByEmployeeId("dzung"), employeeRepo.findById("dzung"));
 		assert employeeRepo.findListByEmail("dzung@youngmokeys.org").get(0) instanceof Employee;
 		assert employeeRepo.findEmployeeIdByEmployeeId("dzung").getEmployeeId().equals("dzung");
 		assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
