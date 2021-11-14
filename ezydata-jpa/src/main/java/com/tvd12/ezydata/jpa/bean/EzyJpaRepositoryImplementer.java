@@ -2,6 +2,7 @@ package com.tvd12.ezydata.jpa.bean;
 
 import java.lang.reflect.Parameter;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -14,8 +15,9 @@ import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
-import com.tvd12.ezyfox.database.annotation.EzyTransactional;
 import com.tvd12.ezyfox.asm.EzyInstruction;
+import com.tvd12.ezyfox.database.annotation.EzyTransactional;
+import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
 public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplementer {
@@ -135,7 +137,19 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 						.variable(List.class, "result")
 							.equal()
 						.append("query.getResultList()"));
-				if(resultType == Object.class || resultType == entityType) {
+				if (resultType == returnType && returnType == Optional.class) {
+				    try {
+				        resultType = EzyGenerics.getOneGenericClassArgument(
+			                method.getGenericReturnType()
+		                );
+				    }
+				    catch (Exception e) {
+				        // do nothing
+                    }
+				}
+				if(resultType == Object.class 
+				        || resultType == entityType
+				        || resultType == Optional.class) {
 					body.append(new EzyInstruction("\t\t", "\n")
 						.variable(Object.class, "answer")
 						.append(" = null"));
@@ -143,8 +157,6 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 						.append("if(result.size() > 0)"));
 					body.append(new EzyInstruction("\t\t\t", "\n")
 							.append("answer = result.get(0)"));
-					answerInstruction = new EzyInstruction("\t\t", "\n")
-							.answer().cast(returnType, "answer");
 				}
 				else {
 					answerInstruction
@@ -153,9 +165,17 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 						.append("this.databaseContext.deserializeResult(result,")
 							.clazz(resultType, true).append(")");
 					body.append(answerInstruction);
-					answerInstruction = new EzyInstruction("\t\t", "\n")
-							.answer().cast(returnType, "answer");
 				}
+				answerInstruction = new EzyInstruction("\t\t", "\n").answer();
+				if (returnType == Optional.class) {
+				    answerInstruction.clazz(Optional.class)
+				        .dot()
+				        .append("ofNullable(answer)");
+				}
+				else {
+				    answerInstruction.cast(returnType, "answer");
+				}
+				
 			}
 		}
 		if(returnType != void.class)
