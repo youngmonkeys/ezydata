@@ -17,11 +17,17 @@ public class EzyJpaQueryMethodConverter
 	@Override
 	public String toQueryString(
 			Class entityClass, EzyQueryMethod method) {
-		StringBuilder builder = new StringBuilder("SELECT ");
-		if(method.getType() == EzyQueryMethodType.COUNT)
+		StringBuilder builder = new StringBuilder();
+		if (method.getType() == EzyQueryMethodType.DELETE) {
+		    builder.append("DELETE ");
+		} else {
+		    builder.append("SELECT ");
+		}
+		if(method.getType() == EzyQueryMethodType.COUNT) {
 			builder.append("COUNT(e)");
-		else
+		} else {
 			builder.append("e");
+		}
 		
 		builder.append(" FROM ")
 			.append(entityClass.getSimpleName()).append(" e");

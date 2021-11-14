@@ -37,10 +37,14 @@ public class EzyQueryMethod {
 	}
 	
 	private static EzyQueryMethodType getType(EzyMethod method) {
+	    EzyQueryMethodType answer = EzyQueryMethodType.FIND;
 		String methodName = method.getName();
-		if(methodName.startsWith(PREFIX_COUNT_BY))
-			return EzyQueryMethodType.COUNT;
-		return EzyQueryMethodType.FIND;
+		for (EzyQueryMethodType it : EzyQueryMethodType.values()) {
+		    if (methodName.startsWith(it.getPrefix())) {
+		        answer = it;
+		    }
+		}
+		return answer;
 	}
 	
 	private static EzyQueryConditionChain getConditionChain(EzyMethod method) {
