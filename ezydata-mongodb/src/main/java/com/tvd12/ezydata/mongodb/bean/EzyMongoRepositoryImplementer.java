@@ -1,5 +1,7 @@
 package com.tvd12.ezydata.mongodb.bean;
 
+import java.util.Optional;
+
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
@@ -8,6 +10,7 @@ import com.tvd12.ezydata.mongodb.repository.EzySimpleMongoRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
+import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
 public class EzyMongoRepositoryImplementer 
@@ -94,17 +97,51 @@ public class EzyMongoRepositoryImplementer
 			}
 			else {
 				if(methodName.startsWith(EzyMongoRepository.PREFIX_FETCH) ||
-					resultType != entityType
+					(resultType != entityType && resultType != Optional.class)
 				) {
-					answerInstruction.answer()
-						.cast(
-							resultType, 
-							"this.aggregateOneWithQuery(query," + resultType.getName() + ".class)"
-						);
+				    if (resultType == returnType && returnType == Optional.class) {
+                        try {
+                            resultType = EzyGenerics.getOneGenericClassArgument(
+                                method.getGenericReturnType()
+                            );
+                        }
+                        catch (Exception e) {
+                            // do nothing
+                        }
+                    }
+					answerInstruction.answer();
+                    if (returnType == Optional.class) {
+                        answerInstruction.clazz(Optional.class)
+                            .dot()
+                            .append("ofNullable(this.aggregateOneWithQuery(query," + resultType.getName() + ".class))");
+                    }
+                    else {
+                        answerInstruction.cast(
+                            resultType, 
+                            "this.aggregateOneWithQuery(query," + resultType.getName() + ".class)"
+                        );
+                    }
 				}
 				else {
-					answerInstruction.answer()
-						.cast(entityType, "this.findOneWithQuery(query)");
+				    if (resultType == returnType && returnType == Optional.class) {
+	                    try {
+	                        resultType = EzyGenerics.getOneGenericClassArgument(
+	                            method.getGenericReturnType()
+	                        );
+	                    }
+	                    catch (Exception e) {
+	                        // do nothing
+	                    }
+	                }
+					answerInstruction.answer();
+					if (returnType == Optional.class) {
+	                    answerInstruction.clazz(Optional.class)
+	                        .dot()
+	                        .append("ofNullable(this.findOneWithQuery(query))");
+	                }
+	                else {
+	                    answerInstruction.cast(returnType, "this.findOneWithQuery(query)");
+	                }
 				}
 			}
 		}

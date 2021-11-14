@@ -1,6 +1,7 @@
 package com.tvd12.ezydata.mongodb.testing.bean;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
@@ -12,6 +13,9 @@ public interface DuckRepo extends EzyMongoRepository<DuckId, Duck> {
 	
 	@EzyQuery("{_id : ?0}")
 	Duck findDuckById(DuckId id);
+	
+	@EzyQuery("{_id : ?0}")
+    Optional<Duck> findDuckByIdOptional(DuckId id);
 	
 	@EzyQuery("{$query: {age: {$gte : ?0}}, $orderby : {age: -1}}")
 	List<Duck> findListByAge(int age, Next next);
