@@ -6,9 +6,6 @@ import java.util.Set;
 
 import javax.persistence.Id;
 
-import com.tvd12.ezydata.database.naming.EzyNameTranslator;
-import com.tvd12.ezydata.database.naming.EzyNamingCase;
-import com.tvd12.ezydata.database.naming.EzySimpleNameTranslator;
 import com.tvd12.ezydata.redis.annotation.EzyRedisMessage;
 import com.tvd12.ezydata.redis.loader.EzyJedisClientPoolLoader;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
@@ -27,6 +24,9 @@ import com.tvd12.ezyfox.data.annotation.EzyCachedKey;
 import com.tvd12.ezyfox.data.annotation.EzyCachedValue;
 import com.tvd12.ezyfox.data.util.EzyCachedValueAnnotations;
 import com.tvd12.ezyfox.message.annotation.EzyMessage;
+import com.tvd12.ezyfox.naming.EzyNameTranslator;
+import com.tvd12.ezyfox.naming.EzyNamingCase;
+import com.tvd12.ezyfox.naming.EzySimpleNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
