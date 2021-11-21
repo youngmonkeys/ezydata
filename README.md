@@ -1,4 +1,4 @@
-# ezydata <img src="https://github.com/youngmonkeys/ezydata/blob/master/logo.png" width="64" />
+# ezydata <img src="https://github.com/youngmonkeys/ezydata/blob/master/logo.png" width="128" />
 
 # Documentation
 
