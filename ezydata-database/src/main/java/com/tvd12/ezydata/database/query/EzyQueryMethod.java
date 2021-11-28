@@ -2,7 +2,9 @@ package com.tvd12.ezydata.database.query;
 
 import static com.tvd12.ezydata.database.EzyDatabaseRepository.PREFIX_COUNT_BY;
 import static com.tvd12.ezydata.database.EzyDatabaseRepository.PREFIX_FIND_BY;
+import static com.tvd12.ezydata.database.EzyDatabaseRepository.PREFIX_DELETE_BY;
 
+import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.util.Next;
 
@@ -49,11 +51,14 @@ public class EzyQueryMethod {
 	
 	private static EzyQueryConditionChain getConditionChain(EzyMethod method) {
 		String methodName = method.getName();
-		String chain = methodName;
-		if(methodName.startsWith(PREFIX_COUNT_BY))
+		String chain = EzyStrings.EMPTY_STRING;
+		if(methodName.startsWith(PREFIX_COUNT_BY)) {
 			chain = methodName.substring(PREFIX_COUNT_BY.length());
-		else if(methodName.startsWith(PREFIX_FIND_BY))
+		} else if(methodName.startsWith(PREFIX_FIND_BY)) {
 			chain = methodName.substring(PREFIX_FIND_BY.length());
+		} else if (methodName.startsWith(PREFIX_DELETE_BY)) {
+		    chain = methodName.substring(PREFIX_DELETE_BY.length());
+		}
 		
 		EzyQueryConditionChain.Builder conditionChainBuilder = 
 				EzyQueryConditionChain.builder();
@@ -66,8 +71,9 @@ public class EzyQueryMethod {
 			String[] conditionStrings = conditionGroupString.split(AND);
 			EzyQueryConditionGroup.Builder conditionGroupBuilder = EzyQueryConditionGroup.builder();
 			
-			for(String conditionString : conditionStrings)
+			for(String conditionString : conditionStrings) {
 				conditionGroupBuilder.addCondition(EzyQueryCondition.parse(conditionString));
+			}
 
 			conditionChainBuilder.addConditionGroup(conditionGroupBuilder.build());
 		}

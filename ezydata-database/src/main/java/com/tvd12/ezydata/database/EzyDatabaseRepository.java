@@ -16,7 +16,7 @@ public interface EzyDatabaseRepository<I, E> extends
 	
 	String PREFIX_FIND_BY = "findBy";
 	String PREFIX_COUNT_BY = "countBy";
+    String PREFIX_DELETE_BY = "deleteBy";
 	
 	EzyClass CLASS = new EzyClass(EzyDatabaseRepository.class);
-	
 }
