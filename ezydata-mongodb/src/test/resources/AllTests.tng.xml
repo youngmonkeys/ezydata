@@ -8,6 +8,8 @@
 			<package name="com.tvd12.ezydata.mongodb.testing.converter"></package>
 			<package name="com.tvd12.ezydata.mongodb.testing.loader"></package>
 			<package name="com.tvd12.ezydata.mongodb.testing.query"></package>
+			<package name="com.tvd12.ezydata.mongodb.testing.repository"></package>
+			<package name="com.tvd12.ezydata.mongodb.testing.result"></package>
 		</packages>
 	</test>
 </suite>

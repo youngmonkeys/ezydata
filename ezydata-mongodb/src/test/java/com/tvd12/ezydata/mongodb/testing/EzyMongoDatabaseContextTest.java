@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
@@ -28,6 +29,7 @@ import com.tvd12.ezydata.mongodb.testing.bean.EzyIdCompositeId2;
 import com.tvd12.ezydata.mongodb.testing.bean.Person;
 import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.reflect.MethodInvoker;
 
 public class EzyMongoDatabaseContextTest extends MongodbTest {
 
@@ -46,6 +48,8 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
 		customer.setName("dzung");
 		customerRepo.save(customer);
 		System.out.println(customer);
+		customerRepo.deleteAll();
+		
 		CategoryRepo categoryRepo = databaseContext.getRepository(CategoryRepo.class);
 		Category category1 = new Category("category1");
 		Category category2 = new Category("category2");
@@ -129,6 +133,146 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
 			.build();
 		databaseContext.close();
 	}
+	
+	@SuppressWarnings("rawtypes")
+    @Test
+	public void findListWithQueryTest() {
+	    // given
+	    EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .maxIdCollectionName("___max_id___")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
+        CustomerRepo customerRepo = databaseContext.getRepository(CustomerRepo.class);
+        customerRepo.deleteAll();
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("dzung");
+        customerRepo.save(customer);
+        
+        EzyQLQuery query = EzyQLQuery.builder()
+                .query("{name: ?0}")
+                .parameter(0, "'dzung'")
+                .build();
+        
+        // when
+        List actual = MethodInvoker.create()
+                .object(customerRepo)
+                .method("findListWithQuery")
+                .param(query)
+                .call();
+        
+        // then
+        Asserts.assertEquals(actual.size(), 1);
+        customerRepo.deleteAll();
+	}
+	
+    @Test
+    public void countWithQueryTest() {
+        // given
+        EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .maxIdCollectionName("___max_id___")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
+        CustomerRepo customerRepo = databaseContext.getRepository(CustomerRepo.class);
+        customerRepo.deleteAll();
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("dzung");
+        customerRepo.save(customer);
+        
+        EzyQLQuery query = EzyQLQuery.builder()
+                .query("{name: ?0}")
+                .parameter(0, "'dzung'")
+                .build();
+        
+        // when
+        Long actual = MethodInvoker.create()
+                .object(customerRepo)
+                .method("countWithQuery")
+                .param(query)
+                .call();
+        
+        // then
+        Asserts.assertEquals(actual, 1L);
+        customerRepo.deleteAll();
+    }
+    
+    @Test
+    public void aggregateOneWithQueryTest() {
+        // given
+        EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .maxIdCollectionName("___max_id___")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
+        CustomerRepo customerRepo = databaseContext.getRepository(CustomerRepo.class);
+        customerRepo.deleteAll();
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("dzung");
+        customerRepo.save(customer);
+        
+        EzyQLQuery query = EzyQLQuery.builder()
+                .query(
+                    "[{ $match: { name: ?0 }}]"
+                )
+                .parameter(0, "'dzung'")
+                .build();
+        
+        // when
+        Customer actual = MethodInvoker.create()
+                .object(customerRepo)
+                .method("aggregateOneWithQuery")
+                .param(query)
+                .param(Customer.class)
+                .call();
+        
+        // then
+        Asserts.assertNotNull(actual);
+        customerRepo.deleteAll();
+    }
+    
+    @SuppressWarnings("rawtypes")
+    @Test
+    public void aggregateListWithQueryTest() {
+        // given
+        EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .maxIdCollectionName("___max_id___")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
+        CustomerRepo customerRepo = databaseContext.getRepository(CustomerRepo.class);
+        customerRepo.deleteAll();
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("dzung");
+        customerRepo.save(customer);
+        
+        EzyQLQuery query = EzyQLQuery.builder()
+                .query(
+                    "[{ $match: { name: ?0 }}]"
+                )
+                .parameter(0, "'dzung'")
+                .build();
+        
+        // when
+        List actual = MethodInvoker.create()
+                .object(customerRepo)
+                .method("aggregateListWithQuery")
+                .param(query)
+                .param(Customer.class)
+                .call();
+        
+        // then
+        Asserts.assertEquals(actual.size(), 1);
+        customerRepo.deleteAll();
+    }
 	
 	public static interface RepoA extends EzyMongoRepository<Integer, Person> {
 		
