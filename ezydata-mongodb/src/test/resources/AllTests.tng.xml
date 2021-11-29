@@ -10,6 +10,7 @@
 			<package name="com.tvd12.ezydata.mongodb.testing.query"></package>
 			<package name="com.tvd12.ezydata.mongodb.testing.repository"></package>
 			<package name="com.tvd12.ezydata.mongodb.testing.result"></package>
+			<package name="com.tvd12.ezydata.mongodb.testing.util"></package>
 		</packages>
 	</test>
 </suite>

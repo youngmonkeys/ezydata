@@ -2,6 +2,7 @@ package com.tvd12.ezydata.mongodb.testing;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.testng.annotations.Test;
 
@@ -237,6 +238,43 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
         customerRepo.deleteAll();
     }
     
+    @Test
+    public void aggregateOneWithQueryAndOptionalTest() {
+        // given
+        EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .maxIdCollectionName("___max_id___")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
+        CustomerRepo customerRepo = databaseContext.getRepository(CustomerRepo.class);
+        customerRepo.deleteAll();
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("dzung");
+        customerRepo.save(customer);
+        
+        EzyQLQuery query = EzyQLQuery.builder()
+                .query(
+                    "[{ $match: { name: ?0 }}]"
+                )
+                .parameter(0, "'dzung'")
+                .build();
+        
+        // when
+        Customer actual = MethodInvoker.create()
+                .object(customerRepo)
+                .method("aggregateOneWithQuery")
+                .param(query)
+                .param(Customer.class)
+                .call();
+        
+        // then
+        Customer expectation = customerRepo.fetchCustomerByNameWork("dzung").get();
+        Asserts.assertEquals(actual, expectation);
+        customerRepo.deleteAll();
+    }
+    
     @SuppressWarnings("rawtypes")
     @Test
     public void aggregateListWithQueryTest() {
@@ -271,6 +309,30 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
         
         // then
         Asserts.assertEquals(actual.size(), 1);
+        customerRepo.deleteAll();
+    }
+    
+    @Test
+    public void findOptionalTest() {
+        // given
+        EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .maxIdCollectionName("___max_id___")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
+        CustomerRepo customerRepo = databaseContext.getRepository(CustomerRepo.class);
+        customerRepo.deleteAll();
+        Customer customer = new Customer();
+        customer.setId("1");
+        customer.setName("dzung");
+        customerRepo.save(customer);
+        
+        // when
+        Optional<Customer> actual = customerRepo.findByName("dzung");
+        
+        // then
+        Asserts.assertEquals(actual.get(), new Customer("1", "dzung", "hello", "world"));
         customerRepo.deleteAll();
     }
 	

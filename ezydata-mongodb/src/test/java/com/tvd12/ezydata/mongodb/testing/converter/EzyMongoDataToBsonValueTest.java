@@ -9,13 +9,16 @@ import java.util.Date;
 import java.util.UUID;
 
 import org.bson.BsonDocument;
+import org.bson.BsonObjectId;
 import org.bson.BsonString;
+import org.bson.types.ObjectId;
 import org.testng.annotations.Test;
 
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataToBsonValue;
 import com.tvd12.ezydata.mongodb.testing.bean.Person;
 import com.tvd12.ezyfox.factory.EzyEntityFactory;
 import com.tvd12.ezyfox.util.EzyMapBuilder;
+import com.tvd12.test.assertion.Asserts;
 
 public class EzyMongoDataToBsonValueTest {
 
@@ -73,6 +76,9 @@ public class EzyMongoDataToBsonValueTest {
 		System.out.println("Date: " + converter.convert(new Date()));
 		System.out.println("LocalDate: " + converter.convert(LocalDate.now()));
 		System.out.println("LocalDateTime: " + converter.convert(LocalDateTime.now()));
+		
+		ObjectId objectId = new ObjectId();
+		Asserts.assertEquals(converter.convert(objectId), new BsonObjectId(objectId));
 	}
 	
 	public static enum EnumA {
