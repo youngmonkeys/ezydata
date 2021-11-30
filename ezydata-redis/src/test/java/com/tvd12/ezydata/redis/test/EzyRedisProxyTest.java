@@ -94,6 +94,7 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		channel.publish("I'm a monkey");
 		System.out.println("publish ok");
 		Thread.sleep(1000);
+		clientPool.close();
 	}
 	
 	@Test
