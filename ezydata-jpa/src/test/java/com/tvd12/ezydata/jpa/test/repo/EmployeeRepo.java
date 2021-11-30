@@ -8,8 +8,10 @@ import javax.transaction.Transactional;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
 import com.tvd12.ezydata.jpa.test.result.EmployeeIdResult;
+import com.tvd12.ezydata.jpa.test.result.EmployeeResult;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.database.annotation.EzyQuery;
+import com.tvd12.ezyfox.database.annotation.EzyTransactional;
 import com.tvd12.ezyfox.util.EzyNext;
 
 @EzyAutoImpl
@@ -91,5 +93,29 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 			nativeQuery = true
 	)
 	List<Employee> findListByEmail(String email);
+	
+	@EzyTransactional
+	int deleteByEmail(String email);
+	
+	@EzyQuery(
+        value = "select * from ezyfox_jpa_employee where email = ?0",
+        nativeQuery = true,
+        resultType = Object.class
+	)
+	List<Object> findListByEmailNotEntityType(String email);
+	
+	@EzyQuery(
+        value = "select * from ezyfox_jpa_employee where email = ?0",
+        nativeQuery = true,
+        resultType = Object.class
+    )
+    Object findOneByEmailObjectType(String email);
+	
+	@EzyQuery(
+        value = "select * from ezyfox_jpa_employee where email = ?0",
+        nativeQuery = true,
+        resultType = EmployeeResult.class
+    )
+    Optional<Employee> findOptionalByEmailNotEntityType(String email);
 	
 }

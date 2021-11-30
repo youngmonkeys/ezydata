@@ -19,13 +19,14 @@ public class EzyJpaQueryMethodConverter
 			Class entityClass, EzyQueryMethod method) {
 		StringBuilder builder = new StringBuilder();
 		if (method.getType() == EzyQueryMethodType.DELETE) {
-		    builder.append("DELETE ");
+		    builder.append("DELETE");
 		} else {
 		    builder.append("SELECT ");
 		}
+		
 		if(method.getType() == EzyQueryMethodType.COUNT) {
 			builder.append("COUNT(e)");
-		} else {
+		} else if (method.getType() != EzyQueryMethodType.DELETE) {
 			builder.append("e");
 		}
 		

@@ -20,7 +20,7 @@ import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public abstract class EzyJpaRepository<I,E> 
+public class EzyJpaRepository<I,E> 
 		extends EzyLoggable
 		implements EzyDatabaseRepository<I,E>, EzyDatabaseContextAware {
 
