@@ -26,4 +26,16 @@ public class EzyRedisProxyFactoryTest {
 				.build();
 	}
 	
+	@Test
+	public void prepareMapNameTranslator2TimesTest() {
+	    // given
+	    EzyRedisProxyFactory.Builder factoryBuilder = new EzyRedisProxyFactory.Builder()
+            .settingsBuilder(new EzyRedisSettingsBuilder());
+	    
+	    // when
+	    // then
+	    factoryBuilder.build();
+	    factoryBuilder.build();
+	}
+	
 }

@@ -73,6 +73,7 @@ public class EzyRedisProxyTest extends EzyRedisBaseTest {
 		assert !map.isEmpty();
 		assert map.getName().equals("ezydata.key_value");
 		map.clear();
+		assert map.get("any value") == null;
 		assert map.isEmpty();
 		EzyRedisAtomicLong atomicLong = proxy.getAtomicLong("ezydata.test_atomic_long");
 		long atomicLongCurrentValue = atomicLong.get();
