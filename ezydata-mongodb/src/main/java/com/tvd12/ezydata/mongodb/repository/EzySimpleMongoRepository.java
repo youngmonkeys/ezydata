@@ -26,13 +26,14 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
-import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.EzyMongoCollectionAware;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
+import com.tvd12.ezydata.mongodb.util.BsonDocuments;
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
+import com.tvd12.ezyfox.naming.EzyNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 import com.tvd12.ezyfox.util.EzyLoggable;
@@ -251,13 +252,11 @@ public class EzySimpleMongoRepository<I,E>
 		logger.debug("find list with query: {}", queryString);
 		BsonDocument queryDocument = BsonDocument.parse(queryString);
 		BsonDocument filter = queryDocument;
-		boolean hasOrderBy = queryDocument.containsKey("$orderby");
-		if(queryDocument.containsKey("$query"))
+		if(queryDocument.containsKey("$query")) {
 			filter = queryDocument.getDocument("$query");
-		else if(hasOrderBy)
-			filter = new BsonDocument();
+		}
 		FindIterable<BsonDocument> find = collection.find(filter);
-		if(hasOrderBy) {
+		if(queryDocument.containsKey("$orderby")) {
 			find.sort(queryDocument.getDocument("$orderby"));
 		}
 		if(next != null) {
@@ -293,15 +292,8 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	protected <R> R aggregateOneWithQuery(EzyQLQuery query, Class<R> resultType) {
-		String queryString = query.getValue();
-		logger.debug("fetch one with query: {}", queryString);
-		List pipeline = BsonArray.parse(queryString); 
-		AggregateIterable<BsonDocument> aggregate = collection.aggregate(pipeline);
-		BsonDocument result = aggregate.first();
-		if(result == null)
-			return null;
-		R answer = bsonValueToData(result, resultType);
-		return answer;
+		List<R> resultList = aggregateListWithQuery(query, resultType, Next.limit(1));
+		return resultList.isEmpty() ? null : resultList.get(0);
 	}
 	
 	protected <R> List<R> aggregateListWithQuery(EzyQLQuery query, Class<R> resultType) {
@@ -366,10 +358,10 @@ public class EzySimpleMongoRepository<I,E>
 		BsonDocument document = dataToBsonValue(entity);
 		String idProperty = objectProxy.getPropertyName("_id");
 		BsonValue idValue = document.get(idProperty);
-		if(idValue != null)
-			document.put("_id", idValue);
-		if(!idProperty.equals("_id")) // remove duplicate id field
+		BsonDocuments.putIfNotNull(document, "_id", idValue);
+		if(!idProperty.equals("_id")) { // remove duplicate id field
 			document.remove(idProperty);
+		}
 		return document;
 	}
 	
@@ -384,9 +376,7 @@ public class EzySimpleMongoRepository<I,E>
 	}
 	
 	private List iterableToList(Iterable<E> iterable) {
-		if(iterable instanceof List)
-			return (List)iterable;
-		return Lists.newArrayList(iterable);
+		return Lists.tryNewArrayList(iterable);
 	}
 	
 	protected Class getIdType() {

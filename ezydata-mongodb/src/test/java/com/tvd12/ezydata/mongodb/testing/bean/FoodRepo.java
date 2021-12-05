@@ -1,6 +1,7 @@
 package com.tvd12.ezydata.mongodb.testing.bean;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
@@ -30,6 +31,13 @@ public interface FoodRepo extends EzyMongoRepository<Integer, Food> {
 			"{ $sort: { type: -1 } }" + 
 		"]")
 	Food fetchOneMatch();
+	
+	@EzyQuery("[" + 
+            "{ $sort: { qty: 1 }}," + 
+            "{ $match: { category: 'cake', qty: 10  } }," + 
+            "{ $sort: { type: -1 } }" + 
+        "]")
+    Optional<Food> fetchOneMatchOptional();
 	
 	@EzyQuery("[" + 
 			"{ $sort: { qty: 1 }}," + 

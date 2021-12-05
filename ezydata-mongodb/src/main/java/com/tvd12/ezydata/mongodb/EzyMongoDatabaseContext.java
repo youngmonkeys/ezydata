@@ -6,8 +6,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzyDatabaseContext;
-import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
+import com.tvd12.ezyfox.naming.EzyNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 
 public interface EzyMongoDatabaseContext extends EzyDatabaseContext {

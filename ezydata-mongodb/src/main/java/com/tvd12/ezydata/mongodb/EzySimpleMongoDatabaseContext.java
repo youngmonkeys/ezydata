@@ -6,13 +6,13 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
-import com.tvd12.ezydata.database.naming.EzyNameTranslator;
 import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 import com.tvd12.ezydata.mongodb.query.EzyMongoQueryFactory;
 import com.tvd12.ezydata.mongodb.reflect.EzyMongoObjectProxyProvider;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
+import com.tvd12.ezyfox.naming.EzyNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 import com.tvd12.ezyfox.reflect.EzyObjectProxyProvider;
 

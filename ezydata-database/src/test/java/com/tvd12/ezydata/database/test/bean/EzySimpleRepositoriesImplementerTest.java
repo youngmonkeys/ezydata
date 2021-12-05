@@ -28,7 +28,7 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 		MongoTemplate template = new MongoTemplate();
 		Map<Class<?>, Object> repos = implementer.implement(template);
 		System.out.println("repos: " + repos);
-		assert repos.size() == 3;
+		assert repos.size() == 4;
 		
 		implementer = new ExEzySimpleRepositoriesImplementer();
 		repos = implementer.implement(template);

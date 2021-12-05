@@ -64,15 +64,20 @@ public class EzyMongoQueryMethodConverter
 		builder
 			.append("{")
 			.append(condition.getField());
-		if(condition.getOperation() == EzyQueryOperation.IN) {
-			builder.append(":{$in");
+		for (EzyQueryOperation it : EzyQueryOperation.notIncludeEqualValues()) {
+		    if(condition.getOperation() == it) {
+	            builder.append(":{$" + it.getSignName());
+	            break;
+	        }
 		}
 		builder.append(":?")
 			.append(parameterCount.getAndIncrement())
 			.append("}");
-		if(condition.getOperation() == EzyQueryOperation.IN) {
-			builder.append("}");
-		}
+		for (EzyQueryOperation it : EzyQueryOperation.notIncludeEqualValues()) {
+            if(condition.getOperation() == it) {
+                builder.append("}");
+                break;
+            }
+        }
 	}
-	
 }

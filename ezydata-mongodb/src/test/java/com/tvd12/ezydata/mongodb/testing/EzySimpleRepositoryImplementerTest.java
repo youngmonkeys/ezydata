@@ -49,6 +49,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		System.out.println("fetchListMatch: " + foodRepo.fetchListMatch());
 		System.out.println("fetchListMatch2: " + foodRepo.fetchListMatch2(Next.fromSkipLimit(0, 1)));
 		System.out.println("fetchOneMatch: " + foodRepo.fetchOneMatch());
+		System.out.println("fetchOneMatchOptional: " + foodRepo.fetchOneMatchOptional());
 		System.out.println("fetchOneMatch2: " + foodRepo.fetchOneMatch2());
 		
 		foodRepo.updateCategory("hello");
@@ -75,6 +76,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 		
 		System.out.println("found duck1: " + duckRepo.findById(duckId1));
 		System.out.println("found duck2: " + duckRepo.findDuckById(duckId1));
+		assert duckRepo.findDuckByIdOptional(duckId1).isPresent();
 		assert duckRepo.findListByIds(Sets.newHashSet(duckId1, duckId2)).size() >= 2;
 		assert duckRepo.findByField("age", 11) != null;
 		assert duckRepo.findListByField("age", 10).size() >= 1;

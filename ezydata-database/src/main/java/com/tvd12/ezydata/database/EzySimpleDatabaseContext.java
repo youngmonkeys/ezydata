@@ -114,11 +114,10 @@ public class EzySimpleDatabaseContext
 			builder.append(repoName).append("=").append(repo.getClass().getName());
 		}
 		Map<Class<?>, EzyResultDeserializer> resultDeserializers = deserializers.getDeserializers();
-		builder.append("\n\nlist of result deserializers:");
-		if(resultDeserializers.isEmpty())
-			builder.append(" empty");
-		else
-			builder.append(" ").append(resultDeserializers.size());
+		builder
+		    .append("\n\nlist of result deserializers:")
+		    .append(" ")
+		    .append(resultDeserializers.size());
 		for(Class<?> resultType : resultDeserializers.keySet()) {
 			builder.append("\n");
 			Object deserializer = resultDeserializers.get(resultType);

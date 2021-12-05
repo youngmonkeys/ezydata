@@ -1,14 +1,17 @@
 package com.tvd12.ezydata.jpa.test.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
 import com.tvd12.ezydata.jpa.test.result.EmployeeIdResult;
+import com.tvd12.ezydata.jpa.test.result.EmployeeResult;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.database.annotation.EzyQuery;
+import com.tvd12.ezyfox.database.annotation.EzyTransactional;
 import com.tvd12.ezyfox.util.EzyNext;
 
 @EzyAutoImpl
@@ -44,6 +47,9 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	
 	Employee findByEmail(String email);
 	
+	@EzyQuery("select e from Employee e where e.email = ?0")
+	Optional<Employee> findByEmailOptional(String email);
+	
 	Employee findBy();
 	
 	Employee findByEmailAndPhoneNumber(String email, String phoneNumber);
@@ -71,9 +77,45 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	EmployeeIdResult findEmployeeIdByEmployeeId(String employeeId);
 	
 	@EzyQuery(
+            value = "select employeeId from ezyfox_jpa_employee where employeeId = ?0",
+            nativeQuery = true
+    )
+    Optional<EmployeeIdResult> findEmployeeIdByEmployeeIdOptional(String employeeId);
+	
+	@EzyQuery(
+            value = "select employeeId from ezyfox_jpa_employee where employeeId = ?0",
+            nativeQuery = true
+    )
+    Optional<?> findEmployeeIdByEmployeeIdOptionalNoType(String employeeId);
+	
+	@EzyQuery(
 			value = "select * from ezyfox_jpa_employee where email = ?0",
 			nativeQuery = true
 	)
 	List<Employee> findListByEmail(String email);
+	
+	@EzyTransactional
+	int deleteByEmail(String email);
+	
+	@EzyQuery(
+        value = "select * from ezyfox_jpa_employee where email = ?0",
+        nativeQuery = true,
+        resultType = Object.class
+	)
+	List<Object> findListByEmailNotEntityType(String email);
+	
+	@EzyQuery(
+        value = "select * from ezyfox_jpa_employee where email = ?0",
+        nativeQuery = true,
+        resultType = Object.class
+    )
+    Object findOneByEmailObjectType(String email);
+	
+	@EzyQuery(
+        value = "select * from ezyfox_jpa_employee where email = ?0",
+        nativeQuery = true,
+        resultType = EmployeeResult.class
+    )
+    Optional<Employee> findOptionalByEmailNotEntityType(String email);
 	
 }

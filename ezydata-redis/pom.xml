@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezydata</artifactId>
-		<version>1.2.0</version>
+		<version>1.2.1</version>
 	</parent>
 	<artifactId>ezydata-redis</artifactId>
 	<name>ezydata-redis</name>
 	<url>https://youngmonkeys.org/</url>
 	
 	<properties>
-		<jedis.version>3.6.3</jedis.version>
+		<jedis.version>3.7.0</jedis.version>
 		<javax.persistence.version>2.2</javax.persistence.version>
 	</properties>
 	

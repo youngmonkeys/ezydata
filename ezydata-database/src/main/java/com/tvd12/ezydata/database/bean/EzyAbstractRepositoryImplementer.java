@@ -87,9 +87,10 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 		Class answerClass = implClass.toClass();
 		implClass.detach();
 		Object repo = answerClass.newInstance();
-		if(template instanceof EzyDatabaseContext 
-				&& repo instanceof EzyDatabaseContextAware) {
-			((EzyDatabaseContextAware)repo).setDatabaseContext((EzyDatabaseContext) template);
+		if(template instanceof EzyDatabaseContext) {
+		    if (repo instanceof EzyDatabaseContextAware) {
+		        ((EzyDatabaseContextAware)repo).setDatabaseContext((EzyDatabaseContext) template);
+		    }
 		}
 		setRepoComponent(repo, template);
 		return repositoryWrapper.wrap(repo);

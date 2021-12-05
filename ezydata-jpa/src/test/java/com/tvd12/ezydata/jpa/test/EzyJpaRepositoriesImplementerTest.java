@@ -14,12 +14,14 @@ import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
 import com.tvd12.ezydata.jpa.test.entity.User;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
 import com.tvd12.ezyfox.database.annotation.EzyQuery;
+import com.tvd12.ezyfox.database.annotation.EzyTransactional;
 
 public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 
 	protected EzyDatabaseContext databaseContext;
 	
 	protected EzyJpaRepositoriesImplementerTest() {
+	    EzyAbstractRepositoryImplementer.setDebug(true);
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("UsersDB");
 		databaseContext = new EzyJpaDatabaseContextBuilder()
 				.repositoryInterfaces(Object.class)
@@ -32,7 +34,6 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 
 	@Test
 	public void test() {
-		EzyAbstractRepositoryImplementer.setDebug(true);
 		UserXRepo userRepo = (UserXRepo) databaseContext.getRepository(UserXRepo.class); 
 		System.out.println(userRepo.count());
 		System.out.println(userRepo.findByEmail("dzung@gmail.com"));
@@ -60,6 +61,20 @@ public class EzyJpaRepositoriesImplementerTest extends BaseJpaTest {
 				resultType = UserIdFullNameResult.class
 		)
 		List<UserIdFullNameResult> findListOfIdAndFullName();
+		
+		@EzyQuery(
+                value = "delete e from User e where e.id = ?0",
+                resultType = UserIdFullNameResult.class
+        )
+		@EzyTransactional
+		int deleteUser(String userId);
+		
+		@EzyQuery(
+                value = "update User e set e.id = ?0",
+                resultType = UserIdFullNameResult.class
+        )
+		@EzyTransactional
+        int updateUser(String userId);
 		
 	}
 }

@@ -7,14 +7,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @Entity
-@ToString
 @Table(name = "ezyfox_jpa_user")
 public class User {
 	
@@ -22,8 +18,8 @@ public class User {
 	@Column(name = "userId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private String fullName;
-	private String email;
-	private String password;
+	private String fullName = "full name";
+	private String email = "mail@youngmonkeys.org";
+	private String password = "password";
 	
 }

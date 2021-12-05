@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.testng.annotations.Test;
 
+import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
@@ -11,6 +12,7 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.converter.EzyResultDeserializer;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.database.test.bean.FindResult;
+import com.tvd12.ezydata.database.test.bean.Person;
 import com.tvd12.ezydata.database.test.bean.PersonRepo;
 import com.tvd12.ezydata.database.test.bean.PersonRepo2;
 import com.tvd12.ezydata.database.test.bean.PersonRepo3;
@@ -21,7 +23,10 @@ import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.io.EzyMaps;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+
+import lombok.AllArgsConstructor;
 
 public class EzyDatabaseContextBuilderTest extends BaseTest {
 
@@ -149,11 +154,42 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 			.build();
 	}
 	
-	private static class DbContext extends EzySimpleDatabaseContext {
+	@Test
+	public void addRepositoryFromClassRepoWithoutEzyDatabaseContextAware() {
+	    // given
+	    DbContext dbContext = new Builder(false)
+                .scan("com.tvd12.ezydata.database.test.bean")
+                .build();
+        
+        // when
+        // then
+        Asserts.assertNotNull(dbContext);
 	}
 	
+	@Test
+    public void setDbContextErrorRepo() {
+        // given
+	    // when
+        Throwable e = Asserts.assertThrows(() ->
+            new Builder()
+                .repositoryClass(SetDbContextErrorRepo.class)
+                .build()
+        );
+        // then
+        Asserts.assertEqualsType(e, IllegalArgumentException.class);
+    }
+	
+	private static class DbContext extends EzySimpleDatabaseContext {}
+	
+	@AllArgsConstructor
 	private static class Builder extends EzyDatabaseContextBuilder<Builder> {
 		
+	    private final boolean awareDBContextRepo;
+	    
+	    public Builder() {
+	        this(true);
+        }
+	    
 		@Override
 		public DbContext build() {
 			return (DbContext)super.build();
@@ -166,9 +202,10 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 
 		@Override
 		protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
-			return new RepositoriesImplementer();
+		    return awareDBContextRepo 
+		            ? new RepositoriesImplementer()
+		            : new RepositoriesImplementerWithoutDbContextAware();
 		}
-		
 	}
 	
 	private static class RepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
@@ -177,7 +214,6 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 		protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
 			return new RepositoryImplementer(itf);
 		}
-		
 	}
 	
 	private static class RepositoryImplementer extends EzyAbstractRepositoryImplementer {
@@ -190,7 +226,32 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
 		protected Class<?> getSuperClass() {
 			return DbRepository.class;
 		}
-		
 	}
 	
+	private static class RepositoriesImplementerWithoutDbContextAware extends EzyAbstractRepositoriesImplementer {
+
+        @Override
+        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+            return new RepositoryImplementeWithoutDbContextAware(itf);
+        }
+    }
+	
+	private static class RepositoryImplementeWithoutDbContextAware extends RepositoryImplementer {
+
+        public RepositoryImplementeWithoutDbContextAware(Class<?> itf) {
+            super(itf);
+        }
+        
+        @Override
+        protected Class<?> getSuperClass() {
+            return BaseDbRepository.class;
+        }
+    }
+	
+	public static class SetDbContextErrorRepo extends DbRepository<Long, Person> {
+	    @Override
+	    public void setDatabaseContext(EzyDatabaseContext context) {
+	        throw new IllegalStateException("just test");
+	    }
+	}
 }

@@ -4,7 +4,9 @@
 	<test name="All">
 		<packages>
 			<package name="com.tvd12.ezydata.jpa.test"></package>
+			<package name="com.tvd12.ezydata.jpa.test.loader"></package>
 			<package name="com.tvd12.ezydata.jpa.test.query"></package>
+			<package name="com.tvd12.ezydata.jpa.test.repository"></package>
 		</packages>
 	</test>
 </suite>
