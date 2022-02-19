@@ -39,8 +39,11 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 	@EzyQuery(value = "select e from Employee e where e.firstName = ?0", resultType = Employee.class)
 	Employee fetchByFirstName2(String firstName);
 	
-	@EzyQuery("delete frome Employee where e.firstName = ?0")
+	@EzyQuery("delete from Employee e where e.firstName = ?0")
 	void deleteByFirstName(String firstName);
+	
+	@EzyQuery("delete from Employee e where e.firstName = ?0")
+    int deleteByFirstName2(String firstName);
 	
 	@EzyQuery("select e from Employee e")
 	List<Employee> findList(EzyNext next);

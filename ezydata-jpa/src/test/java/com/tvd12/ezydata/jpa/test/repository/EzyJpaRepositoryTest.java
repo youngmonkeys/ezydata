@@ -220,6 +220,34 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
     }
     
     @Test
+    public void deleteByFirstNameTest() {
+        // given
+        EzyDatabaseContext databaseContext = new EzyJpaDatabaseContextBuilder()
+                .repositoryInterface(EmployeeRepo.class)
+                .scan("com.tvd12.ezydata.jpa.test.entity")
+                .entityManagerFactory(ENTITY_MANAGER_FACTORY)
+                .build();
+        EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
+        employeeRepo.deleteAll();
+        
+        String email = "monkey@youngmonkeys.org";
+        Employee employee = new Employee();
+        employee.setEmployeeId("dzung");
+        employee.setFirstName("Dep");
+        employee.setLastName("Trai");
+        employee.setEmail(email);
+        employeeRepo.save(employee);
+        
+        
+        // when
+        int actual = employeeRepo.deleteByFirstName2("Dep");
+        
+        // then
+        Asserts.assertEquals(actual, 1);
+        Asserts.assertZero(employeeRepo.count());
+    }
+    
+    @Test
     public void deleteByQueryStringFailed() {
         // given
         UserRepo sut = new UserRepo();
