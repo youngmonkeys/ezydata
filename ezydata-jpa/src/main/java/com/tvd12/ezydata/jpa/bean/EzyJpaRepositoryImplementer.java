@@ -133,6 +133,8 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 				}
 			}
 			else {
+			    body.append(new EzyInstruction("\t\t", "\n")
+                        .append("query.setMaxResults(1)"));
 				body.append(new EzyInstruction("\t\t", "\n")
 						.variable(List.class, "result")
 							.equal()
