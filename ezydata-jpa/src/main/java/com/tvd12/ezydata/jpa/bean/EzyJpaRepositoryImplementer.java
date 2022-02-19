@@ -7,7 +7,6 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
@@ -16,7 +15,6 @@ import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
-import com.tvd12.ezyfox.database.annotation.EzyTransactional;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
@@ -96,18 +94,10 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 				throw new IllegalArgumentException("update or delete method must return int or void, error method: " + method);
 			body.append(new EzyInstruction("\t\t", "\n")
 					.variable(int.class, "answer").equal().append("0"));
-			Transactional transAnno = method.getAnnotation(Transactional.class);
-			EzyTransactional etransAnno = method.getAnnotation(EzyTransactional.class);
-			if(transAnno != null || etransAnno != null) {
-				transactionAppend(body, () -> {
-					body.append(new EzyInstruction("\t\t\t", "\n")
-							.append("answer = query.executeUpdate()"));
-				});
-			}
-			else {
-				body.append(new EzyInstruction("\t\t", "\n")
-						.append("answer = query.executeUpdate()"));
-			}
+			transactionAppend(body, () -> {
+                body.append(new EzyInstruction("\t\t\t", "\n")
+                        .append("answer = query.executeUpdate()"));
+            });
 			answerInstruction.answer().append("answer");
 		}
 		else {
