@@ -130,7 +130,7 @@ public class EzySimpleMongoRepository<I,E>
 		BsonDocument filter = new BsonDocument();
 		BsonValue bsonId = dataToBsonValue(id);
 		filter.put("_id", bsonId);
-		FindIterable<BsonDocument> list = collection.find(filter);
+		FindIterable<BsonDocument> list = collection.find(filter).limit(1);
 		E entity = bsonDocumentToEntity(list.first());
 		return entity;
 	}
@@ -154,7 +154,7 @@ public class EzySimpleMongoRepository<I,E>
 		BsonDocument filter = new BsonDocument();
 		BsonValue bsonId = dataToBsonValue(value);
 		filter.put(field, bsonId);
-		FindIterable<BsonDocument> list = collection.find(filter);
+		FindIterable<BsonDocument> list = collection.find(filter).limit(1);
 		E entity = bsonDocumentToEntity(list.first());
 		return entity;
 	}
@@ -238,8 +238,8 @@ public class EzySimpleMongoRepository<I,E>
 		BsonDocument filter = queryDocument;
 		if(queryDocument.containsKey("$query"))
 			filter = queryDocument.getDocument("$query");
-		BsonDocument result = collection.find(filter).first();
-		E entity = bsonDocumentToEntity(result);
+		FindIterable<BsonDocument> list = collection.find(filter).limit(1);
+		E entity = bsonDocumentToEntity(list.first());
 		return entity;
 	}
 	
