@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -122,9 +123,7 @@ public class EzyJpaRepository<I,E>
 	    EntityManager entityManager = databaseContext.createEntityManager();
 	    List resultList;
 	    try {
-    		Query query = entityManager.createQuery(queryString);
-    		for(int i = 0 ; i < parameters.length ; ++i)
-    			query.setParameter(i, parameters[i]);
+	        Query query = createQuery(entityManager, queryString, parameters);
     		query.setMaxResults(1);
     		resultList = query.getResultList();
 	    }
@@ -158,9 +157,7 @@ public class EzyJpaRepository<I,E>
 	protected List<E> findListByQueryString(String queryString, Object[] parameters) {
 	    EntityManager entityManager = databaseContext.createEntityManager();
 	    try {
-    		Query query = entityManager.createQuery(queryString);
-    		for(int i = 0 ; i < parameters.length ; ++i)
-    			query.setParameter(i, parameters[i]);
+	        Query query = createQuery(entityManager, queryString, parameters);
     		return query.getResultList();
 	    }
 	    finally {
@@ -183,9 +180,7 @@ public class EzyJpaRepository<I,E>
 			Object[] parameters, int skip, int limit) {
 	    EntityManager entityManager = databaseContext.createEntityManager();
 	    try {
-    		Query query = entityManager.createQuery(queryString);
-    		for(int i = 0 ; i < parameters.length ; ++i)
-    			query.setParameter(i, parameters[i]);
+	        Query query = createQuery(entityManager, queryString, parameters);
     		query.setFirstResult(skip);
     		query.setMaxResults(limit);
     		return query.getResultList();
@@ -194,6 +189,23 @@ public class EzyJpaRepository<I,E>
             entityManager.close();
         }
 	}
+	
+    protected List<E> findListByQueryString(
+        String queryString,
+        Map<String, Object> parameters,
+        int skip,
+        int limit
+    ) {
+        EntityManager entityManager = databaseContext.createEntityManager();
+        try {
+            Query query = createQuery(entityManager, queryString, parameters);
+            query.setFirstResult(skip);
+            query.setMaxResults(limit);
+            return query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+    }
 
 	@Override
 	public List<E> findAll() {
@@ -261,9 +273,7 @@ public class EzyJpaRepository<I,E>
 	protected int deleteByQueryString(String queryString, Object[] parameters) {
 	    EntityManager entityManager = databaseContext.createEntityManager();
 		try {
-		    Query query = entityManager.createQuery(queryString);
-	        for(int i = 0 ; i < parameters.length ; ++i)
-	            query.setParameter(i, parameters[i]);
+		    Query query = createQuery(entityManager, queryString, parameters);
             EntityTransaction transaction = entityManager.getTransaction();
             transaction.begin();
     		try {
@@ -295,6 +305,53 @@ public class EzyJpaRepository<I,E>
         finally {
             entityManager.close();
         }
+    }
+	
+	   protected long countByQueryString(String queryString, Object[] parameters) {
+	        EntityManager entityManager = databaseContext.createEntityManager();
+	        try {
+	            Query query = createQuery(entityManager, queryString, parameters);
+	            return (long) query.getSingleResult();
+	        }
+	        finally {
+	            entityManager.close();
+	        }
+	    }
+	
+	protected long countByQueryString(String queryString, Map<String, Object> parameters) {
+        EntityManager entityManager = databaseContext.createEntityManager();
+        try {
+            Query query = createQuery(entityManager, queryString, parameters);
+            return (long) query.getSingleResult();
+        }  finally {
+            entityManager.close();
+        }
+    }
+	
+	protected Query createQuery(
+        EntityManager entityManager,
+        String queryString,
+        Object[] parameters
+    ) {
+	    Query query = entityManager.createQuery(queryString);
+        for(int i = 0 ; i < parameters.length ; ++i)
+            query.setParameter(i, parameters[i]);
+        return query;
+    }
+
+    protected Query createQuery(
+        EntityManager entityManager,
+        String queryString,
+        Map<String, Object> parameters
+    ) {
+        Query query = entityManager.createQuery(queryString);
+        for (String paramName : parameters.keySet()) {
+            Object paramValue = parameters.get(paramName);
+            if (paramValue != null) {
+                query.setParameter(paramName, paramValue);
+            }
+        }
+        return query;
     }
 	
 	protected Class<E> getEntityType() {
