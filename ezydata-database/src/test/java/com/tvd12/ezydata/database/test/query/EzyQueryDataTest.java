@@ -16,6 +16,7 @@ public class EzyQueryDataTest {
     public void test() {
         // given
         EzyQueryData sut = EzyQueryData.builder()
+            .query("youngmonkeys")
             .parameter("name", "hello")
             .parameter("value", "world")
             .parameters(Collections.singletonMap("foo", "bar"))
@@ -38,6 +39,7 @@ public class EzyQueryDataTest {
         Object[] params = sut.getParameters();
         
         // then
+        Asserts.assertEquals(sut.getQuery(), "youngmonkeys");
         Map<String, Object> expectedParamMap = EzyMapBuilder.mapBuilder()
             .put("name", "hello")
             .put("value", "world")

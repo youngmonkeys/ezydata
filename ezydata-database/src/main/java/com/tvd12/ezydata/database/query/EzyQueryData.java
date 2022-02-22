@@ -36,6 +36,11 @@ public class EzyQueryData extends EzyQLQuery {
     public static class Builder extends EzyQLQuery.Builder {
 
         private Map<String, Object> parameterMap;
+        
+        @Override
+        public Builder query(String query) {
+            return (Builder)super.query(query);
+        }
 
         public Builder parameter(String name, Object value) {
             if (parameterMap == null) {
