@@ -206,6 +206,49 @@ public class EzyJpaRepository<I,E>
             entityManager.close();
         }
     }
+    
+    protected <R> List<R> fetchListByQueryString(
+        String queryString, 
+        Object[] parameters,
+        Class<R> resultType,
+        int skip,
+        int limit
+    ) {
+        EntityManager entityManager = databaseContext.createEntityManager();
+        try {
+            Query query = createQuery(entityManager, queryString, parameters);
+            query.setFirstResult(skip);
+            query.setMaxResults(limit);
+            return databaseContext.deserializeResultList(
+                query.getResultList(),
+                resultType
+            );
+        }
+        finally {
+            entityManager.close();
+        }
+    }
+    
+    protected <R> List<R> fetchListByQueryString(
+        String queryString,
+        Map<String, Object> parameters,
+        Class<R> resultType,
+        int skip,
+        int limit
+    ) {
+        EntityManager entityManager = databaseContext.createEntityManager();
+        try {
+            Query query = createQuery(entityManager, queryString, parameters);
+            query.setFirstResult(skip);
+            query.setMaxResults(limit);
+            return databaseContext.deserializeResultList(
+                query.getResultList(),
+                resultType
+            );
+        } finally {
+            entityManager.close();
+        }
+    }
 
 	@Override
 	public List<E> findAll() {
