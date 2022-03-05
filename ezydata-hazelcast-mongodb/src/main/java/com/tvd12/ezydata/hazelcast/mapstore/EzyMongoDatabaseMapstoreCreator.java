@@ -8,7 +8,6 @@ import java.util.Set;
 import com.hazelcast.map.MapStore;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
-import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoreCreator;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseAware;
 
 import lombok.Setter;

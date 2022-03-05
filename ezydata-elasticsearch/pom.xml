@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>com.tvd12</groupId>
 		<artifactId>ezydata</artifactId>
-		<version>1.1.4</version>
+		<version>1.2.2</version>
 	</parent>
 	<artifactId>ezydata-elasticsearch</artifactId>
 	<name>ezydata-elasticsearch</name>
 
 	<properties>
-		<elasticsearch.version>7.14.0</elasticsearch.version>
+		<elasticsearch.version>7.17.1</elasticsearch.version>
 	</properties>
 
 	<dependencies>

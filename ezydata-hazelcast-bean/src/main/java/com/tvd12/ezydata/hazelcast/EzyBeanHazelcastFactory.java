@@ -1,6 +1,5 @@
 package com.tvd12.ezydata.hazelcast;
 
-import com.tvd12.ezydata.hazelcast.EzyAbstractHazelcastFactory;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyBeanMapstoreCreator;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoreCreator;
 import com.tvd12.ezyfox.bean.EzyBeanContext;

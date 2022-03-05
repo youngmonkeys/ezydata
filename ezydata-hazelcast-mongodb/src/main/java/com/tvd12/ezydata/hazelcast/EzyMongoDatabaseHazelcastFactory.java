@@ -1,7 +1,6 @@
 package com.tvd12.ezydata.hazelcast;
 
 import com.mongodb.client.MongoDatabase;
-import com.tvd12.ezydata.hazelcast.EzyAbstractHazelcastFactory;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoreCreator;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMongoDatabaseMapstoreCreator;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseAware;
