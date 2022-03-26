@@ -87,6 +87,12 @@ public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
 		assert employeeRepo.findListByEmail("dzung@youngmokeys.org").get(0) instanceof Employee;
 		assert employeeRepo.findEmployeeIdByEmployeeId("dzung").getEmployeeId().equals("dzung");
 		assert employeeRepo.findEmployeeIdByEmployeeIdOptional("dzung").get().getEmployeeId().equals("dzung");
+		assert employeeRepo.findEmployeeIdAndFirstNameByEmployeeIdOptional("dzung")
+		    .get().getEmployeeId()
+		    .equals("dzung");
+		assert employeeRepo.findEmployeeIdAndFirstNameByEmployeeIdOptional("dzung")
+            .get().getFirstName()
+            .equals("Dung");
 		assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
 		employeeRepo.delete("employee2");
 		assert employeeRepo.count() == (count - 1);
