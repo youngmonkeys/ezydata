@@ -9,26 +9,26 @@ import dev.morphia.Datastore;
 
 public class EzyMorphiaRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
-	public EzyMorphiaRepositoryImplementer(Class<?> clazz) {
-		super(clazz);
-	}
+    public EzyMorphiaRepositoryImplementer(Class<?> clazz) {
+        super(clazz);
+    }
 
-	@Override
-	protected void setRepoComponent(Object repo, Object template) {
-		if(template instanceof Datastore 
-				&& repo instanceof EzyDatastoreAware) {
-			((EzyDatastoreAware)repo).setDatastore((Datastore)template);
-		}
-	}
-	
-	@Override
-	protected Class<?> getSuperClass() {
-		return EzyDatastoreRepository.class;
-	}
-	
-	@Override
-	protected Class<?> getBaseRepositoryInterface() {
-		return EzyMongoRepository.class;
-	}
-	
+    @Override
+    protected void setRepoComponent(Object repo, Object template) {
+        if(template instanceof Datastore
+                && repo instanceof EzyDatastoreAware) {
+            ((EzyDatastoreAware)repo).setDatastore((Datastore)template);
+        }
+    }
+
+    @Override
+    protected Class<?> getSuperClass() {
+        return EzyDatastoreRepository.class;
+    }
+
+    @Override
+    protected Class<?> getBaseRepositoryInterface() {
+        return EzyMongoRepository.class;
+    }
+
 }

@@ -6,10 +6,10 @@ import com.tvd12.ezydata.elasticsearch.handler.EzyEsActionHandler;
 @SuppressWarnings("rawtypes")
 public interface EzyEsActionWrapper {
 
-	EzyEsAction getAction();
-	
-	EzyEsActionHandler getHandler();
-	
-	EzyEsActionCallback getCallback();
-	
+    EzyEsAction getAction();
+
+    EzyEsActionHandler getHandler();
+
+    EzyEsActionCallback getCallback();
+
 }

@@ -1,12 +1,12 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="AllTests">
-	<test name="All">
-		<packages>
-			<package name="com.tvd12.ezydata.redis.test"></package>
-			<package name="com.tvd12.ezydata.redis.test.loader"></package>
-			<package name="com.tvd12.ezydata.redis.test.manager"></package>
-			<package name="com.tvd12.ezydata.redis.test.setting"></package>
-		</packages>
-	</test>
+    <test name="All">
+        <packages>
+            <package name="com.tvd12.ezydata.redis.test"></package>
+            <package name="com.tvd12.ezydata.redis.test.loader"></package>
+            <package name="com.tvd12.ezydata.redis.test.manager"></package>
+            <package name="com.tvd12.ezydata.redis.test.setting"></package>
+        </packages>
+    </test>
 </suite>

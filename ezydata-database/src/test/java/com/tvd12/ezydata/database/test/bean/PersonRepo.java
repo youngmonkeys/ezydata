@@ -6,14 +6,14 @@ import com.tvd12.ezyfox.database.annotation.EzyQuery;
 
 @EzyAutoImpl
 public interface PersonRepo extends EzyDatabaseRepository<Integer, Person> {
-	
-	@EzyQuery("select e from Person e")
-	void findByName();
-	
-	@EzyQuery
-	void findByName2();
-	
-	@EzyQuery(name = "hello", value = "select e from Person e")
-	void findByName3();
-	
+
+    @EzyQuery("select e from Person e")
+    void findByName();
+
+    @EzyQuery
+    void findByName2();
+
+    @EzyQuery(name = "hello", value = "select e from Person e")
+    void findByName3();
+
 }

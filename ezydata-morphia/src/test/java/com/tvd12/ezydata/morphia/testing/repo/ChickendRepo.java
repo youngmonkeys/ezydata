@@ -6,5 +6,5 @@ import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 
 @EzyAutoImpl
 public interface ChickendRepo extends EzyMongoRepository<Long, Chickend> {
-	
+
 }

@@ -14,13 +14,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExampleUser implements EzyHasIdEntity<String>, Serializable {
-	private static final long serialVersionUID = 975411654175906424L;
-	
-	private String username;
-	
-	@Override
-	public String getId() {
-		return username;
-	}
+    private static final long serialVersionUID = 975411654175906424L;
+
+    private String username;
+
+    @Override
+    public String getId() {
+        return username;
+    }
 
 }

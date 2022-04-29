@@ -14,8 +14,8 @@ import com.mongodb.ServerAddress;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzyPropertiesMongoClientLoader 
-		extends EzyLoggable 
-		implements EzyMongoClientLoader {
+        extends EzyLoggable 
+        implements EzyMongoClientLoader {
 
     protected Properties properties;
     
@@ -24,9 +24,9 @@ public class EzyPropertiesMongoClientLoader
     }
     
     public static MongoClient load(Properties properties) {
-    	return new EzyPropertiesMongoClientLoader()
-    			.properties(properties)
-    			.load();
+        return new EzyPropertiesMongoClientLoader()
+                .properties(properties)
+                .load();
     }
     
     public EzyPropertiesMongoClientLoader host(String host) {
@@ -55,7 +55,7 @@ public class EzyPropertiesMongoClientLoader
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-	public EzyPropertiesMongoClientLoader properties(Map map) {
+    public EzyPropertiesMongoClientLoader properties(Map map) {
         this.properties.putAll(map);
         return this;
     }
@@ -74,10 +74,10 @@ public class EzyPropertiesMongoClientLoader
     protected void preload() {}
     
     protected MongoClient createMongoClient() {
-    	String uri = properties.getProperty(URI);
-    	if(uri != null)
-    		return new MongoClient(new MongoClientURI(uri));
-    	
+        String uri = properties.getProperty(URI);
+        if(uri != null)
+            return new MongoClient(new MongoClientURI(uri));
+        
         return new MongoClient(
                 new ServerAddress(getHost(), getPort()), 
                 createCredential(),

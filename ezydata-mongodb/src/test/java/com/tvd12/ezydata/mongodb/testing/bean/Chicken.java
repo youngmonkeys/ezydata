@@ -13,8 +13,8 @@ import lombok.ToString;
 @EzyCollection("test_mongo_bean_chickend")
 public class Chicken {
 
-	@EzyId
-	private String _id;
-	private String name;
-	
+    @EzyId
+    private String _id;
+    private String name;
+
 }

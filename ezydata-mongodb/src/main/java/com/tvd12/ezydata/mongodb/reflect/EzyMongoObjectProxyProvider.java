@@ -18,56 +18,56 @@ import com.tvd12.ezyfox.reflect.EzySetterBuilder;
 
 public class EzyMongoObjectProxyProvider extends EzyObjectProxyProvider {
 
-	@Override
-	protected Map<String, String> getFieldKeys(Collection<EzyField> fields) {
-		Map<String, String> map = new HashMap<>();
-		for(EzyField field : fields) {
-			String name = field.getName();
-			EzyId idAnno = field.getAnnotation(EzyId.class);
-			if(idAnno != null) {
-				map.put("_id", name);
-				continue;
-			}
-			EzyCollectionId collectionIdAnno = field.getAnnotation(EzyCollectionId.class);
-			if(collectionIdAnno != null) {
-				map.put("_id", name);
-				continue;
-			}
-			EzyValue valueAnno = field.getAnnotation(EzyValue.class);
-			if(valueAnno != null) {
-				map.put(valueAnno.value(), name);
-				continue;
-			}
-		}
-		return map;
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void preBuildObjectProxy(EzyClass clazz, Builder builder) {
-		Optional<EzyMethod> idGetterMethod = clazz.getAnnotatedGetterMethod(EzyId.class);
-		if(!idGetterMethod.isPresent())
-			idGetterMethod = clazz.getAnnotatedGetterMethod(EzyCollectionId.class);
-		Optional<EzyMethod> idSetterMethod = clazz.getAnnotatedSetterMethod(EzyId.class);
-		if(!idSetterMethod.isPresent())
-			idSetterMethod = clazz.getAnnotatedSetterMethod(EzyCollectionId.class);
-		if(idGetterMethod.isPresent()) {
-			String fieldName = idGetterMethod.get().getFieldName();
-			builder.addGetter("_id", new EzyGetterBuilder()
-					.method(idGetterMethod.get())
-					.build());
-			builder.propertyKey("_id", fieldName);
-			builder.addPropertyType(fieldName, idGetterMethod.get().getReturnType());
-			
-		}
-		if(idSetterMethod.isPresent()) {
-			String fieldName = idSetterMethod.get().getFieldName();
-			builder.addSetter("_id", new EzySetterBuilder()
-					.method(idSetterMethod.get())
-					.build());
-			builder.propertyKey("_id", fieldName);
-			builder.addPropertyType(fieldName, idSetterMethod.get().getParameterTypes()[0]);
-		}
-	}
-	
+    @Override
+    protected Map<String, String> getFieldKeys(Collection<EzyField> fields) {
+        Map<String, String> map = new HashMap<>();
+        for(EzyField field : fields) {
+            String name = field.getName();
+            EzyId idAnno = field.getAnnotation(EzyId.class);
+            if(idAnno != null) {
+                map.put("_id", name);
+                continue;
+            }
+            EzyCollectionId collectionIdAnno = field.getAnnotation(EzyCollectionId.class);
+            if(collectionIdAnno != null) {
+                map.put("_id", name);
+                continue;
+            }
+            EzyValue valueAnno = field.getAnnotation(EzyValue.class);
+            if(valueAnno != null) {
+                map.put(valueAnno.value(), name);
+                continue;
+            }
+        }
+        return map;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    protected void preBuildObjectProxy(EzyClass clazz, Builder builder) {
+        Optional<EzyMethod> idGetterMethod = clazz.getAnnotatedGetterMethod(EzyId.class);
+        if(!idGetterMethod.isPresent())
+            idGetterMethod = clazz.getAnnotatedGetterMethod(EzyCollectionId.class);
+        Optional<EzyMethod> idSetterMethod = clazz.getAnnotatedSetterMethod(EzyId.class);
+        if(!idSetterMethod.isPresent())
+            idSetterMethod = clazz.getAnnotatedSetterMethod(EzyCollectionId.class);
+        if(idGetterMethod.isPresent()) {
+            String fieldName = idGetterMethod.get().getFieldName();
+            builder.addGetter("_id", new EzyGetterBuilder()
+                    .method(idGetterMethod.get())
+                    .build());
+            builder.propertyKey("_id", fieldName);
+            builder.addPropertyType(fieldName, idGetterMethod.get().getReturnType());
+
+        }
+        if(idSetterMethod.isPresent()) {
+            String fieldName = idSetterMethod.get().getFieldName();
+            builder.addSetter("_id", new EzySetterBuilder()
+                    .method(idSetterMethod.get())
+                    .build());
+            builder.propertyKey("_id", fieldName);
+            builder.addPropertyType(fieldName, idSetterMethod.get().getParameterTypes()[0]);
+        }
+    }
+
 }

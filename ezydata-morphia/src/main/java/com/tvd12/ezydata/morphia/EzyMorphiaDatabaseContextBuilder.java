@@ -8,25 +8,25 @@ import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoriesImplementer;
 import dev.morphia.Datastore;
 
 public class EzyMorphiaDatabaseContextBuilder 
-		extends EzyDatabaseContextBuilder<EzyMorphiaDatabaseContextBuilder> {
+        extends EzyDatabaseContextBuilder<EzyMorphiaDatabaseContextBuilder> {
 
-	protected Datastore datastore;
-	
-	public EzyMorphiaDatabaseContextBuilder datastore(Datastore datastore) {
-		this.datastore = datastore;
-		return this;
-	}
-	
-	@Override
-	protected EzySimpleDatabaseContext newDatabaseContext() {
-		EzySimpleMorphiaDatabaseContext context = new EzySimpleMorphiaDatabaseContext();
-		context.setDatastore(datastore);
-		return context;
-	}
-	
-	@Override
-	protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
-		return new EzyMorphiaRepositoriesImplementer();
-	}
-	
+    protected Datastore datastore;
+
+    public EzyMorphiaDatabaseContextBuilder datastore(Datastore datastore) {
+        this.datastore = datastore;
+        return this;
+    }
+
+    @Override
+    protected EzySimpleDatabaseContext newDatabaseContext() {
+        EzySimpleMorphiaDatabaseContext context = new EzySimpleMorphiaDatabaseContext();
+        context.setDatastore(datastore);
+        return context;
+    }
+
+    @Override
+    protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
+        return new EzyMorphiaRepositoriesImplementer();
+    }
+
 }

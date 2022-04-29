@@ -15,15 +15,15 @@ import lombok.ToString;
 @EzyCollection("test_mongodb_category")
 public class Category {
 
-	@EzyId
-	private String name;
-	private String value;
-	private Date createdDate = new Date();
-	
-	public Category() {}
-	
-	public Category(String value) {
-		this.value = value;
-	}
-	
+    @EzyId
+    private String name;
+    private String value;
+    private Date createdDate = new Date();
+
+    public Category() {}
+
+    public Category(String value) {
+        this.value = value;
+    }
+
 }

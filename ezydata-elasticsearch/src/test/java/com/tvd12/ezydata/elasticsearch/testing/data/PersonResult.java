@@ -18,15 +18,15 @@ import lombok.ToString;
 @EzyObjectBinding
 @EzyIndexedData
 @EzyDataIndexes({
-	"person"
+    "person"
 })
 @NoArgsConstructor
 public class PersonResult {
-	
-	@EzyId
-	private Map<String, String> name;
-	private String email;
-	private String phoneNumber;
-	private int age;
-	
+    
+    @EzyId
+    private Map<String, String> name;
+    private String email;
+    private String phoneNumber;
+    private int age;
+    
 }

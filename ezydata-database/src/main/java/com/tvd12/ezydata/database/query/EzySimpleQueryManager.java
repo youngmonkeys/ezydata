@@ -6,28 +6,28 @@ import java.util.Map;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
 public class EzySimpleQueryManager 
-		extends EzyLoggable implements EzyQueryRegister {
+        extends EzyLoggable implements EzyQueryRegister {
 
-	protected final Map<String, EzyQueryEntity> queries;
-	
-	public EzySimpleQueryManager() {
-		this.queries = new HashMap<>();
-	}
-	
-	@Override
-	public EzyQueryEntity getQuery(String name) {
-		EzyQueryEntity query = queries.get(name);
-		return query;
-	}
-	
-	@Override
-	public Map<String, EzyQueryEntity> getQueries() {
-		return new HashMap<>(queries);
-	}
-	
-	@Override
-	public void addQuery(EzyQueryEntity query) {
-		this.queries.put(query.getName(), query);
-	}
+    protected final Map<String, EzyQueryEntity> queries;
+
+    public EzySimpleQueryManager() {
+        this.queries = new HashMap<>();
+    }
+
+    @Override
+    public EzyQueryEntity getQuery(String name) {
+        EzyQueryEntity query = queries.get(name);
+        return query;
+    }
+
+    @Override
+    public Map<String, EzyQueryEntity> getQueries() {
+        return new HashMap<>(queries);
+    }
+
+    @Override
+    public void addQuery(EzyQueryEntity query) {
+        this.queries.put(query.getName(), query);
+    }
 
 }

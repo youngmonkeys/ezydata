@@ -15,11 +15,11 @@ import lombok.Setter;
 @Getter
 @Entity(value = "ezyfox.mongodb.testing.person", noClassnameStored = true)
 public class Person implements Serializable {
-	private static final long serialVersionUID = 903502360552527690L;
-	
-	@Id
-	private ObjectId id;
-	private String name = "name#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-	private String password = UUID.randomUUID().toString();
+    private static final long serialVersionUID = 903502360552527690L;
+
+    @Id
+    private ObjectId id;
+    private String name = "name#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+    private String password = UUID.randomUUID().toString();
 
 }

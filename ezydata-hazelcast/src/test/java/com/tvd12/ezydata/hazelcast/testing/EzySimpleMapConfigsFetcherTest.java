@@ -8,12 +8,12 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleMapConfigsFetcherTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzySimpleMapConfigsFetcher fetcher = EzySimpleMapConfigsFetcher.builder()
-				.mapNames(Sets.newHashSet("a", "b", "c"))
-				.build();
-		fetcher.get();
-	}
-	
+    @Test
+    public void test() {
+        EzySimpleMapConfigsFetcher fetcher = EzySimpleMapConfigsFetcher.builder()
+                .mapNames(Sets.newHashSet("a", "b", "c"))
+                .build();
+        fetcher.get();
+    }
+
 }

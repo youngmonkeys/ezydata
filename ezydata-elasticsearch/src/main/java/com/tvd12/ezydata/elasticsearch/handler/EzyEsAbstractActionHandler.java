@@ -11,18 +11,18 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import lombok.Setter;
 
 public abstract class EzyEsAbstractActionHandler<A extends EzyEsAction, R>
-		extends EzyLoggable
-		implements EzyEsActionHandler<A, R> {
+        extends EzyLoggable
+        implements EzyEsActionHandler<A, R> {
 
-	@Setter
-	protected EzyEsClientProxy clientProxy;
-	@Setter
-	protected EzyIdFetchers idFetchers;
-	@Setter
-	protected EzyIndexedDataClasses indexedDataClasses;
-	@Setter
-	protected EzyMarshaller marshaller;
-	@Setter
-	protected EzyUnmarshaller unmarshaller;
-	
+    @Setter
+    protected EzyEsClientProxy clientProxy;
+    @Setter
+    protected EzyIdFetchers idFetchers;
+    @Setter
+    protected EzyIndexedDataClasses indexedDataClasses;
+    @Setter
+    protected EzyMarshaller marshaller;
+    @Setter
+    protected EzyUnmarshaller unmarshaller;
+
 }

@@ -15,11 +15,11 @@ import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
  *
  */
 public class EzyMongoMaxIdMapstore extends EzyMongoCollectionMapstore<String, Long> {
-	
+
     @Override
     public Long load(String key) {
-    		Bson filter = getFilter(key);
-    		Document first = collection.find(filter).first();
+            Bson filter = getFilter(key);
+            Document first = collection.find(filter).first();
         Long answer = first != null ? first.getLong("maxId") : 0L;
         logger.info("load maxId of: {} max: {}", key, answer);
         return answer;
@@ -42,8 +42,8 @@ public class EzyMongoMaxIdMapstore extends EzyMongoCollectionMapstore<String, Lo
         return new UpdateOptions().upsert(true);
     }
     
-	@Override
-	protected String getCollectionName() {
-		return EzyMapNames.MAX_ID;
-	}
+    @Override
+    protected String getCollectionName() {
+        return EzyMapNames.MAX_ID;
+    }
 }

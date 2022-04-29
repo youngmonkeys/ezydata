@@ -13,12 +13,12 @@ import lombok.Setter;
 @Table(name = "ezyfox_jpa_employee")
 public class Employee {
 
-	@Id
-	private String employeeId;
-	private String firstName;
-	private String lastName;
-	private String email = "dzung@youngmokeys.org";
-	private String phoneNumber = "123456789";
-	private String bankAccountNo = "abcdefgh";
-	
+    @Id
+    private String employeeId;
+    private String firstName;
+    private String lastName;
+    private String email = "dzung@youngmokeys.org";
+    private String phoneNumber = "123456789";
+    private String bankAccountNo = "abcdefgh";
+    
 }

@@ -9,11 +9,11 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class EzySimpleMapstoreFactory extends EzyAbstractMapstoreFactory {
 
-	protected EzyMapstoreCreator mapstoreCreator;
-	
-	@Override
-	protected Object newMapstore(String mapName, Properties properties) {
-		return mapstoreCreator.create(mapName, properties);
-	}
-	
+    protected EzyMapstoreCreator mapstoreCreator;
+
+    @Override
+    protected Object newMapstore(String mapName, Properties properties) {
+        return mapstoreCreator.create(mapName, properties);
+    }
+
 }

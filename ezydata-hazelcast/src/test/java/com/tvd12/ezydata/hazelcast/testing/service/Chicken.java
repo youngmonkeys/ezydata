@@ -12,9 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Chicken implements Serializable {
-	private static final long serialVersionUID = 8171070638249273626L;
-	
-	private String name;
-	private int age;
+    private static final long serialVersionUID = 8171070638249273626L;
+    
+    private String name;
+    private int age;
 
 }

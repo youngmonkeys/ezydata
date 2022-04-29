@@ -17,27 +17,27 @@ import lombok.ToString;
 @EzyObjectBinding
 @EzyIndexedData
 @EzyDataIndexes({
-	"test"
+    "test"
 })
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestPerson2 {
-	
-	@EzyId
-	private String email;
-	private Name name;
-	private String[] phoneNumber;
-	private int age;
-	
-	@Getter
-	@Setter
-	@ToString
-	@NoArgsConstructor
-	@AllArgsConstructor
-	@EzyObjectBinding
-	public static class Name {
-		private String vietnamese;
-		private String english;
-	}
-	
+
+    @EzyId
+    private String email;
+    private Name name;
+    private String[] phoneNumber;
+    private int age;
+
+    @Getter
+    @Setter
+    @ToString
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EzyObjectBinding
+    public static class Name {
+        private String vietnamese;
+        private String english;
+    }
+
 }

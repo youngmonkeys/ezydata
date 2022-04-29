@@ -15,29 +15,29 @@ import com.tvd12.ezydata.elasticsearch.testing.data.PersonResult;
 
 public class SearchDataTest {
 
-	public static void main(String[] args) {
-		new SearchDataTest().test();
-	}
-	
-	public void test() {
-		RestHighLevelClient highLevelClient = new RestHighLevelClient(
-		        RestClient.builder(
-		                new HttpHost("localhost", 9200, "http")));
-		EzyEsCaller client = EzyEsSimpleCaller.builder()
-				.scanIndexedClasses("com.tvd12.ezydata.elasticsearch.testing.data")
-				.clientProxy(new EzyEsRestClientProxy(highLevelClient))
-				.build();
-		SearchRequest searchRequest = new SearchRequest();
-		searchRequest.indices("person");
-		List<PersonResult> persons = client.call(new EzyEsSimpleSearchAction()
-				.searchRequest(searchRequest)
-				.responseItemType(PersonResult.class));
-		System.out.println(persons);
-		try {
-			highLevelClient.close();
-		}
-		catch(Exception e) {
-		}
-	}
-	
+    public static void main(String[] args) {
+        new SearchDataTest().test();
+    }
+
+    public void test() {
+        RestHighLevelClient highLevelClient = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http")));
+        EzyEsCaller client = EzyEsSimpleCaller.builder()
+                .scanIndexedClasses("com.tvd12.ezydata.elasticsearch.testing.data")
+                .clientProxy(new EzyEsRestClientProxy(highLevelClient))
+                .build();
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.indices("person");
+        List<PersonResult> persons = client.call(new EzyEsSimpleSearchAction()
+                .searchRequest(searchRequest)
+                .responseItemType(PersonResult.class));
+        System.out.println(persons);
+        try {
+            highLevelClient.close();
+        }
+        catch(Exception e) {
+        }
+    }
+
 }

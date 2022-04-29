@@ -10,8 +10,8 @@ import lombok.Setter;
 @Getter
 @EzyIndexedData
 public class Person3 {
-	
-	@EzyId
-	private long id;
-	
+
+    @EzyId
+    private long id;
+
 }

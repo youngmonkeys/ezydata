@@ -7,11 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public class EzyQueryString {
 
-	protected String queryString;
-	protected boolean nativeQuery;
-	
-	public EzyQueryString(String queryString) {
-		this(queryString, false);
-	}
-	
+    protected String queryString;
+    protected boolean nativeQuery;
+
+    public EzyQueryString(String queryString) {
+        this(queryString, false);
+    }
+
 }

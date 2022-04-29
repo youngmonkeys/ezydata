@@ -11,30 +11,30 @@ import lombok.Getter;
 
 @Getter
 public abstract class EzyAbstractMaxIdEntryProcessor implements DataSerializable {
-	
-	protected int delta;
-	
-	public EzyAbstractMaxIdEntryProcessor() {}
-	
-	public EzyAbstractMaxIdEntryProcessor(int delta) {
-		this.delta = delta;
-	}
-	
-	public static long processEntry(Entry<String, Long> entry, int delta) {
-		Long current = entry.getValue();
-		Long maxId = current != null ? current + delta : delta;
-		entry.setValue(maxId);
-		return maxId;
-	}
-	
-	@Override
-	public void writeData(ObjectDataOutput out) throws IOException {
-		out.writeInt(delta);
-	}
+    
+    protected int delta;
+    
+    public EzyAbstractMaxIdEntryProcessor() {}
+    
+    public EzyAbstractMaxIdEntryProcessor(int delta) {
+        this.delta = delta;
+    }
+    
+    public static long processEntry(Entry<String, Long> entry, int delta) {
+        Long current = entry.getValue();
+        Long maxId = current != null ? current + delta : delta;
+        entry.setValue(maxId);
+        return maxId;
+    }
+    
+    @Override
+    public void writeData(ObjectDataOutput out) throws IOException {
+        out.writeInt(delta);
+    }
 
-	@Override
-	public void readData(ObjectDataInput in) throws IOException {
-		this.delta = in.readInt();
-	}
-	
+    @Override
+    public void readData(ObjectDataInput in) throws IOException {
+        this.delta = in.readInt();
+    }
+    
 }

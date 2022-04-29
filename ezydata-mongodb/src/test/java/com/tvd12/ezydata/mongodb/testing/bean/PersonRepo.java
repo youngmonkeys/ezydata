@@ -6,11 +6,11 @@ import com.tvd12.ezyfox.database.annotation.EzyQuery;
 
 @EzyAutoImpl
 public interface PersonRepo extends EzyMongoRepository<Integer, Person> {
-	
-	@EzyQuery("{$query: {_id: ?0}}")
-	Person findById(int id);
-	
-	@EzyQuery("{$query: {personName: ?0}}")
-	Person findByName(String name);
-	
+
+    @EzyQuery("{$query: {_id: ?0}}")
+    Person findById(int id);
+
+    @EzyQuery("{$query: {personName: ?0}}")
+    Person findByName(String name);
+
 }

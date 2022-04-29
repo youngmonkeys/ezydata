@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class EzyRedisSimpleChannelSetting implements EzyRedisChannelSetting {
 
-	protected Class<?> messageType;
-	protected int subThreadPoolSize = 1;
+    protected Class<?> messageType;
+    protected int subThreadPoolSize = 1;
 
 }

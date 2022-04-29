@@ -5,12 +5,12 @@ import java.util.Set;
 
 public interface EzyMapstoresFetcher {
 
-	Set<String> getMapNames();
-	
-	Object getMapstore(String mapName);
-	
-	Map<String, Object> getMapstores();
-	
-	boolean containsMapstore(String mapName);
-	
+    Set<String> getMapNames();
+
+    Object getMapstore(String mapName);
+
+    Map<String, Object> getMapstores();
+
+    boolean containsMapstore(String mapName);
+
 }

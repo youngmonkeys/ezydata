@@ -9,13 +9,13 @@ import com.tvd12.ezydata.mongodb.converter.EzyMongoDataToBsonValue;
 
 public class EzyMongoDataConverterTest {
 
-	@Test
-	public void test() {
-		EzyMongoDataConverter.builder()
-				.dataToBsonValue(new EzyMongoDataToBsonValue())
-				.bsonValueToData(new EzyMongoBsonValueToData())
-				.bsonValueToString(new EzyMongoBsonValueToString())
-				.build();
-	}
-	
+    @Test
+    public void test() {
+        EzyMongoDataConverter.builder()
+                .dataToBsonValue(new EzyMongoDataToBsonValue())
+                .bsonValueToData(new EzyMongoBsonValueToData())
+                .bsonValueToString(new EzyMongoBsonValueToString())
+                .build();
+    }
+
 }

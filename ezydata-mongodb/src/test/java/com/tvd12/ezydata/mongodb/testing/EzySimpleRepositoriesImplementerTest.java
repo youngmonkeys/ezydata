@@ -17,53 +17,53 @@ import com.tvd12.ezyfox.collect.Sets;
 
 public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
 
-	@Test
-	public void test() {
-		EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
-				.mongoClient(mongoClient)
-				.databaseName(databaseName)
-				.scan("com.tvd12.ezydata.mongodb.testing.bean")
-				.build();
-		
-		EzyMongoRepositoryImplementer.setDebug(true);
-		EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
-				.queryMethodConverter(new EzyMongoQueryMethodConverter())
-				.scan("com.tvd12.ezydata.mongodb.testing.bean")
-				.scan("com.tvd12.ezydata.mongodb.testing.bean", "com.tvd12.ezydata.mongodb.testing.bean")
-				.scan(Sets.newHashSet("com.tvd12.ezydata.mongodb.testing.bean"))
-				.repositoryInterface(PersonRepo2.class)
-				.repositoryInterface(Class.class)
-				.repositoryInterface(NothingInterface.class)
-				.repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
-				.repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
-		
-		Map<Class<?>, Object> repos = implementer.implement(databaseContext);
-		System.out.println("repos: " + repos);
-	}
-	
-	public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
+    @Test
+    public void test() {
+        EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
+                .mongoClient(mongoClient)
+                .databaseName(databaseName)
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .build();
 
-		@Override
-		protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
-			return new ExEzySimpleRepositoryImplementer(itf);
-		}
-		
-	}
-	
-	public static class ExEzySimpleRepositoryImplementer extends EzyMongoRepositoryImplementer {
+        EzyMongoRepositoryImplementer.setDebug(true);
+        EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
+                .queryMethodConverter(new EzyMongoQueryMethodConverter())
+                .scan("com.tvd12.ezydata.mongodb.testing.bean")
+                .scan("com.tvd12.ezydata.mongodb.testing.bean", "com.tvd12.ezydata.mongodb.testing.bean")
+                .scan(Sets.newHashSet("com.tvd12.ezydata.mongodb.testing.bean"))
+                .repositoryInterface(PersonRepo2.class)
+                .repositoryInterface(Class.class)
+                .repositoryInterface(NothingInterface.class)
+                .repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
+                .repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
 
-		public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
-			super(clazz);
-		}
+        Map<Class<?>, Object> repos = implementer.implement(databaseContext);
+        System.out.println("repos: " + repos);
+    }
 
-		@Override
-		protected void setRepoComponent(Object repo, Object template) {
-		}
+    public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
 
-		@Override
-		protected Class<?> getSuperClass() {
-			return ExEzyMongoRepository.class;
-		}
-		
-	}
+        @Override
+        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+            return new ExEzySimpleRepositoryImplementer(itf);
+        }
+
+    }
+
+    public static class ExEzySimpleRepositoryImplementer extends EzyMongoRepositoryImplementer {
+
+        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
+            super(clazz);
+        }
+
+        @Override
+        protected void setRepoComponent(Object repo, Object template) {
+        }
+
+        @Override
+        protected Class<?> getSuperClass() {
+            return ExEzyMongoRepository.class;
+        }
+
+    }
 }

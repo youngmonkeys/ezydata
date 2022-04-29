@@ -4,6 +4,6 @@ import javax.persistence.EntityManager;
 
 public interface EzyEntityManagerAware {
 
-	void setEntityManager(EntityManager entityManager);
-	
+    void setEntityManager(EntityManager entityManager);
+
 }

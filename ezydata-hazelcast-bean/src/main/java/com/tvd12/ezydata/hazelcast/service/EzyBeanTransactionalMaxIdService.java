@@ -7,9 +7,9 @@ import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 @EzySingleton("maxIdService")
 public class EzyBeanTransactionalMaxIdService extends EzyTransactionalMaxIdService {
 
-	@EzyAutoBind
-	public EzyBeanTransactionalMaxIdService(HazelcastInstance hazelcastInstance) {
-		super(hazelcastInstance);
-	}
-	
+    @EzyAutoBind
+    public EzyBeanTransactionalMaxIdService(HazelcastInstance hazelcastInstance) {
+        super(hazelcastInstance);
+    }
+
 }

@@ -5,8 +5,8 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyMapNamesTest extends BaseTest {
 
-	public java.lang.Class<?> getTestClass() {
-		return EzyMapNames.class;
-	};
-	
+    public java.lang.Class<?> getTestClass() {
+        return EzyMapNames.class;
+    };
+
 }

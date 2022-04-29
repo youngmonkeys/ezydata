@@ -15,15 +15,15 @@ import lombok.Setter;
 @EzyCachedValue("ezydata_author3")
 public class CompositeAuthor {
 
-	@EzyCachedKey(composite = true)
-	private CompositeId id;
-	
-	private String name;
-	
-	@Getter
-	@Setter
-	public static class CompositeId {
-		private long id;
-	}
-	
+    @EzyCachedKey(composite = true)
+    private CompositeId id;
+
+    private String name;
+
+    @Getter
+    @Setter
+    public static class CompositeId {
+        private long id;
+    }
+
 }

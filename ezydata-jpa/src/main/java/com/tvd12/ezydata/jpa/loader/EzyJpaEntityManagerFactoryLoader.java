@@ -27,185 +27,185 @@ import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import lombok.AllArgsConstructor;
 
 public class EzyJpaEntityManagerFactoryLoader 
-		extends EzyDatabasePropertiesKeeper<EzyJpaEntityManagerFactoryLoader> {
+        extends EzyDatabasePropertiesKeeper<EzyJpaEntityManagerFactoryLoader> {
 
-	protected String jpaVersion = "2.2";
-	protected DataSource dataSource;
-	protected final Set<String> entityPackages = new HashSet<>();
-	protected final List<String> managedClassNames = new ArrayList<>();
-	protected final List<String> mappingFileNames = new ArrayList<>();
-	protected PersistenceUnitTransactionType transactionType = PersistenceUnitTransactionType.RESOURCE_LOCAL;
-	
-	
-	public EzyJpaEntityManagerFactoryLoader jpaVersion(String jpaVersion) {
-		this.jpaVersion = jpaVersion;
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader dataSource(DataSource dataSource) {
-		this.dataSource = dataSource;
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader transactionType(PersistenceUnitTransactionType transactionType) {
-		this.transactionType = transactionType;
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader mappingFileName(String mappingFileName) {
-		this.mappingFileNames.add(mappingFileName);
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader mappingFileName(Iterable<String> mappingFileNames) {
-		for(String mappingFileName : mappingFileNames)
-			mappingFileName(mappingFileName);
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader entityClass(Class<?> entityClass) {
-		this.managedClassNames.add(entityClass.getName());
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader entityClasses(Iterable<Class<?>> entityClasses) {
-		for(Class<?> entityClass : entityClasses)
-			entityClass(entityClass);
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader entityPackage(String entityPackage) {
-		this.entityPackages.add(entityPackage);
-		return this;
-	}
-	
-	public EzyJpaEntityManagerFactoryLoader entityPackages(Iterable<String> entityPackages) {
-		for(String entityPackage : entityPackages)
-			entityPackage(entityPackage);
-		return this;
-	}
+    protected String jpaVersion = "2.2";
+    protected DataSource dataSource;
+    protected final Set<String> entityPackages = new HashSet<>();
+    protected final List<String> managedClassNames = new ArrayList<>();
+    protected final List<String> mappingFileNames = new ArrayList<>();
+    protected PersistenceUnitTransactionType transactionType = PersistenceUnitTransactionType.RESOURCE_LOCAL;
 
-	public EntityManagerFactory load(String persistenceUnitName) {
-		scanEntityPackages();
-		return doLoad(persistenceUnitName);
-	}
-	
-	private EntityManagerFactory doLoad(String persistenceUnitName) {
-		EntityManagerFactory entityManagerFactory = null;
-		try {
-			entityManagerFactory = loadByHibernate(persistenceUnitName);
-		}
-		catch (Throwable e) {
-			logger.warn("can't load EntityManagerFactory by hibernate (you can disable this warning by config log level to ERROR)", e);
-		}
-		if(entityManagerFactory == null)
-			entityManagerFactory = loadByDefaultJpa(persistenceUnitName);
-		return entityManagerFactory;
-	}
 
-	private EntityManagerFactory loadByHibernate(String persistenceUnitName) {
-		PersistenceUnitInfo persistenceUnitInfo = 
-				new PersistenceUnitInfoImpl(persistenceUnitName);
-		HibernatePersistenceProvider persistenceProvider =
-				new HibernatePersistenceProvider();
-		return persistenceProvider
-				.createContainerEntityManagerFactory(
-						persistenceUnitInfo, 
-						Collections.EMPTY_MAP
-				);
-	}
-	
-	private EntityManagerFactory loadByDefaultJpa(String persistenceUnitName) {
-		return Persistence.createEntityManagerFactory(persistenceUnitName);
-	}
-	
-	private void scanEntityPackages() {
-		if(entityPackages.isEmpty())
-			return;
-		EzyReflection reflection = new EzyReflectionProxy(entityPackages);
-		entityClasses(reflection.getAnnotatedClasses(Entity.class));
-	}
+    public EzyJpaEntityManagerFactoryLoader jpaVersion(String jpaVersion) {
+        this.jpaVersion = jpaVersion;
+        return this;
+    }
 
-	@AllArgsConstructor
-	private class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
+    public EzyJpaEntityManagerFactoryLoader dataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        return this;
+    }
 
-		private final String persistenceUnitName; 
-		
-		@Override
-		public String getPersistenceUnitName() {
-			return persistenceUnitName;
-		}
+    public EzyJpaEntityManagerFactoryLoader transactionType(PersistenceUnitTransactionType transactionType) {
+        this.transactionType = transactionType;
+        return this;
+    }
 
-		@Override
-		public String getPersistenceProviderClassName() {
-			return HibernatePersistenceProvider.class.getName();
-		}
+    public EzyJpaEntityManagerFactoryLoader mappingFileName(String mappingFileName) {
+        this.mappingFileNames.add(mappingFileName);
+        return this;
+    }
 
-		@Override
-		public PersistenceUnitTransactionType getTransactionType() {
-			return transactionType;
-		}
+    public EzyJpaEntityManagerFactoryLoader mappingFileName(Iterable<String> mappingFileNames) {
+        for(String mappingFileName : mappingFileNames)
+            mappingFileName(mappingFileName);
+        return this;
+    }
 
-		@Override
-		public DataSource getJtaDataSource() {
-			return dataSource;
-		}
+    public EzyJpaEntityManagerFactoryLoader entityClass(Class<?> entityClass) {
+        this.managedClassNames.add(entityClass.getName());
+        return this;
+    }
 
-		@Override
-		public DataSource getNonJtaDataSource() {
-			return dataSource;
-		}
+    public EzyJpaEntityManagerFactoryLoader entityClasses(Iterable<Class<?>> entityClasses) {
+        for(Class<?> entityClass : entityClasses)
+            entityClass(entityClass);
+        return this;
+    }
 
-		@Override
-		public List<String> getMappingFileNames() {
-			return mappingFileNames;
-		}
+    public EzyJpaEntityManagerFactoryLoader entityPackage(String entityPackage) {
+        this.entityPackages.add(entityPackage);
+        return this;
+    }
 
-		@Override
-		public List<URL> getJarFileUrls() {
-			return Collections.emptyList();
-		}
+    public EzyJpaEntityManagerFactoryLoader entityPackages(Iterable<String> entityPackages) {
+        for(String entityPackage : entityPackages)
+            entityPackage(entityPackage);
+        return this;
+    }
 
-		@Override
-		public URL getPersistenceUnitRootUrl() { return null; }
+    public EntityManagerFactory load(String persistenceUnitName) {
+        scanEntityPackages();
+        return doLoad(persistenceUnitName);
+    }
 
-		@Override
-		public List<String> getManagedClassNames() {
-			return managedClassNames;
-		}
+    private EntityManagerFactory doLoad(String persistenceUnitName) {
+        EntityManagerFactory entityManagerFactory = null;
+        try {
+            entityManagerFactory = loadByHibernate(persistenceUnitName);
+        }
+        catch (Throwable e) {
+            logger.warn("can't load EntityManagerFactory by hibernate (you can disable this warning by config log level to ERROR)", e);
+        }
+        if(entityManagerFactory == null)
+            entityManagerFactory = loadByDefaultJpa(persistenceUnitName);
+        return entityManagerFactory;
+    }
 
-		@Override
-		public boolean excludeUnlistedClasses() { return false; }
+    private EntityManagerFactory loadByHibernate(String persistenceUnitName) {
+        PersistenceUnitInfo persistenceUnitInfo =
+                new PersistenceUnitInfoImpl(persistenceUnitName);
+        HibernatePersistenceProvider persistenceProvider =
+                new HibernatePersistenceProvider();
+        return persistenceProvider
+                .createContainerEntityManagerFactory(
+                        persistenceUnitInfo,
+                        Collections.EMPTY_MAP
+                );
+    }
 
-		@Override
-		public SharedCacheMode getSharedCacheMode() {
-			return SharedCacheMode.UNSPECIFIED;
-		}
+    private EntityManagerFactory loadByDefaultJpa(String persistenceUnitName) {
+        return Persistence.createEntityManagerFactory(persistenceUnitName);
+    }
 
-		@Override
-		public ValidationMode getValidationMode() {
-			return ValidationMode.AUTO;
-		}
+    private void scanEntityPackages() {
+        if(entityPackages.isEmpty())
+            return;
+        EzyReflection reflection = new EzyReflectionProxy(entityPackages);
+        entityClasses(reflection.getAnnotatedClasses(Entity.class));
+    }
 
-		public Properties getProperties() {
-			return properties;
-		}
+    @AllArgsConstructor
+    private class PersistenceUnitInfoImpl implements PersistenceUnitInfo {
 
-		@Override
-		public String getPersistenceXMLSchemaVersion() {
-			return jpaVersion;
-		}
+        private final String persistenceUnitName;
 
-		@Override
-		public ClassLoader getClassLoader() {
-			return Thread.currentThread().getContextClassLoader();
-		}
+        @Override
+        public String getPersistenceUnitName() {
+            return persistenceUnitName;
+        }
 
-		@Override
-		public void addTransformer(ClassTransformer transformer) {}
+        @Override
+        public String getPersistenceProviderClassName() {
+            return HibernatePersistenceProvider.class.getName();
+        }
 
-		@Override
-		public ClassLoader getNewTempClassLoader() { return null; }
-	}
+        @Override
+        public PersistenceUnitTransactionType getTransactionType() {
+            return transactionType;
+        }
+
+        @Override
+        public DataSource getJtaDataSource() {
+            return dataSource;
+        }
+
+        @Override
+        public DataSource getNonJtaDataSource() {
+            return dataSource;
+        }
+
+        @Override
+        public List<String> getMappingFileNames() {
+            return mappingFileNames;
+        }
+
+        @Override
+        public List<URL> getJarFileUrls() {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public URL getPersistenceUnitRootUrl() { return null; }
+
+        @Override
+        public List<String> getManagedClassNames() {
+            return managedClassNames;
+        }
+
+        @Override
+        public boolean excludeUnlistedClasses() { return false; }
+
+        @Override
+        public SharedCacheMode getSharedCacheMode() {
+            return SharedCacheMode.UNSPECIFIED;
+        }
+
+        @Override
+        public ValidationMode getValidationMode() {
+            return ValidationMode.AUTO;
+        }
+
+        public Properties getProperties() {
+            return properties;
+        }
+
+        @Override
+        public String getPersistenceXMLSchemaVersion() {
+            return jpaVersion;
+        }
+
+        @Override
+        public ClassLoader getClassLoader() {
+            return Thread.currentThread().getContextClassLoader();
+        }
+
+        @Override
+        public void addTransformer(ClassTransformer transformer) {}
+
+        @Override
+        public ClassLoader getNewTempClassLoader() { return null; }
+    }
 
 }

@@ -15,21 +15,21 @@ import com.tvd12.ezyfox.reflect.EzyTypes;
 @SuppressWarnings("rawtypes")
 public final class EzyDatabaseTypes {
 
-	public static final Set<Class> DEFAULT_TYPES = defaultTypes();
-	
-	private EzyDatabaseTypes() {}
-	
-	private static Set<Class> defaultTypes() {
-		Set<Class> set = new HashSet<>();
-		set.addAll(EzyTypes.ALL_TYPES);
-		set.add(Date.class);
-		set.add(LocalDate.class);
-		set.add(LocalDateTime.class);
-		set.add(BigInteger.class);
-		set.add(BigDecimal.class);
-		set.add(UUID.class);
-		set.add(Class.class);
-		return Collections.unmodifiableSet(set);
-	}
-	
+    public static final Set<Class> DEFAULT_TYPES = defaultTypes();
+
+    private EzyDatabaseTypes() {}
+
+    private static Set<Class> defaultTypes() {
+        Set<Class> set = new HashSet<>();
+        set.addAll(EzyTypes.ALL_TYPES);
+        set.add(Date.class);
+        set.add(LocalDate.class);
+        set.add(LocalDateTime.class);
+        set.add(BigInteger.class);
+        set.add(BigDecimal.class);
+        set.add(UUID.class);
+        set.add(Class.class);
+        return Collections.unmodifiableSet(set);
+    }
+
 }

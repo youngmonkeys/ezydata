@@ -12,8 +12,8 @@ import lombok.Setter;
 @EzyIndexedData
 @EzyDataIndex("test1")
 public class Person2 {
-	
-	@EzyId
-	private long id;
-	
+
+    @EzyId
+    private long id;
+
 }

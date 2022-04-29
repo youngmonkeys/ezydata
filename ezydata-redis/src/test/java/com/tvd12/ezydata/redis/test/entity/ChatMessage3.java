@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @EzyObjectBinding
 public class ChatMessage3 {
 
-	private String message;
-	
+    private String message;
+
 }

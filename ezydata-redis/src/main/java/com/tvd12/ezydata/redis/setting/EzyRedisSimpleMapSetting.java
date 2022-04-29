@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class EzyRedisSimpleMapSetting implements EzyRedisMapSetting {
 
-	protected Class<?> keyType;
-	protected Class<?> valueType;
+    protected Class<?> keyType;
+    protected Class<?> valueType;
 
 }

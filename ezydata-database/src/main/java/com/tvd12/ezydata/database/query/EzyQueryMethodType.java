@@ -4,9 +4,9 @@ import lombok.Getter;
 
 public enum EzyQueryMethodType {
     
-	FIND("findBy"),
-	COUNT("countBy"),
-	DELETE("deleteBy");
+    FIND("findBy"),
+    COUNT("countBy"),
+    DELETE("deleteBy");
     
     @Getter
     private final String prefix;

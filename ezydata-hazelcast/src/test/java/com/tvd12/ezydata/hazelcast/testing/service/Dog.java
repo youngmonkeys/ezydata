@@ -12,17 +12,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dog implements Serializable {
-	private static final long serialVersionUID = -868330127693127237L;
+    private static final long serialVersionUID = -868330127693127237L;
 
-	private String name;
-	private int age;
-	
-	public void exception() {
-		throw new RuntimeException();
-	}
-	
-	public long exception2() {
-		throw new RuntimeException();
-	}
-	
+    private String name;
+    private int age;
+    
+    public void exception() {
+        throw new RuntimeException();
+    }
+    
+    public long exception2() {
+        throw new RuntimeException();
+    }
+    
 }

@@ -15,11 +15,11 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity(value = "ezyfox.mongodb.testing.chicken", noClassnameStored = true)
 public class Chickend {
-	@Id
-	private Long id = (long) ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-	private String name = "cat#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-	
-	public Chickend(Long id) {
-		this.id = id;
-	}
+    @Id
+    private Long id = (long) ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+    private String name = "cat#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+
+    public Chickend(Long id) {
+        this.id = id;
+    }
 }

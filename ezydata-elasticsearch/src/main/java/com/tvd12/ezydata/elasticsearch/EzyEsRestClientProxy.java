@@ -15,26 +15,26 @@ import lombok.Getter;
 
 public class EzyEsRestClientProxy implements EzyEsClientProxy {
 
-	@Getter
-	protected final RestHighLevelClient elasticsearchClient;
-	
-	public EzyEsRestClientProxy(RestHighLevelClient elasticsearchClient) {
-		this.elasticsearchClient = elasticsearchClient;
-	}
-	
-	@Override
-	public BulkResponse bulk(BulkRequest bulkRequest, RequestOptions options) throws IOException {
-		return elasticsearchClient.bulk(bulkRequest, options);
-	}
-	
-	@Override
-	public IndexResponse index(IndexRequest indexRequest, RequestOptions options) throws IOException {
-		return elasticsearchClient.index(indexRequest, options);
-	}
-	
-	@Override
-	public SearchResponse search(SearchRequest searchRequest, RequestOptions options) throws IOException {
-		return elasticsearchClient.search(searchRequest, options);
-	}
-	
+    @Getter
+    protected final RestHighLevelClient elasticsearchClient;
+
+    public EzyEsRestClientProxy(RestHighLevelClient elasticsearchClient) {
+        this.elasticsearchClient = elasticsearchClient;
+    }
+
+    @Override
+    public BulkResponse bulk(BulkRequest bulkRequest, RequestOptions options) throws IOException {
+        return elasticsearchClient.bulk(bulkRequest, options);
+    }
+
+    @Override
+    public IndexResponse index(IndexRequest indexRequest, RequestOptions options) throws IOException {
+        return elasticsearchClient.index(indexRequest, options);
+    }
+
+    @Override
+    public SearchResponse search(SearchRequest searchRequest, RequestOptions options) throws IOException {
+        return elasticsearchClient.search(searchRequest, options);
+    }
+
 }

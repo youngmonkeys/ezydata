@@ -17,40 +17,40 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyAbstractHazelcastFactoryTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyAbstractHazelcastFactory factory = new EzyAbstractHazelcastFactory() {
-			@Override
-			protected EzyMapstoreCreator newMapstoreCreator() {
-				return new EzyMapstoreCreator() {
-					
-					@Override
-					public Set<String> getMapNames() {
-						return Sets.newHashSet("example_users", EzyMapNames.MAX_ID);
-					}
-					
-					@SuppressWarnings("rawtypes")
-					@Override
-					public MapStore create(String mapName, Properties properties) {
-						if(mapName.equals("example_users"))
-							return new ExampleUserMapstore();
-						return new EzyAbstractMapstore() {
+    @Test
+    public void test() {
+        EzyAbstractHazelcastFactory factory = new EzyAbstractHazelcastFactory() {
+            @Override
+            protected EzyMapstoreCreator newMapstoreCreator() {
+                return new EzyMapstoreCreator() {
 
-							@Override
-							public void store(Object key, Object value) {
-							}
+                    @Override
+                    public Set<String> getMapNames() {
+                        return Sets.newHashSet("example_users", EzyMapNames.MAX_ID);
+                    }
 
-							@Override
-							public Object load(Object key) {
-								return null;
-							}
-							
-						};
-					}
-				};
-			}
-		};
-		factory.newHazelcast(new Config());
-	}
-	
+                    @SuppressWarnings("rawtypes")
+                    @Override
+                    public MapStore create(String mapName, Properties properties) {
+                        if(mapName.equals("example_users"))
+                            return new ExampleUserMapstore();
+                        return new EzyAbstractMapstore() {
+
+                            @Override
+                            public void store(Object key, Object value) {
+                            }
+
+                            @Override
+                            public Object load(Object key) {
+                                return null;
+                            }
+
+                        };
+                    }
+                };
+            }
+        };
+        factory.newHazelcast(new Config());
+    }
+
 }

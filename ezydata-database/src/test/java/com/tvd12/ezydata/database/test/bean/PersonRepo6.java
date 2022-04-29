@@ -8,8 +8,8 @@ import com.tvd12.ezyfox.database.annotation.EzyRepository;
 @EzyRepository
 public class PersonRepo6 extends DbRepository<Integer, Person> implements EzyDatabaseContextAware {
 
-	@Override
-	public void setDatabaseContext(EzyDatabaseContext context) {
-	}
+    @Override
+    public void setDatabaseContext(EzyDatabaseContext context) {
+    }
 
 }

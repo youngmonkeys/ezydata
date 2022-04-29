@@ -7,13 +7,13 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyTransactionTypeTest extends BaseTest {
 
-	@Test
-	public void test() {
-		assert EzyTransactionType.TWO_PHASE.getId() == 1;
-		assert EzyTransactionType.TWO_PHASE.getName().equals("TWO_PHASE");
-		assert EzyTransactionType.valueOf(1) == EzyTransactionType.TWO_PHASE;
-		EzyTransactionType.values();
-		assert EzyTransactionType.valueOf("TWO_PHASE") == EzyTransactionType.TWO_PHASE;
-	}
-	
+    @Test
+    public void test() {
+        assert EzyTransactionType.TWO_PHASE.getId() == 1;
+        assert EzyTransactionType.TWO_PHASE.getName().equals("TWO_PHASE");
+        assert EzyTransactionType.valueOf(1) == EzyTransactionType.TWO_PHASE;
+        EzyTransactionType.values();
+        assert EzyTransactionType.valueOf("TWO_PHASE") == EzyTransactionType.TWO_PHASE;
+    }
+    
 }

@@ -18,15 +18,15 @@ import com.tvd12.properties.file.reader.BaseFileReader;
  */
 public class EzySimpleMongoClientLoader extends EzyPropertiesMongoClientLoader {
     
-	protected InputStream inputStream;
-	
-	public EzySimpleMongoClientLoader configFile(String filePath) {
-		return inputStream(
-			EzyAnywayInputStreamLoader.builder()
-				.build()
-				.load(filePath)
-		);
-	}
+    protected InputStream inputStream;
+
+    public EzySimpleMongoClientLoader configFile(String filePath) {
+        return inputStream(
+            EzyAnywayInputStreamLoader.builder()
+                .build()
+                .load(filePath)
+        );
+    }
     
     public EzySimpleMongoClientLoader inputStream(InputStream inputStream) {
         this.inputStream = inputStream;
@@ -46,8 +46,8 @@ public class EzySimpleMongoClientLoader extends EzyPropertiesMongoClientLoader {
     
     @Override
     protected void preload() {
-    	if(inputStream != null)
-    		this.properties.putAll(loadInputStream());
+        if(inputStream != null)
+            this.properties.putAll(loadInputStream());
     }
     
     private Properties loadInputStream() {

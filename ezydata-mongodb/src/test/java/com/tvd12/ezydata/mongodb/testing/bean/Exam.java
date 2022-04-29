@@ -14,12 +14,12 @@ import lombok.Data;
 @EzyCollection
 public class Exam {
 
-	@EzyId
-	private ObjectId id;
-	private ObjectId eventId;
-	private String content;
-	private List<ObjectId> refIds;
-	private BsonObjectId secondId;
-	
-	
+    @EzyId
+    private ObjectId id;
+    private ObjectId eventId;
+    private String content;
+    private List<ObjectId> refIds;
+    private BsonObjectId secondId;
+
+
 }

@@ -6,5 +6,5 @@ import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 
 @EzyAutoImpl
 abstract class PigRepo3 implements EzyMongoRepository<Long, Pig> {
-	
+
 }

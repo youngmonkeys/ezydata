@@ -12,26 +12,26 @@ import static org.mockito.Mockito.*;
 
 public class EzyJedisProxyTest {
 
-	@Test
-	public void subscribeTest() {
-		// given
-		Jedis jedis = mock(Jedis.class);
-		doNothing().when(jedis).subscribe(any(BinaryJedisPubSub.class), any(byte[].class));
-		doNothing().when(jedis).close();
-		when(jedis.toString()).thenReturn("jedis");
-		EzyJedisProxy sut = new EzyJedisProxy(jedis);
-		
-		// when
-		sut.subscribe("testChannel".getBytes(), new EzyRedisSubscriber() {
-			
-			@Override
-			public void onMessage(byte[] channel, byte[] messageBytes) {
-			}
-		});
-		
-		// then
-		sut.close();
-		System.out.println(sut.toString());
-	}
-	
+    @Test
+    public void subscribeTest() {
+        // given
+        Jedis jedis = mock(Jedis.class);
+        doNothing().when(jedis).subscribe(any(BinaryJedisPubSub.class), any(byte[].class));
+        doNothing().when(jedis).close();
+        when(jedis.toString()).thenReturn("jedis");
+        EzyJedisProxy sut = new EzyJedisProxy(jedis);
+
+        // when
+        sut.subscribe("testChannel".getBytes(), new EzyRedisSubscriber() {
+
+            @Override
+            public void onMessage(byte[] channel, byte[] messageBytes) {
+            }
+        });
+
+        // then
+        sut.close();
+        System.out.println(sut.toString());
+    }
+
 }

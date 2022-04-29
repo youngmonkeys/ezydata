@@ -5,9 +5,9 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyHazelcastConfigsTest extends BaseTest {
 
-	@Override
-	public Class<?> getTestClass() {
-		return EzyHazelcastConfigs.class;
-	}
-	
+    @Override
+    public Class<?> getTestClass() {
+        return EzyHazelcastConfigs.class;
+    }
+    
 }

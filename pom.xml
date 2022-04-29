@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.tvd12</groupId>
-		<artifactId>ezyfox</artifactId>
-		<version>1.0.3</version>
-	</parent>
-	<artifactId>ezydata</artifactId>
-    <version>1.2.2</version>
-	<packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.tvd12</groupId>
+        <artifactId>ezyfox</artifactId>
+        <version>1.0.3</version>
+    </parent>
+    <artifactId>ezydata</artifactId>
+    <version>1.2.3</version>
+    <packaging>pom</packaging>
 
-	<name>ezydata</name>
-	<url>https://youngmonkeys.org/project/ezydata/</url>
-	<description>
-		Support for data, memory caching and database interaction 
-	</description>
+    <name>ezydata</name>
+    <url>https://youngmonkeys.org/project/ezydata/</url>
+    <description>
+        Support for data, memory caching and database interaction
+    </description>
 
-	<organization>
-		<name>Young Monkeys</name>
-		<url>https://youngmonkeys.org/</url>
-	</organization>
+    <organization>
+        <name>Young Monkeys</name>
+        <url>https://youngmonkeys.org/</url>
+    </organization>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<scm>
-		<connection>scm:git:git@github.com:youngmonkeys/ezydata.git</connection>
-		<developerConnection>scm:git:git@github.com:youngmonkeys/ezydata.git</developerConnection>
-		<url>https://github.com/youngmonkeys/ezydata</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git@github.com:youngmonkeys/ezydata.git</connection>
+        <developerConnection>scm:git:git@github.com:youngmonkeys/ezydata.git</developerConnection>
+        <url>https://github.com/youngmonkeys/ezydata</url>
+    </scm>
 
-	<issueManagement>
-		<system>Github</system>
-		<url>https://github.com/youngmonkeys/ezydata/issues</url>
-	</issueManagement>
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/youngmonkeys/ezydata/issues</url>
+    </issueManagement>
 
-	<ciManagement>
-		<system>travis</system>
-		<url>https://travis-ci.org/youngmonkeys/ezydata</url>
-	</ciManagement>
+    <ciManagement>
+        <system>travis</system>
+        <url>https://travis-ci.org/youngmonkeys/ezydata</url>
+    </ciManagement>
 
-	<pluginRepositories>
-		<pluginRepository>
-			<id>oss.sonatype.org</id>
-			<url>https://oss.sonatype.org/content/groups/public</url>
-		</pluginRepository>
-	</pluginRepositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>oss.sonatype.org</id>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<developers>
-		<developer>
-			<name>Ta Van Dung</name>
-			<email>itprono3@gmail.com</email>
-			<organization>Young Monkeys</organization>
-			<organizationUrl>http://www.youngmonkeys.org</organizationUrl>
-		</developer>
-	</developers>
+    <developers>
+        <developer>
+            <name>Ta Van Dung</name>
+            <email>itprono3@gmail.com</email>
+            <organization>Young Monkeys</organization>
+            <organizationUrl>http://www.youngmonkeys.org</organizationUrl>
+        </developer>
+    </developers>
   <modules>
     <module>ezydata-mongodb</module>
     <module>ezydata-morphia</module>

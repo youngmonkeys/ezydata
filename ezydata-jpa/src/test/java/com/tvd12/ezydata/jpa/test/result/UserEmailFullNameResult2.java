@@ -10,12 +10,12 @@ import lombok.ToString;
 @Setter
 @ToString
 @NamedNativeQuery(
-		name = "FindListOfUserEmailFullName2",
-		query = "select e.email, e.fullName from User e"
+        name = "FindListOfUserEmailFullName2",
+        query = "select e.email, e.fullName from User e"
 )
 public class UserEmailFullNameResult2 {
 
-	protected String email;
-	protected String fullName;
-	
+    protected String email;
+    protected String fullName;
+
 }

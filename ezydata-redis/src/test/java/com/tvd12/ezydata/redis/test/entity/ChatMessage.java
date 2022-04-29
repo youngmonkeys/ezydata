@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @EzyRedisMessage("ezydata_chat_message")
 public class ChatMessage {
 
-	private String message;
-	
+    private String message;
+
 }

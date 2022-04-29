@@ -13,7 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class DuckId {
 
-	private int type;
-	private String name;
-	
+    private int type;
+    private String name;
+
 }

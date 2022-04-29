@@ -12,14 +12,14 @@ import lombok.ToString;
 @Setter
 @ToString
 @NamedQuery(
-		name = "FindListOfUserEmailFullName",
-		query = "select e.email, e.fullName from User e"
+        name = "FindListOfUserEmailFullName",
+        query = "select e.email, e.fullName from User e"
 )
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEmailFullNameResult {
 
-	protected String email;
-	protected String fullName;
-	
+    protected String email;
+    protected String fullName;
+
 }
