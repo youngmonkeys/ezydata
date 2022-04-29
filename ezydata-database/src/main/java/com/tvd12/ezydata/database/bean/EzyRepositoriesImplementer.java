@@ -1,11 +1,11 @@
 package com.tvd12.ezydata.database.bean;
 
-import java.util.Map;
-
 import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.reflect.EzyReflection;
+
+import java.util.Map;
 
 public interface EzyRepositoriesImplementer {
 

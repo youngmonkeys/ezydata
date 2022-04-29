@@ -1,10 +1,10 @@
 package com.tvd12.ezydata.database;
 
-import java.util.List;
-import java.util.Map;
-
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezyfox.util.EzyCloseable;
+
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("rawtypes")
 public interface EzyDatabaseContext extends EzyCloseable {

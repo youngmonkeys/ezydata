@@ -1,37 +1,35 @@
 package com.tvd12.ezydata.database.bean;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
-import com.tvd12.ezydata.database.query.EzyQueryEntity;
-import com.tvd12.ezydata.database.query.EzyQueryMethod;
-import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
-import com.tvd12.ezydata.database.query.EzyQueryRegister;
-import com.tvd12.ezydata.database.query.EzyQueryString;
+import com.tvd12.ezydata.database.query.*;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
-import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.asm.EzyInstruction;
+import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.io.EzyStrings;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.reflect.EzyMethods;
 import com.tvd12.ezyfox.util.EzyLoggable;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @SuppressWarnings("rawtypes")
 public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 
+    protected static final AtomicInteger COUNT = new AtomicInteger(0);
+    @Setter
+    protected static boolean debug;
     protected final EzyClass clazz;
     protected Class<?> idType;
     protected Class<?> entityType;
@@ -41,9 +39,6 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     protected EzyQueryMethodConverter queryMethodConverter;
     @Setter
     protected EzyDatabaseRepositoryWrapper repositoryWrapper;
-    @Setter
-    protected static boolean debug;
-    protected static final AtomicInteger COUNT = new AtomicInteger(0);
 
     public EzyAbstractRepositoryImplementer(Class<?> clazz) {
         this(new EzyClass(clazz));
@@ -57,8 +52,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
         try {
             this.preimplement(template);
             return doimplement(template);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             throw new IllegalStateException("error on repo interface: " + clazz.getName(), e);
         }
     }
@@ -74,7 +68,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
         CtClass implClass = pool.makeClass(implClassName);
         EzyClass superClass = new EzyClass(getSuperClass());
         implClass.setSuperclass(pool.get(superClass.getName()));
-        for(EzyMethod method : getAbstractMethods()) {
+        for (EzyMethod method : getAbstractMethods()) {
             registerQuery(method);
             String methodContent = makeAbstractMethodContent(method);
             printMethodContent(methodContent);
@@ -83,13 +77,13 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
         String getEntityTypeMethodContent = makeGetEntityTypeMethodContent(entityType);
         printMethodContent(getEntityTypeMethodContent);
         implClass.addMethod(CtNewMethod.make(getEntityTypeMethodContent, implClass));
-        implClass.setInterfaces(new CtClass[] { pool.get(clazz.getName()) });
+        implClass.setInterfaces(new CtClass[]{pool.get(clazz.getName())});
         Class answerClass = implClass.toClass();
         implClass.detach();
         Object repo = answerClass.newInstance();
-        if(template instanceof EzyDatabaseContext) {
+        if (template instanceof EzyDatabaseContext) {
             if (repo instanceof EzyDatabaseContextAware) {
-                ((EzyDatabaseContextAware)repo).setDatabaseContext((EzyDatabaseContext) template);
+                ((EzyDatabaseContextAware) repo).setDatabaseContext((EzyDatabaseContext) template);
             }
         }
         setRepoComponent(repo, template);
@@ -103,42 +97,50 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     }
 
     protected boolean isAbstractMethod(EzyMethod method) {
-        if(method.isAnnotated(EzyQuery.class))
+        if (method.isAnnotated(EzyQuery.class)) {
             return true;
-        if(isAutoImplementMethod(method))
+        }
+        if (isAutoImplementMethod(method)) {
             return true;
+        }
         return false;
     }
 
     protected boolean isAutoImplementMethod(EzyMethod method) {
-        for(EzyMethod defMethod : EzyDatabaseRepository.CLASS.getMethods()) {
-            if(method.equals(defMethod))
+        for (EzyMethod defMethod : EzyDatabaseRepository.CLASS.getMethods()) {
+            if (method.equals(defMethod)) {
                 return false;
-            if(EzyMethods.isOverriddenMethod(method, defMethod))
+            }
+            if (EzyMethods.isOverriddenMethod(method, defMethod)) {
                 return false;
+            }
         }
         return true;
     }
 
     protected void registerQuery(EzyMethod method) {
-        if(queryManager == null)
+        if (queryManager == null) {
             return;
+        }
         EzyQuery queryAnno = method.getAnnotation(EzyQuery.class);
-        if(queryAnno == null)
+        if (queryAnno == null) {
             return;
+        }
         String queryValue = queryAnno.value();
-        if(EzyStrings.isNoContent(queryValue))
+        if (EzyStrings.isNoContent(queryValue)) {
             return;
+        }
         String queryName = queryAnno.name();
-        if(EzyStrings.isNoContent(queryName))
+        if (EzyStrings.isNoContent(queryName)) {
             queryName = method.toString();
+        }
         EzyQueryEntity queryEntity = EzyQueryEntity.builder()
-                .name(queryName)
-                .type(queryAnno.type())
-                .value(queryValue)
-                .nativeQuery(queryAnno.nativeQuery())
-                .resultType(queryAnno.resultType())
-                .build();
+            .name(queryName)
+            .type(queryAnno.type())
+            .value(queryValue)
+            .nativeQuery(queryAnno.nativeQuery())
+            .resultType(queryAnno.resultType())
+            .build();
         queryManager.addQuery(queryEntity);
     }
 
@@ -149,21 +151,24 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 
     protected EzyQueryString getQueryString(EzyMethod method) {
         EzyQuery anno = method.getAnnotation(EzyQuery.class);
-        if(anno != null)
+        if (anno != null) {
             return getQueryString(method, anno);
+        }
         return convertQueryMethodToQueryString(method);
     }
 
     protected EzyQueryString getQueryString(EzyMethod method, EzyQuery queryAnnotation) {
         String queryString = queryAnnotation.value();
         boolean nativeQuery = queryAnnotation.nativeQuery();
-        if(EzyStrings.isNoContent(queryString)) {
+        if (EzyStrings.isNoContent(queryString)) {
             String queryName = queryAnnotation.name();
-            if(EzyStrings.isNoContent(queryName))
+            if (EzyStrings.isNoContent(queryName)) {
                 throw new IllegalArgumentException("query name can not be null on method: " + method.getName());
+            }
             EzyQueryEntity query = queryManager.getQuery(queryName);
-            if(query == null)
+            if (query == null) {
                 throw new IllegalArgumentException("not found query with name: " + queryName + " on method: " + method.getName());
+            }
             queryString = query.getValue();
             nativeQuery = query.isNativeQuery();
         }
@@ -182,17 +187,18 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     protected Class<?> getResultType(EzyMethod method) {
         Class<?> resultType = Object.class;
         EzyQuery anno = method.getAnnotation(EzyQuery.class);
-        if(anno != null)
+        if (anno != null) {
             resultType = anno.resultType();
-        if(resultType == Object.class) {
+        }
+        if (resultType == Object.class) {
             resultType = method.getReturnType();
-            if(Iterable.class.isAssignableFrom(resultType)) {
+            if (Iterable.class.isAssignableFrom(resultType)) {
                 try {
                     resultType = EzyGenerics.getOneGenericClassArgument(
                         method.getGenericReturnType()
                     );
+                } catch (Exception e) {
                 }
-                catch (Exception e) {}
             }
         }
         return resultType;
@@ -200,12 +206,12 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 
     protected String makeGetEntityTypeMethodContent(Class entityType) {
         return new EzyFunction(getEntityTypeMethod())
-                .body()
-                    .append(new EzyInstruction("\t", "\n")
-                            .answer()
-                            .clazz(entityType, true))
-                    .function()
-                .toString();
+            .body()
+            .append(new EzyInstruction("\t", "\n")
+                .answer()
+                .clazz(entityType, true))
+            .function()
+            .toString();
     }
 
     protected EzyMethod getEntityTypeMethod() {
@@ -228,8 +234,9 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     }
 
     protected void printMethodContent(String methodContent) {
-        if(debug)
+        if (debug) {
             logger.info("method content \n{}", methodContent);
+        }
     }
 
 }

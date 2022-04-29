@@ -1,22 +1,21 @@
 package com.tvd12.ezydata.database.query;
 
-import java.util.function.Function;
-
 import com.tvd12.ezydata.database.exception.EzyCreateQueryException;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.io.EzyStrings;
-
 import lombok.Getter;
+
+import java.util.function.Function;
 
 public class EzyQLQuery {
 
+    protected final static Object[] EMPTY_ARRAY = new Object[0];
     @Getter
     protected final String query;
     @Getter
     protected final String value;
     protected final Object[] parameters;
     protected final Function<Object, Object> parameterConveter;
-    protected final static Object[] EMPTY_ARRAY = new Object[0];
 
     protected EzyQLQuery(Builder builder) {
         this.query = builder.query;
@@ -25,11 +24,14 @@ public class EzyQLQuery {
         this.value = createValue();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     protected String createValue() {
         try {
             return EzyStrings.replace(query, parameters, parameterConveter);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new EzyCreateQueryException("can not create query", e);
         }
     }
@@ -40,14 +42,10 @@ public class EzyQLQuery {
 
     public String toString() {
         return new StringBuilder()
-                .append("query: ").append(query).append("\n")
-                .append("parameters: ").append(EzyStrings.join(parameters, ",")).append("\n")
-                .append("value: ").append(value)
-                .toString();
-    }
-
-    public static Builder builder() {
-        return new Builder();
+            .append("query: ").append(query).append("\n")
+            .append("parameters: ").append(EzyStrings.join(parameters, ",")).append("\n")
+            .append("value: ").append(value)
+            .toString();
     }
 
     public static class Builder implements EzyBuilder<EzyQLQuery> {
@@ -62,48 +60,48 @@ public class EzyQLQuery {
         }
 
         public Builder parameterCount(int count) {
-            if(parameters == null) {
+            if (parameters == null) {
                 parameters = new Object[count];
-            }
-            else if(parameters.length < count) {
+            } else if (parameters.length < count) {
                 Object[] old = parameters;
                 parameters = new Object[count];
-                for(int i = 0 ; i < old.length ; ++i)
+                for (int i = 0; i < old.length; ++i) {
                     parameters[i] = old[i];
+                }
             }
             return this;
         }
 
         public Builder parameter(int index, boolean value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, byte value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, char value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, double value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, float value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, int value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, long value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, short value) {
-            return parameter(index, (Object)value);
+            return parameter(index, (Object) value);
         }
 
         public Builder parameter(int index, Object value) {

@@ -1,19 +1,22 @@
 package com.tvd12.ezydata.database.query;
 
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tvd12.ezyfox.builder.EzyBuilder;
-
-import lombok.Getter;
 
 @Getter
 public class EzyQueryConditionChain {
     protected final List<EzyQueryConditionGroup> conditionGroups;
 
     public EzyQueryConditionChain(
-            List<EzyQueryConditionGroup> conditionGroups) {
+        List<EzyQueryConditionGroup> conditionGroups) {
         this.conditionGroups = conditionGroups;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public int size() {
@@ -22,12 +25,8 @@ public class EzyQueryConditionChain {
 
     public int getParameterCount() {
         return conditionGroups.stream()
-                .mapToInt(it -> it.size())
-                .sum();
-    }
-
-    public static Builder builder() {
-        return new Builder();
+            .mapToInt(it -> it.size())
+            .sum();
     }
 
     public static class Builder implements EzyBuilder<EzyQueryConditionChain> {

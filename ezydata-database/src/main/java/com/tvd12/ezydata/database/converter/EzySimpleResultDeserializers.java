@@ -1,15 +1,15 @@
 package com.tvd12.ezydata.database.converter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.tvd12.ezydata.database.reflect.EzyDatabaseTypes;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings("rawtypes")
-public class EzySimpleResultDeserializers 
-        extends EzyLoggable
-        implements EzyResultDeserializers {
+public class EzySimpleResultDeserializers
+    extends EzyLoggable
+    implements EzyResultDeserializers {
 
     protected final Map<Class<?>, EzyResultDeserializer> deserializers;
 
@@ -20,8 +20,9 @@ public class EzySimpleResultDeserializers
     @Override
     public Object deserialize(Object data, Class<?> resultType) {
         EzyResultDeserializer deserializer = deserializers.get(resultType);
-        if(deserializer == null)
+        if (deserializer == null) {
             throw new IllegalArgumentException("has no deserializer with type: " + resultType.getName());
+        }
         Object answer = deserializer.deserialize(data);
         return answer;
     }
@@ -38,14 +39,16 @@ public class EzySimpleResultDeserializers
     }
 
     public void addDeserializer(Class<?> resultType, EzyResultDeserializer deserializer) {
-        if(!deserializers.containsKey(resultType))
+        if (!deserializers.containsKey(resultType)) {
             deserializers.put(resultType, deserializer);
+        }
     }
 
     protected Map<Class<?>, EzyResultDeserializer> defaultDeserializers() {
         Map<Class<?>, EzyResultDeserializer> map = new HashMap<>();
-        for(Class<?> type : EzyDatabaseTypes.DEFAULT_TYPES)
+        for (Class<?> type : EzyDatabaseTypes.DEFAULT_TYPES) {
             map.put(type, EzyResultDeserializer.DEFAULT);
+        }
         return map;
     }
 

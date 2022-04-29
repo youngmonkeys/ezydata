@@ -1,14 +1,5 @@
 package com.tvd12.ezydata.database.bean;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
@@ -21,9 +12,13 @@ import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 public abstract class EzyAbstractRepositoriesImplementer
-        extends EzyLoggable
-        implements EzyRepositoriesImplementer {
+    extends EzyLoggable
+    implements EzyRepositoriesImplementer {
 
     protected Set<String> packagesToScan;
     protected Set<Class<?>> autoImplInterfaces;
@@ -49,21 +44,20 @@ public abstract class EzyAbstractRepositoriesImplementer
     }
 
     public EzyRepositoriesImplementer scan(Iterable<String> packageNames) {
-        for(String packageName : packageNames)
+        for (String packageName : packageNames) {
             this.scan(packageName);
+        }
         return this;
     }
 
     @Override
     public EzyRepositoriesImplementer repositoryInterface(Class<?> itf) {
-        if(!Modifier.isInterface(itf.getModifiers())) {
+        if (!Modifier.isInterface(itf.getModifiers())) {
             logger.warn("class {} is not an interface, ignore its", itf.getSimpleName());
-        }
-        else if(!getBaseRepositoryInterface().isAssignableFrom(itf)) {
+        } else if (!getBaseRepositoryInterface().isAssignableFrom(itf)) {
             logger.warn("interface {} doestn't extends {}, ignore its",
                 itf.getSimpleName(), getBaseRepositoryInterface().getSimpleName());
-        }
-        else {
+        } else {
             autoImplInterfaces.add(itf);
         }
         return this;
@@ -76,15 +70,17 @@ public abstract class EzyAbstractRepositoriesImplementer
 
     @Override
     public EzyRepositoriesImplementer repositoryInterfaces(Iterable<Class<?>> itfs) {
-        for(Class<?> itf : itfs)
+        for (Class<?> itf : itfs) {
             this.repositoryInterface(itf);
+        }
         return this;
     }
 
     @Override
     public EzyRepositoriesImplementer repositoryInterfaces(EzyReflection reflection) {
-        if(reflection != null)
+        if (reflection != null) {
             this.reflections.add(reflection);
+        }
         return this;
     }
 
@@ -111,7 +107,7 @@ public abstract class EzyAbstractRepositoriesImplementer
         Collection<Class<?>> scannedInterfaces = getAutoImplRepoInterfaces();
         autoImplInterfaces.addAll(scannedInterfaces);
         Map<Class<?>, Object> repositories = new ConcurrentHashMap<>();
-        for(Class<?> itf : autoImplInterfaces) {
+        for (Class<?> itf : autoImplInterfaces) {
             Object repo = implementRepoInterface(itf, template);
             repositories.put(itf, repo);
         }
@@ -129,12 +125,13 @@ public abstract class EzyAbstractRepositoriesImplementer
     protected abstract EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf);
 
     private Collection<Class<?>> getAutoImplRepoInterfaces() {
-        if(packagesToScan.size() > 0)
+        if (packagesToScan.size() > 0) {
             reflections.add(new EzyReflectionProxy(packagesToScan));
+        }
         Set<Class<?>> classes = new HashSet<>();
         Class<?> baseInterface = getBaseRepositoryInterface();
-        for(Object item : reflections) {
-            EzyReflection reflection = (EzyReflection)item;
+        for (Object item : reflections) {
+            EzyReflection reflection = (EzyReflection) item;
             classes.addAll(reflection.getExtendsClasses(baseInterface));
         }
         return EzySets.filter(classes, clazz -> this.isAutoImplRepoInterface(clazz));
@@ -146,10 +143,8 @@ public abstract class EzyAbstractRepositoriesImplementer
 
     private boolean isAutoImplRepoInterface(Class<?> clazz) {
         return (clazz.isAnnotationPresent(EzyAutoImpl.class) ||
-                clazz.isAnnotationPresent(EzyRepository.class)) &&
-                Modifier.isPublic(clazz.getModifiers()) &&
-                Modifier.isInterface(clazz.getModifiers());
-
+            clazz.isAnnotationPresent(EzyRepository.class)) &&
+            Modifier.isPublic(clazz.getModifiers()) &&
+            Modifier.isInterface(clazz.getModifiers());
     }
-
 }

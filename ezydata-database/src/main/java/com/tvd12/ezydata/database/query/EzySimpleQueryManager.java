@@ -1,12 +1,12 @@
 package com.tvd12.ezydata.database.query;
 
+import com.tvd12.ezyfox.util.EzyLoggable;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tvd12.ezyfox.util.EzyLoggable;
-
-public class EzySimpleQueryManager 
-        extends EzyLoggable implements EzyQueryRegister {
+public class EzySimpleQueryManager
+    extends EzyLoggable implements EzyQueryRegister {
 
     protected final Map<String, EzyQueryEntity> queries;
 

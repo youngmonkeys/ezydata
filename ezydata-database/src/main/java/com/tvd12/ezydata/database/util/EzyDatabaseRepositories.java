@@ -12,15 +12,18 @@ public final class EzyDatabaseRepositories {
     public static String getRepoName(Class<?> repoType) {
         String repoName = "";
         EzyAutoImpl autoImplAnno = repoType.getAnnotation(EzyAutoImpl.class);
-        if(autoImplAnno != null)
+        if (autoImplAnno != null) {
             repoName = autoImplAnno.value();
-        if(EzyStrings.isNoContent(repoName)) {
-            EzyRepository repositoryAnno = repoType.getAnnotation(EzyRepository.class);
-            if(repositoryAnno != null)
-                repoName = repositoryAnno.value();
         }
-        if(EzyStrings.isNoContent(repoName))
+        if (EzyStrings.isNoContent(repoName)) {
+            EzyRepository repositoryAnno = repoType.getAnnotation(EzyRepository.class);
+            if (repositoryAnno != null) {
+                repoName = repositoryAnno.value();
+            }
+        }
+        if (EzyStrings.isNoContent(repoName)) {
             repoName = EzyClasses.getVariableName(repoType);
+        }
         return repoName;
     }
 

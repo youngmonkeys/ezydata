@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.database.test.query;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.database.query.EzyQueryOperation;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
 
 public class EzyQueryOperationTest {
 

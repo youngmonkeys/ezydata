@@ -1,14 +1,13 @@
 package com.tvd12.ezydata.database.test.bean;
 
-import java.util.Map;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.Map;
 
 public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 
@@ -16,14 +15,14 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
     public void test() {
         EzyAbstractRepositoryImplementer.setDebug(true);
         EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
-                .scan("com.tvd12.ezydata.database.test.bean")
-                .scan("com.tvd12.ezydata.database.test.bean", "com.tvd12.ezydata.database.test.bean")
-                .scan(Sets.newHashSet("com.tvd12.ezydata.database.test.bean"))
-                .repositoryInterface(PersonRepo2.class)
-                .repositoryInterface(Class.class)
-                .repositoryInterface(NothingInterface.class)
-                .repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
-                .repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
+            .scan("com.tvd12.ezydata.database.test.bean")
+            .scan("com.tvd12.ezydata.database.test.bean", "com.tvd12.ezydata.database.test.bean")
+            .scan(Sets.newHashSet("com.tvd12.ezydata.database.test.bean"))
+            .repositoryInterface(PersonRepo2.class)
+            .repositoryInterface(Class.class)
+            .repositoryInterface(NothingInterface.class)
+            .repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
+            .repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
 
         MongoTemplate template = new MongoTemplate();
         Map<Class<?>, Object> repos = implementer.implement(template);

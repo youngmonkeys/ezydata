@@ -1,16 +1,12 @@
 package com.tvd12.ezydata.database.reflect;
 
+import com.tvd12.ezyfox.reflect.EzyTypes;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import com.tvd12.ezyfox.reflect.EzyTypes;
+import java.util.*;
 
 @SuppressWarnings("rawtypes")
 public final class EzyDatabaseTypes {

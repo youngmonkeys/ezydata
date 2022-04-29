@@ -1,22 +1,21 @@
 package com.tvd12.ezydata.database.test;
 
+import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.query.EzyQueryEntity;
+import org.testng.annotations.Test;
+
 import java.util.List;
 import java.util.Map;
 
-import org.testng.annotations.Test;
-
-import com.tvd12.ezydata.database.EzyDatabaseContext;
-import com.tvd12.ezydata.database.query.EzyQueryEntity;
-
 public class EzyDatabaseContextTest {
-    
+
     @Test
     public void closeTest() {
         InternalContext sut = new InternalContext();
         sut.close();
     }
 
-    
+
     private static class InternalContext implements EzyDatabaseContext {
 
         @Override
@@ -55,6 +54,6 @@ public class EzyDatabaseContextTest {
         public List deserializeResultList(Object result, Class<?> resultItemType) {
             return null;
         }
-        
+
     }
 }

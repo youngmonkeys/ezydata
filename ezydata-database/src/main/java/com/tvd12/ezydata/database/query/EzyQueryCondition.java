@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class EzyQueryCondition {
-    
+
     protected String field;
     protected EzyQueryOperation operation;
 
@@ -14,7 +14,7 @@ public class EzyQueryCondition {
         String field = str;
         EzyQueryOperation operation = EzyQueryOperation.EQUAL;
         for (EzyQueryOperation it : EzyQueryOperation.notIncludeEqualValues()) {
-            if(str.endsWith(it.getTag())) {
+            if (str.endsWith(it.getTag())) {
                 field = str.substring(0, str.length() - it.getTag().length());
                 operation = it;
                 break;

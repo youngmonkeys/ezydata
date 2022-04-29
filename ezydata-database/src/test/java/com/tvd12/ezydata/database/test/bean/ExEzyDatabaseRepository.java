@@ -1,14 +1,14 @@
 package com.tvd12.ezydata.database.test.bean;
 
-import java.util.Collection;
-import java.util.List;
-
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 
-public class ExEzyDatabaseRepository 
-        implements EzyDatabaseRepository<Integer, Person>, EzyDatabaseContextAware {
+import java.util.Collection;
+import java.util.List;
+
+public class ExEzyDatabaseRepository
+    implements EzyDatabaseRepository<Integer, Person>, EzyDatabaseContextAware {
 
     @Override
     public void setDatabaseContext(EzyDatabaseContext context) {

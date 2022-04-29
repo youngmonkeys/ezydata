@@ -1,9 +1,9 @@
 package com.tvd12.ezydata.database.test;
 
+import com.tvd12.ezydata.database.EzyDatabaseRepository;
+
 import java.util.Collection;
 import java.util.List;
-
-import com.tvd12.ezydata.database.EzyDatabaseRepository;
 
 public class BaseDbRepository<I, E> implements EzyDatabaseRepository<I, E> {
 

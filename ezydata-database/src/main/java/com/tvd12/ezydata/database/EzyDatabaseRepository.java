@@ -4,9 +4,9 @@ import com.tvd12.ezyfox.database.repository.EzyEmptyRepository;
 import com.tvd12.ezyfox.database.service.EzyCrudService;
 import com.tvd12.ezyfox.reflect.EzyClass;
 
-public interface EzyDatabaseRepository<I, E> extends 
-        EzyEmptyRepository<I, E>,
-        EzyCrudService<I, E> {
+public interface EzyDatabaseRepository<I, E> extends
+    EzyEmptyRepository<I, E>,
+    EzyCrudService<I, E> {
 
     String PREFIX_FIND = "find";
     String PREFIX_FETCH = "fetch";
