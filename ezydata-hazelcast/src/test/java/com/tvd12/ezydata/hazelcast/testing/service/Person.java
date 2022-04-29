@@ -16,14 +16,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "name")
 public class Person implements EzyHasIdEntity<String>, Serializable {
-	private static final long serialVersionUID = -3967779291148509736L;
-	
-	private String name;
-	private int age;
-	
-	@Override
-	public String getId() {
-		return name;
-	}
-	
+    private static final long serialVersionUID = -3967779291148509736L;
+
+    private String name;
+    private int age;
+
+    @Override
+    public String getId() {
+        return name;
+    }
+
 }

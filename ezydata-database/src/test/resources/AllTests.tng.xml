@@ -1,15 +1,15 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="AllTests">
-	<test name="All">
-		<packages>
-			<package name="com.tvd12.ezydata.database.test"></package>
-			<package name="com.tvd12.ezydata.database.test.bean"></package>
-			<package name="com.tvd12.ezydata.database.test.converter"></package>
-			<package name="com.tvd12.ezydata.database.test.reflect"></package>
-			<package name="com.tvd12.ezydata.database.test.naming"></package>
-			<package name="com.tvd12.ezydata.database.test.query"></package>
-			<package name="com.tvd12.ezydata.database.test.util"></package>
-		</packages>
-	</test>
+    <test name="All">
+        <packages>
+            <package name="com.tvd12.ezydata.database.test"></package>
+            <package name="com.tvd12.ezydata.database.test.bean"></package>
+            <package name="com.tvd12.ezydata.database.test.converter"></package>
+            <package name="com.tvd12.ezydata.database.test.reflect"></package>
+            <package name="com.tvd12.ezydata.database.test.naming"></package>
+            <package name="com.tvd12.ezydata.database.test.query"></package>
+            <package name="com.tvd12.ezydata.database.test.util"></package>
+        </packages>
+    </test>
 </suite>

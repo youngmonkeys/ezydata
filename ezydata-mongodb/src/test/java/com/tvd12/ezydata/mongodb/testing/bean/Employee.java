@@ -13,12 +13,12 @@ import lombok.ToString;
 @EzyCollection("test_mongo_employee")
 public class Employee {
 
-	@EzyId
-	private String employeeId;
-	private String firstName;
-	private String lastName;
-	private String email = "dzung@youngmokeys.org";
-	private String phoneNumber = "123456789";
-	private String bankAccountNo = "abcdefgh";
-	
+    @EzyId
+    private String employeeId;
+    private String firstName;
+    private String lastName;
+    private String email = "dzung@youngmokeys.org";
+    private String phoneNumber = "123456789";
+    private String bankAccountNo = "abcdefgh";
+    
 }

@@ -5,17 +5,17 @@ import com.tvd12.ezyfox.bean.annotation.EzyAutoBind;
 import com.tvd12.ezyfox.bean.annotation.EzyPostInit;
 
 public abstract class EzyBeanSimpleHazelcastMapService<K,V> 
-		extends EzySimpleHazelcastMapService<K,V> {
+        extends EzySimpleHazelcastMapService<K,V> {
 
-	@EzyAutoBind
-	@Override
-	public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
-		super.setHazelcastInstance(hazelcastInstance);
-	}
-	
-	@EzyPostInit
-	@Override
-	public void init() {
-		super.init();
-	}
+    @EzyAutoBind
+    @Override
+    public void setHazelcastInstance(HazelcastInstance hazelcastInstance) {
+        super.setHazelcastInstance(hazelcastInstance);
+    }
+
+    @EzyPostInit
+    @Override
+    public void init() {
+        super.init();
+    }
 }

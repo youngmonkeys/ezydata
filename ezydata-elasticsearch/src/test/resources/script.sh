@@ -5,8 +5,8 @@ curl -XPUT "http://localhost:9200/test" -d'
     },
     "mappings" : {
         "properties" : {
-			"foo" : { "type" : "text" },
-			"bar" : { "type" : "text" }
-		}
+            "foo" : { "type" : "text" },
+            "bar" : { "type" : "text" }
+        }
     }
 }'

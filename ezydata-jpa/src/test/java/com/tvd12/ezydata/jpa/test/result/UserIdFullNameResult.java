@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 public class UserIdFullNameResult {
 
-	protected Integer id;
-	protected String fullName;
-	
+    protected Integer id;
+    protected String fullName;
+
 }

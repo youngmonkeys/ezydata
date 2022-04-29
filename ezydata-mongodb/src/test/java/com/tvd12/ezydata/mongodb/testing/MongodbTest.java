@@ -11,29 +11,29 @@ import com.tvd12.test.base.BaseTest;
 
 public class MongodbTest extends BaseTest {
 
-	protected static String databaseName;
-	protected static MongoClient mongoClient;
-	
-	static {
-		databaseName = "test";
-		mongoClient = mongoClientLoader().load();
-	}
-	
-	protected static EzySimpleMongoClientLoader mongoClientLoader() {
-		InputStream inputStream = EzyAnywayInputStreamLoader.builder()
-				.build()
-				.load("mongodb_config.properties");
-		EzySimpleMongoClientLoader loader = new EzySimpleMongoClientLoader()
-				.inputStream(inputStream)
-				.property(EzyMongoClientLoader.HOST, "127.0.0.1")
-				.property(EzyMongoClientLoader.PORT, "27017")
-				.properties(EzyMapBuilder.mapBuilder()
-						.put(EzyMongoClientLoader.USERNAME, "root")
-						.put(EzyMongoClientLoader.PASSWORD, "123456")
-						.put(EzyMongoClientLoader.DATABASE, databaseName)
-						.build());
-		return loader;
-	}
-	
-	
+    protected static String databaseName;
+    protected static MongoClient mongoClient;
+    
+    static {
+        databaseName = "test";
+        mongoClient = mongoClientLoader().load();
+    }
+    
+    protected static EzySimpleMongoClientLoader mongoClientLoader() {
+        InputStream inputStream = EzyAnywayInputStreamLoader.builder()
+                .build()
+                .load("mongodb_config.properties");
+        EzySimpleMongoClientLoader loader = new EzySimpleMongoClientLoader()
+                .inputStream(inputStream)
+                .property(EzyMongoClientLoader.HOST, "127.0.0.1")
+                .property(EzyMongoClientLoader.PORT, "27017")
+                .properties(EzyMapBuilder.mapBuilder()
+                        .put(EzyMongoClientLoader.USERNAME, "root")
+                        .put(EzyMongoClientLoader.PASSWORD, "123456")
+                        .put(EzyMongoClientLoader.DATABASE, databaseName)
+                        .build());
+        return loader;
+    }
+    
+    
 }

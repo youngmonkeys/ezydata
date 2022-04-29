@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EzyCollectionId
 public class EzyCollectionIdCompositeId2 {
-	private String value;
+    private String value;
 }
 

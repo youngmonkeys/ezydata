@@ -7,11 +7,11 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyMaxIdOneEntryProcessorTest extends BaseTest {
 
-	@Test
-	public void test() throws Exception {
-		EzyMaxIdOneEntryProcessor processor = new EzyMaxIdOneEntryProcessor();
-		processor.writeData(null);
-		processor.readData(null);
-	}
-	
+    @Test
+    public void test() throws Exception {
+        EzyMaxIdOneEntryProcessor processor = new EzyMaxIdOneEntryProcessor();
+        processor.writeData(null);
+        processor.readData(null);
+    }
+
 }

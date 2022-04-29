@@ -5,6 +5,6 @@ import com.mongodb.client.MongoCollection;
 @SuppressWarnings("rawtypes")
 public interface EzyMongoCollectionAware {
 
-	void setCollection(MongoCollection collection);
-	
+    void setCollection(MongoCollection collection);
+
 }

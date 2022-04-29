@@ -11,16 +11,16 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleHazelcastFactoryTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyAbstractHazelcastFactory factory = new EzySimpleHazelcastFactory();
-		factory.setMapstoresFetcher(newMapstoresFetcher());
-		factory.newHazelcast(new Config());
-	}
-	
-	private EzyMapstoresFetcher newMapstoresFetcher() {
-		return EzySimpleMapstoresFetcher.builder()
-				.scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
-				.build();
-	}
+    @Test
+    public void test() {
+        EzyAbstractHazelcastFactory factory = new EzySimpleHazelcastFactory();
+        factory.setMapstoresFetcher(newMapstoresFetcher());
+        factory.newHazelcast(new Config());
+    }
+    
+    private EzyMapstoresFetcher newMapstoresFetcher() {
+        return EzySimpleMapstoresFetcher.builder()
+                .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
+                .build();
+    }
 }

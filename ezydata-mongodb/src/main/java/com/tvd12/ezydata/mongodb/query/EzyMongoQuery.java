@@ -9,37 +9,37 @@ import com.tvd12.ezydata.mongodb.converter.EzyMongoDataConverter;
 
 public class EzyMongoQuery extends EzyQLQuery {
 
-	public EzyMongoQuery(Builder builder) {
-		super(builder);
-	}
-	
-	@Override
-	protected Function<Object, Object> getParameterConveter(
-			EzyQLQuery.Builder builder) {
-		Function<Object, Object> firstConverter = super.getParameterConveter(builder);
-		EzyMongoDataConverter secondConverter = ((Builder)builder).dataConverter;
-		return it -> 
-			secondConverter.bsonValueToString((BsonValue) firstConverter.apply(it));
-	}
-	
-	public static Builder builder() {
-		return new Builder();
-	}
+    public EzyMongoQuery(Builder builder) {
+        super(builder);
+    }
+    
+    @Override
+    protected Function<Object, Object> getParameterConveter(
+            EzyQLQuery.Builder builder) {
+        Function<Object, Object> firstConverter = super.getParameterConveter(builder);
+        EzyMongoDataConverter secondConverter = ((Builder)builder).dataConverter;
+        return it -> 
+            secondConverter.bsonValueToString((BsonValue) firstConverter.apply(it));
+    }
+    
+    public static Builder builder() {
+        return new Builder();
+    }
 
-	public static class Builder extends EzyQLQuery.Builder {
-		
-		protected EzyMongoDataConverter dataConverter;
-		
-		public Builder dataConverter(EzyMongoDataConverter dataConverter) {
-			this.dataConverter = dataConverter;
-			return this;
-		}
-		
-		@Override
-		public EzyQLQuery build() {
-			return new EzyMongoQuery(this);
-		}
-		
-	}
-	
+    public static class Builder extends EzyQLQuery.Builder {
+        
+        protected EzyMongoDataConverter dataConverter;
+        
+        public Builder dataConverter(EzyMongoDataConverter dataConverter) {
+            this.dataConverter = dataConverter;
+            return this;
+        }
+        
+        @Override
+        public EzyQLQuery build() {
+            return new EzyMongoQuery(this);
+        }
+        
+    }
+    
 }

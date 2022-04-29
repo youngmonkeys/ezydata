@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EzyIdCompositeId2 {
-	private String value;
+    private String value;
 }
 

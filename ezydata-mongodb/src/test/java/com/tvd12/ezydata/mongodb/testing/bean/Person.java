@@ -14,19 +14,19 @@ import lombok.ToString;
 @EzyCollection("test_mongo_bean_person")
 public class Person {
 
-	@EzyId
-	private Integer id;
-	@EzyValue("personName")
-	private String name;
-	
-	@EzyId
-	public Integer getId() {
-		return id;
-	}
-	
-	@EzyId
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	
+    @EzyId
+    private Integer id;
+    @EzyValue("personName")
+    private String name;
+    
+    @EzyId
+    public Integer getId() {
+        return id;
+    }
+    
+    @EzyId
+    public void setId(Integer id) {
+        this.id = id;
+    }
+    
 }

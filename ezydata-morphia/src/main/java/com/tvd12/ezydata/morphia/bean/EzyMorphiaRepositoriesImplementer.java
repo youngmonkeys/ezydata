@@ -4,16 +4,16 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 
 public class EzyMorphiaRepositoriesImplementer
-		extends EzyAbstractRepositoriesImplementer {
-	
-	@Override
-	protected EzyMorphiaRepositoryImplementer newRepoImplementer(Class<?> itf) {
-		return new EzyMorphiaRepositoryImplementer(itf);
-	}
-	
-	@Override
-	protected Class<?> getBaseRepositoryInterface() {
-		return EzyMongoRepository.class;
-	}
-	
+        extends EzyAbstractRepositoriesImplementer {
+
+    @Override
+    protected EzyMorphiaRepositoryImplementer newRepoImplementer(Class<?> itf) {
+        return new EzyMorphiaRepositoryImplementer(itf);
+    }
+
+    @Override
+    protected Class<?> getBaseRepositoryInterface() {
+        return EzyMongoRepository.class;
+    }
+
 }

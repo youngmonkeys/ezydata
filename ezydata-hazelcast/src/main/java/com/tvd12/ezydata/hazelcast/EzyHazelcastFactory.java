@@ -5,6 +5,6 @@ import com.hazelcast.core.HazelcastInstance;
 
 public interface EzyHazelcastFactory {
 
-	HazelcastInstance newHazelcast(Config config);
-	
+    HazelcastInstance newHazelcast(Config config);
+    
 }

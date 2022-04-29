@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @EzyMessage(channel = "ezydata_chat_message4")
 public class ChatMessage4 {
 
-	private String message;
-	
+    private String message;
+
 }

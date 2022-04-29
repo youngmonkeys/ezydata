@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EzyCollection
 public class EzyCollectionIdCollection2 {
-	@EzyCollectionId
-	private EzyCollectionIdCompositeId2 id;
-	private String value;
+    @EzyCollectionId
+    private EzyCollectionIdCompositeId2 id;
+    private String value;
 }

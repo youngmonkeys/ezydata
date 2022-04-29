@@ -7,16 +7,16 @@ import com.tvd12.ezydata.redis.setting.EzyRedisSettingsBuilder;
 
 public class EzyRedisMapFactoryTest {
 
-	@Test(expectedExceptions = IllegalArgumentException.class)
-	public void newMapFailed() {
-		// given
-		EzyRedisMapFactory factory = EzyRedisMapFactory.builder()
-				.settings(new EzyRedisSettingsBuilder().build())
-				.build();
-		
-		// when
-		// then
-		factory.newMap("no map");
-	}
-	
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void newMapFailed() {
+        // given
+        EzyRedisMapFactory factory = EzyRedisMapFactory.builder()
+                .settings(new EzyRedisSettingsBuilder().build())
+                .build();
+
+        // when
+        // then
+        factory.newMap("no map");
+    }
+
 }

@@ -10,15 +10,15 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyPropertiesMongoClientLoaderTest extends BaseTest {
 
-	@Test
-	public void test() {
-		Properties properties = new Properties();
-		properties.setProperty(EzyMongoClientLoader.HOST, "127.0.0.1");
-		properties.setProperty(EzyMongoClientLoader.PORT, "27017");
-		properties.setProperty(EzyMongoClientLoader.USERNAME, "root");
-		properties.setProperty(EzyMongoClientLoader.PASSWORD, "123456");
-		properties.setProperty(EzyMongoClientLoader.DATABASE, "test");
-		EzyPropertiesMongoClientLoader.load(properties).close();
-	}
-	
+    @Test
+    public void test() {
+        Properties properties = new Properties();
+        properties.setProperty(EzyMongoClientLoader.HOST, "127.0.0.1");
+        properties.setProperty(EzyMongoClientLoader.PORT, "27017");
+        properties.setProperty(EzyMongoClientLoader.USERNAME, "root");
+        properties.setProperty(EzyMongoClientLoader.PASSWORD, "123456");
+        properties.setProperty(EzyMongoClientLoader.DATABASE, "test");
+        EzyPropertiesMongoClientLoader.load(properties).close();
+    }
+    
 }

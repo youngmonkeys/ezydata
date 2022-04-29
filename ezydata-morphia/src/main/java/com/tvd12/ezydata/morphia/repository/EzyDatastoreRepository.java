@@ -22,138 +22,138 @@ import dev.morphia.query.Query;
 import dev.morphia.query.internal.MorphiaCursor;
 
 public abstract class EzyDatastoreRepository<I, E> 
-		extends EzyLoggable
-		implements EzyDatabaseRepository<I, E>, EzyDatastoreAware, EzyDatabaseContextAware {
+        extends EzyLoggable
+        implements EzyDatabaseRepository<I, E>, EzyDatastoreAware, EzyDatabaseContextAware {
 
-	@EzyAutoBind
-	protected Datastore datastore;
-	protected final Class<E> entityType;
-	protected EzyMorphiaDatabaseContext databaseContext;
-	
-	public EzyDatastoreRepository() {
-		this.entityType = getEntityType();
-	}
-	
-	@Override
-	public void setDatastore(Datastore datastore) {
-		if(this.datastore == null)
-			this.datastore = datastore;
-		else if(this.datastore != datastore)
-			throw new IllegalStateException("set datastore twice");
-	}
-	
-	@Override
-	public void setDatabaseContext(EzyDatabaseContext context) {
-		this.databaseContext = (EzyMorphiaDatabaseContext)context;
-		this.setDatastore(databaseContext.getDatastore());
-	}
-	
-	@Override
-	public long count() {
-		Query<E> query = newQuery();
-		long count = query.count();
-		return count;
-	}
+    @EzyAutoBind
+    protected Datastore datastore;
+    protected final Class<E> entityType;
+    protected EzyMorphiaDatabaseContext databaseContext;
 
-	@Override
-	public void save(E entity) {
-		datastore.save(entity);
-	}
+    public EzyDatastoreRepository() {
+        this.entityType = getEntityType();
+    }
 
-	@Override
-	public void save(Iterable<E> entities) {
-		datastore.save(entities);
-	}
+    @Override
+    public void setDatastore(Datastore datastore) {
+        if(this.datastore == null)
+            this.datastore = datastore;
+        else if(this.datastore != datastore)
+            throw new IllegalStateException("set datastore twice");
+    }
 
-	@Override
-	public E findById(I id) {
-		E e = findByField("_id", id);
-		return e;
-	}
-	
-	@Override
-	public E findByField(String field, Object value) {
-		Query<E> query = newQuery(field, value);
-		E e = query.first();
-		return e;
-	}
-	
-	@Override
-	public List<E> findListByIds(Collection<I> ids) {
-		Query<E> query = newQuery().field("_id").in(ids);
-		MorphiaCursor<E> cursor = query.find();
-		List<E> list = cursor.toList();
-		return list;
-	}
-	
-	@Override
-	public List<E> findListByField(String field, Object value) {
-		Query<E> query = newQuery(field, value);
-		MorphiaCursor<E> cursor = query.find();
-		List<E> list = cursor.toList();
-		return list;
-	}
-	
-	@Override
-	public List<E> findListByField(String field, Object value, int skip, int limit) {
-		FindOptions options = new FindOptions().skip(skip).limit(limit);
-		Query<E> query = newQuery(field, value);
-		MorphiaCursor<E> cursor = query.find(options);
-		List<E> list = cursor.toList();
-		return list;
-	}
+    @Override
+    public void setDatabaseContext(EzyDatabaseContext context) {
+        this.databaseContext = (EzyMorphiaDatabaseContext)context;
+        this.setDatastore(databaseContext.getDatastore());
+    }
 
-	@Override
-	public List<E> findAll() {
-		Query<E> query = newQuery();
-		MorphiaCursor<E> cursor = query.find();
-		List<E> list = cursor.toList();
-		return list;
-	}
-	
-	@Override
-	public List<E> findAll(int skip, int limit) {
-		FindOptions options = new FindOptions().skip(skip).limit(limit);
-		Query<E> query = newQuery();
-		MorphiaCursor<E> cursor = query.find(options);
-		List<E> list = cursor.toList();
-		return list;
-	}
-	
-	@Override
-	public void delete(I id) {
-		datastore.delete(newQuery("_id", id), new DeleteOptions().copy());
-	}
+    @Override
+    public long count() {
+        Query<E> query = newQuery();
+        long count = query.count();
+        return count;
+    }
 
-	@Override
-	public int deleteByIds(Collection<I> ids) {
-		WriteResult result = datastore.delete(newQuery().field("_id").in(ids), new DeleteOptions().copy());
-		return result.getN();
-	}
-	
-	@Override
-	public int deleteAll() {
-		WriteResult result = datastore.delete(newQuery());
-		return result.getN();
-	}
-	
-	protected Query<E> newQuery() {
-		return datastore.createQuery(entityType);
-	}
-	
-	protected Query<E> newQuery(String field, Object value) {
-		return newQuery().field(field).equal(value);
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected Class<E> getEntityType() {
-		try {
-			Type genericSuperclass = getClass().getGenericSuperclass();
-			Class[] genericArgs = EzyGenerics.getTwoGenericClassArguments(genericSuperclass);
-			return genericArgs[1];
-		}
-		catch (Exception e) {
-			throw new UnimplementedOperationException("class " + getClass().getName() + " hasn't implemented method 'getEntityType'", e);
-		}
-	}
+    @Override
+    public void save(E entity) {
+        datastore.save(entity);
+    }
+
+    @Override
+    public void save(Iterable<E> entities) {
+        datastore.save(entities);
+    }
+
+    @Override
+    public E findById(I id) {
+        E e = findByField("_id", id);
+        return e;
+    }
+
+    @Override
+    public E findByField(String field, Object value) {
+        Query<E> query = newQuery(field, value);
+        E e = query.first();
+        return e;
+    }
+
+    @Override
+    public List<E> findListByIds(Collection<I> ids) {
+        Query<E> query = newQuery().field("_id").in(ids);
+        MorphiaCursor<E> cursor = query.find();
+        List<E> list = cursor.toList();
+        return list;
+    }
+
+    @Override
+    public List<E> findListByField(String field, Object value) {
+        Query<E> query = newQuery(field, value);
+        MorphiaCursor<E> cursor = query.find();
+        List<E> list = cursor.toList();
+        return list;
+    }
+
+    @Override
+    public List<E> findListByField(String field, Object value, int skip, int limit) {
+        FindOptions options = new FindOptions().skip(skip).limit(limit);
+        Query<E> query = newQuery(field, value);
+        MorphiaCursor<E> cursor = query.find(options);
+        List<E> list = cursor.toList();
+        return list;
+    }
+
+    @Override
+    public List<E> findAll() {
+        Query<E> query = newQuery();
+        MorphiaCursor<E> cursor = query.find();
+        List<E> list = cursor.toList();
+        return list;
+    }
+
+    @Override
+    public List<E> findAll(int skip, int limit) {
+        FindOptions options = new FindOptions().skip(skip).limit(limit);
+        Query<E> query = newQuery();
+        MorphiaCursor<E> cursor = query.find(options);
+        List<E> list = cursor.toList();
+        return list;
+    }
+
+    @Override
+    public void delete(I id) {
+        datastore.delete(newQuery("_id", id), new DeleteOptions().copy());
+    }
+
+    @Override
+    public int deleteByIds(Collection<I> ids) {
+        WriteResult result = datastore.delete(newQuery().field("_id").in(ids), new DeleteOptions().copy());
+        return result.getN();
+    }
+
+    @Override
+    public int deleteAll() {
+        WriteResult result = datastore.delete(newQuery());
+        return result.getN();
+    }
+
+    protected Query<E> newQuery() {
+        return datastore.createQuery(entityType);
+    }
+
+    protected Query<E> newQuery(String field, Object value) {
+        return newQuery().field(field).equal(value);
+    }
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected Class<E> getEntityType() {
+        try {
+            Type genericSuperclass = getClass().getGenericSuperclass();
+            Class[] genericArgs = EzyGenerics.getTwoGenericClassArguments(genericSuperclass);
+            return genericArgs[1];
+        }
+        catch (Exception e) {
+            throw new UnimplementedOperationException("class " + getClass().getName() + " hasn't implemented method 'getEntityType'", e);
+        }
+    }
 }

@@ -11,26 +11,26 @@ import com.tvd12.ezyfox.reflect.EzyMethod;
 
 public class EzyJpaQueryMethodConverterTest {
 
-	private EzyJpaQueryMethodConverter sut = new EzyJpaQueryMethodConverter();
-	
-	@Test
-	public void convert() {
-		EzyClass repoClass = new EzyClass(EmployeeRepo.class);
-		EzyMethod method = repoClass.getMethod(
-				"findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo");
-		EzyQueryMethod queryMethod = new EzyQueryMethod(method);
-		String queryString = sut.toQueryString(Employee.class, queryMethod);
-		System.out.println(queryString);
-	}
-	
-	@Test
-	public void convertWithOneField() {
-		EzyClass repoClass = new EzyClass(EmployeeRepo.class);
-		EzyMethod method = repoClass.getMethod(
-				"findByEmail");
-		EzyQueryMethod queryMethod = new EzyQueryMethod(method);
-		String queryString = sut.toQueryString(Employee.class, queryMethod);
-		System.out.println(queryString);
-	}
-	
+    private EzyJpaQueryMethodConverter sut = new EzyJpaQueryMethodConverter();
+    
+    @Test
+    public void convert() {
+        EzyClass repoClass = new EzyClass(EmployeeRepo.class);
+        EzyMethod method = repoClass.getMethod(
+                "findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo");
+        EzyQueryMethod queryMethod = new EzyQueryMethod(method);
+        String queryString = sut.toQueryString(Employee.class, queryMethod);
+        System.out.println(queryString);
+    }
+    
+    @Test
+    public void convertWithOneField() {
+        EzyClass repoClass = new EzyClass(EmployeeRepo.class);
+        EzyMethod method = repoClass.getMethod(
+                "findByEmail");
+        EzyQueryMethod queryMethod = new EzyQueryMethod(method);
+        String queryString = sut.toQueryString(Employee.class, queryMethod);
+        System.out.println(queryString);
+    }
+    
 }

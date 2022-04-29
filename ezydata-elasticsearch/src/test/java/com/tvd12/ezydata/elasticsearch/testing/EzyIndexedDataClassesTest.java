@@ -6,8 +6,8 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyIndexedDataClassesTest extends BaseTest {
 
-	@Test
-	public void test() {
-	}
-	
+    @Test
+    public void test() {
+    }
+
 }

@@ -11,13 +11,13 @@ import lombok.Getter;
 @EzyObjectBinding(read = false)
 public class SearchTestPersonByNameEnglishMatchQuery {
 
-	private Match match;
-	
-	@Getter
-	@AllArgsConstructor
-	public static class Match {
-		@EzyValue("name.english")
-		private String name;
-	}
-	
+    private Match match;
+    
+    @Getter
+    @AllArgsConstructor
+    public static class Match {
+        @EzyValue("name.english")
+        private String name;
+    }
+    
 }

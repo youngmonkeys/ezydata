@@ -1,16 +1,16 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 
 <suite name="AllTests">
-	<test name="All">
-		<packages>
-			<package name="com.tvd12.ezydata.mongodb.testing"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.bean"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.converter"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.loader"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.query"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.repository"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.result"></package>
-			<package name="com.tvd12.ezydata.mongodb.testing.util"></package>
-		</packages>
-	</test>
+    <test name="All">
+        <packages>
+            <package name="com.tvd12.ezydata.mongodb.testing"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.bean"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.converter"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.loader"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.query"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.repository"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.result"></package>
+            <package name="com.tvd12.ezydata.mongodb.testing.util"></package>
+        </packages>
+    </test>
 </suite>

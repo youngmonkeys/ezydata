@@ -8,10 +8,10 @@ import lombok.Setter;
 
 @Setter
 public class EzySimpleMorphiaDatabaseContext 
-		extends EzySimpleDatabaseContext
-		implements EzyMorphiaDatabaseContext {
+        extends EzySimpleDatabaseContext
+        implements EzyMorphiaDatabaseContext {
 
-	@Getter
-	protected Datastore datastore;
-	
+    @Getter
+    protected Datastore datastore;
+
 }

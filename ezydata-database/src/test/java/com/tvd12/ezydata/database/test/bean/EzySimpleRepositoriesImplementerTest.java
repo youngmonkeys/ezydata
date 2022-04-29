@@ -12,52 +12,52 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyAbstractRepositoryImplementer.setDebug(true);
-		EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
-				.scan("com.tvd12.ezydata.database.test.bean")
-				.scan("com.tvd12.ezydata.database.test.bean", "com.tvd12.ezydata.database.test.bean")
-				.scan(Sets.newHashSet("com.tvd12.ezydata.database.test.bean"))
-				.repositoryInterface(PersonRepo2.class)
-				.repositoryInterface(Class.class)
-				.repositoryInterface(NothingInterface.class)
-				.repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
-				.repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
-		
-		MongoTemplate template = new MongoTemplate();
-		Map<Class<?>, Object> repos = implementer.implement(template);
-		System.out.println("repos: " + repos);
-		assert repos.size() == 4;
-		
-		implementer = new ExEzySimpleRepositoriesImplementer();
-		repos = implementer.implement(template);
-		assert repos.isEmpty();
-	}
-	
-	public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
+    @Test
+    public void test() {
+        EzyAbstractRepositoryImplementer.setDebug(true);
+        EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
+                .scan("com.tvd12.ezydata.database.test.bean")
+                .scan("com.tvd12.ezydata.database.test.bean", "com.tvd12.ezydata.database.test.bean")
+                .scan(Sets.newHashSet("com.tvd12.ezydata.database.test.bean"))
+                .repositoryInterface(PersonRepo2.class)
+                .repositoryInterface(Class.class)
+                .repositoryInterface(NothingInterface.class)
+                .repositoryInterfaces(PersonRepo2.class, PersonRepo2.class)
+                .repositoryInterfaces(Sets.newHashSet(PersonRepo2.class));
 
-		@Override
-		protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
-			return new ExEzySimpleRepositoryImplementer(itf);
-		}
-		
-	}
-	
-	public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
+        MongoTemplate template = new MongoTemplate();
+        Map<Class<?>, Object> repos = implementer.implement(template);
+        System.out.println("repos: " + repos);
+        assert repos.size() == 4;
 
-		public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
-			super(clazz);
-		}
+        implementer = new ExEzySimpleRepositoriesImplementer();
+        repos = implementer.implement(template);
+        assert repos.isEmpty();
+    }
 
-		@Override
-		protected void setRepoComponent(Object repo, Object template) {
-		}
+    public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
 
-		@Override
-		protected Class<?> getSuperClass() {
-			return ExEzyDatabaseRepository.class;
-		}
-		
-	}
+        @Override
+        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+            return new ExEzySimpleRepositoryImplementer(itf);
+        }
+
+    }
+
+    public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
+
+        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
+            super(clazz);
+        }
+
+        @Override
+        protected void setRepoComponent(Object repo, Object template) {
+        }
+
+        @Override
+        protected Class<?> getSuperClass() {
+            return ExEzyDatabaseRepository.class;
+        }
+
+    }
 }

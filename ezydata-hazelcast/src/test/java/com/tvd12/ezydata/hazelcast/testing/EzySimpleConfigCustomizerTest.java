@@ -8,9 +8,9 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleConfigCustomizerTest extends BaseTest {
 
-	@Test
-	public void test() {
-		new EzySimpleConfigCustomizer().customize(new Config());
-	}
-	
+    @Test
+    public void test() {
+        new EzySimpleConfigCustomizer().customize(new Config());
+    }
+    
 }

@@ -13,9 +13,9 @@ import lombok.NoArgsConstructor;
 @EzyCachedValue("ezydata_author")
 public class Author {
 
-	@EzyCachedKey
-	private long id;
-	
-	private String name;
-	
+    @EzyCachedKey
+    private long id;
+
+    private String name;
+
 }

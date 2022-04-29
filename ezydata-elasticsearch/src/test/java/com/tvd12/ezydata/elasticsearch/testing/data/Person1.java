@@ -11,11 +11,11 @@ import lombok.Setter;
 @Getter
 @EzyIndexedData
 @EzyDataIndexes({
-	"test1", "test2"
+    "test1", "test2"
 })
 public class Person1 {
-	
-	@EzyId
-	private long id;
-	
+    
+    @EzyId
+    private long id;
+    
 }

@@ -12,26 +12,26 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class EzyJpaDataSourceLoader 
-		extends EzyDatabasePropertiesKeeper<EzyJpaDataSourceLoader> {
-	
-	public DataSource load() {
-		return load(props ->
-			new HikariDataSource(newConfig(props))
-		);
-	}
-	
-	public DataSource load(Function<Properties, DataSource> supplier) {
-		return supplier.apply(properties);
-	}
-	
-	private HikariConfig newConfig(Properties properties) {
-	    Properties newProps = new Properties();
-	    for (String name : properties.stringPropertyNames()) {
-	        String camelCaseName = EzyStrings.underscoreToCamelCase(name);
-	        newProps.put(camelCaseName, properties.get(name));
-	    }
-	    return new PropertiesMapper()
-	            .data(newProps)
-	            .map(HikariConfig.class);
-	}
+        extends EzyDatabasePropertiesKeeper<EzyJpaDataSourceLoader> {
+
+    public DataSource load() {
+        return load(props ->
+            new HikariDataSource(newConfig(props))
+        );
+    }
+
+    public DataSource load(Function<Properties, DataSource> supplier) {
+        return supplier.apply(properties);
+    }
+
+    private HikariConfig newConfig(Properties properties) {
+        Properties newProps = new Properties();
+        for (String name : properties.stringPropertyNames()) {
+            String camelCaseName = EzyStrings.underscoreToCamelCase(name);
+            newProps.put(camelCaseName, properties.get(name));
+        }
+        return new PropertiesMapper()
+                .data(newProps)
+                .map(HikariConfig.class);
+    }
 }

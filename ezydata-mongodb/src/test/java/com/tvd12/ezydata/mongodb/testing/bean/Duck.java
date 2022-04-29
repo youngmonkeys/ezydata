@@ -13,9 +13,9 @@ import lombok.ToString;
 @EzyCollection("test_mongo_duck")
 public class Duck {
 
-	@EzyCollectionId(composite = true)
-	private DuckId id;
-	private int age;
-	private String description;
-	
+    @EzyCollectionId(composite = true)
+    private DuckId id;
+    private int age;
+    private String description;
+
 }

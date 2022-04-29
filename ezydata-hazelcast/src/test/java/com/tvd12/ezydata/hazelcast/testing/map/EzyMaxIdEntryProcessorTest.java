@@ -7,10 +7,10 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyMaxIdEntryProcessorTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzyMaxIdEntryProcessor processor = new EzyMaxIdEntryProcessor();
-		assert processor.getDelta() == 0;
-	}
-	
+    @Test
+    public void test() {
+        EzyMaxIdEntryProcessor processor = new EzyMaxIdEntryProcessor();
+        assert processor.getDelta() == 0;
+    }
+    
 }

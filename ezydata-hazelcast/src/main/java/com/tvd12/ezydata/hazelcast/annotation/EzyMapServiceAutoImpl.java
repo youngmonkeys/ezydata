@@ -12,15 +12,15 @@ import java.lang.annotation.Target;
 @Target({ TYPE })
 public @interface EzyMapServiceAutoImpl {
 
-	/**
-	 * @return the map name
-	 */
-	String value();
-	
-	/**
-	 * 
-	 * @return the bean name
-	 */
-	String name() default "";
-	
+    /**
+     * @return the map name
+     */
+    String value();
+
+    /**
+     *
+     * @return the bean name
+     */
+    String name() default "";
+
 }

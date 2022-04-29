@@ -7,19 +7,19 @@ import com.tvd12.ezydata.redis.setting.EzyRedisSettingsBuilder;
 
 public class EzyRedisAtomicLongFactoryTest {
 
-	@Test(expectedExceptions = IllegalArgumentException.class)
-	public void newMapFailed() {
-		// given
-		EzyRedisAtomicLongFactory factory = EzyRedisAtomicLongFactory.builder()
-				.settings(new EzyRedisSettingsBuilder()
-						.atomicLongMapName("")
-						.build()
-				)
-				.build();
-		
-		// when
-		// then
-		factory.newAtomicLong("hello");
-	}
-	
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void newMapFailed() {
+        // given
+        EzyRedisAtomicLongFactory factory = EzyRedisAtomicLongFactory.builder()
+                .settings(new EzyRedisSettingsBuilder()
+                        .atomicLongMapName("")
+                        .build()
+                )
+                .build();
+
+        // when
+        // then
+        factory.newAtomicLong("hello");
+    }
+
 }

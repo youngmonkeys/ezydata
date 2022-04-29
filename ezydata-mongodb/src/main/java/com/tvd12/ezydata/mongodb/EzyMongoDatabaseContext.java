@@ -11,21 +11,21 @@ import com.tvd12.ezyfox.naming.EzyNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 
 public interface EzyMongoDatabaseContext extends EzyDatabaseContext {
-	
-	MongoClient getClient();
-	
-	MongoDatabase getDatabase();
-	
-	<T> MongoCollection<T> getCollection(String name, Class<T> documentType);
 
-	EzyQLQuery.Builder newQueryBuilder();
-	
-	EzyObjectProxy getObjectProxy(Class<?> objectType);
-	
-	<T extends BsonValue> T dataToBsonValue(Object data);
-	
-	<T> T bsonValueToData(BsonValue value, Class<T> dataType);
-	
-	EzyNameTranslator getCollectionNameTranslator();
-	
+    MongoClient getClient();
+
+    MongoDatabase getDatabase();
+
+    <T> MongoCollection<T> getCollection(String name, Class<T> documentType);
+
+    EzyQLQuery.Builder newQueryBuilder();
+
+    EzyObjectProxy getObjectProxy(Class<?> objectType);
+
+    <T extends BsonValue> T dataToBsonValue(Object data);
+
+    <T> T bsonValueToData(BsonValue value, Class<T> dataType);
+
+    EzyNameTranslator getCollectionNameTranslator();
+
 }

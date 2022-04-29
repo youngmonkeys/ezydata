@@ -13,10 +13,10 @@ import lombok.Setter;
  *
  */
 public abstract class EzyMongoDatabaseMapstore<K,V>
-		extends EzyAbstractMapstore<K, V> 
-		implements EzyMongoDatabaseAware {
+        extends EzyAbstractMapstore<K, V>
+        implements EzyMongoDatabaseAware {
 
-	@Setter
+    @Setter
     protected MongoDatabase database;
     
 }

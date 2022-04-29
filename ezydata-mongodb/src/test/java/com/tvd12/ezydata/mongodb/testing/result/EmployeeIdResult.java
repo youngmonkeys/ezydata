@@ -10,6 +10,6 @@ import lombok.Setter;
 @EzyQueryResult
 public class EmployeeIdResult {
 
-	private String employeeId;
-	
+    private String employeeId;
+
 }

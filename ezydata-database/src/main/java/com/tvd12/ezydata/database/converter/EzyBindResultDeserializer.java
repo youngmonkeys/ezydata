@@ -11,24 +11,24 @@ import com.tvd12.ezyfox.entity.EzyArray;
 @SuppressWarnings("rawtypes")
 public class EzyBindResultDeserializer implements EzyResultDeserializer {
 
-	protected final Class<?> resultType;
-	protected final EzyUnmarshaller unmarshaller;
-	
-	@Override
-	public Object deserialize(Object result) {
-		EzyArray array = EzyEntityFactory.newArray();
-		if(result instanceof Iterable) {
-			for(Object item : (Iterable)result)
-				array.add(item);
-		}
-		else if(result instanceof Object[]) {
-			array.add((Object[])result);
-		}
-		else {
-			array.add(result);
-		}
-		Object answer = unmarshaller.unmarshal(array, resultType);
-		return answer;
-	}
-	
+    protected final Class<?> resultType;
+    protected final EzyUnmarshaller unmarshaller;
+
+    @Override
+    public Object deserialize(Object result) {
+        EzyArray array = EzyEntityFactory.newArray();
+        if(result instanceof Iterable) {
+            for(Object item : (Iterable)result)
+                array.add(item);
+        }
+        else if(result instanceof Object[]) {
+            array.add((Object[])result);
+        }
+        else {
+            array.add(result);
+        }
+        Object answer = unmarshaller.unmarshal(array, resultType);
+        return answer;
+    }
+
 }

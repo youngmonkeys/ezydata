@@ -13,19 +13,19 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzyBeanHazelcastFactoryTest extends BaseTest {
 
-	@Test
-	public void test() {
-		HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
-		EzyBeanContext beanContext = EzyBeanContext.builder()
-				.addSingleton("hazelcastInstance", hazelcastInstance)
-				.scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
-				.scan("com.tvd12.ezydata.hazelcast.testing.service")
-				.addSingletonClass(EzyBeanTransactionalMaxIdService.class)
-				.addSingletonClass(EzyBeanEntryProcessorMaxIdService.class)
-				.build();
-		EzyBeanHazelcastFactory factory = new EzyBeanHazelcastFactory();
-		factory.setContext(beanContext);
-		factory.newHazelcast(new Config());
-	}
-	
+    @Test
+    public void test() {
+        HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
+        EzyBeanContext beanContext = EzyBeanContext.builder()
+                .addSingleton("hazelcastInstance", hazelcastInstance)
+                .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
+                .scan("com.tvd12.ezydata.hazelcast.testing.service")
+                .addSingletonClass(EzyBeanTransactionalMaxIdService.class)
+                .addSingletonClass(EzyBeanEntryProcessorMaxIdService.class)
+                .build();
+        EzyBeanHazelcastFactory factory = new EzyBeanHazelcastFactory();
+        factory.setContext(beanContext);
+        factory.newHazelcast(new Config());
+    }
+
 }

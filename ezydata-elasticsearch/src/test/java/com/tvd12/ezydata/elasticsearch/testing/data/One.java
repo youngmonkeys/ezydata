@@ -17,9 +17,9 @@ import lombok.Setter;
 @EzyObjectBinding
 public class One {
 
-	@EzyId
-	private int id;
-	private String foo;
-	private String bar;
-	
+    @EzyId
+    private int id;
+    private String foo;
+    private String bar;
+
 }

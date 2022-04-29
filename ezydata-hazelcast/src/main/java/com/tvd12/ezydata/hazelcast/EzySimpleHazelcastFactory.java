@@ -5,11 +5,11 @@ import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoreCreator;
 
 public class EzySimpleHazelcastFactory extends EzyAbstractHazelcastFactory {
 
-	@Override
-	protected EzyMapstoreCreator newMapstoreCreator() {
-		return new EzySimpleMapstoreCreator();
-	}
+    @Override
+    protected EzyMapstoreCreator newMapstoreCreator() {
+        return new EzySimpleMapstoreCreator();
+    }
 
-	
-	
+
+
 }

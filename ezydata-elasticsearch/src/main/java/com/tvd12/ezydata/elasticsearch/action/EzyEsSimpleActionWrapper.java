@@ -11,8 +11,8 @@ import lombok.Getter;
 @SuppressWarnings("rawtypes")
 public class EzyEsSimpleActionWrapper implements EzyEsActionWrapper {
 
-	protected final EzyEsAction action;
-	protected final EzyEsActionHandler handler;
-	protected final EzyEsActionCallback callback;
+    protected final EzyEsAction action;
+    protected final EzyEsActionHandler handler;
+    protected final EzyEsActionCallback callback;
 
 }

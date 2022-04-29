@@ -9,7 +9,7 @@ public interface EzyMapstoreCreator {
 
     Set<String> getMapNames();
     
-	@SuppressWarnings("rawtypes")
-	MapStore create(String mapName, Properties properties);
-	
+    @SuppressWarnings("rawtypes")
+    MapStore create(String mapName, Properties properties);
+    
 }

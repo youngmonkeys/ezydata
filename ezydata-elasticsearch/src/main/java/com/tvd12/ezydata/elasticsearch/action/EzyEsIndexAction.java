@@ -6,11 +6,11 @@ import java.util.Set;
 import org.elasticsearch.client.RequestOptions;
 
 public interface EzyEsIndexAction extends EzyEsAction {
-	
-	List<Object> getObjects();
-	
-	Set<String> getIndexes();
-	
-	RequestOptions getRequestOptions();
-	
+
+    List<Object> getObjects();
+
+    Set<String> getIndexes();
+
+    RequestOptions getRequestOptions();
+
 }

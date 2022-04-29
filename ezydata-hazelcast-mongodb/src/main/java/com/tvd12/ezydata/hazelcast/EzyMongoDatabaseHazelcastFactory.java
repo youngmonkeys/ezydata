@@ -9,20 +9,20 @@ import lombok.Setter;
 
 @Setter
 public class EzyMongoDatabaseHazelcastFactory 
-		extends EzyAbstractHazelcastFactory 
-		implements EzyMongoDatabaseAware {
-	
-	protected MongoDatabase database;
-	
-	@Override
-	protected EzyMapstoreCreator newMapstoreCreator() {
-		EzyMongoDatabaseMapstoreCreator creator = newDatabaseMapstoreCreator();
-		creator.setDatabase(database);
-		return creator;
-	}
+        extends EzyAbstractHazelcastFactory
+        implements EzyMongoDatabaseAware {
 
-	protected EzyMongoDatabaseMapstoreCreator newDatabaseMapstoreCreator() {
-		return new EzyMongoDatabaseMapstoreCreator(); 
-	}
-	
+    protected MongoDatabase database;
+
+    @Override
+    protected EzyMapstoreCreator newMapstoreCreator() {
+        EzyMongoDatabaseMapstoreCreator creator = newDatabaseMapstoreCreator();
+        creator.setDatabase(database);
+        return creator;
+    }
+
+    protected EzyMongoDatabaseMapstoreCreator newDatabaseMapstoreCreator() {
+        return new EzyMongoDatabaseMapstoreCreator();
+    }
+
 }

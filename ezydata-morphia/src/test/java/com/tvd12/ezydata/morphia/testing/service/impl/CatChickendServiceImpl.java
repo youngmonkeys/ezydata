@@ -14,28 +14,28 @@ import lombok.Setter;
 @Setter
 @EzySingleton
 public class CatChickendServiceImpl
-		extends EzyLoggable
-		implements CatChickendService {
+        extends EzyLoggable
+        implements CatChickendService {
 
-	@EzyAutoBind
-	private CatRepo catRepo;
-	
-	@EzyAutoBind
-	private MonkeyRepo monkeyRepo;
-	
-	@EzyAutoBind
-	private ChickendRepo chickendRepo;
-	
-	@Override
-	public void printAllCatAndChickend() {
-		System.out.println("all cat: " + catRepo.findAll());
-		System.out.println("all chickend: " + chickendRepo.findAll());
-		System.out.println("all monkey: " + monkeyRepo.findAll());
-	}
-	
-	@Override
-	public void save2Monkey(Monkey monkey1, Monkey monkey2) {
-		monkeyRepo.save2Monkey(monkey1, monkey2);
-	}
-	
+    @EzyAutoBind
+    private CatRepo catRepo;
+    
+    @EzyAutoBind
+    private MonkeyRepo monkeyRepo;
+    
+    @EzyAutoBind
+    private ChickendRepo chickendRepo;
+    
+    @Override
+    public void printAllCatAndChickend() {
+        System.out.println("all cat: " + catRepo.findAll());
+        System.out.println("all chickend: " + chickendRepo.findAll());
+        System.out.println("all monkey: " + monkeyRepo.findAll());
+    }
+    
+    @Override
+    public void save2Monkey(Monkey monkey1, Monkey monkey2) {
+        monkeyRepo.save2Monkey(monkey1, monkey2);
+    }
+    
 }

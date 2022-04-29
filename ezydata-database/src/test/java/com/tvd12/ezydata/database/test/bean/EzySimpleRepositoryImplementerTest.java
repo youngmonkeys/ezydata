@@ -7,27 +7,27 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleRepositoryImplementerTest extends BaseTest {
 
-	@Test(expectedExceptions = IllegalStateException.class)
-	public void test() {
-		ExEzySimpleRepositoryImplementer implementer = new ExEzySimpleRepositoryImplementer(PersonRepo.class);
-		implementer.implement(new MongoTemplate());
-	}
-	
-	public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
+    @Test(expectedExceptions = IllegalStateException.class)
+    public void test() {
+        ExEzySimpleRepositoryImplementer implementer = new ExEzySimpleRepositoryImplementer(PersonRepo.class);
+        implementer.implement(new MongoTemplate());
+    }
 
-		public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
-			super(clazz);
-		}
+    public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
-		@Override
-		protected void setRepoComponent(Object repo, Object template) {
-		}
+        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
+            super(clazz);
+        }
 
-		@Override
-		protected Class<?> getSuperClass() {
-			throw new IllegalStateException("has no super class");
-		}
-		
-	}
-	
+        @Override
+        protected void setRepoComponent(Object repo, Object template) {
+        }
+
+        @Override
+        protected Class<?> getSuperClass() {
+            throw new IllegalStateException("has no super class");
+        }
+
+    }
+
 }

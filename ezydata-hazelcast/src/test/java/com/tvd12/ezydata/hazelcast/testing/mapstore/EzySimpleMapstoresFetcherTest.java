@@ -7,11 +7,11 @@ import com.tvd12.test.base.BaseTest;
 
 public class EzySimpleMapstoresFetcherTest extends BaseTest {
 
-	@Test
-	public void test() {
-		EzySimpleMapstoresFetcher fetcher = EzySimpleMapstoresFetcher.builder()
-				.build();
-		assert fetcher.getMapNames().isEmpty();
-	}
-	
+    @Test
+    public void test() {
+        EzySimpleMapstoresFetcher fetcher = EzySimpleMapstoresFetcher.builder()
+                .build();
+        assert fetcher.getMapNames().isEmpty();
+    }
+
 }

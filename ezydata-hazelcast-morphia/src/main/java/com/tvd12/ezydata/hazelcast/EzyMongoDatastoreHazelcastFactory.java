@@ -10,16 +10,16 @@ import lombok.Setter;
 
 @Setter
 public class EzyMongoDatastoreHazelcastFactory 
-		extends EzyMongoDatabaseHazelcastFactory 
-		implements EzyDatastoreAware {
-	
-	protected Datastore datastore;
+        extends EzyMongoDatabaseHazelcastFactory
+        implements EzyDatastoreAware {
 
-	@Override
-	protected EzyMongoDatabaseMapstoreCreator newDatabaseMapstoreCreator() {
-		EzyMongoDatastoreMapstoreCreator creator = new EzyMongoDatastoreMapstoreCreator();
-		creator.setDatastore(datastore);
-		return creator;
-	}
-	
+    protected Datastore datastore;
+
+    @Override
+    protected EzyMongoDatabaseMapstoreCreator newDatabaseMapstoreCreator() {
+        EzyMongoDatastoreMapstoreCreator creator = new EzyMongoDatastoreMapstoreCreator();
+        creator.setDatastore(datastore);
+        return creator;
+    }
+
 }

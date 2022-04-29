@@ -18,13 +18,13 @@ import lombok.ToString;
 @Entity(value = "ezyfox.mongodb.testing.duck", noClassnameStored = true)
 public class Duck {
 
-	@Id
-	private Long id = (long) ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-	private String name = "cat#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
-	private String fixedValue = "fixedValue";
-	
-	public Duck(Long id) {
-		this.id = id;
-	}
-	
+    @Id
+    private Long id = (long) ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+    private String name = "cat#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
+    private String fixedValue = "fixedValue";
+
+    public Duck(Long id) {
+        this.id = id;
+    }
+
 }

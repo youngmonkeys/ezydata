@@ -6,6 +6,6 @@ import dev.morphia.Datastore;
 
 public interface EzyMorphiaDatabaseContext extends EzyDatabaseContext {
 
-	Datastore getDatastore();
-	
+    Datastore getDatastore();
+
 }

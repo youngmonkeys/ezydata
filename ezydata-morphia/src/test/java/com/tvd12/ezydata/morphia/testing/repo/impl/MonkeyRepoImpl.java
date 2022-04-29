@@ -8,12 +8,12 @@ import com.tvd12.ezyfox.bean.annotation.EzySingleton;
 
 @EzySingleton
 public class MonkeyRepoImpl
-		extends EzyDatastoreRepository<Long, Monkey>
-		implements MonkeyRepo {
+        extends EzyDatastoreRepository<Long, Monkey>
+        implements MonkeyRepo {
 
-	@Override
-	public void save2Monkey(Monkey monkey1, Monkey monkey2) {
-		datastore.save(Lists.newArrayList(monkey1, monkey2));
-	}
-	
+    @Override
+    public void save2Monkey(Monkey monkey1, Monkey monkey2) {
+        datastore.save(Lists.newArrayList(monkey1, monkey2));
+    }
+
 }

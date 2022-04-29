@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @EzyCachedValue("ezydata_author_error")
 public class AuthorError {
 
-	private long id;
-	
-	private String name;
-	
+    private long id;
+
+    private String name;
+
 }
