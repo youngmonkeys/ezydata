@@ -1,11 +1,9 @@
 package com.tvd12.ezydata.database.converter;
 
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
-import com.tvd12.ezyfox.factory.EzyEntityFactory;
-
-import lombok.AllArgsConstructor;
-
 import com.tvd12.ezyfox.entity.EzyArray;
+import com.tvd12.ezyfox.factory.EzyEntityFactory;
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @SuppressWarnings("rawtypes")
@@ -17,14 +15,13 @@ public class EzyBindResultDeserializer implements EzyResultDeserializer {
     @Override
     public Object deserialize(Object result) {
         EzyArray array = EzyEntityFactory.newArray();
-        if(result instanceof Iterable) {
-            for(Object item : (Iterable)result)
+        if (result instanceof Iterable) {
+            for (Object item : (Iterable) result) {
                 array.add(item);
-        }
-        else if(result instanceof Object[]) {
-            array.add((Object[])result);
-        }
-        else {
+            }
+        } else if (result instanceof Object[]) {
+            array.add((Object[]) result);
+        } else {
             array.add(result);
         }
         Object answer = unmarshaller.unmarshal(array, resultType);

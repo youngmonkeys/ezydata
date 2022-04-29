@@ -10,7 +10,7 @@ public interface EzyResultDeserializer<T> {
 
     @SuppressWarnings("unchecked")
     default T deserialize(Object data) {
-        return (T)data;
+        return (T) data;
     }
 
     default T deserialize(Object data, EzyResultDeserializers deserializers) {
@@ -21,13 +21,12 @@ public interface EzyResultDeserializer<T> {
         try {
             Class<?> readerClass = getClass();
             Class<?>[] args = EzyGenerics.getGenericInterfacesArguments(
-                    readerClass,
-                    EzyResultDeserializer.class, 1);
+                readerClass,
+                EzyResultDeserializer.class, 1);
             return args[0];
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             EzyResultDeserialized anno =
-                    getClass().getAnnotation(EzyResultDeserialized.class);
+                getClass().getAnnotation(EzyResultDeserialized.class);
             return anno != null ? anno.value() : null;
         }
     }

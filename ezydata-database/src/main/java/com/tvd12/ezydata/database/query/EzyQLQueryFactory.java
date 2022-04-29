@@ -1,8 +1,8 @@
 package com.tvd12.ezydata.database.query;
 
-import java.util.function.Function;
-
 import com.tvd12.ezyfox.builder.EzyBuilder;
+
+import java.util.function.Function;
 
 public class EzyQLQueryFactory {
 
@@ -12,9 +12,13 @@ public class EzyQLQueryFactory {
         this.parameterConveter = builder.parameterConveter;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public EzyQLQuery.Builder newQueryBuilder() {
         return newEmptyQueryBuilder()
-                .parameterConveter(parameterConveter);
+            .parameterConveter(parameterConveter);
     }
 
     protected EzyQLQuery.Builder newEmptyQueryBuilder() {
@@ -23,19 +27,16 @@ public class EzyQLQueryFactory {
 
     public EzyQLQuery.Builder newQueryBuilder(int parameterCount) {
         return newQueryBuilder()
-                .parameterCount(parameterCount);
+            .parameterCount(parameterCount);
     }
 
     public EzyQLQuery newQuery(String query, Object... parameters) {
         EzyQLQuery.Builder builder = newQueryBuilder(parameters.length)
-                .query(query);
-        for(int i = 0 ; i < parameters.length ; ++i)
+            .query(query);
+        for (int i = 0; i < parameters.length; ++i) {
             builder.parameter(i, parameters[i]);
+        }
         return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyQLQueryFactory> {

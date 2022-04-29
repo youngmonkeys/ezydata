@@ -1,11 +1,10 @@
 package com.tvd12.ezydata.database.query;
 
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.tvd12.ezyfox.builder.EzyBuilder;
-
-import lombok.Getter;
 
 @Getter
 public class EzyQueryConditionGroup {
@@ -15,12 +14,12 @@ public class EzyQueryConditionGroup {
         this.conditions = conditions;
     }
 
-    public int size() {
-        return conditions.size();
-    }
-
     public static Builder builder() {
         return new Builder();
+    }
+
+    public int size() {
+        return conditions.size();
     }
 
     public static class Builder implements EzyBuilder<EzyQueryConditionGroup> {

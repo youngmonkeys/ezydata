@@ -1,10 +1,9 @@
 package com.tvd12.ezydata.database.test.util;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezyfox.database.annotation.EzyCollection;
 import com.tvd12.ezyfox.database.util.EzyCollectionAnnotations;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyCollectionAnnotationsTest extends BaseTest {
 
