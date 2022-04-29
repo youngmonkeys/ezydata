@@ -154,7 +154,7 @@ public class EzyJpaRepositoryImplementer extends EzyAbstractRepositoryImplemente
 					answerInstruction
 						.variable(Object.class, "answer")
 							.equal()
-						.append("this.databaseContext.deserializeResult(result,")
+						.append("result.isEmpty() ? null : this.databaseContext.deserializeResult(result.get(0),")
 							.clazz(resultType, true).append(")");
 					body.append(answerInstruction);
 				}

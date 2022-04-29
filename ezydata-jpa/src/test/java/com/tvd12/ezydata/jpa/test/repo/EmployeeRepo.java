@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
+import com.tvd12.ezydata.jpa.test.result.EmployeeIdAndFirstNameResult;
 import com.tvd12.ezydata.jpa.test.result.EmployeeIdResult;
 import com.tvd12.ezydata.jpa.test.result.EmployeeResult;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
@@ -84,6 +85,14 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
             nativeQuery = true
     )
     Optional<EmployeeIdResult> findEmployeeIdByEmployeeIdOptional(String employeeId);
+	
+	@EzyQuery(
+        value = "select employeeId, firstName from ezyfox_jpa_employee where employeeId = ?0",
+        nativeQuery = true
+    )
+    Optional<EmployeeIdAndFirstNameResult> findEmployeeIdAndFirstNameByEmployeeIdOptional(
+        String employeeId
+    );
 	
 	@EzyQuery(
             value = "select employeeId from ezyfox_jpa_employee where employeeId = ?0",
