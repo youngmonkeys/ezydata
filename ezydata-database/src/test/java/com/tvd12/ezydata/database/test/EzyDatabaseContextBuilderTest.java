@@ -194,8 +194,8 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
         @Override
         protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
             return awareDBContextRepo
-                ? new RepositoriesImplement()
-                : new RepositoriesImplementWithoutDbContextAware();
+                ? new RepositoriesImplementer()
+                : new RepositoriesImplementerWithoutDbContextAware();
         }
 
         @Override
@@ -207,7 +207,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
         }
     }
 
-    private static class RepositoriesImplement
+    private static class RepositoriesImplementer
         extends EzyAbstractRepositoriesImplementer {
 
         @Override
@@ -229,7 +229,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
         }
     }
 
-    private static class RepositoriesImplementWithoutDbContextAware
+    private static class RepositoriesImplementerWithoutDbContextAware
         extends EzyAbstractRepositoriesImplementer {
 
         @Override
