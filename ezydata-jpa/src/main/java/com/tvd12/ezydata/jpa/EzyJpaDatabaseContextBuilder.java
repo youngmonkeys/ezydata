@@ -1,11 +1,5 @@
 package com.tvd12.ezydata.jpa;
 
-import java.util.Set;
-
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.NamedQuery;
-
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
@@ -14,13 +8,19 @@ import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoriesImplementer;
 import com.tvd12.ezydata.jpa.query.EzyJpaQueryMethodConverter;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 
-public class EzyJpaDatabaseContextBuilder 
-        extends EzyDatabaseContextBuilder<EzyJpaDatabaseContextBuilder> {
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQuery;
+import java.util.Set;
+
+public class EzyJpaDatabaseContextBuilder
+    extends EzyDatabaseContextBuilder<EzyJpaDatabaseContextBuilder> {
 
     protected EntityManagerFactory entityManagerFactory;
 
-    public EzyJpaDatabaseContextBuilder
-            entityManagerFactory(EntityManagerFactory entityManagerFactory) {
+    public EzyJpaDatabaseContextBuilder entityManagerFactory(
+        EntityManagerFactory entityManagerFactory
+    ) {
         this.entityManagerFactory = entityManagerFactory;
         return this;
     }
@@ -45,19 +45,19 @@ public class EzyJpaDatabaseContextBuilder
     @Override
     protected void scanAndAddQueries(EzyReflection reflection) {
         Set<Class<?>> resultClasses = reflection.getAnnotatedClasses(NamedQuery.class);
-        for(Class<?> resultClass : resultClasses) {
+        for (Class<?> resultClass : resultClasses) {
             NamedQuery anno = resultClass.getAnnotation(NamedQuery.class);
             addQuery(anno.name(), anno.query(), resultClass, false);
         }
         resultClasses = reflection.getAnnotatedClasses(NamedNativeQuery.class);
-        for(Class<?> resultClass : resultClasses) {
+        for (Class<?> resultClass : resultClasses) {
             NamedNativeQuery anno = resultClass.getAnnotation(NamedNativeQuery.class);
             addQuery(anno.name(), anno.query(), resultClass, true);
         }
     }
 
     protected void addQuery(
-            String name, String value, Class<?> resultClass, boolean nativeQuery) {
+        String name, String value, Class<?> resultClass, boolean nativeQuery) {
         super.doAddQuery(name, "", value, resultClass, nativeQuery);
     }
 
@@ -65,5 +65,4 @@ public class EzyJpaDatabaseContextBuilder
     protected void bindResultType(Class<?> resultType) {
         bindingContextBuilder.addArrayBindingClass(resultType);
     }
-
 }

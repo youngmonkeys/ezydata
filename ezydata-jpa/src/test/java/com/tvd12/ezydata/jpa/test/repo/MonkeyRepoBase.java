@@ -6,7 +6,6 @@ import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 
 @EzyAutoImpl
 public interface MonkeyRepoBase extends EzyDatabaseRepository<String, Monkey> {
-    
+
     Monkey findByMonkeyId(String id);
-    
 }
