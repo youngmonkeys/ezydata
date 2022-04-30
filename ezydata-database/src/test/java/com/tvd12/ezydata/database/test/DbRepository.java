@@ -8,6 +8,5 @@ public class DbRepository<I, E>
     implements EzyDatabaseContextAware {
 
     @Override
-    public void setDatabaseContext(EzyDatabaseContext context) {
-    }
+    public void setDatabaseContext(EzyDatabaseContext context) {}
 }

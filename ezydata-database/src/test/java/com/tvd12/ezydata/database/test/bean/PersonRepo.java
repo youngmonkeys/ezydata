@@ -4,6 +4,7 @@ import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.database.annotation.EzyQuery;
 
+@SuppressWarnings("unused")
 @EzyAutoImpl
 public interface PersonRepo extends EzyDatabaseRepository<Integer, Person> {
 
@@ -15,5 +16,4 @@ public interface PersonRepo extends EzyDatabaseRepository<Integer, Person> {
 
     @EzyQuery(name = "hello", value = "select e from Person e")
     void findByName3();
-
 }

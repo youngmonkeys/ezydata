@@ -50,13 +50,13 @@ public class EzyQueryDataTest {
             "young",
             "monkeys",
             true,
-            new Byte((byte) 1),
-            new Character('a'),
-            new Double(2.0D),
-            new Float(3.0F),
-            new Integer(4),
-            new Long(5L),
-            new Short((short) 6),
+            (byte) 1,
+            'a',
+            2.0D,
+            3.0F,
+            4,
+            5L,
+            (short) 6,
             "7"
         };
         Asserts.assertEquals(params, expectedParams);

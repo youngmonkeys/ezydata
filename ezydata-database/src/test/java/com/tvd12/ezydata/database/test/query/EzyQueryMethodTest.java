@@ -123,15 +123,14 @@ public class EzyQueryMethodTest {
     private EzyMethod getMethod(String name, Class<?>... parameters) {
         try {
             return new EzyMethod(Repo.class.getDeclaredMethod(name, parameters));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
+        } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private static interface Repo extends EzyDatabaseRepository<Long, Data> {
+    @SuppressWarnings("unused")
+    private interface Repo extends EzyDatabaseRepository<Long, Data> {
 
         int countByNameAndValue(String name, String value);
 

@@ -68,14 +68,14 @@ public class ExEzyDatabaseRepository
     }
 
     @Override
-    public void delete(Integer id) {
-    }
+    public void delete(Integer id) {}
 
     @Override
     public int deleteByIds(Collection<Integer> ids) {
         return 0;
     }
 
+    @SuppressWarnings("unused")
     protected Class<Person> getEntityType() {
         return Person.class;
     }

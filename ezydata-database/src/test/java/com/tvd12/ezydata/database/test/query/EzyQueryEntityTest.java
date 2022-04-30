@@ -29,16 +29,20 @@ public class EzyQueryEntityTest {
         assert !queryA.isNativeQuery();
         System.out.println(queryA);
         assert queryA.hashCode() == "findOne".hashCode();
+        //noinspection ConstantConditions
         assert !queryA.equals(null);
+        //noinspection EqualsWithItself
         assert queryA.equals(queryA);
         assert queryA.equals(queryB);
         assert !queryA.equals(queryC);
+        //noinspection EqualsBetweenInconvertibleTypes
         assert !queryA.equals(getClass());
 
         try {
             EzyQueryEntity.builder()
                 .build();
         } catch (Exception e) {
+            e.printStackTrace();
         }
 
         try {
@@ -46,7 +50,7 @@ public class EzyQueryEntityTest {
                 .name("hello")
                 .build();
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-
 }

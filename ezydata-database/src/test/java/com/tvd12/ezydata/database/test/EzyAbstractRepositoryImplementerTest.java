@@ -47,7 +47,7 @@ public class EzyAbstractRepositoryImplementerTest {
     }
 
     @Test
-    public void doimplementWithoutEzyDatabaseContext() {
+    public void doImplementWithoutEzyDatabaseContext() {
         // given
         EzyClass clazz = new EzyClass(RepoA.class);
 
@@ -70,7 +70,7 @@ public class EzyAbstractRepositoryImplementerTest {
     }
 
     @Test
-    public void doimplementWithoutEzyDatabaseContextAware() {
+    public void doImplementWithoutEzyDatabaseContextAware() {
         // given
         EzyClass clazz = new EzyClass(RepoA.class);
 
@@ -136,7 +136,7 @@ public class EzyAbstractRepositoryImplementerTest {
         impl.setQueryManager(queryManager);
         impl.setQueryMethodConverter(queryMethodConverter);
 
-        EzyMethod method = getMethod("findByName", String.class);
+        EzyMethod method = getMethod(String.class);
 
         // when
         EzyQueryString actual = MethodInvoker.create()
@@ -156,7 +156,7 @@ public class EzyAbstractRepositoryImplementerTest {
 
         Impl impl = new Impl(clazz);
 
-        EzyMethod method = getMethod("findByName", String.class);
+        EzyMethod method = getMethod(String.class);
 
         // when
         boolean actual = MethodInvoker.create()
@@ -249,23 +249,21 @@ public class EzyAbstractRepositoryImplementerTest {
         Asserts.assertEquals(actual, List.class);
     }
 
-    private EzyMethod getMethod(String name, Class<?>... parameters) {
-        return getMethod(RepoA.class, name, parameters);
+    private EzyMethod getMethod(Class<?>... parameters) {
+        return getMethod(RepoA.class, "findByName", parameters);
     }
 
     private EzyMethod getMethod(Class<?> repoClass, String name, Class<?>... parameters) {
         try {
             return new EzyMethod(repoClass.getDeclaredMethod(name, parameters));
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
+        } catch (NoSuchMethodException | SecurityException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-
-    public static interface RepoA extends EzyDatabaseRepository<Integer, Person> {
+    @SuppressWarnings("unused")
+    public interface RepoA extends EzyDatabaseRepository<Integer, Person> {
 
         @EzyQuery("select e from E e")
         void find1();
@@ -284,7 +282,8 @@ public class EzyAbstractRepositoryImplementerTest {
         void findByName(String name);
     }
 
-    public static interface RepoB extends EzyDatabaseRepository<Integer, Person> {
+    @SuppressWarnings("unused")
+    public interface RepoB extends EzyDatabaseRepository<Integer, Person> {
 
         Person findByName(String name);
 

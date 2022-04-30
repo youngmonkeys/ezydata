@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 public class EzyQueryConditionBuilderTest {
 
-
     @Test
     public void test() {
         // given

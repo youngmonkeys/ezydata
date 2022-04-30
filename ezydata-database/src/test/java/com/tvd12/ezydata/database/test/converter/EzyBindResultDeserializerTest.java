@@ -69,5 +69,4 @@ public class EzyBindResultDeserializerTest {
         private String name;
         private int value;
     }
-
 }

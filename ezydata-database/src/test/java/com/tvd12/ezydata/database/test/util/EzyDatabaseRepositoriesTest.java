@@ -29,8 +29,8 @@ public class EzyDatabaseRepositoriesTest {
     }
 
     @EzyAutoImpl("repo1")
-    private static interface Repo1 {}
+    private interface Repo1 {}
 
     @EzyRepository("repo2")
-    private static interface Repo2 {}
+    private interface Repo2 {}
 }

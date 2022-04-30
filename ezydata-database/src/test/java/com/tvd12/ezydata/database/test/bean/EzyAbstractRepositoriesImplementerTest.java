@@ -29,10 +29,9 @@ public class EzyAbstractRepositoriesImplementerTest {
     }
 
     @EzyRepository
-    private static interface InternalRepo extends EzyDatabaseRepository<Long, Person> {}
+    private interface InternalRepo extends EzyDatabaseRepository<Long, Person> {}
 
     private static class Internal extends EzyAbstractRepositoriesImplementer {
-
         @Override
         protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
             return null;

@@ -66,5 +66,4 @@ public class EzyQLQueryTest {
             assert e instanceof EzyCreateQueryException;
         }
     }
-
 }

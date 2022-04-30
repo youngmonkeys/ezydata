@@ -15,7 +15,6 @@ public class EzyDatabaseContextTest {
         sut.close();
     }
 
-
     private static class InternalContext implements EzyDatabaseContext {
 
         @Override
@@ -54,6 +53,5 @@ public class EzyDatabaseContextTest {
         public List deserializeResultList(Object result, Class<?> resultItemType) {
             return null;
         }
-
     }
 }

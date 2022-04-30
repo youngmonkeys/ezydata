@@ -6,7 +6,5 @@ import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 public class MongoTemplate implements EzyDatabaseContextAware {
 
     @Override
-    public void setDatabaseContext(EzyDatabaseContext context) {
-    }
-
+    public void setDatabaseContext(EzyDatabaseContext context) {}
 }

@@ -70,6 +70,7 @@ public class BaseDbRepository<I, E> implements EzyDatabaseRepository<I, E> {
         return 0;
     }
 
+    @SuppressWarnings("unused")
     protected Class<E> getEntityType() {
         return null;
     }

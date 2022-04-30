@@ -8,25 +8,24 @@ public class EzySimpleRepositoryImplementerTest extends BaseTest {
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void test() {
-        ExEzySimpleRepositoryImplementer implementer = new ExEzySimpleRepositoryImplementer(PersonRepo.class);
+        ExEzySimpleRepositoryImplementer implementer =
+            new ExEzySimpleRepositoryImplementer(PersonRepo.class);
         implementer.implement(new MongoTemplate());
     }
 
-    public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
+    public static class ExEzySimpleRepositoryImplementer
+        extends EzyAbstractRepositoryImplementer {
 
         public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
             super(clazz);
         }
 
         @Override
-        protected void setRepoComponent(Object repo, Object template) {
-        }
+        protected void setRepoComponent(Object repo, Object template) {}
 
         @Override
         protected Class<?> getSuperClass() {
             throw new IllegalStateException("has no super class");
         }
-
     }
-
 }
