@@ -1,10 +1,5 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import java.io.InputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.mongodb.MongoClient;
@@ -13,6 +8,8 @@ import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;
 import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 import com.tvd12.test.base.BaseTest;
+
+import java.io.InputStream;
 
 public abstract class HazelcastBaseTest extends BaseTest {
 
@@ -25,7 +22,7 @@ public abstract class HazelcastBaseTest extends BaseTest {
         HZ_INSTANCE = newHzInstance();
         MAX_ID_SERVICE = newMaxIdService();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(()-> {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("\n\nshutdown hook, close mongo client\n\n");
             MONGO_CLIENT.close();
         }));
@@ -33,13 +30,12 @@ public abstract class HazelcastBaseTest extends BaseTest {
 
     private static MongoClient newMongoClient() {
         return new EzySimpleMongoClientLoader()
-                .inputStream(getConfigStream())
-                .load();
+            .inputStream(getConfigStream())
+            .load();
     }
 
     private static EzyMaxIdService newMaxIdService() {
-        EzyTransactionalMaxIdService service = new EzyTransactionalMaxIdService(HZ_INSTANCE);
-        return service;
+        return new EzyTransactionalMaxIdService(HZ_INSTANCE);
     }
 
     private static HazelcastInstance newHzInstance() {
@@ -51,13 +47,4 @@ public abstract class HazelcastBaseTest extends BaseTest {
     private static InputStream getConfigStream() {
         return HazelcastBaseTest.class.getResourceAsStream("/mongo_config.properties");
     }
-
-    protected Object newServiceBuilder() {
-        return null;
-    }
-
-    protected Logger getLogger() {
-        return LoggerFactory.getLogger(getClass());
-    }
-
 }
