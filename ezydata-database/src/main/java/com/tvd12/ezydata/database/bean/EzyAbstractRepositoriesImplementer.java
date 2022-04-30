@@ -135,14 +135,14 @@ public abstract class EzyAbstractRepositoriesImplementer
     }
 
     private Object implementRepoInterface(Class<?> itf, Object template) {
-        EzyAbstractRepositoryImplementer implementer = newRepoImplement(itf);
+        EzyAbstractRepositoryImplementer implementer = newRepoImplementer(itf);
         implementer.setQueryManager(queryManager);
         implementer.setQueryMethodConverter(queryMethodConverter);
         implementer.setRepositoryWrapper(repositoryWrapper);
         return implementer.implement(template);
     }
 
-    protected abstract EzyAbstractRepositoryImplementer newRepoImplement(
+    protected abstract EzyAbstractRepositoryImplementer newRepoImplementer(
         Class<?> itf
     );
 

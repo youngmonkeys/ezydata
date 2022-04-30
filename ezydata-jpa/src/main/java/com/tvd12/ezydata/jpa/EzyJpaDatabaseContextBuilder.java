@@ -38,7 +38,7 @@ public class EzyJpaDatabaseContextBuilder
     }
 
     @Override
-    protected EzyAbstractRepositoriesImplementer newRepositoriesImplement() {
+    protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
         return new EzyJpaRepositoriesImplementer();
     }
 

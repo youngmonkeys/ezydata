@@ -75,15 +75,15 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
         extends EzyAbstractRepositoriesImplementer {
 
         @Override
-        protected EzyAbstractRepositoryImplementer newRepoImplement(Class<?> itf) {
-            return new ExEzySimpleRepositoryImplement(itf);
+        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+            return new ExEzySimpleRepositoryImplementer(itf);
         }
     }
 
-    public static class ExEzySimpleRepositoryImplement
+    public static class ExEzySimpleRepositoryImplementer
         extends EzyAbstractRepositoryImplementer {
 
-        public ExEzySimpleRepositoryImplement(Class<?> clazz) {
+        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
             super(clazz);
         }
 

@@ -44,15 +44,15 @@ public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
     public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
 
         @Override
-        protected EzyAbstractRepositoryImplementer newRepoImplement(Class<?> itf) {
-            return new ExEzySimpleRepositoryImplementer(itf);
+        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+            return new ExEzySimpleRepositoryImplementerer(itf);
         }
 
     }
 
-    public static class ExEzySimpleRepositoryImplementer extends EzyMongoRepositoryImplementer {
+    public static class ExEzySimpleRepositoryImplementerer extends EzyMongoRepositoryImplementer {
 
-        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
+        public ExEzySimpleRepositoryImplementerer(Class<?> clazz) {
             super(clazz);
         }
 

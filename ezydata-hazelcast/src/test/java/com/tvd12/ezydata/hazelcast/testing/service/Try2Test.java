@@ -11,7 +11,7 @@ public class Try2Test extends HazelcastBaseTest {
 
     @Test
     public void test1() {
-        EzyServicesImplementer implementer = EzyServicesImplementer.servicesImplement()
+        EzyServicesImplementer implementer = EzyServicesImplementer.servicesImplementer()
                 .scan(new String[] {"com.tvd12.ezydata.hazelcast.testing.service"})
                 .serviceInterface("chicken", ChickenMapService.class);
         Map<Class<?>, Object> map = implementer.implement(HZ_INSTANCE);
@@ -25,7 +25,7 @@ public class Try2Test extends HazelcastBaseTest {
     
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void test2() {
-        EzyServicesImplementer implementer = EzyServicesImplementer.servicesImplement()
+        EzyServicesImplementer implementer = EzyServicesImplementer.servicesImplementer()
                 .scan(new String[] {"com.tvd12.ezydata.hazelcast.testing.service"});
         Map<Class<?>, Object> map = implementer.implement(HZ_INSTANCE);
         MonkeyMapService service = (MonkeyMapService) map.get(MonkeyMapService.class);

@@ -6,7 +6,7 @@ public class EzyJpaRepositoriesImplementer
         extends EzyAbstractRepositoriesImplementer {
 
     @Override
-    protected EzyJpaRepositoryImplementer newRepoImplement(Class<?> itf) {
+    protected EzyJpaRepositoryImplementer newRepoImplementer(Class<?> itf) {
         return new EzyJpaRepositoryImplementer(itf);
     }
 

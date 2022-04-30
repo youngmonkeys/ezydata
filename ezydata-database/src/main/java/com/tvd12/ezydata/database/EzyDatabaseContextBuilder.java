@@ -406,12 +406,12 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
         EzySimpleDatabaseContext context
     ) {
         EzyAbstractRepositoriesImplementer implementer =
-            createRepositoriesImplement();
+            createRepositoriesImplementer();
         repositories.putAll(implementer.implement(context));
     }
 
-    private EzyAbstractRepositoriesImplementer createRepositoriesImplement() {
-        EzyAbstractRepositoriesImplementer answer = newRepositoriesImplement();
+    private EzyAbstractRepositoriesImplementer createRepositoriesImplementer() {
+        EzyAbstractRepositoriesImplementer answer = newRepositoriesImplementer();
         answer.queryManager(queryManager);
         answer.queryMethodConverter(queryMethodConverter);
         answer.repositoryWrapper(repositoryWrapper);
@@ -425,7 +425,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
         return answer;
     }
 
-    protected abstract EzyAbstractRepositoriesImplementer newRepositoriesImplement();
+    protected abstract EzyAbstractRepositoriesImplementer newRepositoriesImplementer();
 
     protected void printDatabaseContextInformation(EzyDatabaseContext context) {
         logger.debug("\n{}\n{}\n{}",

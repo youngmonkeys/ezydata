@@ -7,7 +7,7 @@ public class EzyMorphiaRepositoriesImplementer
         extends EzyAbstractRepositoriesImplementer {
 
     @Override
-    protected EzyMorphiaRepositoryImplementer newRepoImplement(Class<?> itf) {
+    protected EzyMorphiaRepositoryImplementer newRepoImplementer(Class<?> itf) {
         return new EzyMorphiaRepositoryImplementer(itf);
     }
 

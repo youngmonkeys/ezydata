@@ -187,7 +187,7 @@ public class EzyMongoDatabaseContextBuilder
     }
 
     @Override
-    protected EzyAbstractRepositoriesImplementer newRepositoriesImplement() {
+    protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
         return new EzyMongoRepositoriesImplementer();
     }
 

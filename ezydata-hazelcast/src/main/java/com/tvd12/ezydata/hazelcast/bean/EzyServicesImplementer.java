@@ -7,7 +7,7 @@ import com.tvd12.ezydata.hazelcast.impl.EzySimpleServicesImplementer;
 
 public interface EzyServicesImplementer {
 
-    public static EzyServicesImplementer servicesImplement() {
+    public static EzyServicesImplementer servicesImplementer() {
         return new EzySimpleServicesImplementer();
     }
 

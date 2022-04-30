@@ -8,13 +8,13 @@ public class EzySimpleRepositoryImplementerTest extends BaseTest {
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void test() {
-        ExEzySimpleRepositoryImplement implementer = new ExEzySimpleRepositoryImplement(PersonRepo.class);
+        ExEzySimpleRepositoryImplementer implementer = new ExEzySimpleRepositoryImplementer(PersonRepo.class);
         implementer.implement(new MongoTemplate());
     }
 
-    public static class ExEzySimpleRepositoryImplement extends EzyAbstractRepositoryImplementer {
+    public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
 
-        public ExEzySimpleRepositoryImplement(Class<?> clazz) {
+        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
             super(clazz);
         }
 
