@@ -11,5 +11,4 @@ public class EzyBeanEntryProcessorMaxIdService extends EzyEntryProcessorMaxIdSer
     public EzyBeanEntryProcessorMaxIdService(HazelcastInstance hazelcastInstance) {
         super(hazelcastInstance);
     }
-
 }

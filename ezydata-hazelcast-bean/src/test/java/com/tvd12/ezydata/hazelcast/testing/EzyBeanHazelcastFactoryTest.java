@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
-import org.testng.annotations.Test;
-
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -10,6 +8,7 @@ import com.tvd12.ezydata.hazelcast.service.EzyBeanEntryProcessorMaxIdService;
 import com.tvd12.ezydata.hazelcast.service.EzyBeanTransactionalMaxIdService;
 import com.tvd12.ezyfox.bean.EzyBeanContext;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
 
 public class EzyBeanHazelcastFactoryTest extends BaseTest {
 
@@ -17,15 +16,14 @@ public class EzyBeanHazelcastFactoryTest extends BaseTest {
     public void test() {
         HazelcastInstance hazelcastInstance = Hazelcast.newHazelcastInstance();
         EzyBeanContext beanContext = EzyBeanContext.builder()
-                .addSingleton("hazelcastInstance", hazelcastInstance)
-                .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
-                .scan("com.tvd12.ezydata.hazelcast.testing.service")
-                .addSingletonClass(EzyBeanTransactionalMaxIdService.class)
-                .addSingletonClass(EzyBeanEntryProcessorMaxIdService.class)
-                .build();
+            .addSingleton("hazelcastInstance", hazelcastInstance)
+            .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
+            .scan("com.tvd12.ezydata.hazelcast.testing.service")
+            .addSingletonClass(EzyBeanTransactionalMaxIdService.class)
+            .addSingletonClass(EzyBeanEntryProcessorMaxIdService.class)
+            .build();
         EzyBeanHazelcastFactory factory = new EzyBeanHazelcastFactory();
         factory.setContext(beanContext);
         factory.newHazelcast(new Config());
     }
-
 }

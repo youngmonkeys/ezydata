@@ -4,7 +4,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.tvd12.ezyfox.bean.annotation.EzyAutoBind;
 import com.tvd12.ezyfox.bean.annotation.EzyPostInit;
 
-public abstract class EzyBeanAbstractMapService<K,V> extends EzyAbstractMapService<K,V> {
+public abstract class EzyBeanAbstractMapService<K, V> extends EzyAbstractMapService<K, V> {
 
     @EzyAutoBind
     @Override
@@ -17,5 +17,4 @@ public abstract class EzyBeanAbstractMapService<K,V> extends EzyAbstractMapServi
     public void init() {
         super.init();
     }
-
 }

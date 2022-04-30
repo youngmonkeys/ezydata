@@ -11,7 +11,4 @@ public class ExampleUserMapService extends EzyBeanAbstractMapService<String, Exa
     protected String getMapName() {
         return "hazelcast-bean-user-map";
     }
-
-    
-    
 }
