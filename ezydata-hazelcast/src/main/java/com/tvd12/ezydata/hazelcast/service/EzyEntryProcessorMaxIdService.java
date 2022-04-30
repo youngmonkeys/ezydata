@@ -50,5 +50,4 @@ public class EzyEntryProcessorMaxIdService
     protected EntryProcessor<String, Long, Long> newEntryProcessor(int delta) {
         return new EzyMaxIdEntryProcessor(delta);
     }
-
 }

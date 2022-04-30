@@ -77,10 +77,10 @@ public class EzySimpleServicesImplementer
     }
 
     private boolean isAutoImplServiceInterface(Class<?> clazz) {
-        return (clazz.isAnnotationPresent(EzyAutoImpl.class) ||
-            clazz.isAnnotationPresent(EzyMapServiceAutoImpl.class)) &&
-            Modifier.isPublic(clazz.getModifiers()) &&
-            Modifier.isInterface(clazz.getModifiers());
-
+        return (clazz.isAnnotationPresent(EzyAutoImpl.class)
+            || clazz.isAnnotationPresent(EzyMapServiceAutoImpl.class)
+            )
+            && Modifier.isPublic(clazz.getModifiers())
+            && Modifier.isInterface(clazz.getModifiers());
     }
 }

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezydata.hazelcast.service;
 
 import com.hazelcast.core.HazelcastInstance;
@@ -9,10 +6,6 @@ import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
 import com.tvd12.ezydata.hazelcast.transaction.EzyMapReturnTransaction;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 
-/**
- * @author tavandung12
- *
- */
 public class EzyTransactionalMaxIdService
     extends EzyAbstractMapService<String, Long>
     implements EzyMaxIdService {

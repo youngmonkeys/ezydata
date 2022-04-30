@@ -14,7 +14,6 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import lombok.Setter;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 @Setter

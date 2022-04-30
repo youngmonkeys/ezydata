@@ -60,9 +60,21 @@ public class EzySimpleMapConfigsFetcher
         }
     }
 
+    protected void applyConfig(String mapName, MapStoreConfig config) {
+        if (mapstoreConfigApplies.containsKey(mapName)) {
+            mapstoreConfigApplies.get(mapName).apply(config);
+        }
+    }
+
     protected void applyCommonConfig(MapConfig config) {
         if (mapAllConfigApply != null) {
             mapAllConfigApply.apply(config);
+        }
+    }
+
+    protected void applyCommonConfig(MapStoreConfig config) {
+        if (mapstoreAllConfigApply != null) {
+            mapstoreAllConfigApply.apply(config);
         }
     }
 
@@ -76,18 +88,6 @@ public class EzySimpleMapConfigsFetcher
             config.setFactoryImplementation(mapstoreFactory);
         }
         return config;
-    }
-
-    protected void applyConfig(String mapName, MapStoreConfig config) {
-        if (mapstoreConfigApplies.containsKey(mapName)) {
-            mapstoreConfigApplies.get(mapName).apply(config);
-        }
-    }
-
-    protected void applyCommonConfig(MapStoreConfig config) {
-        if (mapstoreAllConfigApply != null) {
-            mapstoreAllConfigApply.apply(config);
-        }
     }
 
     protected Set<String> getMapNames() {

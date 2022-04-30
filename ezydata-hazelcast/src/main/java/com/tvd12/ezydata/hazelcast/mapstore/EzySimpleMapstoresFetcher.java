@@ -78,11 +78,11 @@ public class EzySimpleMapstoresFetcher
         }
 
         public Builder addMapstoreClass(Class clazz) {
-            return addMapstoreClass(() -> getMapName(clazz), clazz);
+            return doAddMapstoreClass(() -> getMapName(clazz), clazz);
         }
 
         public Builder addMapstoreClass(String mapName, Class clazz) {
-            return addMapstoreClass(() -> mapName, clazz);
+            return doAddMapstoreClass(() -> mapName, clazz);
         }
 
         public Builder addMapstore(MapStore mapstore) {
@@ -121,7 +121,7 @@ public class EzySimpleMapstoresFetcher
             return EzyClasses.newInstance(mapstoreClass);
         }
 
-        private Builder addMapstoreClass(Supplier<String> mapNameSupplier, Class clazz) {
+        private Builder doAddMapstoreClass(Supplier<String> mapNameSupplier, Class clazz) {
             if (MapStore.class.isAssignableFrom(clazz)) {
                 this.mapstoreClassMap.put(mapNameSupplier.get(), clazz);
             } else {
