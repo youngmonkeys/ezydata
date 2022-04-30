@@ -23,14 +23,12 @@ public class EzySimpleResultDeserializers
         if (deserializer == null) {
             throw new IllegalArgumentException("has no deserializer with type: " + resultType.getName());
         }
-        Object answer = deserializer.deserialize(data);
-        return answer;
+        return deserializer.deserialize(data, this);
     }
 
     @Override
     public EzyResultDeserializer getDeserializer(Class<?> resultType) {
-        EzyResultDeserializer deserializer = deserializers.get(resultType);
-        return deserializer;
+        return deserializers.get(resultType);
     }
 
     @Override
@@ -51,5 +49,4 @@ public class EzySimpleResultDeserializers
         }
         return map;
     }
-
 }

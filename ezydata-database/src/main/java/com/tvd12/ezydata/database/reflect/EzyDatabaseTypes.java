@@ -16,8 +16,7 @@ public final class EzyDatabaseTypes {
     private EzyDatabaseTypes() {}
 
     private static Set<Class> defaultTypes() {
-        Set<Class> set = new HashSet<>();
-        set.addAll(EzyTypes.ALL_TYPES);
+        Set<Class> set = new HashSet<>(EzyTypes.ALL_TYPES);
         set.add(Date.class);
         set.add(LocalDate.class);
         set.add(LocalDateTime.class);
@@ -27,5 +26,4 @@ public final class EzyDatabaseTypes {
         set.add(Class.class);
         return Collections.unmodifiableSet(set);
     }
-
 }

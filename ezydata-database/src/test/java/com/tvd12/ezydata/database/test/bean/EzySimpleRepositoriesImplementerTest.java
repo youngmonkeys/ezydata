@@ -1,13 +1,22 @@
 package com.tvd12.ezydata.database.test.bean;
 
+import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.database.bean.EzyRepositoriesImplementer;
+import com.tvd12.ezydata.database.query.EzyQueryRegister;
 import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.reflect.EzyReflection;
+import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
+import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.base.BaseTest;
+import com.tvd12.test.reflect.FieldUtil;
 import org.testng.annotations.Test;
 
+import java.util.Collections;
 import java.util.Map;
+
+import static org.mockito.Mockito.mock;
 
 public class EzySimpleRepositoriesImplementerTest extends BaseTest {
 
@@ -34,29 +43,56 @@ public class EzySimpleRepositoriesImplementerTest extends BaseTest {
         assert repos.isEmpty();
     }
 
-    public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
+    @Test
+    public void setPropertiesTest() {
+        // given
+        EzyQueryRegister queryManager = mock(EzyQueryRegister.class);
+        EzyDatabaseRepositoryWrapper repositoryWrapper = mock(EzyDatabaseRepositoryWrapper.class);
+        EzyReflection reflection = new EzyReflectionProxy("com.tvd12.ezydata.database.test.bean");
+        EzyRepositoriesImplementer implementer = new ExEzySimpleRepositoriesImplementer()
+            .repositoryInterfaces(reflection)
+            .queryManager(queryManager)
+            .repositoryWrapper(repositoryWrapper);
 
-        @Override
-        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
-            return new ExEzySimpleRepositoryImplementer(itf);
-        }
-
+        // when
+        // then
+        Asserts.assertEquals(
+            FieldUtil.getFieldValue(implementer, "queryManager"),
+            queryManager
+        );
+        Asserts.assertEquals(
+            FieldUtil.getFieldValue(implementer, "repositoryWrapper"),
+            repositoryWrapper
+        );
+        Asserts.assertEquals(
+            FieldUtil.getFieldValue(implementer, "reflections"),
+            Collections.singletonList(reflection),
+            false
+        );
     }
 
-    public static class ExEzySimpleRepositoryImplementer extends EzyAbstractRepositoryImplementer {
+    public static class ExEzySimpleRepositoriesImplementer
+        extends EzyAbstractRepositoriesImplementer {
 
-        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
+        @Override
+        protected EzyAbstractRepositoryImplementer newRepoImplement(Class<?> itf) {
+            return new ExEzySimpleRepositoryImplement(itf);
+        }
+    }
+
+    public static class ExEzySimpleRepositoryImplement
+        extends EzyAbstractRepositoryImplementer {
+
+        public ExEzySimpleRepositoryImplement(Class<?> clazz) {
             super(clazz);
         }
 
         @Override
-        protected void setRepoComponent(Object repo, Object template) {
-        }
+        protected void setRepoComponent(Object repo, Object template) {}
 
         @Override
         protected Class<?> getSuperClass() {
             return ExEzyDatabaseRepository.class;
         }
-
     }
 }

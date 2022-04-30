@@ -6,10 +6,10 @@ import java.util.function.Function;
 
 public class EzyQLQueryFactory {
 
-    protected final Function<Object, Object> parameterConveter;
+    protected final Function<Object, Object> parameterConverter;
 
     protected EzyQLQueryFactory(Builder builder) {
-        this.parameterConveter = builder.parameterConveter;
+        this.parameterConverter = builder.parameterConverter;
     }
 
     public static Builder builder() {
@@ -18,16 +18,16 @@ public class EzyQLQueryFactory {
 
     public EzyQLQuery.Builder newQueryBuilder() {
         return newEmptyQueryBuilder()
-            .parameterConveter(parameterConveter);
-    }
-
-    protected EzyQLQuery.Builder newEmptyQueryBuilder() {
-        return EzyQLQuery.builder();
+            .parameterConverter(parameterConverter);
     }
 
     public EzyQLQuery.Builder newQueryBuilder(int parameterCount) {
         return newQueryBuilder()
             .parameterCount(parameterCount);
+    }
+
+    protected EzyQLQuery.Builder newEmptyQueryBuilder() {
+        return EzyQLQuery.builder();
     }
 
     public EzyQLQuery newQuery(String query, Object... parameters) {
@@ -41,10 +41,10 @@ public class EzyQLQueryFactory {
 
     public static class Builder implements EzyBuilder<EzyQLQueryFactory> {
 
-        protected Function<Object, Object> parameterConveter;
+        protected Function<Object, Object> parameterConverter;
 
-        public Builder parameterConveter(Function<Object, Object> parameterConveter) {
-            this.parameterConveter = parameterConveter;
+        public Builder parameterConverter(Function<Object, Object> parameterConverter) {
+            this.parameterConverter = parameterConverter;
             return this;
         }
 
@@ -52,7 +52,5 @@ public class EzyQLQueryFactory {
         public EzyQLQueryFactory build() {
             return new EzyQLQueryFactory(this);
         }
-
     }
-
 }

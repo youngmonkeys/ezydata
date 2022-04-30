@@ -13,7 +13,7 @@ public class EzyMongoRepositoriesImplementer
     }
 
     @Override
-    protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+    protected EzyAbstractRepositoryImplementer newRepoImplement(Class<?> itf) {
         return new EzyMongoRepositoryImplementer(itf);
     }
 

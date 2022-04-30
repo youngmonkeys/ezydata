@@ -8,15 +8,13 @@ import java.util.List;
 
 @Getter
 public class EzyQueryConditionChain {
+
     protected final List<EzyQueryConditionGroup> conditionGroups;
 
     public EzyQueryConditionChain(
-        List<EzyQueryConditionGroup> conditionGroups) {
+        List<EzyQueryConditionGroup> conditionGroups
+    ) {
         this.conditionGroups = conditionGroups;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public int size() {
@@ -25,12 +23,18 @@ public class EzyQueryConditionChain {
 
     public int getParameterCount() {
         return conditionGroups.stream()
-            .mapToInt(it -> it.size())
+            .mapToInt(EzyQueryConditionGroup::size)
             .sum();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public static class Builder implements EzyBuilder<EzyQueryConditionChain> {
-        protected final List<EzyQueryConditionGroup> conditionGroups = new ArrayList<>();
+
+        protected final List<EzyQueryConditionGroup> conditionGroups
+            = new ArrayList<>();
 
         public Builder addConditionGroup(EzyQueryConditionGroup conditionGroup) {
             this.conditionGroups.add(conditionGroup);

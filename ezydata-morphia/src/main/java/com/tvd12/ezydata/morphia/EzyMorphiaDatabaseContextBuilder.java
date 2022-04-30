@@ -25,7 +25,7 @@ public class EzyMorphiaDatabaseContextBuilder
     }
 
     @Override
-    protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
+    protected EzyAbstractRepositoriesImplementer newRepositoriesImplement() {
         return new EzyMorphiaRepositoriesImplementer();
     }
 

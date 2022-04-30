@@ -44,7 +44,7 @@ public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
     public static class ExEzySimpleRepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
 
         @Override
-        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+        protected EzyAbstractRepositoryImplementer newRepoImplement(Class<?> itf) {
             return new ExEzySimpleRepositoryImplementer(itf);
         }
 

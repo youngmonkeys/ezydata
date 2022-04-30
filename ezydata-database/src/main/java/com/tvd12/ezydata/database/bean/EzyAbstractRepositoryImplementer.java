@@ -20,14 +20,11 @@ import javassist.CtClass;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("rawtypes")
 public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
-
-    protected static final AtomicInteger COUNT = new AtomicInteger(0);
     @Setter
     protected static boolean debug;
     protected final EzyClass clazz;
@@ -40,6 +37,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     @Setter
     protected EzyDatabaseRepositoryWrapper repositoryWrapper;
 
+    protected static final AtomicInteger COUNT = new AtomicInteger(0);
+
     public EzyAbstractRepositoryImplementer(Class<?> clazz) {
         this(new EzyClass(clazz));
     }
@@ -50,16 +49,16 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 
     public Object implement(Object template) {
         try {
-            this.preimplement(template);
-            return doimplement(template);
+            return doImplement(template);
         } catch (Exception e) {
-            throw new IllegalStateException("error on repo interface: " + clazz.getName(), e);
+            throw new IllegalStateException(
+                "error on repo interface: " + clazz.getName(),
+                e
+            );
         }
     }
 
-    protected void preimplement(Object template) {}
-
-    protected Object doimplement(Object template) throws Exception {
+    protected Object doImplement(Object template) throws Exception {
         Class[] idAndEntityTypes = getIdAndEntityTypes();
         idType = idAndEntityTypes[0];
         entityType = idAndEntityTypes[1];
@@ -74,16 +73,21 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
             printMethodContent(methodContent);
             implClass.addMethod(CtNewMethod.make(methodContent, implClass));
         }
-        String getEntityTypeMethodContent = makeGetEntityTypeMethodContent(entityType);
+        String getEntityTypeMethodContent =
+            makeGetEntityTypeMethodContent(entityType);
         printMethodContent(getEntityTypeMethodContent);
-        implClass.addMethod(CtNewMethod.make(getEntityTypeMethodContent, implClass));
+        implClass.addMethod(
+            CtNewMethod.make(getEntityTypeMethodContent, implClass)
+        );
         implClass.setInterfaces(new CtClass[]{pool.get(clazz.getName())});
         Class answerClass = implClass.toClass();
         implClass.detach();
         Object repo = answerClass.newInstance();
         if (template instanceof EzyDatabaseContext) {
             if (repo instanceof EzyDatabaseContextAware) {
-                ((EzyDatabaseContextAware) repo).setDatabaseContext((EzyDatabaseContext) template);
+                ((EzyDatabaseContextAware) repo).setDatabaseContext(
+                    (EzyDatabaseContext) template
+                );
             }
         }
         setRepoComponent(repo, template);
@@ -93,17 +97,14 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     protected void setRepoComponent(Object repo, Object template) {}
 
     protected Collection<EzyMethod> getAbstractMethods() {
-        return clazz.getDistinctMethods(m -> isAbstractMethod(m));
+        return clazz.getDistinctMethods(this::isAbstractMethod);
     }
 
     protected boolean isAbstractMethod(EzyMethod method) {
         if (method.isAnnotated(EzyQuery.class)) {
             return true;
         }
-        if (isAutoImplementMethod(method)) {
-            return true;
-        }
-        return false;
+        return isAutoImplementMethod(method);
     }
 
     protected boolean isAutoImplementMethod(EzyMethod method) {
@@ -157,17 +158,25 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
         return convertQueryMethodToQueryString(method);
     }
 
-    protected EzyQueryString getQueryString(EzyMethod method, EzyQuery queryAnnotation) {
+    protected EzyQueryString getQueryString(
+        EzyMethod method,
+        EzyQuery queryAnnotation
+    ) {
         String queryString = queryAnnotation.value();
         boolean nativeQuery = queryAnnotation.nativeQuery();
         if (EzyStrings.isNoContent(queryString)) {
             String queryName = queryAnnotation.name();
             if (EzyStrings.isNoContent(queryName)) {
-                throw new IllegalArgumentException("query name can not be null on method: " + method.getName());
+                throw new IllegalArgumentException(
+                    "query name can not be null on method: " + method.getName()
+                );
             }
             EzyQueryEntity query = queryManager.getQuery(queryName);
             if (query == null) {
-                throw new IllegalArgumentException("not found query with name: " + queryName + " on method: " + method.getName());
+                throw new IllegalArgumentException(
+                    "not found query with name: " + queryName +
+                        " on method: " + method.getName()
+                );
             }
             queryString = query.getValue();
             nativeQuery = query.isNativeQuery();
@@ -177,7 +186,9 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
 
     protected EzyQueryString convertQueryMethodToQueryString(EzyMethod method) {
         EzyQueryMethod queryMethod = new EzyQueryMethod(method);
-        return new EzyQueryString(queryMethodConverter.toQueryString(entityType, queryMethod));
+        return new EzyQueryString(
+            queryMethodConverter.toQueryString(entityType, queryMethod)
+        );
     }
 
     protected boolean isPaginationMethod(EzyMethod method) {
@@ -197,7 +208,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
                     resultType = EzyGenerics.getOneGenericClassArgument(
                         method.getGenericReturnType()
                     );
-                } catch (Exception e) {
+                } catch (Exception ignored) {
+                    // do nothing
                 }
             }
         }
@@ -215,18 +227,28 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     }
 
     protected EzyMethod getEntityTypeMethod() {
-        Method method = EzyMethods.getMethod(getSuperClass(), "getEntityType");
-        return new EzyMethod(method);
+        return new EzyMethod(
+            EzyMethods.getMethod(
+                getSuperClass(),
+                "getEntityType"
+            )
+        );
     }
 
     protected abstract Class<?> getSuperClass();
 
     protected String getImplClassName() {
-        return clazz.getName() + "$EzyDatabaseRepository$EzyAutoImpl$" + COUNT.incrementAndGet();
+        return clazz.getName() +
+            "$EzyDatabaseRepository$EzyAutoImpl$" +
+            COUNT.incrementAndGet();
     }
 
     protected Class[] getIdAndEntityTypes() {
-        return EzyGenerics.getGenericInterfacesArguments(clazz.getClazz(), getBaseRepositoryInterface(), 2);
+        return EzyGenerics.getGenericInterfacesArguments(
+            clazz.getClazz(),
+            getBaseRepositoryInterface(),
+            2
+        );
     }
 
     protected Class<?> getBaseRepositoryInterface() {
@@ -238,5 +260,4 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
             logger.info("method content \n{}", methodContent);
         }
     }
-
 }

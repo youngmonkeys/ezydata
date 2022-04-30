@@ -35,8 +35,8 @@ public class EzyMongoQueryFactory extends EzyQLQueryFactory {
         }
         
         @Override
-        public Builder parameterConveter(Function<Object, Object> parameterConveter) {
-            super.parameterConveter(parameterConveter);
+        public Builder parameterConverter(Function<Object, Object> parameterConverter) {
+            super.parameterConverter(parameterConverter);
             return this;
         }
         

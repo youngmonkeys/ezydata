@@ -13,5 +13,4 @@ public class EzyQueryString {
     public EzyQueryString(String queryString) {
         this(queryString, false);
     }
-
 }

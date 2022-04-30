@@ -7,5 +7,4 @@ public interface EzyQueryManager {
     EzyQueryEntity getQuery(String name);
 
     Map<String, EzyQueryEntity> getQueries();
-
 }

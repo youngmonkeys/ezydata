@@ -14,9 +14,9 @@ public class EzyMongoQuery extends EzyQLQuery {
     }
     
     @Override
-    protected Function<Object, Object> getParameterConveter(
+    protected Function<Object, Object> getParameterConverter(
             EzyQLQuery.Builder builder) {
-        Function<Object, Object> firstConverter = super.getParameterConveter(builder);
+        Function<Object, Object> firstConverter = super.getParameterConverter(builder);
         EzyMongoDataConverter secondConverter = ((Builder)builder).dataConverter;
         return it -> 
             secondConverter.bsonValueToString((BsonValue) firstConverter.apply(it));

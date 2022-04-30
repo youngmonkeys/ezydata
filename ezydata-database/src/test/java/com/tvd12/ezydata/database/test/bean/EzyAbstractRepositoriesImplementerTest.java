@@ -34,7 +34,7 @@ public class EzyAbstractRepositoriesImplementerTest {
     private static class Internal extends EzyAbstractRepositoriesImplementer {
 
         @Override
-        protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
+        protected EzyAbstractRepositoryImplementer newRepoImplement(Class<?> itf) {
             return null;
         }
     }

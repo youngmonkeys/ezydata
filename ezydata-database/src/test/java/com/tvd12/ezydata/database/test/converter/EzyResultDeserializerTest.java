@@ -7,6 +7,7 @@ import com.tvd12.test.assertion.Asserts;
 import org.testng.annotations.Test;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyResultDeserializerTest {
 
@@ -45,17 +46,35 @@ public class EzyResultDeserializerTest {
         Asserts.assertNull(sut.getOutType());
     }
 
+    @Test
+    public void deserializeWithDeserializersTest() {
+        // given
+        EzyResultDeserializers deserializers = mock(EzyResultDeserializers.class);
+        Object data = 1L;
+        when(deserializers.deserialize(data, Long.class)).thenReturn(data);
+
+        EzyResultDeserializer<Long> sut = new EzyResultDeserializer<Long>() {
+            @Override
+            public Long deserialize(Object data, EzyResultDeserializers deserializers) {
+                return (Long) deserializers.deserialize(data, Long.class);
+            }
+        };
+
+        // when
+        Long actual = sut.deserialize(data, deserializers);
+
+        // then
+        Asserts.assertEquals(actual, data);
+    }
+
     private static class Data {}
 
-    private static class Repo implements EzyResultDeserializer<Data> {
-    }
+    private static class Repo implements EzyResultDeserializer<Data> {}
 
     @SuppressWarnings("rawtypes")
     @EzyResultDeserialized(Data.class)
-    private static class Repo2 implements EzyResultDeserializer {
-    }
+    private static class Repo2 implements EzyResultDeserializer {}
 
     @SuppressWarnings("rawtypes")
-    private static class Repo3 implements EzyResultDeserializer {
-    }
+    private static class Repo3 implements EzyResultDeserializer {}
 }

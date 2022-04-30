@@ -9,11 +9,13 @@ import static com.tvd12.ezydata.database.EzyDatabaseRepository.*;
 
 @Getter
 public class EzyQueryMethod {
-    protected final static String OR = "Or";
-    protected final static String AND = "And";
+
     protected final EzyMethod method;
     protected final EzyQueryMethodType type;
     protected final EzyQueryConditionChain conditionChain;
+
+    protected static final String OR = "Or";
+    protected static final String AND = "And";
 
     public EzyQueryMethod(EzyMethod method) {
         this.method = method;
@@ -76,9 +78,7 @@ public class EzyQueryMethod {
         int paramCount = method.getParameterCount();
         if (paramCount > 0) {
             Class<?> lastParamType = method.getParameterTypes()[paramCount - 1];
-            if (Next.class.isAssignableFrom(lastParamType)) {
-                return true;
-            }
+            return Next.class.isAssignableFrom(lastParamType);
         }
         return false;
     }

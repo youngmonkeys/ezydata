@@ -16,8 +16,7 @@ public class EzySimpleQueryManager
 
     @Override
     public EzyQueryEntity getQuery(String name) {
-        EzyQueryEntity query = queries.get(name);
-        return query;
+        return queries.get(name);
     }
 
     @Override
@@ -29,5 +28,4 @@ public class EzySimpleQueryManager
     public void addQuery(EzyQueryEntity query) {
         this.queries.put(query.getName(), query);
     }
-
 }

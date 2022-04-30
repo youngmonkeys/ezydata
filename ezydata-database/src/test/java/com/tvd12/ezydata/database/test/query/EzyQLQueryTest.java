@@ -14,7 +14,7 @@ public class EzyQLQueryTest {
     @Test
     public void test() {
         EzyQLQueryFactory factory = EzyQLQueryFactory.builder()
-            .parameterConveter(p -> p != null ? p : "null")
+            .parameterConverter(p -> p != null ? p : "null")
             .build();
         String queryString = "select e from E e where id = ?0 and name = ?1";
         EzyQLQuery query = factory.newQuery(queryString, 1, "dung");
