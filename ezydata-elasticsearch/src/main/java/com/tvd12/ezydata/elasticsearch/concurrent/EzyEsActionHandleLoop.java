@@ -14,11 +14,12 @@ public class EzyEsActionHandleLoop
     extends EzyLoggable
     implements EzyStartable, EzyStoppable {
 
-    protected static final String THREAD_NAME = "elasticsearch-action-handling";
+    protected volatile boolean active;
     protected final EzyEsActionQueue actionQueue;
     protected final EzyThreadList executorService;
     protected final EzyEsUncaughtExceptionHandler uncaughtExceptionHandler;
-    protected volatile boolean active;
+    
+    protected static final String THREAD_NAME = "elasticsearch-action-handling";
 
     public EzyEsActionHandleLoop(
         int threadPoolSize,
