@@ -1,13 +1,5 @@
 package com.tvd12.ezydata.jpa.test;
 
-import java.util.Arrays;
-import java.util.Properties;
-
-import javax.persistence.EntityManagerFactory;
-import javax.sql.DataSource;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
@@ -21,6 +13,13 @@ import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
 import com.tvd12.ezyfox.util.EzyNext;
 import com.tvd12.properties.file.reader.BaseFileReader;
 import com.tvd12.test.assertion.Asserts;
+import org.testng.annotations.Test;
+
+import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Properties;
 
 public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
 
@@ -28,7 +27,7 @@ public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
 
     public EzyJpaByHibernateRepositoryTest() {
         this.properties = new BaseFileReader()
-                .read("application.yaml");
+            .read("application.yaml");
     }
 
     @Test
@@ -41,7 +40,7 @@ public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
         System.out.println(userRepo.findByEmail("dzung@gmail.com"));
         System.out.println(userRepo.findByField("email", "dzung@gmail.com"));
         System.out.println("findListByEmail2: " + userRepo.findListByEmail2("dzung@gmail.com"));
-        System.out.println("countAll: " + userRepo.countAll(""));
+        System.out.println("countAll: " + userRepo.countAll());
         EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
         Employee employee = new Employee();
         employee.setEmployeeId("dzung");
@@ -67,36 +66,41 @@ public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
         assert employeeRepo.findListByField("firstName", "Hello").size() >= 1;
         assert employeeRepo.findListByField("firstName", "Hello", 0, 2).size() >= 1;
         assert employeeRepo.findList(EzyNext.fromSkipLimit(0, 100)).size() >= 1;
+        //noinspection ConstantConditions
         assert employeeRepo.findAll().size() >= 0;
         assert employeeRepo.findAll(0, 1).size() == 1;
         assert employeeRepo.findByEmail("dzung@youngmokeys.org") != null;
         assert employeeRepo.findByEmailOptional("dzung@youngmokeys.org").isPresent();
         assert employeeRepo.findByEmailAndPhoneNumber(
-                "dzung@youngmokeys.org",
-                "123456789"
-                ) != null;
+            "dzung@youngmokeys.org",
+            "123456789"
+        ) != null;
         long count = employeeRepo.count();
         assert employeeRepo.findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo(
-                "dzung",
-                Arrays.asList("dzung@youngmokeys.org"),
-                Arrays.asList("123456789"),
-                "abcdefgh",
-                EzyNext.fromSkipLimit(0, 100)
-                ).size() == count;
+            "dzung",
+            Collections.singletonList("dzung@youngmokeys.org"),
+            Collections.singletonList("123456789"),
+            "abcdefgh",
+            EzyNext.fromSkipLimit(0, 100)
+        ).size() == count;
         Asserts.assertEquals(employeeRepo.findByEmployeeId("dzung"), employeeRepo.findById("dzung"));
+        //noinspection ConstantConditions
         assert employeeRepo.findListByEmail("dzung@youngmokeys.org").get(0) instanceof Employee;
         assert employeeRepo.findEmployeeIdByEmployeeId("dzung").getEmployeeId().equals("dzung");
+        //noinspection OptionalGetWithoutIsPresent
         assert employeeRepo.findEmployeeIdByEmployeeIdOptional("dzung").get().getEmployeeId().equals("dzung");
+        //noinspection OptionalGetWithoutIsPresent
         assert employeeRepo.findEmployeeIdAndFirstNameByEmployeeIdOptional("dzung")
             .get().getEmployeeId()
             .equals("dzung");
+        //noinspection OptionalGetWithoutIsPresent
         assert employeeRepo.findEmployeeIdAndFirstNameByEmployeeIdOptional("dzung")
             .get().getFirstName()
             .equals("Dung");
         assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
         employeeRepo.delete("employee2");
         assert employeeRepo.count() == (count - 1);
-        assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;
+        assert employeeRepo.deleteByIds(Collections.singletonList("employee3")) >= 1;
         employeeRepo.deleteAll();
         assert employeeRepo.count() == 0;
         Thread.sleep(1000L);
@@ -104,30 +108,30 @@ public class EzyJpaByHibernateRepositoryTest extends BaseJpaTest {
 
     private EzyDatabaseContext databaseContext() {
         EzyQueryEntity query1 = EzyQueryEntity.builder()
-                .name("findListByEmail")
-                .value("select e.id, e.fullName from User e")
-                .resultType(UserIdFullNameResult.class)
-                .build();
+            .name("findListByEmail")
+            .value("select e.id, e.fullName from User e where e.email = ?0")
+            .resultType(UserIdFullNameResult.class)
+            .build();
         return new EzyJpaDatabaseContextBuilder()
-                .addQuery(query1)
-                .repositoryClass(UserRepo.class)
-                .scan("com.tvd12.ezydata.jpa.test.repo")
-                .scan("com.tvd12.ezydata.jpa.test.result")
-                .entityManagerFactory(entityManagerFactory())
-                .build();
+            .addQuery(query1)
+            .repositoryClass(UserRepo.class)
+            .scan("com.tvd12.ezydata.jpa.test.repo")
+            .scan("com.tvd12.ezydata.jpa.test.result")
+            .entityManagerFactory(entityManagerFactory())
+            .build();
     }
 
     private EntityManagerFactory entityManagerFactory() {
         return new EzyJpaEntityManagerFactoryLoader()
-                .entityPackage("com.tvd12.ezydata.jpa.test.entity")
-                .dataSource(dataSource())
-                .properties(properties)
-                .load("Test");
+            .entityPackage("com.tvd12.ezydata.jpa.test.entity")
+            .dataSource(dataSource())
+            .properties(properties)
+            .load("Test");
     }
 
     private DataSource dataSource() {
         return new EzyJpaDataSourceLoader()
-                .properties(properties, "datasource")
-                .load();
+            .properties(properties, "datasource")
+            .load();
     }
 }

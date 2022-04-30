@@ -1,39 +1,27 @@
 package com.tvd12.ezydata.jpa.loader;
 
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import com.tvd12.ezydata.database.util.EzyDatabasePropertiesKeeper;
+import com.tvd12.ezyfox.reflect.EzyReflection;
+import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
+import lombok.AllArgsConstructor;
+import org.hibernate.jpa.HibernatePersistenceProvider;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
+import javax.persistence.*;
 import javax.persistence.spi.ClassTransformer;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
+import java.net.URL;
+import java.util.*;
 
-import org.hibernate.jpa.HibernatePersistenceProvider;
+public class EzyJpaEntityManagerFactoryLoader
+    extends EzyDatabasePropertiesKeeper<EzyJpaEntityManagerFactoryLoader> {
 
-import com.tvd12.ezydata.database.util.EzyDatabasePropertiesKeeper;
-import com.tvd12.ezyfox.reflect.EzyReflection;
-import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
-
-import lombok.AllArgsConstructor;
-
-public class EzyJpaEntityManagerFactoryLoader 
-        extends EzyDatabasePropertiesKeeper<EzyJpaEntityManagerFactoryLoader> {
-
-    protected String jpaVersion = "2.2";
-    protected DataSource dataSource;
     protected final Set<String> entityPackages = new HashSet<>();
     protected final List<String> managedClassNames = new ArrayList<>();
     protected final List<String> mappingFileNames = new ArrayList<>();
+    protected String jpaVersion = "2.2";
+    protected DataSource dataSource;
     protected PersistenceUnitTransactionType transactionType = PersistenceUnitTransactionType.RESOURCE_LOCAL;
 
 
@@ -58,8 +46,9 @@ public class EzyJpaEntityManagerFactoryLoader
     }
 
     public EzyJpaEntityManagerFactoryLoader mappingFileName(Iterable<String> mappingFileNames) {
-        for(String mappingFileName : mappingFileNames)
+        for (String mappingFileName : mappingFileNames) {
             mappingFileName(mappingFileName);
+        }
         return this;
     }
 
@@ -69,8 +58,9 @@ public class EzyJpaEntityManagerFactoryLoader
     }
 
     public EzyJpaEntityManagerFactoryLoader entityClasses(Iterable<Class<?>> entityClasses) {
-        for(Class<?> entityClass : entityClasses)
+        for (Class<?> entityClass : entityClasses) {
             entityClass(entityClass);
+        }
         return this;
     }
 
@@ -80,8 +70,9 @@ public class EzyJpaEntityManagerFactoryLoader
     }
 
     public EzyJpaEntityManagerFactoryLoader entityPackages(Iterable<String> entityPackages) {
-        for(String entityPackage : entityPackages)
+        for (String entityPackage : entityPackages) {
             entityPackage(entityPackage);
+        }
         return this;
     }
 
@@ -94,25 +85,29 @@ public class EzyJpaEntityManagerFactoryLoader
         EntityManagerFactory entityManagerFactory = null;
         try {
             entityManagerFactory = loadByHibernate(persistenceUnitName);
+        } catch (Throwable e) {
+            logger.warn(
+                "can't load EntityManagerFactory by hibernate " +
+                    "(you can disable this warning by config log level to ERROR)",
+                e
+            );
         }
-        catch (Throwable e) {
-            logger.warn("can't load EntityManagerFactory by hibernate (you can disable this warning by config log level to ERROR)", e);
-        }
-        if(entityManagerFactory == null)
+        if (entityManagerFactory == null) {
             entityManagerFactory = loadByDefaultJpa(persistenceUnitName);
+        }
         return entityManagerFactory;
     }
 
     private EntityManagerFactory loadByHibernate(String persistenceUnitName) {
         PersistenceUnitInfo persistenceUnitInfo =
-                new PersistenceUnitInfoImpl(persistenceUnitName);
+            new PersistenceUnitInfoImpl(persistenceUnitName);
         HibernatePersistenceProvider persistenceProvider =
-                new HibernatePersistenceProvider();
+            new HibernatePersistenceProvider();
         return persistenceProvider
-                .createContainerEntityManagerFactory(
-                        persistenceUnitInfo,
-                        Collections.EMPTY_MAP
-                );
+            .createContainerEntityManagerFactory(
+                persistenceUnitInfo,
+                Collections.EMPTY_MAP
+            );
     }
 
     private EntityManagerFactory loadByDefaultJpa(String persistenceUnitName) {
@@ -120,8 +115,9 @@ public class EzyJpaEntityManagerFactoryLoader
     }
 
     private void scanEntityPackages() {
-        if(entityPackages.isEmpty())
+        if (entityPackages.isEmpty()) {
             return;
+        }
         EzyReflection reflection = new EzyReflectionProxy(entityPackages);
         entityClasses(reflection.getAnnotatedClasses(Entity.class));
     }
@@ -167,7 +163,9 @@ public class EzyJpaEntityManagerFactoryLoader
         }
 
         @Override
-        public URL getPersistenceUnitRootUrl() { return null; }
+        public URL getPersistenceUnitRootUrl() {
+            return null;
+        }
 
         @Override
         public List<String> getManagedClassNames() {
@@ -175,7 +173,9 @@ public class EzyJpaEntityManagerFactoryLoader
         }
 
         @Override
-        public boolean excludeUnlistedClasses() { return false; }
+        public boolean excludeUnlistedClasses() {
+            return false;
+        }
 
         @Override
         public SharedCacheMode getSharedCacheMode() {
@@ -205,7 +205,8 @@ public class EzyJpaEntityManagerFactoryLoader
         public void addTransformer(ClassTransformer transformer) {}
 
         @Override
-        public ClassLoader getNewTempClassLoader() { return null; }
+        public ClassLoader getNewTempClassLoader() {
+            return null;
+        }
     }
-
 }

@@ -10,5 +10,4 @@ public class BaseJpaTest {
     static {
         ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("UsersDB");
     }
-
 }
