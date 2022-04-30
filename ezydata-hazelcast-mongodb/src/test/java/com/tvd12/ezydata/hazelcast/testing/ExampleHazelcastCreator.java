@@ -6,7 +6,6 @@ import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.hazelcast.EzyMongoDatabaseHazelcastFactory;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoresFetcher;
 import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoresFetcher;
-import com.tvd12.ezydata.hazelcast.testing.ExampleHazelcastCreator;
 import com.tvd12.ezydata.hazelcast.util.EzyHazelcastConfigs;
 import com.tvd12.ezyfox.function.EzyCreation;
 
@@ -39,8 +38,7 @@ public class ExampleHazelcastCreator implements EzyCreation<HazelcastInstance> {
 
     private EzyMapstoresFetcher newMapstoresFetcher() {
         return EzySimpleMapstoresFetcher.builder()
-                .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
-                .build();
+            .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
+            .build();
     }
-
 }

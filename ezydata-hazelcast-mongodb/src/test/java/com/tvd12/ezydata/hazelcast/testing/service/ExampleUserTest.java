@@ -1,12 +1,11 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import org.testng.annotations.Test;
-
 import com.hazelcast.map.IMap;
 import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezydata.hazelcast.testing.constant.Entities;
 import com.tvd12.ezydata.hazelcast.testing.entity.ExampleUser;
+import org.testng.annotations.Test;
 
 public class ExampleUserTest extends HazelcastBaseTest {
 
@@ -27,5 +26,4 @@ public class ExampleUserTest extends HazelcastBaseTest {
 
         Thread.sleep(3000);
     }
-
 }
