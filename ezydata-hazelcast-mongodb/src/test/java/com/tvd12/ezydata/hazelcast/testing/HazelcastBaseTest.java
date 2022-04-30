@@ -1,11 +1,6 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
 
-import java.io.InputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -18,6 +13,8 @@ import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 import com.tvd12.ezyfox.io.EzyMaps;
 import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
 import com.tvd12.test.base.BaseTest;
+
+import java.io.InputStream;
 
 public abstract class HazelcastBaseTest extends BaseTest {
 
@@ -33,14 +30,14 @@ public abstract class HazelcastBaseTest extends BaseTest {
         HZ_INSTANCE = newHzInstance();
         MAP_TRANSACTION_FACTORY = newMapTransactionFactory();
         MAX_ID_SERVICE = newMaxIdService();
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> MONGO_CLIENT.close()));
+        Runtime.getRuntime().addShutdownHook(new Thread(MONGO_CLIENT::close));
     }
 
     private static HazelcastInstance newHzInstance() {
         return new ExampleHazelcastCreator()
-                .filePath("hazelcast.xml")
-                .database(MONGO_CLIENT.getDatabase("test"))
-                .create();
+            .filePath("hazelcast.xml")
+            .database(MONGO_CLIENT.getDatabase("test"))
+            .create();
     }
 
     private static EzyMaxIdService newMaxIdService() {
@@ -55,21 +52,16 @@ public abstract class HazelcastBaseTest extends BaseTest {
 
     private static MongoClient newMongoClient() {
         return new EzySimpleMongoClientLoader()
-                .inputStream(getMongoConfigInputStream())
-                .property(EzyMongoClientLoader.DATABASE, "test")
-                .properties(EzyMaps.newHashMap(EzyMongoClientLoader.DATABASE, "test"))
-                .load();
+            .inputStream(getMongoConfigInputStream())
+            .property(EzyMongoClientLoader.DATABASE, "test")
+            .properties(EzyMaps.newHashMap(EzyMongoClientLoader.DATABASE, "test"))
+            .load();
     }
 
     private static InputStream getMongoConfigInputStream() {
         return EzyAnywayInputStreamLoader.builder()
-                .context(HazelcastBaseTest.class)
-                .build()
-                .load("mongo_config.properties");
+            .context(HazelcastBaseTest.class)
+            .build()
+            .load("mongo_config.properties");
     }
-
-    protected Logger getLogger() {
-        return LoggerFactory.getLogger(getClass());
-    }
-
 }

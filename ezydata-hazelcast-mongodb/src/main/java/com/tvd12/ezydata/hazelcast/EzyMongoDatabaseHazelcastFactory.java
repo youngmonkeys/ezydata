@@ -4,13 +4,12 @@ import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoreCreator;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMongoDatabaseMapstoreCreator;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseAware;
-
 import lombok.Setter;
 
 @Setter
-public class EzyMongoDatabaseHazelcastFactory 
-        extends EzyAbstractHazelcastFactory
-        implements EzyMongoDatabaseAware {
+public class EzyMongoDatabaseHazelcastFactory
+    extends EzyAbstractHazelcastFactory
+    implements EzyMongoDatabaseAware {
 
     protected MongoDatabase database;
 
@@ -24,5 +23,4 @@ public class EzyMongoDatabaseHazelcastFactory
     protected EzyMongoDatabaseMapstoreCreator newDatabaseMapstoreCreator() {
         return new EzyMongoDatabaseMapstoreCreator();
     }
-
 }

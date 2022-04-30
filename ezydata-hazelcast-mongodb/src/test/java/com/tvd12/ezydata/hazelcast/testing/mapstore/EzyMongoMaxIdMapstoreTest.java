@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.hazelcast.testing.mapstore;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMongoMaxIdMapstore;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
+import org.testng.annotations.Test;
 
 public class EzyMongoMaxIdMapstoreTest extends HazelcastBaseTest {
 
@@ -14,5 +13,4 @@ public class EzyMongoMaxIdMapstoreTest extends HazelcastBaseTest {
         mapstore.postInit();
         mapstore.load("not exists key");
     }
-
 }

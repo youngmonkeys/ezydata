@@ -1,11 +1,10 @@
 package com.tvd12.ezydata.hazelcast.mapstore;
 
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
-import com.mongodb.client.MongoCollection;
-
-public abstract class EzyMongoCollectionMapstore<K,V>
-        extends EzyMongoDatabaseMapstore<K, V> {
+public abstract class EzyMongoCollectionMapstore<K, V>
+    extends EzyMongoDatabaseMapstore<K, V> {
 
     protected MongoCollection<Document> collection;
 
@@ -16,5 +15,4 @@ public abstract class EzyMongoCollectionMapstore<K,V>
     }
 
     protected abstract String getCollectionName();
-
 }
