@@ -11,5 +11,4 @@ public class EzyBeanTransactionalMaxIdService extends EzyTransactionalMaxIdServi
     public EzyBeanTransactionalMaxIdService(HazelcastInstance hazelcastInstance) {
         super(hazelcastInstance);
     }
-
 }

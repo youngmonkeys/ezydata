@@ -17,5 +17,4 @@ public abstract class EzyBeanAbstractHazelcastService extends EzyAbstractHazelca
     public void init() {
         super.init();
     }
-
 }
