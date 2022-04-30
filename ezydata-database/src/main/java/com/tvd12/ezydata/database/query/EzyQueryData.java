@@ -42,41 +42,16 @@ public class EzyQueryData extends EzyQLQuery {
             return (Builder) super.query(query);
         }
 
+        public Builder parameterCount(int count) {
+            return (Builder) super.parameterCount(count);
+        }
+
         public Builder parameter(String name, Object value) {
             if (parameterMap == null) {
                 this.parameterMap = new HashMap<>();
             }
             this.parameterMap.put(name, value);
             return this;
-        }
-
-        public Builder parameters(Map<String, Object> parameters) {
-            if (parameterMap == null) {
-                this.parameterMap = new HashMap<>();
-            }
-            this.parameterMap.putAll(parameters);
-            return this;
-        }
-
-        public Builder parameters(List<Object> parameters) {
-            int parameterCount = 0;
-            for (Object param : parameters) {
-                if (param != null) {
-                    ++parameterCount;
-                }
-            }
-            parameterCount(parameterCount);
-            for (int paramIndex = 0, i = 0; i < parameters.size(); ++i) {
-                Object param = parameters.get(i);
-                if (param != null) {
-                    parameter(paramIndex++, param);
-                }
-            }
-            return this;
-        }
-
-        public Builder parameterCount(int count) {
-            return (Builder) super.parameterCount(count);
         }
 
         public Builder parameter(int index, boolean value) {
@@ -115,8 +90,33 @@ public class EzyQueryData extends EzyQLQuery {
             return (Builder) super.parameter(index, value);
         }
 
-        public Builder parameterConveter(Function<Object, Object> parameterConveter) {
-            return (Builder) super.parameterConveter(parameterConveter);
+        public Builder parameters(Map<String, Object> parameters) {
+            if (parameterMap == null) {
+                this.parameterMap = new HashMap<>();
+            }
+            this.parameterMap.putAll(parameters);
+            return this;
+        }
+
+        public Builder parameters(List<Object> parameters) {
+            int parameterCount = 0;
+            for (Object param : parameters) {
+                if (param != null) {
+                    ++parameterCount;
+                }
+            }
+            parameterCount(parameterCount);
+            for (int paramIndex = 0, i = 0; i < parameters.size(); ++i) {
+                Object param = parameters.get(i);
+                if (param != null) {
+                    parameter(paramIndex++, param);
+                }
+            }
+            return this;
+        }
+
+        public Builder parameterConverter(Function<Object, Object> parameterConverter) {
+            return (Builder) super.parameterConverter(parameterConverter);
         }
 
         @Override

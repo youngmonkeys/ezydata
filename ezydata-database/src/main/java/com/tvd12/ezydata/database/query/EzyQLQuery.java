@@ -9,17 +9,18 @@ import java.util.function.Function;
 
 public class EzyQLQuery {
 
-    protected final static Object[] EMPTY_ARRAY = new Object[0];
     @Getter
     protected final String query;
     @Getter
     protected final String value;
     protected final Object[] parameters;
-    protected final Function<Object, Object> parameterConveter;
+    protected final Function<Object, Object> parameterConverter;
+
+    protected static final Object[] EMPTY_ARRAY = new Object[0];
 
     protected EzyQLQuery(Builder builder) {
         this.query = builder.query;
-        this.parameterConveter = getParameterConveter(builder);
+        this.parameterConverter = getParameterConverter(builder);
         this.parameters = builder.parameters != null ? builder.parameters : EMPTY_ARRAY;
         this.value = createValue();
     }
@@ -30,29 +31,27 @@ public class EzyQLQuery {
 
     protected String createValue() {
         try {
-            return EzyStrings.replace(query, parameters, parameterConveter);
+            return EzyStrings.replace(query, parameters, parameterConverter);
         } catch (Exception e) {
             throw new EzyCreateQueryException("can not create query", e);
         }
     }
 
-    protected Function<Object, Object> getParameterConveter(Builder builder) {
-        return builder.parameterConveter;
+    protected Function<Object, Object> getParameterConverter(Builder builder) {
+        return builder.parameterConverter;
     }
 
     public String toString() {
-        return new StringBuilder()
-            .append("query: ").append(query).append("\n")
-            .append("parameters: ").append(EzyStrings.join(parameters, ",")).append("\n")
-            .append("value: ").append(value)
-            .toString();
+        return "query: " + query + "\n" +
+            "parameters: " + EzyStrings.join(parameters, ",") + "\n" +
+            "value: " + value;
     }
 
     public static class Builder implements EzyBuilder<EzyQLQuery> {
 
         protected String query;
         protected Object[] parameters;
-        protected Function<Object, Object> parameterConveter;
+        protected Function<Object, Object> parameterConverter;
 
         public Builder query(String query) {
             this.query = query;
@@ -65,9 +64,7 @@ public class EzyQLQuery {
             } else if (parameters.length < count) {
                 Object[] old = parameters;
                 parameters = new Object[count];
-                for (int i = 0; i < old.length; ++i) {
-                    parameters[i] = old[i];
-                }
+                System.arraycopy(old, 0, parameters, 0, old.length);
             }
             return this;
         }
@@ -110,8 +107,8 @@ public class EzyQLQuery {
             return this;
         }
 
-        public Builder parameterConveter(Function<Object, Object> parameterConveter) {
-            this.parameterConveter = parameterConveter;
+        public Builder parameterConverter(Function<Object, Object> parameterConverter) {
+            this.parameterConverter = parameterConverter;
             return this;
         }
 
@@ -119,7 +116,5 @@ public class EzyQLQuery {
         public EzyQLQuery build() {
             return new EzyQLQuery(this);
         }
-
     }
-
 }

@@ -24,8 +24,6 @@ public class EzyBindResultDeserializer implements EzyResultDeserializer {
         } else {
             array.add(result);
         }
-        Object answer = unmarshaller.unmarshal(array, resultType);
-        return answer;
+        return unmarshaller.unmarshal(array, resultType);
     }
-
 }

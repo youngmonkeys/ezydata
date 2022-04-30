@@ -25,5 +25,4 @@ public interface EzyDatabaseContext extends EzyCloseable {
 
     @Override
     default void close() {}
-
 }

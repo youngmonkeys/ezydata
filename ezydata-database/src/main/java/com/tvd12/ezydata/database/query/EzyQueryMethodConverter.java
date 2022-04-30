@@ -4,5 +4,4 @@ public interface EzyQueryMethodConverter {
 
     @SuppressWarnings("rawtypes")
     String toQueryString(Class entityClass, EzyQueryMethod method);
-
 }

@@ -17,9 +17,9 @@ public interface EzyRepositoriesImplementer {
 
     EzyRepositoriesImplementer repositoryInterface(Class<?> itf);
 
-    EzyRepositoriesImplementer repositoryInterfaces(Class<?>... itfs);
+    EzyRepositoriesImplementer repositoryInterfaces(Class<?>... interfaces);
 
-    EzyRepositoriesImplementer repositoryInterfaces(Iterable<Class<?>> itfs);
+    EzyRepositoriesImplementer repositoryInterfaces(Iterable<Class<?>> interfaces);
 
     EzyRepositoriesImplementer repositoryInterfaces(EzyReflection reflection);
 
@@ -29,6 +29,5 @@ public interface EzyRepositoriesImplementer {
 
     EzyRepositoriesImplementer repositoryWrapper(EzyDatabaseRepositoryWrapper repositoryWrapper);
 
-    public abstract Map<Class<?>, Object> implement(Object template);
-
+    Map<Class<?>, Object> implement(Object template);
 }

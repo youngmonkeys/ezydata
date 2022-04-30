@@ -11,7 +11,7 @@ public enum EzyQueryMethodType {
     @Getter
     private final String prefix;
 
-    private EzyQueryMethodType(String prefix) {
+    EzyQueryMethodType(String prefix) {
         this.prefix = prefix;
     }
 }

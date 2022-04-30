@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.tvd12</groupId>
         <artifactId>ezyfox</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <artifactId>ezydata</artifactId>
     <version>1.2.3</version>
@@ -60,16 +61,49 @@
             <organizationUrl>http://www.youngmonkeys.org</organizationUrl>
         </developer>
     </developers>
-  <modules>
-    <module>ezydata-mongodb</module>
-    <module>ezydata-morphia</module>
-    <module>ezydata-hazelcast</module>
-    <module>ezydata-hazelcast-bean</module>
-    <module>ezydata-hazelcast-mongodb</module>
-    <module>ezydata-hazelcast-morphia</module>
-    <module>ezydata-elasticsearch</module>
-    <module>ezydata-jpa</module>
-    <module>ezydata-database</module>
-    <module>ezydata-redis</module>
-  </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.2</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>8.42</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <violationSeverity>error</violationSeverity>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>ezydata-mongodb</module>
+        <module>ezydata-morphia</module>
+        <module>ezydata-hazelcast</module>
+        <module>ezydata-hazelcast-bean</module>
+        <module>ezydata-hazelcast-mongodb</module>
+        <module>ezydata-hazelcast-morphia</module>
+        <module>ezydata-elasticsearch</module>
+        <module>ezydata-jpa</module>
+        <module>ezydata-database</module>
+        <module>ezydata-redis</module>
+    </modules>
 </project>

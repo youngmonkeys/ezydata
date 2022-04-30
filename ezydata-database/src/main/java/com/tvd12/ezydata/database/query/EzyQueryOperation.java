@@ -14,10 +14,6 @@ public enum EzyQueryOperation {
     LT("<", "lt", "Lt"),
     LTE("<=", "lte", "Lte");
 
-    private static final List<EzyQueryOperation> NOT_INCLUDE_EQUAL_VALUES =
-        Collections.unmodifiableList(
-            Lists.newArrayList(IN, GT, GTE, LT, LTE)
-        );
     @Getter
     private final String sign;
     @Getter
@@ -25,7 +21,12 @@ public enum EzyQueryOperation {
     @Getter
     private final String tag;
 
-    private EzyQueryOperation(String sign, String signName, String tag) {
+    private static final List<EzyQueryOperation> NOT_INCLUDE_EQUAL_VALUES =
+        Collections.unmodifiableList(
+            Lists.newArrayList(IN, GT, GTE, LT, LTE)
+        );
+
+    EzyQueryOperation(String sign, String signName, String tag) {
         this.sign = sign;
         this.signName = signName;
         this.tag = tag;

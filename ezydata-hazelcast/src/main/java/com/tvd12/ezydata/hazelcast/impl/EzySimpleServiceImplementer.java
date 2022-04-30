@@ -35,7 +35,7 @@ public class EzySimpleServiceImplementer {
     
     public Object implement(HazelcastInstance hzInstance, String mapName) {
         try {
-            return doimplement(hzInstance, mapName);
+            return doImplement(hzInstance, mapName);
         }
         catch(Exception e) {
             throw new IllegalStateException(e);
@@ -48,7 +48,7 @@ public class EzySimpleServiceImplementer {
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private Object doimplement(HazelcastInstance hzInstance, String mapName) throws Exception {
+    private Object doImplement(HazelcastInstance hzInstance, String mapName) throws Exception {
         ClassPool pool = ClassPool.getDefault();
         String implClassName = getImplClassName();
         CtClass implClass = pool.makeClass(implClassName);
@@ -62,8 +62,7 @@ public class EzySimpleServiceImplementer {
         Class answerClass = implClass.toClass();
         implClass.detach();
         Constructor constructor = answerClass.getConstructor(HazelcastInstance.class);
-        Object service = constructor.newInstance(hzInstance);
-        return service;
+        return constructor.newInstance(hzInstance);
     }
     
     protected CtConstructor makeConstructorMethod(

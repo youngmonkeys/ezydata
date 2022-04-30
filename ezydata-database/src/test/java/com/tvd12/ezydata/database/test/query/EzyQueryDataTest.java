@@ -30,7 +30,7 @@ public class EzyQueryDataTest {
             .parameter(8, 5L)
             .parameter(9, (short) 6)
             .parameter(10, "7")
-            .parameterConveter(it -> it)
+            .parameterConverter(it -> it)
             .build();
 
         // when

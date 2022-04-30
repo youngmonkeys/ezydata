@@ -6,5 +6,4 @@ public class EzyCreateQueryException extends IllegalArgumentException {
     public EzyCreateQueryException(String msg, Exception e) {
         super(msg, e);
     }
-
 }

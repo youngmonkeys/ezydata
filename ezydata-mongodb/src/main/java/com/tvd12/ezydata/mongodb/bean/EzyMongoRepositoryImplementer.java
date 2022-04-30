@@ -13,8 +13,8 @@ import com.tvd12.ezyfox.asm.EzyInstruction;
 import com.tvd12.ezyfox.reflect.EzyGenerics;
 import com.tvd12.ezyfox.reflect.EzyMethod;
 
-public class EzyMongoRepositoryImplementer 
-        extends EzyAbstractRepositoryImplementer  {
+public class EzyMongoRepositoryImplementer
+        extends EzyAbstractRepositoryImplementer {
     
     public EzyMongoRepositoryImplementer(Class<?> clazz) {
         super(clazz);

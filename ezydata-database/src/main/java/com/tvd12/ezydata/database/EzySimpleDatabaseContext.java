@@ -41,8 +41,7 @@ public class EzySimpleDatabaseContext
 
     @Override
     public Object deserializeResult(Object result, Class<?> resultType) {
-        Object answer = deserializers.deserialize(result, resultType);
-        return answer;
+        return deserializers.deserialize(result, resultType);
     }
 
     @Override
@@ -129,5 +128,4 @@ public class EzySimpleDatabaseContext
         }
         return builder.toString();
     }
-
 }

@@ -69,8 +69,8 @@ public class EzySimpleMongoDatabaseContext
 
     @Override
     public <T extends BsonValue> T dataToBsonValue(Object data) {
-        Object mdata = marshaller.marshal(data);
-        return dataConverter.dataToBsonValue(mdata);
+        Object marshalledData = marshaller.marshal(data);
+        return dataConverter.dataToBsonValue(marshalledData);
     }
 
 }

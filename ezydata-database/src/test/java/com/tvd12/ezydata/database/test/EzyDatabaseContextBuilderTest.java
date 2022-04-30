@@ -20,6 +20,7 @@ import lombok.AllArgsConstructor;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class EzyDatabaseContextBuilderTest extends BaseTest {
 
@@ -49,7 +50,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
             .scan(new EzyReflectionProxy("com.tvd12.ezydata.database.test.bean"))
             .repositoryInterface(PersonRepo.class)
             .repositoryInterfaces(PersonRepo.class, PersonRepo2.class)
-            .repositoryInterfaces(Arrays.asList(PersonRepo3.class))
+            .repositoryInterfaces(Collections.singletonList(PersonRepo3.class))
             .repositoryClass(PersonRepo5.class)
             .repositoryClasses(PersonRepo5.class, PersonRepo5.class)
             .repositoryClasses(Sets.newHashSet(PersonRepo5.class))
@@ -69,7 +70,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
         assert dbContext.getQuery("test1") == queryEntity1;
         assert dbContext.deserializeResult(new Object[0], FindResult.class) instanceof FindResult;
         assert dbContext.deserializeResultList(Arrays.asList(new Object[0], new Object[0]), FindResult.class).size() == 2;
-        assert dbContext.getRepository(PersonRepo.class) instanceof PersonRepo;
+        assert dbContext.getRepository(PersonRepo.class) != null;
         assert dbContext.getRepository("personRepo") instanceof PersonRepo;
         assert dbContext.getRepositories().size() > 0;
         assert dbContext.getRepositoriesByName().size() > 0;
@@ -101,7 +102,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
             .bindingContextBuilder(bindingContextBuilder)
             .repositoryInterface(PersonRepo.class)
             .repositoryInterfaces(PersonRepo.class, PersonRepo2.class)
-            .repositoryInterfaces(Arrays.asList(PersonRepo3.class))
+            .repositoryInterfaces(Collections.singletonList(PersonRepo3.class))
             .repositoryClass(PersonRepo5.class)
             .repositoryClasses(PersonRepo5.class, PersonRepo5.class)
             .repositoryClasses(Sets.newHashSet(PersonRepo5.class))
@@ -131,7 +132,7 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
-    public void emtyQueryNameTest() {
+    public void emptyQueryNameTest() {
         new Builder()
             .scan("com.tvd12.ezydata.database.test.invalid1")
             .build();
@@ -196,9 +197,18 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
                 ? new RepositoriesImplementer()
                 : new RepositoriesImplementerWithoutDbContextAware();
         }
+
+        @Override
+        public void postCreateRepositoryFromClass(
+            EzyDatabaseContext context,
+            Object repo
+        ) {
+            super.postCreateRepositoryFromClass(context, repo);
+        }
     }
 
-    private static class RepositoriesImplementer extends EzyAbstractRepositoriesImplementer {
+    private static class RepositoriesImplementer
+        extends EzyAbstractRepositoriesImplementer {
 
         @Override
         protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
@@ -206,7 +216,8 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
         }
     }
 
-    private static class RepositoryImplementer extends EzyAbstractRepositoryImplementer {
+    private static class RepositoryImplementer
+        extends EzyAbstractRepositoryImplementer {
 
         public RepositoryImplementer(Class<?> itf) {
             super(itf);
@@ -218,17 +229,19 @@ public class EzyDatabaseContextBuilderTest extends BaseTest {
         }
     }
 
-    private static class RepositoriesImplementerWithoutDbContextAware extends EzyAbstractRepositoriesImplementer {
+    private static class RepositoriesImplementerWithoutDbContextAware
+        extends EzyAbstractRepositoriesImplementer {
 
         @Override
         protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
-            return new RepositoryImplementeWithoutDbContextAware(itf);
+            return new RepositoryImplementerWithoutDbContextAware(itf);
         }
     }
 
-    private static class RepositoryImplementeWithoutDbContextAware extends RepositoryImplementer {
+    private static class RepositoryImplementerWithoutDbContextAware
+        extends RepositoryImplementer {
 
-        public RepositoryImplementeWithoutDbContextAware(Class<?> itf) {
+        public RepositoryImplementerWithoutDbContextAware(Class<?> itf) {
             super(itf);
         }
 

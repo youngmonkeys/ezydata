@@ -182,7 +182,7 @@ public class EzyMongoDatabaseContextBuilder
     protected EzyMongoQueryFactory newQueryFactory(EzyMarshaller marshaller) {
         return EzyMongoQueryFactory.builder()
                 .dataConverter(dataConverter)
-                .parameterConveter(newQueryParameterConveter(marshaller))
+                .parameterConverter(newQueryParameterConverter(marshaller))
                 .build();
     }
 
@@ -191,7 +191,7 @@ public class EzyMongoDatabaseContextBuilder
         return new EzyMongoRepositoriesImplementer();
     }
 
-    protected Function<Object, Object> newQueryParameterConveter(EzyMarshaller marshaller) {
+    protected Function<Object, Object> newQueryParameterConverter(EzyMarshaller marshaller) {
         return param -> {
             Object data = marshaller.marshal(param);
             BsonValue value = dataConverter.dataToBsonValue(data);

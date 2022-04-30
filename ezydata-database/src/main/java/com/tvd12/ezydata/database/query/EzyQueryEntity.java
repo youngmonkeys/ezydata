@@ -92,7 +92,5 @@ public class EzyQueryEntity {
         public EzyQueryEntity build() {
             return new EzyQueryEntity(this);
         }
-
     }
-
 }

@@ -75,7 +75,7 @@ public class EzySimpleServicesImplementer
             return new HashSet<>();
         EzyReflection reflection = new EzyReflectionProxy(packagesToScan);
         Set<Class<?>> classes = reflection.getExtendsClasses(EzyHazelcastMapService.class);
-        return EzySets.filter(classes, clazz -> this.isAutoImplServiceInterface(clazz));
+        return EzySets.filter(classes, this::isAutoImplServiceInterface);
     }
     
     private boolean isAutoImplServiceInterface(Class<?> clazz) {

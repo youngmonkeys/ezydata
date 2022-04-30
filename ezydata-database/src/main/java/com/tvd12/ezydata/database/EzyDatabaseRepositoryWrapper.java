@@ -5,5 +5,4 @@ public interface EzyDatabaseRepositoryWrapper {
     EzyDatabaseRepositoryWrapper DEFAULT = repo -> repo;
 
     Object wrap(Object repository);
-
 }
