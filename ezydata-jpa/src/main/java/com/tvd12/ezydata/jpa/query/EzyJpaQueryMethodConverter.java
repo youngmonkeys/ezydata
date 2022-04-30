@@ -11,7 +11,9 @@ public class EzyJpaQueryMethodConverter
     @SuppressWarnings("rawtypes")
     @Override
     public String toQueryString(
-        Class entityClass, EzyQueryMethod method) {
+        Class entityClass,
+        EzyQueryMethod method
+    ) {
         StringBuilder builder = new StringBuilder();
         if (method.getType() == EzyQueryMethodType.DELETE) {
             builder.append("DELETE");
@@ -39,7 +41,8 @@ public class EzyJpaQueryMethodConverter
 
     private void convert(
         StringBuilder builder,
-        EzyQueryConditionChain conditionChain) {
+        EzyQueryConditionChain conditionChain
+    ) {
         List<EzyQueryConditionGroup> conditionGroups = conditionChain.getConditionGroups();
         AtomicInteger parameterCount = new AtomicInteger();
         for (int i = 0; i < conditionGroups.size(); ++i) {
@@ -54,7 +57,8 @@ public class EzyJpaQueryMethodConverter
     private void convert(
         StringBuilder builder,
         AtomicInteger parameterCount,
-        EzyQueryConditionGroup conditionGroup) {
+        EzyQueryConditionGroup conditionGroup
+    ) {
         List<EzyQueryCondition> conditions = conditionGroup.getConditions();
         if (conditions.size() > 1) {
             builder.append("(");
@@ -73,7 +77,8 @@ public class EzyJpaQueryMethodConverter
     private void convert(
         StringBuilder builder,
         AtomicInteger parameterCount,
-        EzyQueryCondition condition) {
+        EzyQueryCondition condition
+    ) {
         builder.append("e.")
             .append(condition.getField())
             .append(" ")

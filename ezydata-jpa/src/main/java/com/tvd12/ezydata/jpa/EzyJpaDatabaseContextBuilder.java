@@ -57,7 +57,11 @@ public class EzyJpaDatabaseContextBuilder
     }
 
     protected void addQuery(
-        String name, String value, Class<?> resultClass, boolean nativeQuery) {
+        String name,
+        String value,
+        Class<?> resultClass,
+        boolean nativeQuery
+    ) {
         super.doAddQuery(name, "", value, resultClass, nativeQuery);
     }
 
