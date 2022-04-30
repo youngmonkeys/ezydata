@@ -1,18 +1,17 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoresFetcher;
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMongoDatastoreMapstoreCreator;
 import com.tvd12.ezydata.hazelcast.testing.mapstore.ExampleUserMapstore;
 import com.tvd12.ezydata.hazelcast.testing.mapstore.ExampleUserMapstore2;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 public class EzyMongoDatastoreMapstoreCreatorTest extends BaseTest {
 
@@ -52,6 +51,5 @@ public class EzyMongoDatastoreMapstoreCreatorTest extends BaseTest {
         public boolean containsMapstore(String mapName) {
             return true;
         }
-
     }
 }
