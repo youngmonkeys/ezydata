@@ -1,14 +1,5 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.testng.annotations.Test;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.hazelcast.transaction.TransactionalMap;
@@ -20,35 +11,42 @@ import com.tvd12.ezydata.hazelcast.transaction.EzyMapApplyTransaction;
 import com.tvd12.ezydata.hazelcast.transaction.EzyMapReturnTransaction;
 import com.tvd12.ezydata.hazelcast.transaction.EzyTransactionOptions;
 import com.tvd12.ezyfox.function.EzyExceptionFunction;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyTransactionalMaxIdServiceTest extends HazelcastBaseTest {
 
     @Test
     public void test() throws Exception {
-        final EzyTransactionalMaxIdService service = new EzyTransactionalMaxIdService(HZ_INSTANCE);
+        final EzyTransactionalMaxIdService service =
+            new EzyTransactionalMaxIdService(HZ_INSTANCE);
         service.setMapTransactionFactory(MAP_TRANSACTION_FACTORY);
 
         List<Long> nums = new ArrayList<>();
         Thread[] threads = new Thread[1000];
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i] = new Thread(() -> {
-                nums.add(service.incrementAndGet("something"));
-            });
+        for (int i = 0; i < threads.length; ++i) {
+            threads[i] = new Thread(() ->
+                nums.add(service.incrementAndGet("somethingy"))
+            );
         }
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i].start();
-//            threads[i].join();
+        for (Thread thread : threads) {
+            thread.start();
         }
 
         Thread.sleep(2000L);
 
         System.out.println(nums);
-        for(int i = 0 ; i < nums.size() - 1 ; ++i) {
-            if(nums.get(i + 1) != nums.get(i) + 1) {
+        for (int i = 0; i < nums.size() - 1; ++i) {
+            if (nums.get(i + 1) != nums.get(i) + 1) {
                 System.err.println("transaction xxx: error in " + i);
             }
         }
-
     }
 
     @Test
@@ -58,25 +56,23 @@ public class EzyTransactionalMaxIdServiceTest extends HazelcastBaseTest {
 
         List<Long> nums = new ArrayList<>();
         Thread[] threads = new Thread[1000];
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i] = new Thread(() -> {
-                nums.add(service.incrementAndGet("somethingx", 2));
-            });
+        for (int i = 0; i < threads.length; ++i) {
+            threads[i] = new Thread(() ->
+                nums.add(service.incrementAndGet("somethingx", 2))
+            );
         }
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i].start();
-//            threads[i].join();
+        for (Thread thread : threads) {
+            thread.start();
         }
 
         Thread.sleep(2000L);
 
         System.out.println(nums);
-        for(int i = 0 ; i < nums.size() - 1 ; ++i) {
-            if(nums.get(i + 1) != nums.get(i) + 2) {
+        for (int i = 0; i < nums.size() - 1; ++i) {
+            if (nums.get(i + 1) != nums.get(i) + 2) {
                 System.err.println("transaction yyy: error in " + i);
             }
         }
-
     }
 
     @Test
@@ -92,24 +88,21 @@ public class EzyTransactionalMaxIdServiceTest extends HazelcastBaseTest {
 
             @Override
             public <K, V, R> EzyMapReturnTransaction<K, V, R> newReturnTransaction(String mapName,
-                    EzyTransactionOptions options) {
+                                                                                   EzyTransactionOptions options) {
                 return new EzyMapReturnTransaction<K, V, R>() {
                     @Override
-                    public R apply(EzyExceptionFunction<TransactionalMap<K, V>, R> func) throws Exception {
+                    public R apply(EzyExceptionFunction<TransactionalMap<K, V>, R> func) {
                         throw new RuntimeException();
                     }
 
                     @Override
-                    public void begin() {
-                    }
+                    public void begin() {}
 
                     @Override
-                    public void commit() {
-                    }
+                    public void commit() {}
 
                     @Override
-                    public void rollback() {
-                    }
+                    public void rollback() {}
                 };
             }
 
@@ -120,22 +113,20 @@ public class EzyTransactionalMaxIdServiceTest extends HazelcastBaseTest {
         });
         try {
             service.incrementAndGet("d");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             assert e instanceof IllegalStateException;
         }
         try {
             service.incrementAndGet("d", 100);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             assert e instanceof IllegalStateException;
         }
         Thread.sleep(1000);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     public void test3() {
         IMap map = mock(IMap.class);
@@ -145,5 +136,4 @@ public class EzyTransactionalMaxIdServiceTest extends HazelcastBaseTest {
         service.setMapTransactionFactory(MAP_TRANSACTION_FACTORY);
         service.loadAll();
     }
-
 }

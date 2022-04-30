@@ -1,15 +1,14 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.tvd12.ezydata.hazelcast.factory.EzyMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.factory.EzySimpleMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.service.EzyTransactionalMaxIdService;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 import com.tvd12.test.base.BaseTest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class HazelcastBaseTest extends BaseTest {
 
@@ -25,8 +24,8 @@ public abstract class HazelcastBaseTest extends BaseTest {
 
     private static HazelcastInstance newHzInstance() {
         return new ExampleHazelcastCreator()
-                .filePath("hazelcast.xml")
-                .create();
+            .filePath("hazelcast.xml")
+            .create();
     }
 
     private static EzyMaxIdService newMaxIdService() {

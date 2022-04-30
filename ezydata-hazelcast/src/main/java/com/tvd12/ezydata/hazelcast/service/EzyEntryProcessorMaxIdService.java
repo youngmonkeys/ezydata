@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.tvd12.ezydata.hazelcast.service;
 
 import com.hazelcast.core.HazelcastInstance;
@@ -11,16 +8,12 @@ import com.tvd12.ezydata.hazelcast.map.EzyMaxIdOneEntryProcessor;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 
 
-/**
- * @author tavandung12
- *
- */
 public class EzyEntryProcessorMaxIdService
-        extends EzyAbstractMapService<String, Long>
-        implements EzyMaxIdService {
-    
+    extends EzyAbstractMapService<String, Long>
+    implements EzyMaxIdService {
+
     protected final EntryProcessor<String, Long, Long> onEntryProcessor;
-    
+
     public EzyEntryProcessorMaxIdService() {
         this.onEntryProcessor = newOneEntryProcessor();
     }
@@ -29,7 +22,7 @@ public class EzyEntryProcessorMaxIdService
         super(hazelcastInstance);
         this.onEntryProcessor = newOneEntryProcessor();
     }
-    
+
     @Override
     public void loadAll() {
         map.loadAll(false);
@@ -37,25 +30,25 @@ public class EzyEntryProcessorMaxIdService
 
     @Override
     public Long incrementAndGet(String key) {
-        return (Long)map.executeOnKey(key, onEntryProcessor);
+        return map.executeOnKey(key, onEntryProcessor);
     }
-    
+
     @Override
     public Long incrementAndGet(String key, int delta) {
-        return (Long)map.executeOnKey(key, newEntryProcessor(delta));
+        return map.executeOnKey(key, newEntryProcessor(delta));
     }
 
     @Override
     protected String getMapName() {
         return EzyMapNames.MAX_ID;
     }
-    
+
     protected EntryProcessor<String, Long, Long> newOneEntryProcessor() {
         return new EzyMaxIdOneEntryProcessor();
     }
-    
+
     protected EntryProcessor<String, Long, Long> newEntryProcessor(int delta) {
         return new EzyMaxIdEntryProcessor(delta);
     }
-    
+
 }

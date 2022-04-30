@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.service.EzyAbstractHazelcastService;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
+import org.testng.annotations.Test;
 
 public class EzyAbstractHazelcastServiceTest extends HazelcastBaseTest {
 
@@ -14,7 +13,5 @@ public class EzyAbstractHazelcastServiceTest extends HazelcastBaseTest {
         service.init();
     }
 
-    public static class MyService extends EzyAbstractHazelcastService {
-    }
-
+    public static class MyService extends EzyAbstractHazelcastService {}
 }

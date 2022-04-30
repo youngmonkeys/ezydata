@@ -1,9 +1,5 @@
 package com.tvd12.ezydata.hazelcast;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.hazelcast.config.MapConfig;
 import com.hazelcast.config.MapStoreConfig;
 import com.hazelcast.config.MapStoreConfig.InitialLoadMode;
@@ -13,10 +9,14 @@ import com.tvd12.ezyfox.function.EzyApply;
 import com.tvd12.ezyfox.io.EzyLists;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 @SuppressWarnings("rawtypes")
-public class EzySimpleMapConfigsFetcher 
-        extends EzyLoggable 
-        implements EzyMapConfigsFetcher {
+public class EzySimpleMapConfigsFetcher
+    extends EzyLoggable
+    implements EzyMapConfigsFetcher {
 
     protected Set<String> mapNames;
     protected MapStoreFactory mapstoreFactory;
@@ -24,20 +24,24 @@ public class EzySimpleMapConfigsFetcher
     protected EzyApply<MapStoreConfig> mapstoreAllConfigApply;
     protected Map<String, EzyApply<MapConfig>> mapConfigApplies;
     protected Map<String, EzyApply<MapStoreConfig>> mapstoreConfigApplies;
-    
+
     protected EzySimpleMapConfigsFetcher(Builder builder) {
-            this.mapNames = builder.mapNames;
-            this.mapstoreFactory = builder.mapstoreFactory;
-            this.mapConfigApplies = builder.mapConfigApplies;
-            this.mapAllConfigApply = builder.mapAllConfigApply;
-            this.mapstoreConfigApplies = builder.mapstoreConfigApplies;
-            this.mapstoreAllConfigApply = builder.mapstoreAllConfigApply;
+        this.mapNames = builder.mapNames;
+        this.mapstoreFactory = builder.mapstoreFactory;
+        this.mapConfigApplies = builder.mapConfigApplies;
+        this.mapAllConfigApply = builder.mapAllConfigApply;
+        this.mapstoreConfigApplies = builder.mapstoreConfigApplies;
+        this.mapstoreAllConfigApply = builder.mapstoreAllConfigApply;
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
     public Iterable<MapConfig> get() {
         return EzyLists.newArrayList(
-                getMapNames(), (mn) -> newMapConfig(mn));
+            getMapNames(), this::newMapConfig);
     }
 
     protected MapConfig newMapConfig(String name) {
@@ -51,44 +55,45 @@ public class EzySimpleMapConfigsFetcher
     }
 
     protected void applyConfig(String mapName, MapConfig config) {
-        if(mapConfigApplies.containsKey(mapName))
+        if (mapConfigApplies.containsKey(mapName)) {
             mapConfigApplies.get(mapName).apply(config);
+        }
     }
 
     protected void applyCommonConfig(MapConfig config) {
-        if(mapAllConfigApply != null)
+        if (mapAllConfigApply != null) {
             mapAllConfigApply.apply(config);
+        }
     }
-    
+
     protected MapStoreConfig newMapStoreConfig(String mapName) {
         MapStoreConfig config = new MapStoreConfig();
         config.setEnabled(true);
         config.setInitialLoadMode(InitialLoadMode.EAGER);
         applyCommonConfig(config);
         applyConfig(mapName, config);
-        if(mapstoreFactory != null)
+        if (mapstoreFactory != null) {
             config.setFactoryImplementation(mapstoreFactory);
+        }
         return config;
     }
-    
+
     protected void applyConfig(String mapName, MapStoreConfig config) {
-        if(mapstoreConfigApplies.containsKey(mapName))
+        if (mapstoreConfigApplies.containsKey(mapName)) {
             mapstoreConfigApplies.get(mapName).apply(config);
+        }
     }
-    
+
     protected void applyCommonConfig(MapStoreConfig config) {
-        if(mapstoreAllConfigApply != null)
+        if (mapstoreAllConfigApply != null) {
             mapstoreAllConfigApply.apply(config);
+        }
     }
-    
+
     protected Set<String> getMapNames() {
         return mapNames;
     }
-    
-    public static Builder builder() {
-        return new Builder();
-    }
-    
+
     public static class Builder implements EzyBuilder<EzyMapConfigsFetcher> {
         protected Set<String> mapNames;
         protected MapStoreFactory mapstoreFactory;
@@ -101,41 +106,46 @@ public class EzySimpleMapConfigsFetcher
             this.mapNames = mapNames;
             return this;
         }
-        
+
         public Builder mapstoreFactory(MapStoreFactory mapStoreFactory) {
             this.mapstoreFactory = mapStoreFactory;
             return this;
         }
-        
+
         public Builder mapConfigApply(
-                String mapName, EzyApply<MapConfig> apply) {
+            String mapName, EzyApply<MapConfig> apply) {
             this.mapConfigApplies.put(mapName, apply);
             return this;
         }
-        
+
         public Builder mapstoreConfigApply(
-            String mapName, EzyApply<MapStoreConfig> apply) {
+            String mapName,
+            EzyApply<MapStoreConfig> apply
+        ) {
             this.mapstoreConfigApplies.put(mapName, apply);
             return this;
         }
-        
+
         public Builder mapConfigApplies(
-                Map<String, EzyApply<MapConfig>> mapConfigApplies) {
+            Map<String,
+                EzyApply<MapConfig>> mapConfigApplies
+        ) {
             this.mapConfigApplies.putAll(mapConfigApplies);
             return this;
         }
-        
+
         public Builder mapstoreConfigApplies(
-                Map<String, EzyApply<MapStoreConfig>> mapStoreConfigApplies) {
+            Map<String, EzyApply<MapStoreConfig>> mapStoreConfigApplies
+        ) {
             this.mapstoreConfigApplies.putAll(mapStoreConfigApplies);
             return this;
         }
-        
+
         public Builder mapAllConfigApply(EzyApply<MapConfig> mapAllConfigApply) {
             this.mapAllConfigApply = mapAllConfigApply;
             return this;
         }
-        
+
         public Builder mapstoreAllConfigApply(EzyApply<MapStoreConfig> mapStoreAllConfigApply) {
             this.mapstoreAllConfigApply = mapStoreAllConfigApply;
             return this;
@@ -145,7 +155,5 @@ public class EzySimpleMapConfigsFetcher
         public EzySimpleMapConfigsFetcher build() {
             return new EzySimpleMapConfigsFetcher(this);
         }
-        
     }
-
 }

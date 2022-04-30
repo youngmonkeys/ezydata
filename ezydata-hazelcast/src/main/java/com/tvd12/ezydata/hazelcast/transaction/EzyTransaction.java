@@ -7,5 +7,4 @@ public interface EzyTransaction {
     void commit();
 
     void rollback();
-
 }

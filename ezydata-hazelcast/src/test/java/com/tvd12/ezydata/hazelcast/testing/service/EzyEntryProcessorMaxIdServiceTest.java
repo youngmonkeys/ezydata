@@ -1,18 +1,17 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.testng.annotations.Test;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.IMap;
 import com.tvd12.ezydata.hazelcast.service.EzyEntryProcessorMaxIdService;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyEntryProcessorMaxIdServiceTest extends HazelcastBaseTest {
 
@@ -23,25 +22,23 @@ public class EzyEntryProcessorMaxIdServiceTest extends HazelcastBaseTest {
 
         List<Long> nums = new ArrayList<>();
         Thread[] threads = new Thread[1000];
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i] = new Thread(() -> {
-                nums.add(service.incrementAndGet("something"));
-            });
+        for (int i = 0; i < threads.length; ++i) {
+            threads[i] = new Thread(() ->
+                nums.add(service.incrementAndGet("something"))
+            );
         }
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i].start();
-//            threads[i].join();
+        for (Thread thread : threads) {
+            thread.start();
         }
 
         Thread.sleep(2000L);
 
         System.out.println(nums);
-        for(int i = 0 ; i < nums.size() - 1 ; ++i) {
-            if(nums.get(i + 1) != nums.get(i) + 1) {
+        for (int i = 0; i < nums.size() - 1; ++i) {
+            if (nums.get(i + 1) != nums.get(i) + 1) {
                 System.err.println("entryprocessor xxx: error in " + i);
             }
         }
-
     }
 
     @Test
@@ -52,33 +49,31 @@ public class EzyEntryProcessorMaxIdServiceTest extends HazelcastBaseTest {
 
         List<Long> nums = new ArrayList<>();
         Thread[] threads = new Thread[1000];
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i] = new Thread(() -> {
-                nums.add(service.incrementAndGet("somethingy", 2));
-            });
+        for (int i = 0; i < threads.length; ++i) {
+            threads[i] = new Thread(() ->
+                nums.add(service.incrementAndGet("something", 2))
+            );
         }
-        for(int i = 0 ; i < threads.length ; ++i) {
-            threads[i].start();
-//            threads[i].join();
+        for (Thread thread : threads) {
+            thread.start();
         }
 
         Thread.sleep(3000L);
 
         System.out.println(nums);
         try {
-            for(int i = 0 ; i < nums.size() - 1 ; ++i) {
-                if(nums.get(i + 1) != nums.get(i) + 2) {
+            for (int i = 0; i < nums.size() - 1; ++i) {
+                if (nums.get(i + 1) != nums.get(i) + 2) {
                     System.err.println("entryprocessor yyy: error in " + i);
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Test
     public void test3() {
         IMap map = mock(IMap.class);
@@ -88,5 +83,4 @@ public class EzyEntryProcessorMaxIdServiceTest extends HazelcastBaseTest {
         service.setMapTransactionFactory(MAP_TRANSACTION_FACTORY);
         service.loadAll();
     }
-
 }

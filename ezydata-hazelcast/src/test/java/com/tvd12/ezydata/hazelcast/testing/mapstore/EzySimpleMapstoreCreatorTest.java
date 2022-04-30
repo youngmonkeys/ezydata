@@ -1,13 +1,12 @@
 package com.tvd12.ezydata.hazelcast.testing.mapstore;
 
-import java.util.Properties;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.mapstore.EzyMapstoresFetcher;
 import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoreCreator;
 import com.tvd12.ezydata.hazelcast.mapstore.EzySimpleMapstoresFetcher;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.Properties;
 
 public class EzySimpleMapstoreCreatorTest extends BaseTest {
 
@@ -19,16 +18,14 @@ public class EzySimpleMapstoreCreatorTest extends BaseTest {
         try {
             System.out.println(creator.create("example_users", new Properties()));
             creator.create("no", new Properties());
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private EzyMapstoresFetcher newMapstoresFetcher() {
         return EzySimpleMapstoresFetcher.builder()
-                .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
-                .build();
+            .scan("com.tvd12.ezydata.hazelcast.testing.mapstore")
+            .build();
     }
-
 }

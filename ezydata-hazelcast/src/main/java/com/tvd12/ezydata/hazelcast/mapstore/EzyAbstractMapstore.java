@@ -1,60 +1,61 @@
 package com.tvd12.ezydata.hazelcast.mapstore;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Properties;
-
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.map.MapLoaderLifecycleSupport;
 import com.hazelcast.map.MapStore;
 import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyPostInit;
 
-public abstract class EzyAbstractMapstore<K, V> 
-        extends EzyLoggable
-        implements MapStore<K, V>, MapLoaderLifecycleSupport, EzyPostInit {
+import java.util.*;
+
+public abstract class EzyAbstractMapstore<K, V>
+    extends EzyLoggable
+    implements MapStore<K, V>, MapLoaderLifecycleSupport, EzyPostInit {
 
     protected Properties properties;
     protected HazelcastInstance hzInstance;
 
     @Override
     public final void init(
-            HazelcastInstance hzInstance, Properties properties, String mapName) {
-        initComponents(hzInstance, properties, mapName);
+        HazelcastInstance hzInstance,
+        Properties properties,
+        String mapName
+    ) {
+        initComponents(hzInstance, properties);
         config(hzInstance, properties, mapName);
     }
 
-    private final void initComponents(
-            HazelcastInstance hzInstance, Properties properties, String mapName) {
+    private void initComponents(
+        HazelcastInstance hzInstance,
+        Properties properties
+    ) {
         this.properties = properties;
         this.hzInstance = hzInstance;
     }
 
     protected void config(
-            HazelcastInstance hzInstance, Properties properties, String mapName) {
-    }
+        HazelcastInstance hzInstance,
+        Properties properties,
+        String mapName
+    ) {}
 
     @Override
-    public void postInit() {
-    }
+    public void postInit() {}
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 
     @Override
-    public void delete(K key) {
-    }
+    public void delete(K key) {}
 
     @Override
     public Map<K, V> loadAll(Collection<K> keys) {
         Map<K, V> map = new HashMap<>();
         for (K key : keys) {
             V value = load(key);
-            if(value != null)
+            if (value != null) {
                 map.put(key, value);
+            }
         }
         return map;
     }
@@ -66,8 +67,9 @@ public abstract class EzyAbstractMapstore<K, V>
 
     @Override
     public void storeAll(Map<K, V> map) {
-        for (K key : map.keySet())
+        for (K key : map.keySet()) {
             store(key, map.get(key));
+        }
     }
 
     @Override
@@ -82,5 +84,4 @@ public abstract class EzyAbstractMapstore<K, V>
     protected final boolean containsProperty(Object key) {
         return properties.containsKey(key);
     }
-
 }

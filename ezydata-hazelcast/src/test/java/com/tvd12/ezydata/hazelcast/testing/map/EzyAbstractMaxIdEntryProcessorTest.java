@@ -1,12 +1,13 @@
 package com.tvd12.ezydata.hazelcast.testing.map;
 
-import org.testng.annotations.Test;
-
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
 import com.tvd12.ezydata.hazelcast.map.EzyAbstractMaxIdEntryProcessor;
 import com.tvd12.test.base.BaseTest;
-import static org.mockito.Mockito.*;
+import org.testng.annotations.Test;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class EzyAbstractMaxIdEntryProcessorTest extends BaseTest {
 
@@ -21,8 +22,7 @@ public class EzyAbstractMaxIdEntryProcessorTest extends BaseTest {
         processor.readData(in);
         assert processor.getDelta() == 123;
     }
-    
-    public static class ExEzyAbstractMaxIdEntryProcessor extends EzyAbstractMaxIdEntryProcessor {
-    }
-    
+
+    public static class ExEzyAbstractMaxIdEntryProcessor
+        extends EzyAbstractMaxIdEntryProcessor {}
 }

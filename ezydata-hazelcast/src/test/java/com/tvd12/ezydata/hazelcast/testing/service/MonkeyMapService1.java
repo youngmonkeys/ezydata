@@ -4,5 +4,5 @@ import com.tvd12.ezydata.hazelcast.annotation.EzyMapServiceAutoImpl;
 import com.tvd12.ezydata.hazelcast.service.EzyHazelcastMapService;
 
 @EzyMapServiceAutoImpl("monkey")
-interface MonkeyMapService1 extends EzyHazelcastMapService<String, Monkey> {
-}
+interface MonkeyMapService1
+    extends EzyHazelcastMapService<String, Monkey> {}

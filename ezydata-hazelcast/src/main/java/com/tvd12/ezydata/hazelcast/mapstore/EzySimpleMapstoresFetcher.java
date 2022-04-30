@@ -1,31 +1,35 @@
 package com.tvd12.ezydata.hazelcast.mapstore;
 
-import static com.tvd12.ezyfox.database.util.EzyMapstoreAnnotations.getMapName;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import java.util.function.Supplier;
-import com.tvd12.ezyfox.collect.Sets;
 import com.hazelcast.map.MapStore;
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.database.annotation.EzyMapstore;
 import com.tvd12.ezyfox.reflect.EzyClasses;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+
+import static com.tvd12.ezyfox.database.util.EzyMapstoreAnnotations.getMapName;
+
 public class EzySimpleMapstoresFetcher
-        extends EzyLoggable
-        implements EzyMapstoresFetcher {
+    extends EzyLoggable
+    implements EzyMapstoresFetcher {
 
     protected Map<String, Object> mapstores = new ConcurrentHashMap<>();
 
     protected EzySimpleMapstoresFetcher(Builder builder) {
         this.mapstores.putAll(builder.mapstores);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     @Override
@@ -48,14 +52,10 @@ public class EzySimpleMapstoresFetcher
         return mapstores.containsKey(mapName);
     }
 
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @SuppressWarnings({"rawtypes"})
     public static class Builder
-            extends EzyLoggable
-            implements EzyBuilder<EzyMapstoresFetcher> {
+        extends EzyLoggable
+        implements EzyBuilder<EzyMapstoresFetcher> {
 
         protected Set<String> packagesToScan = new HashSet<>();
         protected Map<String, Object> mapstores = new HashMap<>();
@@ -71,8 +71,9 @@ public class EzySimpleMapstoresFetcher
         }
 
         public Builder scan(Iterable<String> packageNames) {
-            for(String packageName : packageNames)
+            for (String packageName : packageNames) {
                 this.scan(packageName);
+            }
             return this;
         }
 
@@ -97,9 +98,10 @@ public class EzySimpleMapstoresFetcher
         @Override
         public EzySimpleMapstoresFetcher build() {
             Set<Class<?>> annotatedClasses = scanAnnotatedClasses();
-            for(Class<?> clazz : annotatedClasses)
+            for (Class<?> clazz : annotatedClasses) {
                 addMapstoreClass(clazz);
-            for(String mapName : mapstoreClassMap.keySet()) {
+            }
+            for (String mapName : mapstoreClassMap.keySet()) {
                 Class clazz = mapstoreClassMap.get(mapName);
                 Object mapstore = newMapstore(clazz);
                 addMapstore(mapName, (MapStore) mapstore);
@@ -108,11 +110,11 @@ public class EzySimpleMapstoresFetcher
         }
 
         private Set<Class<?>> scanAnnotatedClasses() {
-            if(packagesToScan.isEmpty())
+            if (packagesToScan.isEmpty()) {
                 return new HashSet<>();
+            }
             EzyReflection reflection = new EzyReflectionProxy(packagesToScan);
-            Set<Class<?>> annotatedClasses = reflection.getAnnotatedClasses(EzyMapstore.class);
-            return annotatedClasses;
+            return reflection.getAnnotatedClasses(EzyMapstore.class);
         }
 
         protected Object newMapstore(Class<?> mapstoreClass) {
@@ -120,13 +122,12 @@ public class EzySimpleMapstoresFetcher
         }
 
         private Builder addMapstoreClass(Supplier<String> mapNameSupplier, Class clazz) {
-            if(MapStore.class.isAssignableFrom(clazz))
+            if (MapStore.class.isAssignableFrom(clazz)) {
                 this.mapstoreClassMap.put(mapNameSupplier.get(), clazz);
-            else
+            } else {
                 logger.warn("{} doesn't implements {}, ignore it", clazz, MapStore.class);
+            }
             return this;
         }
-
     }
-
 }

@@ -1,15 +1,14 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import java.lang.reflect.Method;
-import java.util.Properties;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.mapstore.EzyAbstractMapstore;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezydata.hazelcast.testing.entity.ExampleUser;
 import com.tvd12.ezydata.hazelcast.testing.mapstore.ExampleUserMapstore;
 import com.tvd12.ezyfox.io.EzyMaps;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Properties;
 
 public class ExampleUserMapstoreTest extends HazelcastBaseTest {
 
@@ -31,5 +30,4 @@ public class ExampleUserMapstoreTest extends HazelcastBaseTest {
         assert getProperty.invoke(mapstore, "hello") != null;
         assert containsProperty.invoke(mapstore, "hello").equals(Boolean.TRUE);
     }
-
 }

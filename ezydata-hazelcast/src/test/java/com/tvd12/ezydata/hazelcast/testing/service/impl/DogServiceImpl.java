@@ -5,7 +5,7 @@ import com.tvd12.ezydata.hazelcast.service.EzySimpleHazelcastMapService;
 import com.tvd12.ezydata.hazelcast.testing.service.Dog;
 import com.tvd12.ezydata.hazelcast.testing.service.DogService;
 
-public class DogServiceImpl 
+public class DogServiceImpl
     extends EzySimpleHazelcastMapService<String, Dog>
     implements DogService {
 
@@ -18,6 +18,7 @@ public class DogServiceImpl
         try {
             transactionUpdate(name, dog -> dog.setAge(100), new Dog());
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -26,13 +27,14 @@ public class DogServiceImpl
         try {
             transactionUpdate(name, dog -> dog.setAge(100), null);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public long updateAge3(String name) {
         try {
-            return transactionUpdateAndGet(name, dog -> (long)dog.getAge(), null);
+            return transactionUpdateAndGet(name, dog -> (long) dog.getAge(), null);
         } catch (Exception e) {
             return 0;
         }
@@ -41,16 +43,18 @@ public class DogServiceImpl
     @Override
     public void throwException(String name) {
         try {
-            transactionUpdate(name, dog -> dog.exception(), new Dog());
+            transactionUpdate(name, Dog::exception, new Dog());
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void throwException2(String name) {
         try {
-            transactionUpdateAndGet(name, dog -> dog.exception2(), new Dog());
+            transactionUpdateAndGet(name, Dog::exception2, new Dog());
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -58,5 +62,4 @@ public class DogServiceImpl
     protected String getMapName() {
         return "dog";
     }
-
 }
