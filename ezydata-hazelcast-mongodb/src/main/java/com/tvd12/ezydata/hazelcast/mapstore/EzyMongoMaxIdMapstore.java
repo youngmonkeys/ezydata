@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezydata.hazelcast.mapstore;
 
 import com.mongodb.client.model.Filters;
