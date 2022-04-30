@@ -1,15 +1,17 @@
 package com.tvd12.ezydata.elasticsearch;
 
+import com.tvd12.ezyfox.builder.EzyBuilder;
+
 import java.util.Map;
 import java.util.Set;
 
-import com.tvd12.ezyfox.builder.EzyBuilder;
-
 @SuppressWarnings("rawtypes")
-public interface EzyIndexedDataClassesBuilder 
-        extends EzyBuilder<EzyIndexedDataClasses> {
+public interface EzyIndexedDataClassesBuilder
+    extends EzyBuilder<EzyIndexedDataClasses> {
 
     EzyIndexedDataClassesBuilder addIndexedDataClass(Class clazz);
+
+    EzyIndexedDataClassesBuilder addIndexedDataClass(Class clazz, Set<String> indexes);
 
     EzyIndexedDataClassesBuilder addIndexedDataClasses(Class... classes);
 
@@ -18,7 +20,4 @@ public interface EzyIndexedDataClassesBuilder
     EzyIndexedDataClassesBuilder addIndexedDataClasses(Object reflection);
 
     EzyIndexedDataClassesBuilder addIndexedDataClasses(Map<Class, Set<String>> map);
-
-    EzyIndexedDataClassesBuilder addIndexedDataClass(Class clazz, Set<String> indexes);
-
 }

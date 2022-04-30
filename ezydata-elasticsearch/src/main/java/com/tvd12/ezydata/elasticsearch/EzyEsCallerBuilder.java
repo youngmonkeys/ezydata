@@ -18,5 +18,4 @@ public interface EzyEsCallerBuilder extends EzyBuilder<EzyEsCaller> {
     EzyEsCallerBuilder addActionHandler(String actionType, EzyEsActionHandler handler);
 
     EzyEsSimpleCallerBuilder uncaughtExceptionHandler(EzyEsUncaughtExceptionHandler uncaughtExceptionHandler);
-
 }

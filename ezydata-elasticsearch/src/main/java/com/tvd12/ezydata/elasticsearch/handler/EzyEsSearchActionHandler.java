@@ -1,18 +1,17 @@
 package com.tvd12.ezydata.elasticsearch.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import com.tvd12.ezydata.elasticsearch.action.EzyEsSearchAction;
+import com.tvd12.ezyfox.entity.EzyObject;
+import com.tvd12.ezyfox.util.EzyEntityObjects;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 
-import com.tvd12.ezydata.elasticsearch.action.EzyEsSearchAction;
-import com.tvd12.ezyfox.entity.EzyObject;
-import com.tvd12.ezyfox.util.EzyEntityObjects;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("rawtypes")
 public class EzyEsSearchActionHandler extends EzyEsAbstractActionHandler<EzyEsSearchAction, List> {
@@ -33,8 +32,6 @@ public class EzyEsSearchActionHandler extends EzyEsAbstractActionHandler<EzyEsSe
     protected Object unmarshalHit(SearchHit hit, Class<?> responseItemType) {
         Map<String, Object> map = hit.getSourceAsMap();
         EzyObject source = EzyEntityObjects.newObject(map);
-        Object answer = unmarshaller.unmarshal(source, responseItemType);
-        return answer;
+        return unmarshaller.unmarshal(source, responseItemType);
     }
-
 }

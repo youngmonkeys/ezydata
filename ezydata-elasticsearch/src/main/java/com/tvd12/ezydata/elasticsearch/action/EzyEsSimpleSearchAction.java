@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.elasticsearch.action;
 
+import lombok.Getter;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RequestOptions;
-
-import lombok.Getter;
 
 public class EzyEsSimpleSearchAction implements EzyEsSearchAction {
 
@@ -25,8 +24,9 @@ public class EzyEsSimpleSearchAction implements EzyEsSearchAction {
 
     @Override
     public RequestOptions getRequestOptions() {
-        if(requestOptions == null)
+        if (requestOptions == null) {
             return RequestOptions.DEFAULT;
+        }
         return requestOptions;
     }
 
@@ -34,5 +34,4 @@ public class EzyEsSimpleSearchAction implements EzyEsSearchAction {
     public String getActionType() {
         return EzyEsActionTypes.SEARCH;
     }
-
 }

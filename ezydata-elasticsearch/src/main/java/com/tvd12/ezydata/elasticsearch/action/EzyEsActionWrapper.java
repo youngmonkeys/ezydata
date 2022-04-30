@@ -11,5 +11,4 @@ public interface EzyEsActionWrapper {
     EzyEsActionHandler getHandler();
 
     EzyEsActionCallback getCallback();
-
 }
