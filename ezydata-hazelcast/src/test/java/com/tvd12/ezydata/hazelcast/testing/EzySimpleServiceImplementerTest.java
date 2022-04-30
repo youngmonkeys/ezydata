@@ -1,25 +1,24 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.annotation.EzyMapServiceAutoImpl;
 import com.tvd12.ezydata.hazelcast.impl.EzySimpleServiceImplementer;
 import com.tvd12.ezydata.hazelcast.impl.EzySimpleServicesImplementer;
 import com.tvd12.ezyfox.reflect.EzyClass;
+import org.testng.annotations.Test;
 
 public class EzySimpleServiceImplementerTest extends HazelcastBaseTest {
 
     @Test(expectedExceptions = {IllegalArgumentException.class})
     public void test() {
         EzySimpleServiceImplementer implementer =
-                new EzySimpleServiceImplementer(new EzyClass(ClassA.class));
+            new EzySimpleServiceImplementer(new EzyClass(ClassA.class));
         implementer.implement(HZ_INSTANCE);
     }
 
     @Test(expectedExceptions = {IllegalStateException.class})
     public void test2() {
         EzySimpleServiceImplementer implementer =
-                new EzySimpleServiceImplementer(new EzyClass(InterfaceA.class));
+            new EzySimpleServiceImplementer(new EzyClass(InterfaceA.class));
         implementer.implement(null);
     }
 
@@ -30,13 +29,8 @@ public class EzySimpleServiceImplementerTest extends HazelcastBaseTest {
     }
 
     @EzyMapServiceAutoImpl("a")
-    public static class ClassA {
-
-    }
+    public interface InterfaceA {}
 
     @EzyMapServiceAutoImpl("a")
-    public static interface InterfaceA {
-
-    }
-
+    public static class ClassA {}
 }

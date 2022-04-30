@@ -5,14 +5,14 @@ import com.hazelcast.transaction.TransactionalMap;
 import com.tvd12.ezydata.hazelcast.transaction.EzyMapReturnTransaction;
 import com.tvd12.ezyfox.function.EzyExceptionFunction;
 
-public class EzySimpleMapReturnTransaction<K,V,R>
-        extends EzySimpleTransaction
-        implements EzyMapReturnTransaction<K, V, R> {
+public class EzySimpleMapReturnTransaction<K, V, R>
+    extends EzySimpleTransaction
+    implements EzyMapReturnTransaction<K, V, R> {
 
     protected final String mapName;
 
     public EzySimpleMapReturnTransaction(
-            TransactionContext context, String mapName) {
+        TransactionContext context, String mapName) {
         super(context);
         this.mapName = mapName;
     }
@@ -22,5 +22,4 @@ public class EzySimpleMapReturnTransaction<K,V,R>
         TransactionalMap<K, V> map = context.getMap(mapName);
         return func.apply(map);
     }
-
 }

@@ -1,13 +1,12 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
+import com.hazelcast.map.MapStore;
+import com.tvd12.ezydata.hazelcast.factory.EzyAbstractMapstoreFactory;
+import org.testng.annotations.Test;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
-
-import org.testng.annotations.Test;
-
-import com.hazelcast.map.MapStore;
-import com.tvd12.ezydata.hazelcast.factory.EzyAbstractMapstoreFactory;
 
 public class EzyAbstractMapstoreFactoryTest {
 
@@ -55,5 +54,4 @@ public class EzyAbstractMapstoreFactoryTest {
         };
         factory.newMapStore("map", new Properties());
     }
-
 }

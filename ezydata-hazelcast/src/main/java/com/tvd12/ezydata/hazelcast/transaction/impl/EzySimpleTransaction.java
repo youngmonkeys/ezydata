@@ -4,9 +4,9 @@ import com.hazelcast.transaction.TransactionContext;
 import com.tvd12.ezydata.hazelcast.transaction.EzyTransaction;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
-public class EzySimpleTransaction 
-        extends EzyLoggable
-        implements EzyTransaction {
+public class EzySimpleTransaction
+    extends EzyLoggable
+    implements EzyTransaction {
 
     protected final TransactionContext context;
 
@@ -28,5 +28,4 @@ public class EzySimpleTransaction
     public void rollback() {
         context.rollbackTransaction();
     }
-
 }

@@ -1,23 +1,22 @@
 package com.tvd12.ezydata.hazelcast.service;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.query.Predicate;
+import com.hazelcast.query.PredicateBuilder.EntryObject;
+import com.hazelcast.query.impl.PredicateBuilderImpl;
+import com.tvd12.ezyfox.collect.Sets;
+import com.tvd12.ezyfox.util.EzyHasIdEntity;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tvd12.ezyfox.collect.Sets;
-import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.query.Predicate;
-import com.hazelcast.query.PredicateBuilder.EntryObject;
-import com.hazelcast.query.impl.PredicateBuilderImpl;
-import com.tvd12.ezyfox.util.EzyHasIdEntity;
+public abstract class EzySimpleHazelcastMapService<K, V>
+    extends EzyAbstractMapService<K, V>
+    implements EzyHazelcastMapService<K, V> {
 
-public abstract class EzySimpleHazelcastMapService<K,V>
-        extends EzyAbstractMapService<K, V>
-        implements EzyHazelcastMapService<K, V> {
-
-    public EzySimpleHazelcastMapService() {
-    }
+    public EzySimpleHazelcastMapService() {}
 
     public EzySimpleHazelcastMapService(HazelcastInstance hazelcastInstance) {
         super(hazelcastInstance);
@@ -97,8 +96,9 @@ public abstract class EzySimpleHazelcastMapService<K,V>
 
     @SuppressWarnings("unchecked")
     private K getKey(V value) {
-        if(value instanceof EzyHasIdEntity)
-            return ((EzyHasIdEntity<K>)value).getId();
+        if (value instanceof EzyHasIdEntity) {
+            return ((EzyHasIdEntity<K>) value).getId();
+        }
         throw new IllegalArgumentException("value must implements 'EzyHasIdEntity' interface");
     }
 
@@ -109,8 +109,9 @@ public abstract class EzySimpleHazelcastMapService<K,V>
 
     @Override
     public void remove(Iterable<K> keys) {
-        for(K key : keys)
+        for (K key : keys) {
             this.remove(key);
+        }
     }
 
     @Override
@@ -140,7 +141,7 @@ public abstract class EzySimpleHazelcastMapService<K,V>
         return getList(predicate);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     protected List<V> getList(Predicate predicate) {
         return new ArrayList<>(map.values(predicate));
     }
@@ -148,5 +149,4 @@ public abstract class EzySimpleHazelcastMapService<K,V>
     protected final EntryObject getEntryObject() {
         return new PredicateBuilderImpl().getEntryObject();
     }
-
 }

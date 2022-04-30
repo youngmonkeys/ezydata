@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezydata.hazelcast.testing.service.impl.DogServiceImpl;
+import org.testng.annotations.Test;
 
 public class DogServiceTest extends HazelcastBaseTest {
 
@@ -41,5 +40,4 @@ public class DogServiceTest extends HazelcastBaseTest {
         service.setMapTransactionFactory(MAP_TRANSACTION_FACTORY);
         service.throwException2("hehe");
     }
-
 }

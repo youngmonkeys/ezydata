@@ -9,5 +9,4 @@ public class EzyHazelcastConfigsTest extends BaseTest {
     public Class<?> getTestClass() {
         return EzyHazelcastConfigs.class;
     }
-    
 }

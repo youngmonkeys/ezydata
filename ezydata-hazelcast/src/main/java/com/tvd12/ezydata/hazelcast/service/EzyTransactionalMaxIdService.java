@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.tvd12.ezydata.hazelcast.service;
 
 import com.hazelcast.core.HazelcastInstance;
@@ -9,16 +6,11 @@ import com.tvd12.ezydata.hazelcast.constant.EzyMapNames;
 import com.tvd12.ezydata.hazelcast.transaction.EzyMapReturnTransaction;
 import com.tvd12.ezyfox.database.service.EzyMaxIdService;
 
-/**
- * @author tavandung12
- *
- */
 public class EzyTransactionalMaxIdService
-        extends EzyAbstractMapService<String, Long>
-        implements EzyMaxIdService {
+    extends EzyAbstractMapService<String, Long>
+    implements EzyMaxIdService {
 
-    public EzyTransactionalMaxIdService() {
-    }
+    public EzyTransactionalMaxIdService() {}
 
     public EzyTransactionalMaxIdService(HazelcastInstance hazelcastInstance) {
         super(hazelcastInstance);
@@ -32,15 +24,14 @@ public class EzyTransactionalMaxIdService
     @Override
     public Long incrementAndGet(String key) {
         EzyMapReturnTransaction<String, Long, Long> transaction =
-                newReturnTransaction();
+            newReturnTransaction();
         transaction.begin();
         try {
             Long maxId =
-            transaction.apply(map -> incrementAndGetMaxId(map, key, 1));
+                transaction.apply(map -> incrementAndGetMaxId(map, key, 1));
             transaction.commit();
             return maxId;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             transaction.rollback();
             throw new IllegalStateException("cannot increment and get on key " + key, e);
         }
@@ -49,15 +40,14 @@ public class EzyTransactionalMaxIdService
     @Override
     public Long incrementAndGet(String key, int delta) {
         EzyMapReturnTransaction<String, Long, Long> transaction =
-                newReturnTransaction();
+            newReturnTransaction();
         transaction.begin();
         try {
             Long maxId =
-            transaction.apply(map -> incrementAndGetMaxId(map, key, delta));
+                transaction.apply(map -> incrementAndGetMaxId(map, key, delta));
             transaction.commit();
             return maxId;
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             transaction.rollback();
             throw new IllegalStateException("cannot increment and get on key " + key, e);
         }
@@ -74,5 +64,4 @@ public class EzyTransactionalMaxIdService
     protected String getMapName() {
         return EzyMapNames.MAX_ID;
     }
-
 }

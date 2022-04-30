@@ -1,12 +1,11 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.impl.EzySimpleServiceImplementer;
 import com.tvd12.ezydata.hazelcast.service.EzySimpleHazelcastMapService;
 import com.tvd12.ezydata.hazelcast.testing.HazelcastBaseTest;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.reflect.EzyClass;
+import org.testng.annotations.Test;
 
 public class TryTest extends HazelcastBaseTest {
 
@@ -14,8 +13,8 @@ public class TryTest extends HazelcastBaseTest {
     @Test
     public void test() {
         EzySimpleServiceImplementer implementer =
-                new EzySimpleServiceImplementer(new EzyClass(PersonMapService.class));
-        PersonMapService service = (PersonMapService)implementer.implement(HZ_INSTANCE);
+            new EzySimpleServiceImplementer(new EzyClass(PersonMapService.class));
+        PersonMapService service = (PersonMapService) implementer.implement(HZ_INSTANCE);
         service.clear();
         assert service.isEmpty();
         service.put(new Person("dung", 25));
@@ -37,8 +36,7 @@ public class TryTest extends HazelcastBaseTest {
         assert !service.containsValue(new Person("not found", 1));
         service.put("hung", new Person("hung", 32));
         assert !service.isEmpty();
-        EzySimpleHazelcastMapService<String, Person> ab = (EzySimpleHazelcastMapService<String, Person>)service;
+        EzySimpleHazelcastMapService<String, Person> ab = (EzySimpleHazelcastMapService<String, Person>) service;
         assert ab.getListByField("name", "dung").size() == 1;
     }
-    
 }

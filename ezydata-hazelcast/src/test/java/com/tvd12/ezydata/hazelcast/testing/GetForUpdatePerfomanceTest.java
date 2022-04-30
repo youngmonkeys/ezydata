@@ -1,57 +1,61 @@
 package com.tvd12.ezydata.hazelcast.testing;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.hazelcast.transaction.TransactionContext;
 import com.hazelcast.transaction.TransactionOptions;
 import com.hazelcast.transaction.TransactionOptions.TransactionType;
 import com.hazelcast.transaction.TransactionalMap;
+import com.tvd12.ezyfox.util.EzyThreads;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GetForUpdatePerfomanceTest extends HazelcastBaseTest {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         new GetForUpdatePerfomanceTest().test();
     }
 
-    public void testX() throws Exception {
+    @SuppressWarnings("unused")
+    public void testX() {
         HZ_INSTANCE.getMap("map").clear();
         AtomicInteger done = new AtomicInteger(0);
         TransactionOptions txOptions = newHazelcastTransactionOptions();
-        Runnable runnable  = () ->  {
+        Runnable runnable = () -> {
             TransactionContext txCxt = HZ_INSTANCE.newTransactionContext(txOptions);
             txCxt.beginTransaction();
             try {
-            TransactionalMap<String, Long> map = txCxt.getMap("map");
-            for(int i = 0 ; i < 50 ; ++i) {
-                String key = "" + i;
-                Long oldValue = map.getForUpdate(key);
-                map.set(key, oldValue != null ? oldValue + 1L : 1L);
-                Long newValue = map.get(key);
-                if(newValue == null) {
-                    System.out.println("hello");
+                TransactionalMap<String, Long> map = txCxt.getMap("map");
+                for (int i = 0; i < 50; ++i) {
+                    String key = "" + i;
+                    Long oldValue = map.getForUpdate(key);
+                    map.set(key, oldValue != null ? oldValue + 1L : 1L);
+                    Long newValue = map.get(key);
+                    if (newValue == null) {
+                        System.out.println("hello");
+                    }
                 }
-            }
-            txCxt.commitTransaction();
-            }
-            catch (Exception e) {
+                txCxt.commitTransaction();
+            } catch (Exception e) {
                 txCxt.rollbackTransaction();
-            }
-            finally {
+            } finally {
                 done.incrementAndGet();
             }
         };
         Thread[] threads = new Thread[1000];
-        for(int i = 0 ; i < threads.length ; ++i)
+        for (int i = 0; i < threads.length; ++i) {
             threads[i] = new Thread(runnable);
-        for(int i = 0 ; i < threads.length ; ++i)
-            threads[i].start();
-        while (done.get() < threads.length);
+        }
+        for (Thread thread : threads) {
+            thread.start();
+        }
+        while (done.get() < threads.length) {
+            EzyThreads.sleep(3);
+        }
         Map<String, Long> xmap = HZ_INSTANCE.getMap("map");
-        for(String key : xmap.keySet())
+        for (String key : xmap.keySet()) {
             System.out.println(key + " : " + xmap.get(key));
-
+        }
     }
 
     public void test() {
@@ -61,7 +65,7 @@ public class GetForUpdatePerfomanceTest extends HazelcastBaseTest {
         txCxt.beginTransaction();
         TransactionalMap<Object, Object> map = txCxt.getMap("map");
         long start = System.currentTimeMillis();
-        for(int i = 0 ; i < 50000 ; ++i) {
+        for (int i = 0; i < 50000; ++i) {
             map.getForUpdate("" + i);
             map.set("" + i, i);
         }
@@ -72,9 +76,8 @@ public class GetForUpdatePerfomanceTest extends HazelcastBaseTest {
 
     private TransactionOptions newHazelcastTransactionOptions() {
         return new TransactionOptions()
-                .setTimeout(300, TimeUnit.SECONDS)
-                .setTransactionType(TransactionType.TWO_PHASE)
-                .setDurability(300);
+            .setTimeout(300, TimeUnit.SECONDS)
+            .setTransactionType(TransactionType.TWO_PHASE)
+            .setDurability(300);
     }
-
 }

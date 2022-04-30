@@ -9,7 +9,4 @@ public class EzySimpleHazelcastFactory extends EzyAbstractHazelcastFactory {
     protected EzyMapstoreCreator newMapstoreCreator() {
         return new EzySimpleMapstoreCreator();
     }
-
-
-
 }

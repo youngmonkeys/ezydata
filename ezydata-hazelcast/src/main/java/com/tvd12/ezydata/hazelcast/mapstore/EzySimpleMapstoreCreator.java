@@ -1,16 +1,15 @@
 package com.tvd12.ezydata.hazelcast.mapstore;
 
+import com.hazelcast.map.MapStore;
+import com.tvd12.ezyfox.util.EzyLoggable;
+import lombok.Setter;
+
 import java.util.Properties;
 import java.util.Set;
 
-import com.hazelcast.map.MapStore;
-import com.tvd12.ezyfox.util.EzyLoggable;
-
-import lombok.Setter;
-
 public class EzySimpleMapstoreCreator
-        extends EzyLoggable
-        implements EzyMapstoreCreator, EzyMapstoresFetcherAware {
+    extends EzyLoggable
+    implements EzyMapstoreCreator, EzyMapstoresFetcherAware {
 
     @Setter
     protected EzyMapstoresFetcher mapstoresFetcher;
@@ -23,9 +22,9 @@ public class EzySimpleMapstoreCreator
     @SuppressWarnings("rawtypes")
     @Override
     public MapStore create(String mapName, Properties properties) {
-        if(mapstoresFetcher.containsMapstore(mapName))
+        if (mapstoresFetcher.containsMapstore(mapName)) {
             return (MapStore) mapstoresFetcher.getMapstore(mapName);
+        }
         throw new IllegalArgumentException("has no mapstore with name = " + mapName);
     }
-
 }

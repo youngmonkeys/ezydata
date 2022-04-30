@@ -1,10 +1,10 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
+import com.tvd12.ezydata.hazelcast.testing.entity.ExampleUser;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.tvd12.ezydata.hazelcast.testing.entity.ExampleUser;
 
 public interface ExampleUserService {
 
@@ -19,5 +19,4 @@ public interface ExampleUserService {
     void deleteUser(String username);
 
     void deleteAllUser();
-
 }

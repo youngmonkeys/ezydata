@@ -1,13 +1,12 @@
 package com.tvd12.ezydata.hazelcast.testing.entity;
 
-import java.io.Serializable;
-
 import com.tvd12.ezyfox.util.EzyHasIdEntity;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Setter
 @Getter
@@ -22,5 +21,4 @@ public class ExampleUser implements EzyHasIdEntity<String>, Serializable {
     public String getId() {
         return username;
     }
-
 }

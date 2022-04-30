@@ -1,12 +1,5 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import static org.mockito.Mockito.*;
-
-import java.util.Map;
-import java.util.Set;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.hazelcast.factory.EzyMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.factory.EzySimpleMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.service.EzyAbstractMapService;
@@ -17,6 +10,12 @@ import com.tvd12.ezyfox.function.EzyExceptionApply;
 import com.tvd12.ezyfox.function.EzyExceptionFunction;
 import com.tvd12.ezyfox.function.EzyExceptionVoid;
 import com.tvd12.ezyfox.function.EzySupplier;
+import org.testng.annotations.Test;
+
+import java.util.Map;
+import java.util.Set;
+
+import static org.mockito.Mockito.*;
 
 public class EzyAbstractMapServiceTest extends HazelcastBaseTest {
 
@@ -24,9 +23,10 @@ public class EzyAbstractMapServiceTest extends HazelcastBaseTest {
     public void test() throws Exception {
         ChickenMapService service = new ChickenMapService();
         service.setHazelcastInstance(HZ_INSTANCE);
-        service.mapLockUpdate("one", () -> {
-            System.out.println("hello world");
-        });
+        service.mapLockUpdate(
+            "one",
+            () -> System.out.println("hello world")
+        );
         try {
             service.mapLockUpdate("one", () -> {
                 throw new IllegalStateException("maintain");
@@ -43,9 +43,10 @@ public class EzyAbstractMapServiceTest extends HazelcastBaseTest {
             assert e instanceof IllegalStateException;
         }
 
-        service.mapLockUpdateWithException("one", () -> {
-            System.out.println("hello world");
-        });
+        service.mapLockUpdateWithException(
+            "one",
+            () -> System.out.println("hello world")
+        );
         try {
             service.mapLockUpdateWithException("one", () -> {
                 throw new IllegalStateException("maintain");
@@ -72,22 +73,25 @@ public class EzyAbstractMapServiceTest extends HazelcastBaseTest {
         });
         service.tranPut(new Chicken("two", 456));
         assert service.tranGet(Sets.newHashSet("one", "two")).size() == 2;
-        service.tranUpdateAndGet("one", c -> c.getName()).equals("one");
-        assert service.tranUpdateAndGet("no key", c -> c.getName()) == null;
+        assert service.tranUpdateAndGet("one", Chicken::getName).equals("one");
+        assert service.tranUpdateAndGet("no key", Chicken::getName) == null;
 
         ChickenMap2Service service2 = new ChickenMap2Service();
         service2.setHazelcastInstance(HZ_INSTANCE);
         service2.setMapTransactionFactory(mapTransactionFactory);
         try {
-            service2.tranGet("one", new Chicken("one", 1));
-        }
-        catch (Exception e) {
+            assert service2.tranGet("one", new Chicken("one", 1)) != null;
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
         try {
-            service2.tranGet(Sets.newHashSet("one"));
+            assert service2.tranGet(Sets.newHashSet("one")) != null;
+        } catch (Exception e) {
+            assert e instanceof IllegalStateException;
         }
-        catch (Exception e) {
+        try {
+            assert service.tranGet("one", new Chicken()) != null;
+        } catch (Exception e) {
             assert e instanceof IllegalStateException;
         }
 
@@ -162,14 +166,13 @@ public class EzyAbstractMapServiceTest extends HazelcastBaseTest {
             return transactionGet(keys);
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @SuppressWarnings({"unchecked", "rawtypes"})
         @Override
         protected <R> EzyMapReturnTransaction<String, Chicken, R> newReturnTransaction() {
             EzyMapReturnTransaction transaction = mock(EzyMapReturnTransaction.class);
             try {
                 when(transaction.apply(any())).thenThrow(new IllegalStateException("maintain"));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new IllegalStateException(e);
             }
             return transaction;

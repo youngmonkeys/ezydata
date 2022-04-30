@@ -12,5 +12,4 @@ public interface EzyMapstoresFetcher {
     Map<String, Object> getMapstores();
 
     boolean containsMapstore(String mapName);
-
 }

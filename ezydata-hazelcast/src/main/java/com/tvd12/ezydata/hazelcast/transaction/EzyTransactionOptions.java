@@ -15,5 +15,4 @@ public abstract class EzyTransactionOptions {
     public abstract int getDurability();
 
     public abstract EzyTransactionType getTransactionType();
-
 }

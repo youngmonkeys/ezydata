@@ -1,34 +1,34 @@
 package com.tvd12.ezydata.hazelcast.testing.service.impl;
 
+import com.tvd12.ezydata.hazelcast.service.EzySimpleHazelcastMapService;
+import com.tvd12.ezydata.hazelcast.testing.entity.ExampleUser;
+import com.tvd12.ezydata.hazelcast.testing.service.ExampleUserService;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.tvd12.ezydata.hazelcast.service.EzySimpleHazelcastMapService;
-import com.tvd12.ezydata.hazelcast.testing.entity.ExampleUser;
-import com.tvd12.ezydata.hazelcast.testing.service.ExampleUserService;
-
 public class ExampleUserServiceImpl
-        extends EzySimpleHazelcastMapService<String, ExampleUser>
-        implements ExampleUserService {
+    extends EzySimpleHazelcastMapService<String, ExampleUser>
+    implements ExampleUserService {
 
     @Override
     public void saveUser(ExampleUser user) {
         map.set(user.getUsername(), user);
     }
-    
+
     @Override
     public void saveUser(List<ExampleUser> users) {
         set(users);
         set(new HashMap<>());
     }
-    
+
     @Override
     public ExampleUser getUser(String username) {
         return map.get(username);
     }
-    
+
     @Override
     protected String getMapName() {
         return "example_users";
@@ -48,5 +48,4 @@ public class ExampleUserServiceImpl
     public void deleteAllUser() {
         clear();
     }
-    
 }

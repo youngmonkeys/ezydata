@@ -1,11 +1,11 @@
 package com.tvd12.ezydata.hazelcast.testing.service;
 
-import java.io.Serializable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 @Setter
 @Getter
@@ -16,13 +16,12 @@ public class Dog implements Serializable {
 
     private String name;
     private int age;
-    
+
     public void exception() {
         throw new RuntimeException();
     }
-    
+
     public long exception2() {
         throw new RuntimeException();
     }
-    
 }
