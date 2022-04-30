@@ -4,11 +4,10 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.RequestOptions;
 
 public interface EzyEsSearchAction extends EzyEsAction {
-    
+
     SearchRequest getSearchRequest();
-    
+
     RequestOptions getRequestOptions();
-    
+
     Class<?> getResponseItemType();
-    
 }

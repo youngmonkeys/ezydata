@@ -12,14 +12,13 @@ public interface EzyEsCaller extends EzyStartable, EzyShutdownable {
 
     void async(EzyEsAction action, EzyEsActionCallback callback);
 
-    EzyEsClientProxy getClientProxy();
-
     default void async(EzyEsAction action) {
         async(action, null);
     }
 
+    EzyEsClientProxy getClientProxy();
+
     default <T> T call(EzyEsAction action) {
         return sync(action);
     }
-
 }

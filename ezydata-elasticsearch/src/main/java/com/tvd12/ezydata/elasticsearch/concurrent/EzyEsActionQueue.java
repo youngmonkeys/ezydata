@@ -1,10 +1,10 @@
 package com.tvd12.ezydata.elasticsearch.concurrent;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import com.tvd12.ezydata.elasticsearch.action.EzyEsActionWrapper;
 import com.tvd12.ezydata.elasticsearch.exception.EzyEsActionQueueFullException;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class EzyEsActionQueue {
 
@@ -18,12 +18,12 @@ public class EzyEsActionQueue {
 
     public void addAction(EzyEsActionWrapper wrapper) {
         boolean success = this.queue.offer(wrapper);
-        if(!success)
+        if (!success) {
             throw new EzyEsActionQueueFullException(capacity, queue.size());
+        }
     }
 
     public EzyEsActionWrapper takeAction() throws Exception {
-        EzyEsActionWrapper wrapper = this.queue.take();
-        return wrapper;
+        return this.queue.take();
     }
 }

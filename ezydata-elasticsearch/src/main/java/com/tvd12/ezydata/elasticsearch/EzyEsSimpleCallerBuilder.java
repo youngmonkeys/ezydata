@@ -1,17 +1,7 @@
 package com.tvd12.ezydata.elasticsearch;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.tvd12.ezydata.elasticsearch.action.EzyEsActionTypes;
-import com.tvd12.ezydata.elasticsearch.handler.EzyEsAbstractActionHandler;
-import com.tvd12.ezydata.elasticsearch.handler.EzyEsActionHandler;
-import com.tvd12.ezydata.elasticsearch.handler.EzyEsIndexActionHandler;
-import com.tvd12.ezydata.elasticsearch.handler.EzyEsLogUncaughtExceptionHandler;
-import com.tvd12.ezydata.elasticsearch.handler.EzyEsSearchActionHandler;
-import com.tvd12.ezydata.elasticsearch.handler.EzyEsUncaughtExceptionHandler;
+import com.tvd12.ezydata.elasticsearch.handler.*;
 import com.tvd12.ezyfox.binding.EzyBindingContext;
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
@@ -19,6 +9,11 @@ import com.tvd12.ezyfox.data.EzyIndexedDataIdFetchers;
 import com.tvd12.ezyfox.identifier.EzyIdFetchers;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings({"rawtypes"})
 public class EzyEsSimpleCallerBuilder implements EzyEsCallerBuilder {
@@ -78,17 +73,18 @@ public class EzyEsSimpleCallerBuilder implements EzyEsCallerBuilder {
 
     @Override
     public EzyEsCaller build() {
-        this.scanIndexedClasses();
+        this.doScanIndexedClasses();
         this.resetupActionHandlers();
-        if(uncaughtExceptionHandler == null)
+        if (uncaughtExceptionHandler == null) {
             this.uncaughtExceptionHandler = new EzyEsLogUncaughtExceptionHandler();
+        }
         return new EzyEsSimpleCaller(this);
     }
 
     protected void resetupActionHandlers() {
-        for(EzyEsActionHandler handler : actionHandlers.values()) {
-            if(handler instanceof EzyEsAbstractActionHandler) {
-                EzyEsAbstractActionHandler abstractHandler = (EzyEsAbstractActionHandler)handler;
+        for (EzyEsActionHandler handler : actionHandlers.values()) {
+            if (handler instanceof EzyEsAbstractActionHandler) {
+                EzyEsAbstractActionHandler abstractHandler = (EzyEsAbstractActionHandler) handler;
                 abstractHandler.setClientProxy(clientProxy);
                 abstractHandler.setIdFetchers(idFetchers);
                 abstractHandler.setIndexedDataClasses(indexedDataClasses);
@@ -98,9 +94,10 @@ public class EzyEsSimpleCallerBuilder implements EzyEsCallerBuilder {
         }
     }
 
-    protected void scanIndexedClasses() {
-        if(indexedPackagesToScan.isEmpty())
+    protected void doScanIndexedClasses() {
+        if (indexedPackagesToScan.isEmpty()) {
             return;
+        }
         EzyReflection reflection = new EzyReflectionProxy(indexedPackagesToScan);
         indexedDataClasses = newIndexedDataClasses(reflection);
         idFetchers = newDataIdFetchers(reflection);
@@ -111,19 +108,19 @@ public class EzyEsSimpleCallerBuilder implements EzyEsCallerBuilder {
 
     protected EzyIndexedDataClasses newIndexedDataClasses(EzyReflection reflection) {
         return EzyIndexedDataClasses.builder()
-                .addIndexedDataClasses(reflection)
-                .build();
+            .addIndexedDataClasses(reflection)
+            .build();
     }
 
     protected EzyIdFetchers newDataIdFetchers(EzyReflection reflection) {
         return EzyIndexedDataIdFetchers.builder()
-                .addClasses(reflection)
-                .build();
+            .addClasses(reflection)
+            .build();
     }
 
     protected EzyBindingContext newBindingContext(EzyReflection reflection) {
         return EzyBindingContext.builder()
-                .addAllClasses(reflection)
-                .build();
+            .addAllClasses(reflection)
+            .build();
     }
 }

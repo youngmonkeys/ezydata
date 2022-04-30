@@ -1,22 +1,20 @@
 package com.tvd12.ezydata.elasticsearch.util;
 
-import java.util.Set;
-
 import com.tvd12.ezydata.elasticsearch.annotation.EzyDataIndex;
 import com.tvd12.ezyfox.collect.Sets;
 
+import java.util.Set;
+
 public final class EzyDataIndexAnnotations {
 
-    private EzyDataIndexAnnotations() {
+    private EzyDataIndexAnnotations() {}
+
+    public static String getIndex(EzyDataIndex anno) {
+        return anno.value();
     }
 
-    public static String getIndex(Class<?> clazz, EzyDataIndex anno) {
-        String index = anno.value();
-        return index;
-    }
-
-    public static Set<String> getIndexes(Class<?> clazz, EzyDataIndex anno) {
-        return Sets.newHashSet(getIndex(clazz, anno));
+    public static Set<String> getIndexes(EzyDataIndex anno) {
+        return Sets.newHashSet(getIndex(anno));
     }
 
 }

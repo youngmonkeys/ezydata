@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.elasticsearch;
 
-import java.util.Map;
-
 import com.tvd12.ezydata.elasticsearch.action.EzyEsAction;
 import com.tvd12.ezydata.elasticsearch.action.EzyEsActionWrapper;
 import com.tvd12.ezydata.elasticsearch.action.EzyEsSimpleActionWrapper;
@@ -11,8 +9,9 @@ import com.tvd12.ezydata.elasticsearch.concurrent.EzyEsActionQueue;
 import com.tvd12.ezydata.elasticsearch.handler.EzyEsActionHandler;
 import com.tvd12.ezyfox.exception.EzyProxyException;
 import com.tvd12.ezyfox.util.EzyLoggable;
-
 import lombok.Getter;
+
+import java.util.Map;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EzyEsSimpleCaller extends EzyLoggable implements EzyEsCaller {
@@ -28,21 +27,24 @@ public class EzyEsSimpleCaller extends EzyLoggable implements EzyEsCaller {
         this.clientProxy = builder.clientProxy;
         this.actionQueue = new EzyEsActionQueue(builder.maxQueueSize);
         this.actionHandleLoop = new EzyEsActionHandleLoop(
-                builder.threadPoolSize,
-                actionQueue,
-                builder.uncaughtExceptionHandler);
+            builder.threadPoolSize,
+            actionQueue,
+            builder.uncaughtExceptionHandler);
+    }
+
+    public static EzyEsCallerBuilder builder() {
+        return new EzyEsSimpleCallerBuilder();
     }
 
     @Override
     public <T> T sync(EzyEsAction action) {
         EzyEsActionHandler actionHandler = actionHandlers.get(action.getActionType());
-        if(actionHandler == null)
+        if (actionHandler == null) {
             throw new IllegalArgumentException("has no action handler for type: " + action.getActionType());
-        try {
-            T result = (T)actionHandler.handle(action);
-            return result;
         }
-        catch(Exception e) {
+        try {
+            return (T) actionHandler.handle(action);
+        } catch (Exception e) {
             throw new EzyProxyException(e);
         }
     }
@@ -50,14 +52,15 @@ public class EzyEsSimpleCaller extends EzyLoggable implements EzyEsCaller {
     @Override
     public void async(EzyEsAction action, EzyEsActionCallback callback) {
         EzyEsActionHandler actionHandler = actionHandlers.get(action.getActionType());
-        if(actionHandler == null)
+        if (actionHandler == null) {
             throw new IllegalArgumentException("has no action handler for type: " + action.getActionType());
+        }
         EzyEsActionWrapper wrapper = new EzyEsSimpleActionWrapper(action, actionHandler, callback);
         actionQueue.addAction(wrapper);
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         actionHandleLoop.start();
     }
 
@@ -65,9 +68,4 @@ public class EzyEsSimpleCaller extends EzyLoggable implements EzyEsCaller {
     public void shutdown() {
         actionHandleLoop.stop();
     }
-
-    public static EzyEsCallerBuilder builder() {
-        return new EzyEsSimpleCallerBuilder();
-    }
-
 }

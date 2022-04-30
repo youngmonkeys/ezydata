@@ -1,9 +1,9 @@
 package com.tvd12.ezydata.elasticsearch.action;
 
+import org.elasticsearch.client.RequestOptions;
+
 import java.util.List;
 import java.util.Set;
-
-import org.elasticsearch.client.RequestOptions;
 
 public interface EzyEsIndexAction extends EzyEsAction {
 
@@ -12,5 +12,4 @@ public interface EzyEsIndexAction extends EzyEsAction {
     Set<String> getIndexes();
 
     RequestOptions getRequestOptions();
-
 }

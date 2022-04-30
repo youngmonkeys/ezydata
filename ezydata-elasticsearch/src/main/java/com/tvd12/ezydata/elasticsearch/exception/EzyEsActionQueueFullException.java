@@ -6,5 +6,4 @@ public class EzyEsActionQueueFullException extends RuntimeException {
     public EzyEsActionQueueFullException(int capacity, int currentSize) {
         super("queue is full, capacity: " + capacity + " current size: " + currentSize);
     }
-
 }

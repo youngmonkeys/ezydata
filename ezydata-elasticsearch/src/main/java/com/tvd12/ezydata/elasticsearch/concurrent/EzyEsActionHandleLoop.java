@@ -10,37 +10,38 @@ import com.tvd12.ezyfox.util.EzyLoggable;
 import com.tvd12.ezyfox.util.EzyStartable;
 import com.tvd12.ezyfox.util.EzyStoppable;
 
-public class EzyEsActionHandleLoop 
-        extends EzyLoggable
-        implements EzyStartable, EzyStoppable {
+public class EzyEsActionHandleLoop
+    extends EzyLoggable
+    implements EzyStartable, EzyStoppable {
 
-    protected volatile boolean active;
+    protected static final String THREAD_NAME = "elasticsearch-action-handling";
     protected final EzyEsActionQueue actionQueue;
     protected final EzyThreadList executorService;
     protected final EzyEsUncaughtExceptionHandler uncaughtExceptionHandler;
-    protected static final String THREAD_NAME = "elasticsearch-action-handling";
+    protected volatile boolean active;
 
     public EzyEsActionHandleLoop(
-            int threadPoolSize,
-            EzyEsActionQueue actionQueue,
-            EzyEsUncaughtExceptionHandler uncaughtExceptionHandler) {
+        int threadPoolSize,
+        EzyEsActionQueue actionQueue,
+        EzyEsUncaughtExceptionHandler uncaughtExceptionHandler) {
         this.actionQueue = actionQueue;
         this.executorService = newExecutorService(threadPoolSize);
         this.uncaughtExceptionHandler = uncaughtExceptionHandler;
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
         this.active = true;
         this.executorService.execute();
     }
 
     protected void loop() {
-        while(active)
+        while (active) {
             this.handleActions();
+        }
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     protected void handleActions() {
         Object response = null;
         Exception exception = null;
@@ -52,33 +53,36 @@ public class EzyEsActionHandleLoop
             action = wrapper.getAction();
             callback = wrapper.getCallback();
             response = handler.handle(action);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             exception = e;
-        }
-        finally {
-            if(response != null && callback != null)
+        } finally {
+            if (response != null && callback != null) {
                 callback.onSuccess(action, response);
-            if(exception != null) {
-                if(callback != null)
+            }
+            if (exception != null) {
+                if (callback != null) {
                     callback.onError(action, exception);
-                else if(uncaughtExceptionHandler != null)
+                } else if (uncaughtExceptionHandler != null) {
                     uncaughtExceptionHandler.uncaughtException(action, exception);
-                else
-                    logger.error("call action ({}): {} error", action.getActionType(), action, exception);
+                } else {
+                    logger.error(
+                        "call action ({}): {} error",
+                        action != null ? action.getActionType() : "null",
+                        action,
+                        exception
+                    );
+                }
             }
         }
     }
 
     protected EzyThreadList newExecutorService(int threadPoolSize) {
-        Runnable task = () -> loop();
-        EzyThreadList executorService = new EzyThreadList(threadPoolSize, task, THREAD_NAME);
-        return executorService;
+        Runnable task = this::loop;
+        return new EzyThreadList(threadPoolSize, task, THREAD_NAME);
     }
 
     @Override
     public void stop() {
         this.active = false;
     }
-
 }

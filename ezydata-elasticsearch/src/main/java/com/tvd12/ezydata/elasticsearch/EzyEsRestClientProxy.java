@@ -1,7 +1,6 @@
 package com.tvd12.ezydata.elasticsearch;
 
-import java.io.IOException;
-
+import lombok.Getter;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
@@ -11,7 +10,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 
-import lombok.Getter;
+import java.io.IOException;
 
 public class EzyEsRestClientProxy implements EzyEsClientProxy {
 
@@ -23,18 +22,26 @@ public class EzyEsRestClientProxy implements EzyEsClientProxy {
     }
 
     @Override
-    public BulkResponse bulk(BulkRequest bulkRequest, RequestOptions options) throws IOException {
+    public BulkResponse bulk(
+        BulkRequest bulkRequest,
+        RequestOptions options
+    ) throws IOException {
         return elasticsearchClient.bulk(bulkRequest, options);
     }
 
     @Override
-    public IndexResponse index(IndexRequest indexRequest, RequestOptions options) throws IOException {
+    public IndexResponse index(
+        IndexRequest indexRequest,
+        RequestOptions options
+    ) throws IOException {
         return elasticsearchClient.index(indexRequest, options);
     }
 
     @Override
-    public SearchResponse search(SearchRequest searchRequest, RequestOptions options) throws IOException {
+    public SearchResponse search(
+        SearchRequest searchRequest,
+        RequestOptions options
+    ) throws IOException {
         return elasticsearchClient.search(searchRequest, options);
     }
-
 }
