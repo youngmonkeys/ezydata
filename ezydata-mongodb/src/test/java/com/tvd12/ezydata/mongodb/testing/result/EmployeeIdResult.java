@@ -8,7 +8,5 @@ import lombok.Setter;
 @Setter
 @EzyQueryResult
 public class EmployeeIdResult {
-
     private String employeeId;
-
 }

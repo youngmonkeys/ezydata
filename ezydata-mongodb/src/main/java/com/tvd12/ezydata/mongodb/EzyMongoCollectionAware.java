@@ -6,5 +6,4 @@ import com.mongodb.client.MongoCollection;
 public interface EzyMongoCollectionAware {
 
     void setCollection(MongoCollection collection);
-
 }

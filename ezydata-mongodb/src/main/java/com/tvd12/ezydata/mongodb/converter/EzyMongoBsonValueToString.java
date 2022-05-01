@@ -47,5 +47,4 @@ public class EzyMongoBsonValueToString {
         }
         return "[" + EzyStrings.join(list, ",") + "]";
     }
-
 }

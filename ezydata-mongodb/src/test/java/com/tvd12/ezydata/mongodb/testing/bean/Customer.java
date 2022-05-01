@@ -11,11 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EzyCollection("test_mongo_bean_customer")
 public class Customer {
-
     @EzyId
     private String id;
     private String name;
     private String hello = "hello";
     private String world = "world";
-
 }

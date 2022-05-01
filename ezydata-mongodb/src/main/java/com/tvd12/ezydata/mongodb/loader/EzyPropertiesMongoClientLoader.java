@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezydata.mongodb.loader;
 
 import com.mongodb.*;
@@ -50,7 +47,7 @@ public class EzyPropertiesMongoClientLoader
         return this;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({"rawtypes"})
     public EzyPropertiesMongoClientLoader properties(Map map) {
         this.properties.putAll(map);
         return this;
@@ -93,7 +90,7 @@ public class EzyPropertiesMongoClientLoader
     }
 
     protected int getPort() {
-        return Integer.valueOf((String) properties.get(EzyMongoClientLoader.PORT));
+        return Integer.parseInt((String) properties.get(EzyMongoClientLoader.PORT));
     }
 
     protected String getUsername() {
@@ -107,5 +104,4 @@ public class EzyPropertiesMongoClientLoader
     protected String getDatabase() {
         return (String) properties.get(EzyMongoClientLoader.DATABASE);
     }
-
 }

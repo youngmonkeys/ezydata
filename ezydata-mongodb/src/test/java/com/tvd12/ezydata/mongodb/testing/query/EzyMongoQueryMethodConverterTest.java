@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 
 public class EzyMongoQueryMethodConverterTest {
 
-    private EzyMongoQueryMethodConverter sut = new EzyMongoQueryMethodConverter();
+    private final EzyMongoQueryMethodConverter sut =
+        new EzyMongoQueryMethodConverter();
 
     @Test
     public void convert() {
@@ -41,5 +42,4 @@ public class EzyMongoQueryMethodConverterTest {
         String queryString = sut.toQueryString(Employee.class, queryMethod);
         System.out.println(queryString);
     }
-
 }

@@ -5,5 +5,4 @@ import com.tvd12.ezyfox.database.annotation.EzyRepository;
 import org.bson.types.ObjectId;
 
 @EzyRepository
-public interface ExamRepository extends EzyMongoRepository<ObjectId, Exam> {
-}
+public interface ExamRepository extends EzyMongoRepository<ObjectId, Exam> {}

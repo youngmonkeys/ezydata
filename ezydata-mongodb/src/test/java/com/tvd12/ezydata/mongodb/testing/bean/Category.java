@@ -24,5 +24,4 @@ public class Category {
     public Category(String value) {
         this.value = value;
     }
-
 }

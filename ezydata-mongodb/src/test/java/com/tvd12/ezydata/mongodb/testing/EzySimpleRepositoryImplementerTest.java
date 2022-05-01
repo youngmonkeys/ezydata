@@ -11,6 +11,7 @@ import com.tvd12.ezyfox.util.Next;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 
@@ -124,6 +125,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
         assert employeeRepo.findByField("firstName", "Foo") != null;
         assert employeeRepo.findListByField("firstName", "Hello").size() >= 1;
         assert employeeRepo.findListByField("firstName", "Hello", 0, 2).size() >= 1;
+        //noinspection ConstantConditions
         assert employeeRepo.findAll().size() >= 0;
         assert employeeRepo.findAll(0, 1).size() == 1;
         assert employeeRepo.findByEmail("dzung@youngmokeys.org") != null;
@@ -134,15 +136,15 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
         long count = employeeRepo.count();
         assert employeeRepo.findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo(
             "dzung",
-            Arrays.asList("dzung@youngmokeys.org"),
-            Arrays.asList("123456789"),
+            Collections.singletonList("dzung@youngmokeys.org"),
+            Collections.singletonList("123456789"),
             "abcdefgh",
             EzyNext.fromSkipLimit(0, 100)
         ).size() == count;
         assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
         employeeRepo.delete("employee2");
         assert employeeRepo.count() == (count - 1);
-        assert employeeRepo.deleteByIds(Arrays.asList("employee3")) >= 1;
+        assert employeeRepo.deleteByIds(Collections.singletonList("employee3")) >= 1;
         employeeRepo.deleteAll();
         assert employeeRepo.count() == 0;
         Thread.sleep(1000L);

@@ -23,7 +23,7 @@ public class MongodbTest extends BaseTest {
         InputStream inputStream = EzyAnywayInputStreamLoader.builder()
             .build()
             .load("mongodb_config.properties");
-        EzySimpleMongoClientLoader loader = new EzySimpleMongoClientLoader()
+        return new EzySimpleMongoClientLoader()
             .inputStream(inputStream)
             .property(EzyMongoClientLoader.HOST, "127.0.0.1")
             .property(EzyMongoClientLoader.PORT, "27017")
@@ -32,8 +32,5 @@ public class MongodbTest extends BaseTest {
                 .put(EzyMongoClientLoader.PASSWORD, "123456")
                 .put(EzyMongoClientLoader.DATABASE, databaseName)
                 .build());
-        return loader;
     }
-
-
 }
