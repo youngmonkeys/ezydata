@@ -220,9 +220,9 @@ public class EzyRedisProxyFactory extends EzyLoggable {
         private EzyField getMapKeyFieldOf(Class<?> mapValueClass) {
             EzyClass clazz = new EzyClass(mapValueClass);
             return clazz.getField(f ->
-                    f.isAnnotated(EzyCachedKey.class) ||
-                        f.isAnnotated(EzyId.class) ||
-                        f.isAnnotated(Id.class)
+                    f.isAnnotated(EzyCachedKey.class)
+                        || f.isAnnotated(EzyId.class)
+                        || f.isAnnotated(Id.class)
                 )
                 .orElseThrow(() -> new IllegalArgumentException(
                     "unknown key type of cached value type: " + mapValueClass.getName() +
