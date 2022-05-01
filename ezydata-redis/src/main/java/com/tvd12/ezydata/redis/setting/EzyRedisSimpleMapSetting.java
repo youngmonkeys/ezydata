@@ -9,5 +9,4 @@ public class EzyRedisSimpleMapSetting implements EzyRedisMapSetting {
 
     protected Class<?> keyType;
     protected Class<?> valueType;
-
 }

@@ -16,19 +16,20 @@ public class EzyRedisAtomicLongFactory {
         this.redisClient = builder.redisClient;
     }
 
-    public EzyRedisAtomicLong newAtomicLong(String name) {
-        String mapName = settings.getAtomicLongMapName();
-        if(EzyStrings.isNoContent(mapName))
-            throw new IllegalArgumentException("has no setting for atomic long map name");
-        return EzyRedisAtomicLong.builder()
-                .name(name)
-                .redisClient(redisClient)
-                .mapName(mapName)
-                .build();
-    }
-
     public static Builder builder() {
         return new Builder();
+    }
+
+    public EzyRedisAtomicLong newAtomicLong(String name) {
+        String mapName = settings.getAtomicLongMapName();
+        if (EzyStrings.isNoContent(mapName)) {
+            throw new IllegalArgumentException("has no setting for atomic long map name");
+        }
+        return EzyRedisAtomicLong.builder()
+            .name(name)
+            .redisClient(redisClient)
+            .mapName(mapName)
+            .build();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisAtomicLongFactory> {
@@ -50,7 +51,5 @@ public class EzyRedisAtomicLongFactory {
         public EzyRedisAtomicLongFactory build() {
             return new EzyRedisAtomicLongFactory(this);
         }
-
     }
-
 }

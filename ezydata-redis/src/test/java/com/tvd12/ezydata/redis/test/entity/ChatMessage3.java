@@ -1,7 +1,6 @@
 package com.tvd12.ezydata.redis.test.entity;
 
 import com.tvd12.ezyfox.binding.annotation.EzyObjectBinding;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +12,4 @@ import lombok.NoArgsConstructor;
 public class ChatMessage3 {
 
     private String message;
-
 }

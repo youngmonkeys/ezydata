@@ -34,53 +34,57 @@ public class EzyRedisProxy {
         this.atomicLongProvider = newAtomicLongProvider();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     protected EzyRedisMapFactory newMapFactory() {
         return EzyRedisMapFactory.builder()
-                .settings(settings)
-                .redisClient(redisClient)
-                .entityCodec(entityCodec)
-                .build();
+            .settings(settings)
+            .redisClient(redisClient)
+            .entityCodec(entityCodec)
+            .build();
     }
 
     protected EzyRedisMapProvider newMapProvider() {
         return EzyRedisMapProvider.builder()
-                .mapFactory(mapFactory)
-                .build();
+            .mapFactory(mapFactory)
+            .build();
     }
 
     protected EzyRedisChannelFactory newChannelFactory() {
         return EzyRedisChannelFactory.builder()
-                .settings(settings)
-                .redisClient(redisClient)
-                .entityCodec(entityCodec)
-                .build();
+            .settings(settings)
+            .redisClient(redisClient)
+            .entityCodec(entityCodec)
+            .build();
     }
 
     protected EzyRedisChannelProvider newChannelProvider() {
         return EzyRedisChannelProvider.builder()
-                .channelFactory(channelFactory)
-                .build();
+            .channelFactory(channelFactory)
+            .build();
     }
 
     protected EzyRedisAtomicLongFactory newAtomicLongFactory() {
         return EzyRedisAtomicLongFactory.builder()
-                .settings(settings)
-                .redisClient(redisClient)
-                .build();
+            .settings(settings)
+            .redisClient(redisClient)
+            .build();
     }
 
     protected EzyRedisAtomicLongProvider newAtomicLongProvider() {
         return EzyRedisAtomicLongProvider.builder()
-                .atomicLongFactory(atomicLongFactory)
-                .build();
+            .atomicLongFactory(atomicLongFactory)
+            .build();
     }
 
-    public <K,V> EzyRedisMap<K, V> getMap(String name) {
+    public <K, V> EzyRedisMap<K, V> getMap(String name) {
         return mapProvider.getMap(name);
     }
 
-    public <K,V> EzyRedisMap<K, V> getMap(
-            String name, Class<K> keyType, Class<V> valueType) {
+    public <K, V> EzyRedisMap<K, V> getMap(
+        String name, Class<K> keyType, Class<V> valueType) {
         return mapProvider.getMap(name, keyType, valueType);
     }
 
@@ -94,10 +98,6 @@ public class EzyRedisProxy {
 
     public EzyRedisAtomicLong getAtomicLong(String name) {
         return atomicLongProvider.getAtomicLong(name);
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisProxy> {
@@ -125,7 +125,5 @@ public class EzyRedisProxy {
         public EzyRedisProxy build() {
             return new EzyRedisProxy(this);
         }
-
     }
-
 }

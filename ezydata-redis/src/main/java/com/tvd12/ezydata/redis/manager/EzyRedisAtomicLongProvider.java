@@ -1,11 +1,11 @@
 package com.tvd12.ezydata.redis.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.tvd12.ezydata.redis.EzyRedisAtomicLong;
 import com.tvd12.ezydata.redis.factory.EzyRedisAtomicLongFactory;
 import com.tvd12.ezyfox.builder.EzyBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EzyRedisAtomicLongProvider {
 
@@ -17,26 +17,27 @@ public class EzyRedisAtomicLongProvider {
         this.atomicLongFactory = builder.atomicLongFactory;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public EzyRedisAtomicLong getAtomicLong(String name) {
         EzyRedisAtomicLong atomicLong = atomicLongs.get(name);
-        if(atomicLong == null)
+        if (atomicLong == null) {
             atomicLong = newAtomicLong(name);
+        }
         return atomicLong;
     }
 
     protected EzyRedisAtomicLong newAtomicLong(String name) {
         synchronized (atomicLongs) {
             EzyRedisAtomicLong atomicLong = atomicLongs.get(name);
-            if(atomicLong == null) {
+            if (atomicLong == null) {
                 atomicLong = atomicLongFactory.newAtomicLong(name);
                 atomicLongs.put(name, atomicLong);
             }
             return atomicLong;
         }
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisAtomicLongProvider> {
@@ -52,7 +53,5 @@ public class EzyRedisAtomicLongProvider {
         public EzyRedisAtomicLongProvider build() {
             return new EzyRedisAtomicLongProvider(this);
         }
-
     }
-
 }

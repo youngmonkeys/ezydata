@@ -5,5 +5,4 @@ import com.tvd12.ezyfox.util.EzyCloseable;
 public interface EzyRedisClientPool extends EzyCloseable {
 
     EzyRedisClient getClient();
-
 }

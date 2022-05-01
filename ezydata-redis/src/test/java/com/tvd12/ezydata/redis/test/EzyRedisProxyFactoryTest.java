@@ -1,9 +1,21 @@
 package com.tvd12.ezydata.redis.test;
 
-import org.testng.annotations.Test;
-
+import com.tvd12.ezydata.redis.EzyRedisClient;
+import com.tvd12.ezydata.redis.EzyRedisClientPool;
 import com.tvd12.ezydata.redis.EzyRedisProxyFactory;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettingsBuilder;
+import com.tvd12.ezyfox.naming.EzyNamingCase;
+import com.tvd12.ezyfox.naming.EzySimpleNameTranslator;
+import com.tvd12.ezyfox.util.EzyThreads;
+import com.tvd12.test.assertion.Asserts;
+import com.tvd12.test.reflect.FieldUtil;
+import com.tvd12.test.util.RandomUtil;
+import org.testng.annotations.Test;
+
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+
+import static org.mockito.Mockito.*;
 
 public class EzyRedisProxyFactoryTest {
 
@@ -11,8 +23,8 @@ public class EzyRedisProxyFactoryTest {
     public void prepareSettingsWithReflectionIsNullTest() {
         // given
         EzyRedisProxyFactory factory = new EzyRedisProxyFactory.Builder()
-                .settingsBuilder(new EzyRedisSettingsBuilder())
-                .build();
+            .settingsBuilder(new EzyRedisSettingsBuilder())
+            .build();
 
         // when
         // then
@@ -22,8 +34,8 @@ public class EzyRedisProxyFactoryTest {
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void prepareSettingsWithErrorEntityTest() {
         new EzyRedisProxyFactory.Builder()
-                .scan("com.tvd12.ezydata.redis.test.error_entity")
-                .build();
+            .scan("com.tvd12.ezydata.redis.test.error_entity")
+            .build();
     }
 
     @Test
@@ -38,4 +50,83 @@ public class EzyRedisProxyFactoryTest {
         factoryBuilder.build();
     }
 
+    @Test
+    public void builderTest() {
+        // given
+        EzyNamingCase namingCase = RandomUtil.randomEnumValue(
+            EzyNamingCase.class
+        );
+        String ignoredSuffix = RandomUtil.randomShortAlphabetString();
+
+        // when
+        EzyRedisProxyFactory.Builder sut = EzyRedisProxyFactory.builder()
+            .mapNameTranslator(namingCase, ignoredSuffix);
+
+        // then
+        Asserts.assertEquals(
+            FieldUtil.getFieldValue(sut, "mapNameTranslator"),
+            EzySimpleNameTranslator.builder()
+                .namingCase(namingCase)
+                .ignoredSuffix(ignoredSuffix)
+                .build()
+        );
+    }
+
+    @Test
+    public void getRedisClientRetryTest() {
+        // given
+        EzyRedisClientPool clientPool = mock(EzyRedisClientPool.class);
+        EzyRedisClient redisClient = mock(EzyRedisClient.class);
+
+        AtomicInteger count = new AtomicInteger();
+        when(clientPool.getClient()).thenAnswer(it -> {
+            if (count.incrementAndGet() >= 2) {
+                return redisClient;
+            }
+            throw new IllegalStateException("just test");
+        });
+        EzyRedisProxyFactory factory = new EzyRedisProxyFactory.Builder()
+            .settingsBuilder(new EzyRedisSettingsBuilder())
+            .clientPool(clientPool)
+            .build();
+
+        // when
+        // then
+        assert factory.newRedisProxy() != null;
+        verify(clientPool, times(2)).getClient();
+    }
+
+    @Test
+    public void getRedisClientInterruptTest() {
+        // given
+        EzyRedisClientPool clientPool = mock(EzyRedisClientPool.class);
+
+        when(clientPool.getClient()).thenAnswer(it -> {
+            throw new IllegalStateException("just test");
+        });
+        EzyRedisProxyFactory factory = new EzyRedisProxyFactory.Builder()
+            .settingsBuilder(new EzyRedisSettingsBuilder())
+            .clientPool(clientPool)
+            .build();
+
+        // when
+        AtomicReference<Throwable> e = new AtomicReference<>();
+        Thread newThread = new Thread(() -> {
+            try {
+                factory.newRedisProxy();
+            } catch (Exception ex) {
+                e.set(ex);
+            }
+        });
+        newThread.start();
+        EzyThreads.sleep(300);
+        newThread.interrupt();
+
+        // then
+        while (e.get() == null) {
+            EzyThreads.sleep(3);
+        }
+        Asserts.assertEqualsType(e.get(), IllegalStateException.class);
+        verify(clientPool, times(1)).getClient();
+    }
 }

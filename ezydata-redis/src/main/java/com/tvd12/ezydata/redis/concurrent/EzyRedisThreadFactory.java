@@ -27,7 +27,5 @@ public class EzyRedisThreadFactory extends EzyThreadFactory {
         public EzyThreadFactory build() {
             return new EzyRedisThreadFactory(this);
         }
-
     }
-
 }

@@ -5,7 +5,6 @@ import com.tvd12.ezyfox.binding.codec.EzyBindingEntityCodec;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
 import com.tvd12.ezyfox.codec.MsgPackSimpleDeserializer;
 import com.tvd12.ezyfox.codec.MsgPackSimpleSerializer;
-
 import redis.clients.jedis.Jedis;
 
 public class EzyRedisBaseTest {
@@ -19,21 +18,19 @@ public class EzyRedisBaseTest {
     }
 
     private static Jedis newJedis() {
-        Jedis jedis = new Jedis();
-        return jedis;
+        return new Jedis();
     }
 
     private static EzyEntityCodec newEntityCodec() {
         EzyBindingContext bindingContext = EzyBindingContext.builder()
-                .scan("com.tvd12.ezydata.redis.test")
-                .build();
-        EzyEntityCodec codec = EzyBindingEntityCodec.builder()
-                .marshaller(bindingContext.newMarshaller())
-                .unmarshaller(bindingContext.newUnmarshaller())
-                .messageSerializer(new MsgPackSimpleSerializer())
-                .messageDeserializer(new MsgPackSimpleDeserializer())
-                .build();
-        return codec;
+            .scan("com.tvd12.ezydata.redis.test")
+            .build();
+        return EzyBindingEntityCodec.builder()
+            .marshaller(bindingContext.newMarshaller())
+            .unmarshaller(bindingContext.newUnmarshaller())
+            .messageSerializer(new MsgPackSimpleSerializer())
+            .messageDeserializer(new MsgPackSimpleDeserializer())
+            .build();
     }
 
 }

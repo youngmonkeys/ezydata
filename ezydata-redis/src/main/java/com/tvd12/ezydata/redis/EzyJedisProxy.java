@@ -1,11 +1,11 @@
 package com.tvd12.ezydata.redis;
 
+import redis.clients.jedis.BinaryJedisPubSub;
+import redis.clients.jedis.Jedis;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import redis.clients.jedis.BinaryJedisPubSub;
-import redis.clients.jedis.Jedis;
 
 public class EzyJedisProxy implements EzyRedisClient {
 
@@ -95,5 +95,4 @@ public class EzyJedisProxy implements EzyRedisClient {
     public String toString() {
         return jedis.toString();
     }
-
 }

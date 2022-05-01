@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.redis.test;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.redis.factory.EzyRedisChannelFactory;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettingsBuilder;
+import org.testng.annotations.Test;
 
 public class EzyRedisChannelFactoryTest {
 
@@ -11,12 +10,11 @@ public class EzyRedisChannelFactoryTest {
     public void newMapFailed() {
         // given
         EzyRedisChannelFactory factory = EzyRedisChannelFactory.builder()
-                .settings(new EzyRedisSettingsBuilder().build())
-                .build();
+            .settings(new EzyRedisSettingsBuilder().build())
+            .build();
 
         // when
         // then
         factory.newChannel("no channel");
     }
-
 }

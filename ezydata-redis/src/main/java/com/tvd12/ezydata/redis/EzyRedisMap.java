@@ -1,16 +1,10 @@
 package com.tvd12.ezydata.redis;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import com.tvd12.ezydata.redis.setting.EzyRedisMapSetting;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.codec.EzyEntityCodec;
+
+import java.util.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EzyRedisMap<K, V> implements Map<K, V> {
@@ -33,6 +27,10 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
         this.mapNameBytes = mapName.getBytes();
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     @Override
     public V put(K key, V value) {
         byte[] keyBytes = entityCodec.serialize(key);
@@ -44,7 +42,7 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     @Override
     public void putAll(Map<? extends K, ? extends V> m) {
         Map<byte[], byte[]> keyValueBytesMap = new HashMap<>();
-        for(K key : m.keySet()) {
+        for (K key : m.keySet()) {
             V value = m.get(key);
             byte[] keyBytes = entityCodec.serialize(key);
             byte[] valueBytes = entityCodec.serialize(value);
@@ -57,24 +55,26 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     public V get(Object key) {
         byte[] keyBytes = entityCodec.serialize(key);
         byte[] valueBytes = redisClient.hget(mapNameBytes, keyBytes);
-        if(valueBytes == null)
+        if (valueBytes == null) {
             return null;
-        V value = entityCodec.deserialize(valueBytes, valueType);
-        return value;
+        }
+        return entityCodec.deserialize(valueBytes, valueType);
     }
 
     public Map<K, V> get(Set<K> keys) {
         byte[][] keyBytesArray = new byte[keys.size()][];
         int i = 0;
-        for(K key : keys)
+        for (K key : keys) {
             keyBytesArray[i++] = entityCodec.serialize(key);
+        }
         List<byte[]> valueBytesList = redisClient.hmget(mapNameBytes, keyBytesArray);
         Map<K, V> answer = new HashMap<>();
         int k = 0;
-        for(K key : keys) {
-            byte[] valueBytes = valueBytesList.get(k ++);
-            if(valueBytes == null)
+        for (K key : keys) {
+            byte[] valueBytes = valueBytesList.get(k++);
+            if (valueBytes == null) {
                 continue;
+            }
             V value = entityCodec.deserialize(valueBytes, valueType);
             answer.put(key, value);
         }
@@ -91,10 +91,11 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     @Override
     public boolean containsValue(Object value) {
         Map<byte[], byte[]> keyValueBytesMap = redisClient.hgetAll(mapNameBytes);
-        for(byte[] valueBytes : keyValueBytesMap.values()) {
+        for (byte[] valueBytes : keyValueBytesMap.values()) {
             V v = entityCodec.deserialize(valueBytes, valueType);
-            if(value.equals(v))
+            if (value.equals(v)) {
                 return true;
+            }
         }
         return false;
     }
@@ -109,8 +110,9 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     public int remove(Collection<K> keys) {
         byte[][] keyBytesArray = new byte[keys.size()][];
         int i = 0;
-        for(K key : keys)
+        for (K key : keys) {
             keyBytesArray[i++] = entityCodec.serialize(key);
+        }
         Long count = redisClient.hdel(mapNameBytes, keyBytesArray);
         return count.intValue();
     }
@@ -119,7 +121,7 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     public Set<K> keySet() {
         Set<byte[]> keyBytesSet = redisClient.hkeys(mapNameBytes);
         Set<K> answer = new HashSet<>();
-        for(byte[] keyBytes : keyBytesSet) {
+        for (byte[] keyBytes : keyBytesSet) {
             K key = entityCodec.deserialize(keyBytes, keyType);
             answer.add(key);
         }
@@ -130,7 +132,7 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     public Collection<V> values() {
         Map<byte[], byte[]> keyValueBytesMap = redisClient.hgetAll(mapNameBytes);
         List<V> answer = new ArrayList<>();
-        for(byte[] valueBytes : keyValueBytesMap.values()) {
+        for (byte[] valueBytes : keyValueBytesMap.values()) {
             V value = entityCodec.deserialize(valueBytes, valueType);
             answer.add(value);
         }
@@ -141,7 +143,7 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
     public Set<Entry<K, V>> entrySet() {
         Map<byte[], byte[]> keyValueBytesMap = redisClient.hgetAll(mapNameBytes);
         Map<K, V> answer = new HashMap<>();
-        for(byte[] keyBytes : keyValueBytesMap.keySet()) {
+        for (byte[] keyBytes : keyValueBytesMap.keySet()) {
             byte[] valueBytes = keyValueBytesMap.get(keyBytes);
             K key = entityCodec.deserialize(keyBytes, keyType);
             V value = entityCodec.deserialize(valueBytes, valueType);
@@ -152,12 +154,11 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
 
     @Override
     public int size() {
-        return (int)sizeLong();
+        return (int) sizeLong();
     }
 
     public long sizeLong() {
-        long size = redisClient.hlen(mapNameBytes);
-        return size;
+        return redisClient.hlen(mapNameBytes);
     }
 
     @Override
@@ -172,10 +173,6 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
 
     public String getName() {
         return mapName;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisMap> {
@@ -209,7 +206,5 @@ public class EzyRedisMap<K, V> implements Map<K, V> {
         public EzyRedisMap build() {
             return new EzyRedisMap<>(this);
         }
-
     }
-
 }
