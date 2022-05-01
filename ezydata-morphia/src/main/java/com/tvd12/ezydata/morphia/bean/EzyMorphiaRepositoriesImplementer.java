@@ -4,7 +4,7 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 
 public class EzyMorphiaRepositoriesImplementer
-        extends EzyAbstractRepositoriesImplementer {
+    extends EzyAbstractRepositoriesImplementer {
 
     @Override
     protected EzyMorphiaRepositoryImplementer newRepoImplementer(Class<?> itf) {
@@ -15,5 +15,4 @@ public class EzyMorphiaRepositoriesImplementer
     protected Class<?> getBaseRepositoryInterface() {
         return EzyMongoRepository.class;
     }
-
 }

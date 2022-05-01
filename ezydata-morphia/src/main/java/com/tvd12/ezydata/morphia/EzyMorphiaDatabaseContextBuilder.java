@@ -4,11 +4,10 @@ import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
 import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoriesImplementer;
-
 import dev.morphia.Datastore;
 
-public class EzyMorphiaDatabaseContextBuilder 
-        extends EzyDatabaseContextBuilder<EzyMorphiaDatabaseContextBuilder> {
+public class EzyMorphiaDatabaseContextBuilder
+    extends EzyDatabaseContextBuilder<EzyMorphiaDatabaseContextBuilder> {
 
     protected Datastore datastore;
 
@@ -28,5 +27,4 @@ public class EzyMorphiaDatabaseContextBuilder
     protected EzyAbstractRepositoriesImplementer newRepositoriesImplementer() {
         return new EzyMorphiaRepositoriesImplementer();
     }
-
 }

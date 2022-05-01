@@ -1,10 +1,9 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.morphia.EzyDataStoreBuilder;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 import com.tvd12.ezydata.morphia.testing.data.Person;
+import org.testng.annotations.Test;
 
 public class EzyDataStoreBuilderTest extends BaseMongoDBTest {
 
@@ -19,6 +18,4 @@ public class EzyDataStoreBuilderTest extends BaseMongoDBTest {
             .addEntityClasses(Pig.class, Duck.class)
             .build();
     }
-
-
 }

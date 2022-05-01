@@ -1,21 +1,17 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 @Setter
 @Getter
 @ToString
 @NoArgsConstructor
 @EqualsAndHashCode
-@Entity(value = "ezyfox.mongodb.testing.duck", noClassnameStored = true)
+@Entity(value = "ezyfox.mongodb.testing.duck")
 public class Duck {
 
     @Id
@@ -26,5 +22,4 @@ public class Duck {
     public Duck(Long id) {
         this.id = id;
     }
-
 }

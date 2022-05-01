@@ -1,23 +1,22 @@
 package com.tvd12.ezydata.morphia;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.mongodb.MongoClient;
 import com.tvd12.ezyfox.builder.EzyBuilder;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import com.tvd12.ezyfox.util.EzyLoggable;
-
 import dev.morphia.Datastore;
 import dev.morphia.Morphia;
 import dev.morphia.annotations.Entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @SuppressWarnings("rawtypes")
 public class EzyDataStoreBuilder
-        extends EzyLoggable
-        implements EzyBuilder<Datastore> {
+    extends EzyLoggable
+    implements EzyBuilder<Datastore> {
 
     protected String databaseName;
     protected MongoClient mongoClient;
@@ -49,14 +48,16 @@ public class EzyDataStoreBuilder
     }
 
     public EzyDataStoreBuilder scan(String... packageNames) {
-        for(String packageName : packageNames)
+        for (String packageName : packageNames) {
             scan(packageName);
+        }
         return this;
     }
 
     public EzyDataStoreBuilder scan(Iterable<String> packageNames) {
-        for(String packageName : packageNames)
+        for (String packageName : packageNames) {
             scan(packageName);
+        }
         return this;
     }
 
@@ -70,31 +71,29 @@ public class EzyDataStoreBuilder
     }
 
     public EzyDataStoreBuilder addEntityClasses(Iterable<Class> classes) {
-        for(Class clazz : classes)
+        for (Class clazz : classes) {
             this.addEntityClass(clazz);
+        }
         return this;
     }
 
     @Override
     public Datastore build() {
-        Datastore datastore = newDataStore();
-        return datastore;
+        return newDataStore();
     }
 
     private Datastore newDataStore() {
         Set<Class<?>> annotatedClasses = getAnnotatedClasses();
         entityClasses.addAll(annotatedClasses);
         Morphia morphia = new Morphia(entityClasses);
-        Datastore datastore = morphia.createDatastore(mongoClient, databaseName);
-        return datastore;
+        return morphia.createDatastore(mongoClient, databaseName);
     }
 
     private Set<Class<?>> getAnnotatedClasses() {
-        if(packagesToScan.isEmpty())
+        if (packagesToScan.isEmpty()) {
             return new HashSet<>();
+        }
         EzyReflection reflection = new EzyReflectionProxy(packagesToScan);
-        Set<Class<?>> classes = reflection.getAnnotatedClasses(Entity.class);
-        return classes;
+        return reflection.getAnnotatedClasses(Entity.class);
     }
-
 }

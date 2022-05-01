@@ -1,19 +1,18 @@
 package com.tvd12.ezydata.morphia.testing.data;
 
-import java.io.Serializable;
-import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
-
-import org.bson.types.ObjectId;
-
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.types.ObjectId;
+
+import java.io.Serializable;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Setter
 @Getter
-@Entity(value = "ezyfox.mongodb.testing.person", noClassnameStored = true)
+@Entity(value = "ezyfox.mongodb.testing.person")
 public class Person implements Serializable {
     private static final long serialVersionUID = 903502360552527690L;
 
