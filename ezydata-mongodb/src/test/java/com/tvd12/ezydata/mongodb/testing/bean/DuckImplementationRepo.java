@@ -4,10 +4,12 @@ import com.tvd12.ezydata.database.query.EzyQLQuery;
 import com.tvd12.ezydata.mongodb.repository.EzySimpleMongoRepository;
 import com.tvd12.ezydata.mongodb.testing.result.DuckResult;
 import com.tvd12.ezydata.mongodb.testing.result.DuckResult2;
+import com.tvd12.ezyfox.database.annotation.EzyRepository;
 import com.tvd12.ezyfox.util.Next;
 
 import java.util.List;
 
+@EzyRepository
 public class DuckImplementationRepo
     extends EzySimpleMongoRepository<DuckId, Duck> {
 

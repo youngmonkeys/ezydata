@@ -16,4 +16,16 @@ public final class BsonDocuments {
             document.put(key, value);
         }
     }
+
+    public static void decorateIdValue(BsonDocument document) {
+        if (!document.containsKey("id")) {
+            try {
+                if (document.containsKey("_id")) {
+                    document.put("id", document.get("_id"));
+                }
+            } catch (Exception ignored) {
+                // do nothing
+            }
+        }
+    }
 }

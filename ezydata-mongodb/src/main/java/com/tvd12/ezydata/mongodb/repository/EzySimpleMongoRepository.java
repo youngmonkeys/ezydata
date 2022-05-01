@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.tvd12.ezydata.mongodb.util.BsonDocuments.decorateIdValue;
 import static com.tvd12.ezyfox.database.util.EzyCollectionAnnotations.getCollectionName;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
@@ -311,6 +312,7 @@ public class EzySimpleMongoRepository<I, E>
         AggregateIterable<BsonDocument> aggregate = collection.aggregate(pipeline);
         List<R> answer = new ArrayList<>();
         for (BsonDocument item : aggregate) {
+            decorateIdValue(item);
             answer.add(bsonValueToData(item, resultType));
         }
         return answer;
