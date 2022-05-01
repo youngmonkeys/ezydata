@@ -118,7 +118,8 @@ public class EzyRedisSettingsBuilder implements EzyBuilder<EzyRedisSettings> {
             channelSettingBuilder(channelName)
                 .messageType(
                     channelProperties.getProperty(
-                        EzyRedisSettings.CHANNEL_MESSAGE_TYPE)
+                        EzyRedisSettings.CHANNEL_MESSAGE_TYPE
+                    )
                 )
                 .subThreadPoolSize(
                     channelProperties.getProperty(
