@@ -1,11 +1,5 @@
 package com.tvd12.ezydata.mongodb.testing;
 
-import java.util.Arrays;
-
-import org.bson.BsonObjectId;
-import org.bson.types.ObjectId;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.testing.bean.Exam;
@@ -13,6 +7,11 @@ import com.tvd12.ezydata.mongodb.testing.bean.ExamRepository;
 import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.util.RandomUtil;
+import org.bson.BsonObjectId;
+import org.bson.types.ObjectId;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
 
 public class ExamMongoRepositoryTest extends MongodbTest {
 
@@ -20,10 +19,10 @@ public class ExamMongoRepositoryTest extends MongodbTest {
     public void test() {
         // given
         EzyMongoDatabaseContext ctx = new EzyMongoDatabaseContextBuilder()
-                .mongoClient(mongoClient)
-                .scan("com.tvd12.ezydata.mongodb.testing")
-                .propertiesFile("mongodb_config.properties")
-                .build();
+            .mongoClient(mongoClient)
+            .scan("com.tvd12.ezydata.mongodb.testing")
+            .propertiesFile("mongodb_config.properties")
+            .build();
         ExamRepository repo = ctx.getRepository(ExamRepository.class);
 
         ObjectId examId = new ObjectId();

@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.mongodb;
 
-import org.bson.BsonValue;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -15,15 +13,16 @@ import com.tvd12.ezyfox.binding.EzyUnmarshaller;
 import com.tvd12.ezyfox.naming.EzyNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyObjectProxy;
 import com.tvd12.ezyfox.reflect.EzyObjectProxyProvider;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.bson.BsonValue;
 
 @Setter
-public class EzySimpleMongoDatabaseContext 
-        extends EzySimpleDatabaseContext
-        implements EzyMongoDatabaseContext {
+public class EzySimpleMongoDatabaseContext
+    extends EzySimpleDatabaseContext
+    implements EzyMongoDatabaseContext {
 
+    protected final EzyObjectProxyProvider objectProxyProvider;
     @Getter
     protected MongoClient client;
     @Getter
@@ -34,7 +33,6 @@ public class EzySimpleMongoDatabaseContext
     protected EzyMongoDataConverter dataConverter;
     @Getter
     protected EzyNameTranslator collectionNameTranslator;
-    protected final EzyObjectProxyProvider objectProxyProvider;
 
     public EzySimpleMongoDatabaseContext() {
         this.objectProxyProvider = new EzyMongoObjectProxyProvider();
@@ -47,7 +45,7 @@ public class EzySimpleMongoDatabaseContext
 
     @Override
     public <T> MongoCollection<T>
-            getCollection(String name, Class<T> documentType) {
+    getCollection(String name, Class<T> documentType) {
         return database.getCollection(name, documentType);
     }
 

@@ -2,7 +2,6 @@ package com.tvd12.ezydata.mongodb.testing.bean;
 
 import com.tvd12.ezyfox.database.annotation.EzyCollection;
 import com.tvd12.ezyfox.database.annotation.EzyCollectionId;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

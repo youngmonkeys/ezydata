@@ -1,8 +1,7 @@
 package com.tvd12.ezydata.mongodb.converter;
 
-import org.bson.BsonValue;
-
 import com.tvd12.ezyfox.builder.EzyBuilder;
+import org.bson.BsonValue;
 
 public class EzyMongoDataConverter {
 
@@ -16,6 +15,10 @@ public class EzyMongoDataConverter {
         this.bsonValueToString = builder.bsonValueToString;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public String bsonValueToString(BsonValue value) {
         String str = bsonValueToString.convert(value);
         return str;
@@ -24,17 +27,13 @@ public class EzyMongoDataConverter {
     @SuppressWarnings("unchecked")
     public <T> T bsonValueToData(BsonValue value) {
         Object data = bsonValueToData.convert(value);
-        return (T)data;
+        return (T) data;
     }
 
     @SuppressWarnings("unchecked")
     public <T extends BsonValue> T dataToBsonValue(Object data) {
         BsonValue value = dataToBsonValue.convert(data);
-        return (T)value;
-    }
-
-    public static Builder builder() {
-        return new Builder();
+        return (T) value;
     }
 
     public static class Builder implements EzyBuilder<EzyMongoDataConverter> {
@@ -60,12 +59,15 @@ public class EzyMongoDataConverter {
 
         @Override
         public EzyMongoDataConverter build() {
-            if(bsonValueToString == null)
+            if (bsonValueToString == null) {
                 bsonValueToString = new EzyMongoBsonValueToString();
-            if(dataToBsonValue == null)
+            }
+            if (dataToBsonValue == null) {
                 dataToBsonValue = new EzyMongoDataToBsonValue();
-            if(bsonValueToData == null)
+            }
+            if (bsonValueToData == null) {
                 bsonValueToData = new EzyMongoBsonValueToData();
+            }
             return new EzyMongoDataConverter(this);
         }
 

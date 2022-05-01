@@ -1,11 +1,10 @@
 package com.tvd12.ezydata.mongodb.converter;
 
-import org.bson.BsonObjectId;
-import org.bson.types.ObjectId;
-
 import com.tvd12.ezyfox.binding.EzyMarshaller;
 import com.tvd12.ezyfox.binding.EzyTemplate;
 import com.tvd12.ezyfox.binding.EzyUnmarshaller;
+import org.bson.BsonObjectId;
+import org.bson.types.ObjectId;
 
 public final class EzyBsonObjectIdConverter implements EzyTemplate<Object, BsonObjectId> {
 
@@ -19,11 +18,13 @@ public final class EzyBsonObjectIdConverter implements EzyTemplate<Object, BsonO
 
     @Override
     public BsonObjectId read(EzyUnmarshaller unmarshaller, Object value) {
-        if(value instanceof String)
-            return new BsonObjectId(new ObjectId((String)value));
-        if(value instanceof ObjectId)
-            return new BsonObjectId((ObjectId)value);
-        return (BsonObjectId)value;
+        if (value instanceof String) {
+            return new BsonObjectId(new ObjectId((String) value));
+        }
+        if (value instanceof ObjectId) {
+            return new BsonObjectId((ObjectId) value);
+        }
+        return (BsonObjectId) value;
     }
 
     @Override

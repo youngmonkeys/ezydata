@@ -1,16 +1,8 @@
 package com.tvd12.ezydata.mongodb.testing.converter;
 
-import org.bson.BsonArray;
-import org.bson.BsonBoolean;
-import org.bson.BsonDateTime;
-import org.bson.BsonDouble;
-import org.bson.BsonInt64;
-import org.bson.BsonNull;
-import org.bson.BsonString;
-import org.bson.BsonUndefined;
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.mongodb.converter.EzyMongoBsonValueToString;
+import org.bson.*;
+import org.testng.annotations.Test;
 
 public class EzyMongoBsonValueToStringTest {
 
@@ -28,5 +20,5 @@ public class EzyMongoBsonValueToStringTest {
         System.out.println(conveter.convert(new BsonDateTime(System.currentTimeMillis())));
         System.out.println(conveter.convert(new BsonUndefined()));
     }
-    
+
 }

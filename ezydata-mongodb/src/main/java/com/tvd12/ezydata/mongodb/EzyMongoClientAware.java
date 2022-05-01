@@ -5,5 +5,5 @@ import com.mongodb.MongoClient;
 public interface EzyMongoClientAware {
 
     void setMongoClient(MongoClient mongoClient);
-    
+
 }
