@@ -1,10 +1,10 @@
 package com.tvd12.ezydata.redis.setting;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EzyRedisSimpleSettings implements EzyRedisSettings {
 
@@ -21,15 +21,13 @@ public class EzyRedisSimpleSettings implements EzyRedisSettings {
     }
 
     @Override
-    public EzyRedisMapSetting getMapSeting(String mapName) {
-        EzyRedisMapSetting setting = mapSettings.get(mapName);
-        return setting;
+    public EzyRedisMapSetting getMapSetting(String mapName) {
+        return mapSettings.get(mapName);
     }
 
     @Override
-    public EzyRedisChannelSetting getChannelSeting(String channelName) {
-        EzyRedisChannelSetting setting = channelSettings.get(channelName);
-        return setting;
+    public EzyRedisChannelSetting getChannelSetting(String channelName) {
+        return channelSettings.get(channelName);
     }
 
     public void addMapSettings(Map<String, EzyRedisMapSetting> settings) {

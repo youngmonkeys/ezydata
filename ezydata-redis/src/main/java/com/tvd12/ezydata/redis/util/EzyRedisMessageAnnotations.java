@@ -10,16 +10,17 @@ public final class EzyRedisMessageAnnotations {
 
     public static String getChannelName(Class<?> messageClass) {
         EzyRedisMessage anno = messageClass.getAnnotation(EzyRedisMessage.class);
-        if(anno != null)
+        if (anno != null) {
             return getChannelName(anno);
+        }
         return EzyMessageAnnotations.getChannelName(messageClass);
     }
 
     public static String getChannelName(EzyRedisMessage anno) {
         String channelName = anno.value();
-        if(EzyStrings.isNoContent(channelName))
+        if (EzyStrings.isNoContent(channelName)) {
             channelName = anno.channel();
+        }
         return channelName;
     }
-
 }

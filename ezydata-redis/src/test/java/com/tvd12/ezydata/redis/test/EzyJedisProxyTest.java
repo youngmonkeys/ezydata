@@ -1,10 +1,7 @@
 package com.tvd12.ezydata.redis.test;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.redis.EzyJedisProxy;
-import com.tvd12.ezydata.redis.EzyRedisSubscriber;
-
+import org.testng.annotations.Test;
 import redis.clients.jedis.BinaryJedisPubSub;
 import redis.clients.jedis.Jedis;
 
@@ -22,16 +19,10 @@ public class EzyJedisProxyTest {
         EzyJedisProxy sut = new EzyJedisProxy(jedis);
 
         // when
-        sut.subscribe("testChannel".getBytes(), new EzyRedisSubscriber() {
-
-            @Override
-            public void onMessage(byte[] channel, byte[] messageBytes) {
-            }
-        });
+        sut.subscribe("testChannel".getBytes(), (channel, messageBytes) -> {});
 
         // then
         sut.close();
-        System.out.println(sut.toString());
+        System.out.println(sut);
     }
-
 }

@@ -1,5 +1,10 @@
 package com.tvd12.ezydata.redis;
 
+import com.tvd12.ezydata.redis.concurrent.EzyRedisThreadFactory;
+import com.tvd12.ezydata.redis.setting.EzyRedisChannelSetting;
+import com.tvd12.ezyfox.builder.EzyBuilder;
+import com.tvd12.ezyfox.codec.EzyEntityCodec;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,11 +12,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.function.Consumer;
-
-import com.tvd12.ezydata.redis.concurrent.EzyRedisThreadFactory;
-import com.tvd12.ezydata.redis.setting.EzyRedisChannelSetting;
-import com.tvd12.ezyfox.builder.EzyBuilder;
-import com.tvd12.ezyfox.codec.EzyEntityCodec;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class EzyRedisChannel<T> {
@@ -39,6 +39,10 @@ public class EzyRedisChannel<T> {
         this.subThreadPoolName = "channel-subscriber-" + channelName;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public Long publish(T message) {
         byte[] messageBytes = entityCodec.serialize(message);
         return redisClient.publish(channelNameBytes, messageBytes);
@@ -46,7 +50,7 @@ public class EzyRedisChannel<T> {
 
     public void addSubscriber(Consumer<T> subscriber) {
         synchronized (this) {
-            if(!subscribed) {
+            if (!subscribed) {
                 this.subscribed = true;
                 this.subExecutorService = newSubExecutorService();
                 this.subscribers = Collections.synchronizedList(new ArrayList<>());
@@ -61,27 +65,20 @@ public class EzyRedisChannel<T> {
             = EzyRedisThreadFactory.create(subThreadPoolName);
         ExecutorService executorService
             = Executors.newFixedThreadPool(subThreadPoolSize, threadFactory);
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> executorService.shutdown()));
+        Runtime.getRuntime().addShutdownHook(new Thread(executorService::shutdown));
         return executorService;
     }
 
     protected void subscribe() {
-        EzyRedisSubscriber subscriber = new EzyRedisSubscriber() {
-            @Override
-            public void onMessage(byte[] channel, byte[] messageBytes) {
-                T message = (T)entityCodec.deserialize(messageBytes, messageType);
-                for(Consumer<T> subscriber : subscribers) {
-                    subscriber.accept(message);
-                }
+        EzyRedisSubscriber subscriber = (channel, messageBytes) -> {
+            T message = (T) entityCodec.deserialize(messageBytes, messageType);
+            for (Consumer<T> subscriber1 : subscribers) {
+                subscriber1.accept(message);
             }
         };
-        for(int i = 0 ; i < subThreadPoolSize ; ++i) {
+        for (int i = 0; i < subThreadPoolSize; ++i) {
             subExecutorService.execute(() -> redisClient.subscribe(channelNameBytes, subscriber));
         }
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisChannel> {
@@ -114,6 +111,5 @@ public class EzyRedisChannel<T> {
         public EzyRedisChannel build() {
             return new EzyRedisChannel<>(this);
         }
-
     }
 }

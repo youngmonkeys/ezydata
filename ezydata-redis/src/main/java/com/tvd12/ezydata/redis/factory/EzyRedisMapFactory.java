@@ -20,35 +20,36 @@ public class EzyRedisMapFactory {
         this.entityCodec = builder.entityCodec;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public <K, V> EzyRedisMap<K, V> newMap(
-            String name, Class<K> keyType, Class<V> valueType) {
+        String name, Class<K> keyType, Class<V> valueType) {
         EzyRedisMapSetting mapSetting = new EzyRedisMapSettingBuilder()
-                .keyType(keyType)
-                .valueType(valueType)
-                .build();
+            .keyType(keyType)
+            .valueType(valueType)
+            .build();
         return newMap(name, mapSetting);
     }
 
     public <K, V> EzyRedisMap<K, V> newMap(String name) {
-        EzyRedisMapSetting mapSetting = settings.getMapSeting(name);
+        EzyRedisMapSetting mapSetting = settings.getMapSetting(name);
         return newMap(name, mapSetting);
     }
 
     @SuppressWarnings("unchecked")
     private <K, V> EzyRedisMap<K, V> newMap(
-            String name, EzyRedisMapSetting mapSetting) {
-        if(mapSetting == null)
+        String name, EzyRedisMapSetting mapSetting) {
+        if (mapSetting == null) {
             throw new IllegalArgumentException("has no setting for map: " + name);
+        }
         return EzyRedisMap.builder()
-                .mapName(name)
-                .setting(mapSetting)
-                .redisClient(redisClient)
-                .entityCodec(entityCodec)
-                .build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
+            .mapName(name)
+            .setting(mapSetting)
+            .redisClient(redisClient)
+            .entityCodec(entityCodec)
+            .build();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisMapFactory> {
@@ -76,7 +77,5 @@ public class EzyRedisMapFactory {
         public EzyRedisMapFactory build() {
             return new EzyRedisMapFactory(this);
         }
-
     }
-
 }

@@ -21,8 +21,9 @@ public class EzyRedisChannelSettingBuilder implements EzyBuilder<EzyRedisChannel
     }
 
     public EzyRedisChannelSettingBuilder messageType(String messageType) {
-        if(messageType != null)
+        if (messageType != null) {
             this.messageType = EzyClasses.getClass(messageType);
+        }
         return this;
     }
 
@@ -32,8 +33,9 @@ public class EzyRedisChannelSettingBuilder implements EzyBuilder<EzyRedisChannel
     }
 
     public EzyRedisChannelSettingBuilder subThreadPoolSize(String subThreadPoolSize) {
-        if(subThreadPoolSize != null)
+        if (subThreadPoolSize != null) {
             this.subThreadPoolSize = Integer.parseInt(subThreadPoolSize);
+        }
         return this;
     }
 
@@ -48,5 +50,4 @@ public class EzyRedisChannelSettingBuilder implements EzyBuilder<EzyRedisChannel
         setting.setSubThreadPoolSize(subThreadPoolSize);
         return setting;
     }
-
 }

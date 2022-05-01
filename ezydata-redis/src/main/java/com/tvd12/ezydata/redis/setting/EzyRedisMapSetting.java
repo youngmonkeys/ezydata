@@ -6,5 +6,4 @@ public interface EzyRedisMapSetting {
     Class getKeyType();
 
     Class getValueType();
-
 }

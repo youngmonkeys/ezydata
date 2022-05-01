@@ -1,10 +1,9 @@
 package com.tvd12.ezydata.redis.test.setting;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.redis.setting.EzyRedisSimpleChannelSetting;
 import com.tvd12.ezydata.redis.setting.EzyRedisSimpleMapSetting;
 import com.tvd12.ezydata.redis.setting.EzyRedisSimpleSettings;
+import org.testng.annotations.Test;
 
 public class EzyRedisSimpleSettingsTest {
 
@@ -17,9 +16,7 @@ public class EzyRedisSimpleSettingsTest {
 
         // when
         // then
-        assert sut.getMapSeting("map") != null;
-        assert sut.getChannelSeting("channel") != null;
-
+        assert sut.getMapSetting("map") != null;
+        assert sut.getChannelSetting("channel") != null;
     }
-
 }

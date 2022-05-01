@@ -11,5 +11,4 @@ public interface EzyRedisClientPoolLoader {
     int DEFAULT_PORT = 6379;
 
     EzyRedisClientPool load();
-
 }

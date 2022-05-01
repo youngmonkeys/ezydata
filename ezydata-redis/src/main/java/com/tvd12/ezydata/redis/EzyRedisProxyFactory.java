@@ -1,11 +1,5 @@
 package com.tvd12.ezydata.redis;
 
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
-
-import javax.persistence.Id;
-
 import com.tvd12.ezydata.redis.annotation.EzyRedisMessage;
 import com.tvd12.ezydata.redis.loader.EzyJedisClientPoolLoader;
 import com.tvd12.ezydata.redis.setting.EzyRedisSettings;
@@ -31,8 +25,15 @@ import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
 import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
+import com.tvd12.ezyfox.util.EzyLoggable;
+import com.tvd12.ezyfox.util.EzyThreads;
 
-public class EzyRedisProxyFactory {
+import javax.persistence.Id;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Set;
+
+public class EzyRedisProxyFactory extends EzyLoggable {
 
     protected final EzyRedisSettings settings;
     protected final EzyEntityCodec entityCodec;
@@ -44,16 +45,32 @@ public class EzyRedisProxyFactory {
         this.clientPool = builder.clientPool;
     }
 
-    public EzyRedisProxy newRedisProxy() {
-        return EzyRedisProxy.builder()
-                .settings(settings)
-                .redisClient(clientPool.getClient())
-                .entityCodec(entityCodec)
-                .build();
-    }
-
     public static Builder builder() {
         return new Builder();
+    }
+
+    public EzyRedisProxy newRedisProxy() {
+        return EzyRedisProxy.builder()
+            .settings(settings)
+            .redisClient(getRedisClient())
+            .entityCodec(entityCodec)
+            .build();
+    }
+
+    private EzyRedisClient getRedisClient() {
+        int retryCount = 0;
+        while (true) {
+            try {
+                return clientPool.getClient();
+            } catch (Exception e) {
+                logger.error(
+                    "can not get redis client, retry count: {}",
+                    (++retryCount),
+                    e
+                );
+                EzyThreads.sleep(3000);
+            }
+        }
     }
 
     public static class Builder implements EzyBuilder<EzyRedisProxyFactory> {
@@ -82,8 +99,9 @@ public class EzyRedisProxyFactory {
         }
 
         public Builder scan(Iterable<String> packageNames) {
-            for(String packageName : packageNames)
+            for (String packageName : packageNames) {
                 this.scan(packageName);
+            }
             return this;
         }
 
@@ -119,16 +137,17 @@ public class EzyRedisProxyFactory {
 
         public Builder mapNameTranslator(EzyNamingCase namingCase, String ignoredSuffix) {
             return mapNameTranslator(EzySimpleNameTranslator.builder()
-                    .namingCase(namingCase)
-                    .ignoredSuffix(ignoredSuffix)
-                    .build()
+                .namingCase(namingCase)
+                .ignoredSuffix(ignoredSuffix)
+                .build()
             );
         }
 
         @Override
         public EzyRedisProxyFactory build() {
-            if(packagesToScan.size() > 0)
+            if (packagesToScan.size() > 0) {
                 this.reflection = new EzyReflectionProxy(packagesToScan);
+            }
             this.prepareMapNameTranslator();
             this.prepareSettings();
             this.prepareEntityCodec();
@@ -137,17 +156,19 @@ public class EzyRedisProxyFactory {
         }
 
         private void prepareSettings() {
-            if(settings != null)
+            if (settings != null) {
                 return;
-            if(settingsBuilder == null)
+            }
+            if (settingsBuilder == null) {
                 settingsBuilder = new EzyRedisSettingsBuilder();
+            }
             settingsBuilder.properties(properties);
-            if(reflection != null) {
+            if (reflection != null) {
                 Set<Class<?>> cachedClasses = reflection.getAnnotatedClasses(EzyCachedValue.class);
-                for(Class<?> cachedClass : cachedClasses) {
+                for (Class<?> cachedClass : cachedClasses) {
                     EzyField keyField = getMapKeyFieldOf(cachedClass);
                     String mapName = mapNameTranslator
-                            .translate(EzyCachedValueAnnotations.getMapName(cachedClass));
+                        .translate(EzyCachedValueAnnotations.getMapName(cachedClass));
                     settingsBuilder.mapSettingBuilder(mapName)
                         .keyType(keyField.getType())
                         .valueType(cachedClass);
@@ -155,7 +176,7 @@ public class EzyRedisProxyFactory {
                 Set<Class<?>> messageClasses = new HashSet<>();
                 messageClasses.addAll(reflection.getAnnotatedClasses(EzyMessage.class));
                 messageClasses.addAll(reflection.getAnnotatedClasses(EzyRedisMessage.class));
-                for(Class<?> messageClass : messageClasses) {
+                for (Class<?> messageClass : messageClasses) {
                     String channelName = EzyRedisMessageAnnotations.getChannelName(messageClass);
                     settingsBuilder.channelSettingBuilder(channelName)
                         .messageType(messageClass);
@@ -164,68 +185,68 @@ public class EzyRedisProxyFactory {
             this.settings = settingsBuilder.build();
         }
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
+        @SuppressWarnings({"unchecked", "rawtypes"})
         private void prepareEntityCodec() {
-            if(entityCodec != null)
+            if (entityCodec != null) {
                 return;
+            }
             EzyBindingContextBuilder bindingContextBuilder = EzyBindingContext.builder();
-            if(reflection != null) {
+            if (reflection != null) {
                 Set<Class<?>> valueClasses = reflection.getAnnotatedClasses(EzyCachedValue.class);
                 bindingContextBuilder
                     .addAllClasses(reflection)
-                    .addClasses((Set)valueClasses)
-                    .addClasses((Set)reflection.getAnnotatedClasses(EzyMessage.class))
-                    .addClasses((Set)reflection.getAnnotatedClasses(EzyRedisMessage.class))
-                    .addClasses((Set)reflection.getAnnotatedClasses(EzyCachedKey.class));
-                for(Class<?> valueClass : valueClasses) {
+                    .addClasses((Set) valueClasses)
+                    .addClasses((Set) reflection.getAnnotatedClasses(EzyMessage.class))
+                    .addClasses((Set) reflection.getAnnotatedClasses(EzyRedisMessage.class))
+                    .addClasses((Set) reflection.getAnnotatedClasses(EzyCachedKey.class));
+                for (Class<?> valueClass : valueClasses) {
                     EzyField keyField = getMapKeyFieldOf(valueClass);
                     EzyCachedKey cachedKeyAnno = keyField.getAnnotation(EzyCachedKey.class);
-                    if(cachedKeyAnno != null && cachedKeyAnno.composite())
+                    if (cachedKeyAnno != null && cachedKeyAnno.composite()) {
                         bindingContextBuilder.addClass(keyField.getType());
+                    }
                 }
 
             }
             EzyBindingContext bindingContext = bindingContextBuilder.build();
             entityCodec = EzyBindingEntityCodec.builder()
-                    .marshaller(bindingContext.newMarshaller())
-                    .unmarshaller(bindingContext.newUnmarshaller())
-                    .messageSerializer(new MsgPackSimpleSerializer())
-                    .messageDeserializer(new MsgPackSimpleDeserializer())
-                    .build();
+                .marshaller(bindingContext.newMarshaller())
+                .unmarshaller(bindingContext.newUnmarshaller())
+                .messageSerializer(new MsgPackSimpleSerializer())
+                .messageDeserializer(new MsgPackSimpleDeserializer())
+                .build();
         }
 
         private EzyField getMapKeyFieldOf(Class<?> mapValueClass) {
             EzyClass clazz = new EzyClass(mapValueClass);
-            EzyField idField = clazz.getField(f ->
-                f.isAnnotated(EzyCachedKey.class) ||
-                f.isAnnotated(EzyId.class) ||
-                f.isAnnotated(Id.class)
-            )
+            return clazz.getField(f ->
+                    f.isAnnotated(EzyCachedKey.class) ||
+                        f.isAnnotated(EzyId.class) ||
+                        f.isAnnotated(Id.class)
+                )
                 .orElseThrow(() -> new IllegalArgumentException(
-                    "unknow key type of cached value type: " + mapValueClass.getName() +
-                    ", annotate key field with @EzyCachedKey or @EzyId or @Id"
+                    "unknown key type of cached value type: " + mapValueClass.getName() +
+                        ", annotate key field with @EzyCachedKey or @EzyId or @Id"
                 ));
-            return idField;
         }
 
         private void prepareClientPool() {
-            if(clientPool != null)
+            if (clientPool != null) {
                 return;
+            }
             clientPool = new EzyJedisClientPoolLoader()
-                    .properties(properties)
-                    .load();
+                .properties(properties)
+                .load();
         }
 
-        protected EzyNameTranslator prepareMapNameTranslator() {
-            if(mapNameTranslator == null) {
+        protected void prepareMapNameTranslator() {
+            if (mapNameTranslator == null) {
                 EzyNamingCase namingCase =
-                        EzyNamingCase.of(properties.getProperty(EzyRedisSettings.MAP_NAMING_CASE));
+                    EzyNamingCase.of(properties.getProperty(EzyRedisSettings.MAP_NAMING_CASE));
                 String ignoredSuffix =
-                        properties.getProperty(EzyRedisSettings.MAP_NAMING_IGNORED_SUFFIX);
+                    properties.getProperty(EzyRedisSettings.MAP_NAMING_IGNORED_SUFFIX);
                 mapNameTranslator(namingCase, ignoredSuffix);
             }
-            return mapNameTranslator;
         }
-
     }
 }

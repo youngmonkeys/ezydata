@@ -8,41 +8,45 @@ public class EzyRedisMapSettingBuilder implements EzyBuilder<EzyRedisMapSetting>
     protected Class<?> keyType;
     protected Class<?> valueType;
     protected EzyRedisSettingsBuilder parent;
-    
+
     public EzyRedisMapSettingBuilder() {}
-    
+
     public EzyRedisMapSettingBuilder(EzyRedisSettingsBuilder parent) {
         this.parent = parent;
     }
-    
+
     public EzyRedisMapSettingBuilder keyType(Class<?> keyType) {
-        if(keyType != null)
+        if (keyType != null) {
             this.keyType = keyType;
+        }
         return this;
     }
-    
+
     public EzyRedisMapSettingBuilder keyType(String keyType) {
-        if(keyType != null)
+        if (keyType != null) {
             this.keyType = EzyClasses.getClass(keyType);
+        }
         return this;
     }
-    
+
     public EzyRedisMapSettingBuilder valueType(Class<?> valueType) {
-        if(valueType != null)
+        if (valueType != null) {
             this.valueType = valueType;
+        }
         return this;
     }
-    
+
     public EzyRedisMapSettingBuilder valueType(String valueType) {
-        if(valueType != null)
+        if (valueType != null) {
             this.valueType = EzyClasses.getClass(valueType);
+        }
         return this;
     }
-    
+
     public EzyRedisSettingsBuilder parent() {
         return parent;
     }
-    
+
     @Override
     public EzyRedisMapSetting build() {
         EzyRedisSimpleMapSetting setting = new EzyRedisSimpleMapSetting();
@@ -50,6 +54,4 @@ public class EzyRedisMapSettingBuilder implements EzyBuilder<EzyRedisMapSetting>
         setting.setValueType(valueType);
         return setting;
     }
-
-
 }

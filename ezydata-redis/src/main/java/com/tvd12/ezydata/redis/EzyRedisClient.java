@@ -1,10 +1,10 @@
 package com.tvd12.ezydata.redis;
 
+import com.tvd12.ezyfox.util.EzyCloseable;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.tvd12.ezyfox.util.EzyCloseable;
 
 public interface EzyRedisClient extends EzyCloseable {
 
@@ -35,5 +35,4 @@ public interface EzyRedisClient extends EzyCloseable {
     void subscribe(byte[] channelName, EzyRedisSubscriber subscriber);
 
     void close();
-
 }

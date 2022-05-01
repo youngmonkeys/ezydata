@@ -18,14 +18,16 @@ public class EzyRedisAtomicLong {
         this.redisClient = builder.redisClient;
     }
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public long get() {
-        Long answer = redisClient.hincrBy(mapNameBytes, nameBytes, 0);
-        return answer;
+        return redisClient.hincrBy(mapNameBytes, nameBytes, 0);
     }
 
     public long addAndGet(long delta) {
-        Long answer = redisClient.hincrBy(mapNameBytes, nameBytes, delta);
-        return answer;
+        return redisClient.hincrBy(mapNameBytes, nameBytes, delta);
     }
 
     public long incrementAndGet() {
@@ -34,10 +36,6 @@ public class EzyRedisAtomicLong {
 
     public String getName() {
         return name;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public static class Builder implements EzyBuilder<EzyRedisAtomicLong> {
@@ -65,7 +63,5 @@ public class EzyRedisAtomicLong {
         public EzyRedisAtomicLong build() {
             return new EzyRedisAtomicLong(this);
         }
-
-
     }
 }
