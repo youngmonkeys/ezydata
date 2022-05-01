@@ -34,4 +34,10 @@ public interface DuckRepo extends EzyMongoRepository<DuckId, Duck> {
 
     @EzyQuery("{$query: {age : ?0}}")
     int deleteByAge2(int age);
+
+    @EzyQuery("{$query: {age: ?0}, $fields: ['id', 'age']}")
+    Duck findOneDuckSomeFields(int age);
+
+    @EzyQuery("{$query: {age: {$gte : ?0}}, $fields: ['id', 'age'], $orderBy : {age: -1}}")
+    List<Duck> findListDuckSomeFields(int age, Next next);
 }

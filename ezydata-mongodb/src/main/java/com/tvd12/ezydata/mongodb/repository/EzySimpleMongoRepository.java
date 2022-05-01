@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.tvd12.ezyfox.database.util.EzyCollectionAnnotations.getCollectionName;
 
@@ -41,7 +42,7 @@ public class EzySimpleMongoRepository<I, E>
     protected EzyObjectProxy objectProxy;
     protected MongoCollection<BsonDocument> collection;
     protected EzyMongoDatabaseContext databaseContext;
-    protected EzyNameTranslator collectionNameTransalator;
+    protected EzyNameTranslator collectionNameTranslator;
 
     public EzySimpleMongoRepository() {
         this.idType = getIdType();
@@ -51,8 +52,8 @@ public class EzySimpleMongoRepository<I, E>
 
     public void setDatabaseContext(EzyDatabaseContext databaseContext) {
         this.databaseContext = (EzyMongoDatabaseContext) databaseContext;
-        this.collectionNameTransalator = this.databaseContext.getCollectionNameTranslator();
-        this.collectionName = collectionNameTransalator.translate(collectionName);
+        this.collectionNameTranslator = this.databaseContext.getCollectionNameTranslator();
+        this.collectionName = collectionNameTranslator.translate(collectionName);
         this.objectProxy = this.databaseContext.getObjectProxy(entityType);
         this.idType = (Class<I>) objectProxy.getPropertyType("_id");
         this.setCollection(this.databaseContext.getCollection(collectionName, BsonDocument.class));
@@ -65,8 +66,7 @@ public class EzySimpleMongoRepository<I, E>
 
     @Override
     public long count() {
-        long count = collection.countDocuments();
-        return count;
+        return collection.countDocuments();
     }
 
     @Override
@@ -120,8 +120,7 @@ public class EzySimpleMongoRepository<I, E>
         BsonValue bsonId = dataToBsonValue(id);
         filter.put("_id", bsonId);
         FindIterable<BsonDocument> list = collection.find(filter).limit(1);
-        E entity = bsonDocumentToEntity(list.first());
-        return entity;
+        return bsonDocumentToEntity(list.first());
     }
 
     @Override
@@ -146,8 +145,7 @@ public class EzySimpleMongoRepository<I, E>
         BsonValue bsonId = dataToBsonValue(value);
         filter.put(field, bsonId);
         FindIterable<BsonDocument> list = collection.find(filter).limit(1);
-        E entity = bsonDocumentToEntity(list.first());
-        return entity;
+        return bsonDocumentToEntity(list.first());
     }
 
     @Override
@@ -235,9 +233,27 @@ public class EzySimpleMongoRepository<I, E>
         if (queryDocument.containsKey("$query")) {
             filter = queryDocument.getDocument("$query");
         }
-        FindIterable<BsonDocument> list = collection.find(filter).limit(1);
-        E entity = bsonDocumentToEntity(list.first());
-        return entity;
+        FindIterable<BsonDocument> find = collection
+            .find(filter)
+            .limit(1);
+        decorateToAddProjection(find, queryDocument);
+        return bsonDocumentToEntity(find.first());
+    }
+
+    private void decorateToAddProjection(
+        FindIterable<BsonDocument> find,
+        BsonDocument queryDocument
+    ) {
+        if (queryDocument.containsKey("$fields")) {
+            BsonArray fields = queryDocument.getArray("$fields");
+            find.projection(
+                Projections.include(
+                    fields.stream()
+                        .map(it -> ((BsonString) it).getValue())
+                        .collect(Collectors.toList())
+                )
+            );
+        }
     }
 
     protected List<E> findListWithQuery(EzyQLQuery query) {
@@ -253,8 +269,11 @@ public class EzySimpleMongoRepository<I, E>
             filter = queryDocument.getDocument("$query");
         }
         FindIterable<BsonDocument> find = collection.find(filter);
+        decorateToAddProjection(find, queryDocument);
         if (queryDocument.containsKey("$orderby")) {
             find.sort(queryDocument.getDocument("$orderby"));
+        } else if (queryDocument.containsKey("$orderBy")) {
+            find.sort(queryDocument.getDocument("$orderBy"));
         }
         if (next != null) {
             find.skip((int) next.getSkip());
@@ -285,8 +304,7 @@ public class EzySimpleMongoRepository<I, E>
             opts.skip((int) next.getSkip());
             opts.limit((int) next.getLimit());
         }
-        long count = collection.countDocuments(filter, opts);
-        return count;
+        return collection.countDocuments(filter, opts);
     }
 
     protected <R> R aggregateOneWithQuery(EzyQLQuery query, Class<R> resultType) {
