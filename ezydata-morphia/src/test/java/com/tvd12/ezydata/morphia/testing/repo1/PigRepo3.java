@@ -5,6 +5,4 @@ import com.tvd12.ezydata.morphia.testing.Pig;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 
 @EzyAutoImpl
-abstract class PigRepo3 implements EzyMongoRepository<Long, Pig> {
-
-}
+abstract class PigRepo3 implements EzyMongoRepository<Long, Pig> {}

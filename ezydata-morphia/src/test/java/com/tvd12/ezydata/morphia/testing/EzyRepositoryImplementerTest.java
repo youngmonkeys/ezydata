@@ -1,8 +1,7 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoryImplementer;
+import org.testng.annotations.Test;
 
 public class EzyRepositoryImplementerTest extends BaseMongoDBTest {
 
@@ -11,8 +10,5 @@ public class EzyRepositoryImplementerTest extends BaseMongoDBTest {
         new EzyMorphiaRepositoryImplementer(ClassA.class).implement(DATASTORE);
     }
 
-    public static class ClassA {
-
-    }
-
+    public static class ClassA {}
 }

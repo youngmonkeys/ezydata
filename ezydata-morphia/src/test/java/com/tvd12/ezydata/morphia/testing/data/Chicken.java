@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.morphia.testing.data;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 import dev.morphia.annotations.Entity;
 import dev.morphia.annotations.Id;
 import lombok.Getter;
@@ -9,17 +7,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 @Setter
 @Getter
 @ToString
 @NoArgsConstructor
-@Entity(value = "ezyfox.mongodb.testing.chicken", noClassnameStored = true)
-public class Chickend {
+@Entity(value = "ezyfox.mongodb.testing.chicken")
+public class Chicken {
     @Id
     private Long id = (long) ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
     private String name = "cat#" + ThreadLocalRandom.current().nextInt(Integer.MAX_VALUE);
 
-    public Chickend(Long id) {
+    public Chicken(Long id) {
         this.id = id;
     }
 }

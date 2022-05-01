@@ -4,7 +4,6 @@ import com.tvd12.ezydata.database.bean.EzyAbstractRepositoryImplementer;
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezydata.morphia.EzyDatastoreAware;
 import com.tvd12.ezydata.morphia.repository.EzyDatastoreRepository;
-
 import dev.morphia.Datastore;
 
 public class EzyMorphiaRepositoryImplementer extends EzyAbstractRepositoryImplementer {
@@ -15,9 +14,9 @@ public class EzyMorphiaRepositoryImplementer extends EzyAbstractRepositoryImplem
 
     @Override
     protected void setRepoComponent(Object repo, Object template) {
-        if(template instanceof Datastore
-                && repo instanceof EzyDatastoreAware) {
-            ((EzyDatastoreAware)repo).setDatastore((Datastore)template);
+        if (template instanceof Datastore
+            && repo instanceof EzyDatastoreAware) {
+            ((EzyDatastoreAware) repo).setDatastore((Datastore) template);
         }
     }
 
@@ -30,5 +29,4 @@ public class EzyMorphiaRepositoryImplementer extends EzyAbstractRepositoryImplem
     protected Class<?> getBaseRepositoryInterface() {
         return EzyMongoRepository.class;
     }
-
 }

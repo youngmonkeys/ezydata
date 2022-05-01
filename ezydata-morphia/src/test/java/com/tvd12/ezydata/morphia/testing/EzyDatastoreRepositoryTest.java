@@ -1,7 +1,5 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.morphia.repository.EzyDatastoreRepository;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 import com.tvd12.ezydata.morphia.testing.data.Monkey;
@@ -12,6 +10,7 @@ import com.tvd12.ezyfox.collect.Lists;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
 import com.tvd12.test.reflect.MethodInvoker;
+import org.testng.annotations.Test;
 
 public class EzyDatastoreRepositoryTest extends BaseMongoDBTest {
 
@@ -67,19 +66,18 @@ public class EzyDatastoreRepositoryTest extends BaseMongoDBTest {
     public void getEntityTypeTest() {
         MonkeyRepoImpl repo = new MonkeyRepoImpl();
         Class<?> entityType = (Class<?>) MethodInvoker.create()
-                .object(repo)
-                .method("getEntityType")
-                .invoke();
+            .object(repo)
+            .method("getEntityType")
+            .invoke();
         assert entityType == Monkey.class;
 
         try {
             NoTypeDataStoreRepo noTypeDataStoreRepo = new NoTypeDataStoreRepo();
             MethodInvoker.create()
-                    .object(noTypeDataStoreRepo)
-                    .method("getEntityType")
-                    .invoke();
-        }
-        catch (Exception e) {
+                .object(noTypeDataStoreRepo)
+                .method("getEntityType")
+                .invoke();
+        } catch (Exception e) {
             assert e instanceof UnimplementedOperationException;
         }
     }
@@ -87,5 +85,4 @@ public class EzyDatastoreRepositoryTest extends BaseMongoDBTest {
     @SuppressWarnings("rawtypes")
     public static class NoTypeDataStoreRepo extends EzyDatastoreRepository {
     }
-
 }

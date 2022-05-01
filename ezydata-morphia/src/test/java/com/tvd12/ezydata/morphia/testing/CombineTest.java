@@ -1,9 +1,8 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.morphia.testing.data.Cat;
 import com.tvd12.ezydata.morphia.testing.repo.CatRepo;
+import org.testng.annotations.Test;
 
 public class CombineTest extends BaseMongoDBTest {
 
@@ -12,7 +11,4 @@ public class CombineTest extends BaseMongoDBTest {
         CatRepo repo = (CatRepo) BEAN_CONTEXT.getBean(CatRepo.class);
         repo.save(new Cat());
     }
-
-
-
 }

@@ -5,6 +5,4 @@ import com.tvd12.ezydata.morphia.testing.Duck;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 
 @EzyAutoImpl
-public interface DuckRepo extends EzyMongoRepository<Long, Duck> {
-
-}
+public interface DuckRepo extends EzyMongoRepository<Long, Duck> {}

@@ -1,12 +1,11 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import java.util.Map;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezydata.morphia.bean.EzyMorphiaRepositoriesImplementer;
 import com.tvd12.ezydata.morphia.testing.data.Cat;
+import org.testng.annotations.Test;
+
+import java.util.Map;
 
 public class EzySimpleRepositoriesImplementerTest extends BaseMongoDBTest {
 
@@ -20,11 +19,7 @@ public class EzySimpleRepositoriesImplementerTest extends BaseMongoDBTest {
         assert map.containsKey(CatXRepo.class);
     }
 
-    public static interface InterfaceA {
+    public interface InterfaceA {}
 
-    }
-
-    public static interface CatXRepo extends EzyMongoRepository<String, Cat> {
-
-    }
+    public interface CatXRepo extends EzyMongoRepository<String, Cat> {}
 }

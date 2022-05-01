@@ -1,12 +1,11 @@
 package com.tvd12.ezydata.morphia.testing;
 
-import java.util.Properties;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzyPropertiesMongoClientLoader;
 import com.tvd12.test.base.BaseTest;
+import org.testng.annotations.Test;
+
+import java.util.Properties;
 
 public class EzyPropertiesMongoClientLoaderTest extends BaseTest {
 
@@ -20,5 +19,4 @@ public class EzyPropertiesMongoClientLoaderTest extends BaseTest {
         properties.setProperty(EzyMongoClientLoader.DATABASE, "test");
         EzyPropertiesMongoClientLoader.load(properties).close();
     }
-    
 }
