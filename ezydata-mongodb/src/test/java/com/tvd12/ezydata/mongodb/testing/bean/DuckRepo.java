@@ -1,12 +1,12 @@
 package com.tvd12.ezydata.mongodb.testing.bean;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.tvd12.ezydata.mongodb.EzyMongoRepository;
 import com.tvd12.ezyfox.annotation.EzyAutoImpl;
 import com.tvd12.ezyfox.database.annotation.EzyQuery;
 import com.tvd12.ezyfox.util.Next;
+
+import java.util.List;
+import java.util.Optional;
 
 @EzyAutoImpl
 public interface DuckRepo extends EzyMongoRepository<DuckId, Duck> {
@@ -35,4 +35,9 @@ public interface DuckRepo extends EzyMongoRepository<DuckId, Duck> {
     @EzyQuery("{$query: {age : ?0}}")
     int deleteByAge2(int age);
 
+    @EzyQuery("{$query: {age: ?0}, $fields: ['id', 'age']}")
+    Duck findOneDuckSomeFields(int age);
+
+    @EzyQuery("{$query: {age: {$gte : ?0}}, $fields: ['id', 'age'], $orderBy : {age: -1}}")
+    List<Duck> findListDuckSomeFields(int age, Next next);
 }

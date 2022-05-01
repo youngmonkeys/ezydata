@@ -1,13 +1,12 @@
 package com.tvd12.ezydata.mongodb.testing.bean;
 
-import java.util.Date;
-
 import com.tvd12.ezyfox.annotation.EzyId;
 import com.tvd12.ezyfox.database.annotation.EzyCollection;
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.util.Date;
 
 @Getter
 @Setter

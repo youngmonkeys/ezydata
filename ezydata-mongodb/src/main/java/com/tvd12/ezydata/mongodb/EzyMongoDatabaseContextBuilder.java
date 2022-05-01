@@ -1,20 +1,10 @@
 package com.tvd12.ezydata.mongodb;
 
-import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_CASE;
-import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_IGNORED_SUFFIX;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-
-import org.bson.BsonValue;
-
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
-import com.tvd12.ezydata.database.query.EzyQLQueryFactory;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
@@ -37,16 +27,23 @@ import com.tvd12.ezyfox.naming.EzySimpleNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
+import org.bson.BsonValue;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+
+import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_CASE;
+import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_IGNORED_SUFFIX;
 
 @SuppressWarnings("rawtypes")
-public class EzyMongoDatabaseContextBuilder 
-        extends EzyDatabaseContextBuilder<EzyMongoDatabaseContextBuilder> {
+public class EzyMongoDatabaseContextBuilder
+    extends EzyDatabaseContextBuilder<EzyMongoDatabaseContextBuilder> {
 
     protected String databaseName;
     protected String maxIdCollectionName;
     protected MongoClient mongoClient;
     protected Set<Class> entityClasses;
-    protected EzyQLQueryFactory queryFactory;
     protected EzyMongoDataConverter dataConverter;
     protected EzyNameTranslator collectionNameTranslator;
 
@@ -85,56 +82,60 @@ public class EzyMongoDatabaseContextBuilder
 
     public EzyMongoDatabaseContextBuilder collectionNameTranslator(EzyNamingCase namingCase, String ignoredSuffix) {
         return collectionNameTranslator(EzySimpleNameTranslator.builder()
-                .namingCase(namingCase)
-                .ignoredSuffix(ignoredSuffix)
-                .build()
+            .namingCase(namingCase)
+            .ignoredSuffix(ignoredSuffix)
+            .build()
         );
     }
 
     @Override
     public EzyMongoDatabaseContext build() {
-        if(databaseName == null)
+        if (databaseName == null) {
             databaseName = properties.getProperty(EzyMongoClientLoader.DATABASE);
-        if(dataConverter == null)
+        }
+        if (dataConverter == null) {
             dataConverter = EzyMongoDataConverter.builder().build();
-        return (EzyMongoDatabaseContext)super.build();
+        }
+        return (EzyMongoDatabaseContext) super.build();
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void preBuild() {
-        for(EzyReflection reflection : reflections) {
+        for (EzyReflection reflection : reflections) {
             entityClasses.addAll(reflection.getAnnotatedClasses(EzyCollection.class));
             bindingContextBuilder
                 .addAllClasses(reflection)
-                .addClasses((Set)reflection.getAnnotatedClasses(EzyId.class))
-                .addClasses((Set)reflection.getAnnotatedClasses(EzyCollectionId.class));
+                .addClasses((Set) reflection.getAnnotatedClasses(EzyId.class))
+                .addClasses((Set) reflection.getAnnotatedClasses(EzyCollectionId.class));
         }
         bindingContextBuilder.addClasses(entityClasses);
         bindingContextBuilder.addTemplate(EzyObjectIdConverter.getInstance());
         bindingContextBuilder.addTemplate(EzyBsonObjectIdConverter.getInstance());
-        for(Class<?> entityClass : entityClasses) {
+        for (Class<?> entityClass : entityClasses) {
             EzyField idField = getCollectionIdFieldOf(entityClass);
             EzyId idAnno = idField.getAnnotation(EzyId.class);
-            if(idAnno != null && idAnno.composite())
+            if (idAnno != null && idAnno.composite()) {
                 bindingContextBuilder.addClass(idField.getType());
+            }
             EzyCollectionId collectionIdAnno = idField.getAnnotation(EzyCollectionId.class);
-            if(collectionIdAnno != null && collectionIdAnno.composite())
+            if (collectionIdAnno != null && collectionIdAnno.composite()) {
                 bindingContextBuilder.addClass(idField.getType());
+            }
         }
     }
 
     private EzyField getCollectionIdFieldOf(Class<?> entityClass) {
         EzyClass clazz = new EzyClass(entityClass);
         return clazz.getField(f ->
-            f.isAnnotated(EzyCollectionId.class) ||
-            f.isAnnotated(EzyId.class)
-        )
-                .orElseThrow(() ->
-                    new IllegalArgumentException(
-                        "there is no Id field in entity class: " + entityClass.getName() +
+                f.isAnnotated(EzyCollectionId.class) ||
+                    f.isAnnotated(EzyId.class)
+            )
+            .orElseThrow(() ->
+                new IllegalArgumentException(
+                    "there is no Id field in entity class: " + entityClass.getName() +
                         ", please annotated Id field with @EzyCollectionId or @EzyId")
-                );
+            );
     }
 
     @Override
@@ -157,9 +158,9 @@ public class EzyMongoDatabaseContextBuilder
 
     @Override
     protected void postBuild(
-            EzySimpleDatabaseContext ctx,
-            EzyBindingContext bindingContext) {
-        EzySimpleMongoDatabaseContext context = (EzySimpleMongoDatabaseContext)ctx;
+        EzySimpleDatabaseContext ctx,
+        EzyBindingContext bindingContext) {
+        EzySimpleMongoDatabaseContext context = (EzySimpleMongoDatabaseContext) ctx;
         EzyMarshaller marshaller = bindingContext.newMarshaller();
         EzyUnmarshaller unmarshaller = bindingContext.newUnmarshaller();
         context.setMarshaller(marshaller);
@@ -170,20 +171,19 @@ public class EzyMongoDatabaseContextBuilder
     protected void addMaxIdRepository(MongoDatabase database) {
         try {
             EzyMaxIdRepository repository = new EzyMongoMaxIdRepository(
-                    database.getCollection(maxIdCollectionName)
+                database.getCollection(maxIdCollectionName)
             );
             repositories.put(EzyMaxIdRepository.class, repository);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.warn("can't create MaxIdRepository", e);
         }
     }
 
     protected EzyMongoQueryFactory newQueryFactory(EzyMarshaller marshaller) {
         return EzyMongoQueryFactory.builder()
-                .dataConverter(dataConverter)
-                .parameterConverter(newQueryParameterConverter(marshaller))
-                .build();
+            .dataConverter(dataConverter)
+            .parameterConverter(newQueryParameterConverter(marshaller))
+            .build();
     }
 
     @Override
@@ -200,11 +200,11 @@ public class EzyMongoDatabaseContextBuilder
     }
 
     protected EzyNameTranslator getOrCreateCollectionNameTranslator() {
-        if(collectionNameTranslator == null) {
+        if (collectionNameTranslator == null) {
             EzyNamingCase namingCase =
-                    EzyNamingCase.of(properties.getProperty(COLLECTION_NAMING_CASE));
+                EzyNamingCase.of(properties.getProperty(COLLECTION_NAMING_CASE));
             String ignoredSuffix =
-                    properties.getProperty(COLLECTION_NAMING_IGNORED_SUFFIX);
+                properties.getProperty(COLLECTION_NAMING_IGNORED_SUFFIX);
             collectionNameTranslator(namingCase, ignoredSuffix);
         }
         return collectionNameTranslator;

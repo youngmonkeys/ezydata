@@ -1,22 +1,17 @@
 package com.tvd12.ezydata.mongodb.repository;
 
-import org.bson.BsonDocument;
-import org.bson.BsonInt32;
-import org.bson.BsonString;
-import org.bson.BsonValue;
-import org.bson.Document;
-
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndUpdateOptions;
 import com.mongodb.client.model.ReturnDocument;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
+import org.bson.*;
 
 public class EzyMongoMaxIdRepository implements EzyMaxIdRepository {
 
     protected final MongoCollection<Document> collection;
 
     public EzyMongoMaxIdRepository(
-            MongoCollection<Document> collection
+        MongoCollection<Document> collection
     ) {
         this.collection = collection;
     }
@@ -36,10 +31,10 @@ public class EzyMongoMaxIdRepository implements EzyMaxIdRepository {
         BsonDocument update = new BsonDocument();
         update.put("$inc", updateValue);
         FindOneAndUpdateOptions opts = new FindOneAndUpdateOptions()
-                .upsert(true)
-                .returnDocument(ReturnDocument.AFTER);
+            .upsert(true)
+            .returnDocument(ReturnDocument.AFTER);
         Document result = collection.findOneAndUpdate(filter, update, opts);
-        return ((Number)result.get("value")).longValue();
+        return ((Number) result.get("value")).longValue();
     }
 
 }

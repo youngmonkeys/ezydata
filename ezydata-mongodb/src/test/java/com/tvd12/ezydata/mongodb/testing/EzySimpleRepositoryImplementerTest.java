@@ -1,24 +1,16 @@
 package com.tvd12.ezydata.mongodb.testing;
 
-import java.util.Arrays;
-
-import org.testng.annotations.Test;
-
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContext;
 import com.tvd12.ezydata.mongodb.EzyMongoDatabaseContextBuilder;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoryImplementer;
-import com.tvd12.ezydata.mongodb.testing.bean.Duck;
-import com.tvd12.ezydata.mongodb.testing.bean.DuckId;
-import com.tvd12.ezydata.mongodb.testing.bean.DuckRepo;
-import com.tvd12.ezydata.mongodb.testing.bean.Employee;
-import com.tvd12.ezydata.mongodb.testing.bean.EmployeeRepo;
-import com.tvd12.ezydata.mongodb.testing.bean.FoodRepo;
-import com.tvd12.ezydata.mongodb.testing.bean.Person;
-import com.tvd12.ezydata.mongodb.testing.bean.PersonRepo;
+import com.tvd12.ezydata.mongodb.testing.bean.*;
 import com.tvd12.ezyfox.collect.Sets;
 import com.tvd12.ezyfox.util.EzyNext;
 import com.tvd12.ezyfox.util.Next;
+import org.testng.annotations.Test;
+
+import java.util.Arrays;
 
 public class EzySimpleRepositoryImplementerTest extends MongodbTest {
 
@@ -26,10 +18,10 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
     public void test() {
         EzyMongoRepositoryImplementer.setDebug(true);
         EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
-                .mongoClient(mongoClient)
-                .databaseName(databaseName)
-                .scan("com.tvd12.ezydata.mongodb.testing.bean")
-                .build();
+            .mongoClient(mongoClient)
+            .databaseName(databaseName)
+            .scan("com.tvd12.ezydata.mongodb.testing.bean")
+            .build();
         PersonRepo repo = databaseContext.getRepository(PersonRepo.class);
         Person person = new Person();
         person.setId(1);
@@ -97,8 +89,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
         assert duckRepo.count() == 0;
         try {
             duckRepo.updateByAge();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assert e instanceof IllegalArgumentException;
         }
     }
@@ -107,11 +98,11 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
     public void testEmployee() throws Exception {
         EzyMongoRepositoryImplementer.setDebug(true);
         EzyMongoDatabaseContext databaseContext = new EzyMongoDatabaseContextBuilder()
-                .mongoClient(mongoClient)
-                .databaseName(databaseName)
-                .repositoryInterface(EmployeeRepo.class)
-                .scan("com.tvd12.ezydata.mongodb.testing.bean")
-                .build();
+            .mongoClient(mongoClient)
+            .databaseName(databaseName)
+            .repositoryInterface(EmployeeRepo.class)
+            .scan("com.tvd12.ezydata.mongodb.testing.bean")
+            .build();
         EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
         Employee employee = new Employee();
         employee.setEmployeeId("dzung");
@@ -137,17 +128,17 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
         assert employeeRepo.findAll(0, 1).size() == 1;
         assert employeeRepo.findByEmail("dzung@youngmokeys.org") != null;
         assert employeeRepo.findByEmailAndPhoneNumber(
-                "dzung@youngmokeys.org",
-                "123456789"
-                ) != null;
+            "dzung@youngmokeys.org",
+            "123456789"
+        ) != null;
         long count = employeeRepo.count();
         assert employeeRepo.findByEmployeeIdAndEmailInOrPhoneNumberInAndBankAccountNo(
-                "dzung",
-                Arrays.asList("dzung@youngmokeys.org"),
-                Arrays.asList("123456789"),
-                "abcdefgh",
-                EzyNext.fromSkipLimit(0, 100)
-                ).size() == count;
+            "dzung",
+            Arrays.asList("dzung@youngmokeys.org"),
+            Arrays.asList("123456789"),
+            "abcdefgh",
+            EzyNext.fromSkipLimit(0, 100)
+        ).size() == count;
         assert employeeRepo.countByEmail("dzung@youngmokeys.org") == count;
         employeeRepo.delete("employee2");
         assert employeeRepo.count() == (count - 1);
