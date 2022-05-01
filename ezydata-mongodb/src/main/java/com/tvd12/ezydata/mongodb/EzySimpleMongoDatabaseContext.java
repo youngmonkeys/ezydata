@@ -70,5 +70,4 @@ public class EzySimpleMongoDatabaseContext
         Object marshalledData = marshaller.marshal(data);
         return dataConverter.dataToBsonValue(marshalledData);
     }
-
 }

@@ -5,5 +5,4 @@ import com.tvd12.ezyfox.database.annotation.EzyRepository;
 
 @EzyRepository
 public interface EzyCollectionIdCollectionRepo2
-    extends EzyMongoRepository<EzyCollectionIdCompositeId2, EzyCollectionIdCollection2> {
-}
+    extends EzyMongoRepository<EzyCollectionIdCompositeId2, EzyCollectionIdCollection2> {}

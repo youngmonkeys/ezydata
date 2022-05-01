@@ -20,8 +20,7 @@ public class EzyMongoDataConverter {
     }
 
     public String bsonValueToString(BsonValue value) {
-        String str = bsonValueToString.convert(value);
-        return str;
+        return bsonValueToString.convert(value);
     }
 
     @SuppressWarnings("unchecked")
@@ -70,7 +69,5 @@ public class EzyMongoDataConverter {
             }
             return new EzyMongoDataConverter(this);
         }
-
     }
-
 }

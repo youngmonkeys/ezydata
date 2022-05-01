@@ -54,5 +54,4 @@ public interface FoodRepo extends EzyMongoRepository<Integer, Food> {
 
     @EzyQuery("{_id : {$gt: ?0}}")
     int countById(int gtId);
-
 }

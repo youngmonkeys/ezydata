@@ -11,10 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Duck {
-
     @EzyCollectionId(composite = true)
     private DuckId id;
     private int age;
     private String description;
-
 }

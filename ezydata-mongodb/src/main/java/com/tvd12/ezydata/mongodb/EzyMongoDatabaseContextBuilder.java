@@ -36,6 +36,13 @@ import java.util.function.Function;
 import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_CASE;
 import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_IGNORED_SUFFIX;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Function;
+
+import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_CASE;
+import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_IGNORED_SUFFIX;
+
 @SuppressWarnings("rawtypes")
 public class EzyMongoDatabaseContextBuilder
     extends EzyDatabaseContextBuilder<EzyMongoDatabaseContextBuilder> {
@@ -155,7 +162,6 @@ public class EzyMongoDatabaseContextBuilder
         return context;
     }
 
-
     @Override
     protected void postBuild(
         EzySimpleDatabaseContext ctx,
@@ -194,8 +200,7 @@ public class EzyMongoDatabaseContextBuilder
     protected Function<Object, Object> newQueryParameterConverter(EzyMarshaller marshaller) {
         return param -> {
             Object data = marshaller.marshal(param);
-            BsonValue value = dataConverter.dataToBsonValue(data);
-            return value;
+            return dataConverter.dataToBsonValue(data);
         };
     }
 
@@ -209,5 +214,4 @@ public class EzyMongoDatabaseContextBuilder
         }
         return collectionNameTranslator;
     }
-
 }

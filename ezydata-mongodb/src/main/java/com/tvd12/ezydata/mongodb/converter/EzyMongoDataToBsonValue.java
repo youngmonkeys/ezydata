@@ -87,12 +87,14 @@ public class EzyMongoDataToBsonValue {
         if (valueType.isEnum()) {
             return new BsonString(data.toString());
         }
-        throw new IllegalArgumentException("has no converter for: " + valueType.getName());
+        throw new IllegalArgumentException(
+            "has no converter for: " + valueType.getName()
+        );
     }
 
     protected void putKeyValue(
         BsonDocument document, Object key, Object value) {
-        String keyString = null;
+        String keyString;
         BsonValue ck = convert(key);
         if (ck instanceof BsonDocument) {
             keyString = ((BsonDocument) ck).toJson();
@@ -109,7 +111,7 @@ public class EzyMongoDataToBsonValue {
         Map<Class, Function<Object, BsonValue>> map = new HashMap<>();
         map.put(Boolean.class, v -> new BsonBoolean((Boolean) v));
         map.put(Byte.class, v -> new BsonInt32((Byte) v));
-        map.put(Character.class, v -> new BsonInt32(((Character) v).charValue()));
+        map.put(Character.class, v -> new BsonInt32((Character) v));
         map.put(Double.class, v -> new BsonDouble((Double) v));
         map.put(Float.class, v -> new BsonDouble((Float) v));
         map.put(Integer.class, v -> new BsonInt32((Integer) v));
@@ -172,9 +174,7 @@ public class EzyMongoDataToBsonValue {
                 array.add(new BsonInt32(value));
             }
             return array;
-
         });
         return map;
     }
-
 }

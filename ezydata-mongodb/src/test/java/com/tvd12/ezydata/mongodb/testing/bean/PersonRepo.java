@@ -12,5 +12,4 @@ public interface PersonRepo extends EzyMongoRepository<Integer, Person> {
 
     @EzyQuery("{$query: {personName: ?0}}")
     Person findByName(String name);
-
 }

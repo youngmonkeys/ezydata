@@ -22,7 +22,6 @@ public class EzySimpleMongoRepositoryTest extends MongodbTest {
         assert repo.bsonDocumentToEntity(null) == null;
     }
 
-
     public static class RepoImpl extends EzySimpleMongoRepository<DuckId, Duck> {
 
         @Override

@@ -28,7 +28,5 @@ public class EzyInputStreamMongoClientLoaderTest extends BaseTest {
                 .put(EzyMongoClientLoader.DATABASE, "test")
                 .build());
         loader.load();
-
     }
-
 }

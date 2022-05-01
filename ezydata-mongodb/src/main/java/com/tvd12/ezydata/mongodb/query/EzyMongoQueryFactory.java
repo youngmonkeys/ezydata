@@ -44,6 +44,5 @@ public class EzyMongoQueryFactory extends EzyQLQueryFactory {
         public EzyMongoQueryFactory build() {
             return new EzyMongoQueryFactory(this);
         }
-
     }
 }

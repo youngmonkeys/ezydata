@@ -11,11 +11,9 @@ import lombok.ToString;
 @ToString
 @EzyCollection("test_aggregate")
 public class Food {
-
     @EzyId
     private int id;
     private String category;
     private String type;
     private int qty;
-
 }

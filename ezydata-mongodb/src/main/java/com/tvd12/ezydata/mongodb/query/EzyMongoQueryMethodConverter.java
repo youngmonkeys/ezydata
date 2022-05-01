@@ -67,7 +67,7 @@ public class EzyMongoQueryMethodConverter
             .append(condition.getField());
         for (EzyQueryOperation it : EzyQueryOperation.notIncludeEqualValues()) {
             if (condition.getOperation() == it) {
-                builder.append(":{$" + it.getSignName());
+                builder.append(":{$").append(it.getSignName());
                 break;
             }
         }
