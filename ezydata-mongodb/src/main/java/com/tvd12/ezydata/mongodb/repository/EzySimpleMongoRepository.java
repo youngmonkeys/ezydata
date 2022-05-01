@@ -240,22 +240,6 @@ public class EzySimpleMongoRepository<I, E>
         return bsonDocumentToEntity(find.first());
     }
 
-    private void decorateToAddProjection(
-        FindIterable<BsonDocument> find,
-        BsonDocument queryDocument
-    ) {
-        if (queryDocument.containsKey("$fields")) {
-            BsonArray fields = queryDocument.getArray("$fields");
-            find.projection(
-                Projections.include(
-                    fields.stream()
-                        .map(it -> ((BsonString) it).getValue())
-                        .collect(Collectors.toList())
-                )
-            );
-        }
-    }
-
     protected List<E> findListWithQuery(EzyQLQuery query) {
         return findListWithQuery(query, null);
     }
@@ -399,6 +383,22 @@ public class EzySimpleMongoRepository<I, E>
 
     private List iterableToList(Iterable<E> iterable) {
         return Lists.tryNewArrayList(iterable);
+    }
+
+    private void decorateToAddProjection(
+        FindIterable<BsonDocument> find,
+        BsonDocument queryDocument
+    ) {
+        if (queryDocument.containsKey("$fields")) {
+            BsonArray fields = queryDocument.getArray("$fields");
+            find.projection(
+                Projections.include(
+                    fields.stream()
+                        .map(it -> ((BsonString) it).getValue())
+                        .collect(Collectors.toList())
+                )
+            );
+        }
     }
 
     protected Class getIdType() {

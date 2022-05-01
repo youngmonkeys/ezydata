@@ -5,7 +5,6 @@ import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.database.EzyDatabaseContextBuilder;
 import com.tvd12.ezydata.database.EzySimpleDatabaseContext;
 import com.tvd12.ezydata.database.bean.EzyAbstractRepositoriesImplementer;
-import com.tvd12.ezydata.database.query.EzyQLQueryFactory;
 import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
 import com.tvd12.ezydata.database.repository.EzyMaxIdRepository;
 import com.tvd12.ezydata.mongodb.bean.EzyMongoRepositoriesImplementer;
@@ -41,14 +40,14 @@ import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_N
 public class EzyMongoDatabaseContextBuilder
     extends EzyDatabaseContextBuilder<EzyMongoDatabaseContextBuilder> {
 
-    protected static final String DEFAULT_MAX_ID_COLLECTION_NAME = "___max_id___";
     protected String databaseName;
     protected String maxIdCollectionName;
     protected MongoClient mongoClient;
     protected Set<Class> entityClasses;
-    protected EzyQLQueryFactory queryFactory;
     protected EzyMongoDataConverter dataConverter;
     protected EzyNameTranslator collectionNameTranslator;
+
+    protected static final String DEFAULT_MAX_ID_COLLECTION_NAME = "___max_id___";
 
     public EzyMongoDatabaseContextBuilder() {
         super();
