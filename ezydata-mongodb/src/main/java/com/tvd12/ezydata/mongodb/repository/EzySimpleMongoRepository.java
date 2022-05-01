@@ -419,7 +419,10 @@ public class EzySimpleMongoRepository<I, E>
             Class[] genericArgs = EzyGenerics.getTwoGenericClassArguments(genericSuperclass);
             return genericArgs[1];
         } catch (Exception e) {
-            throw new UnimplementedOperationException("class " + getClass().getName() + " hasn't implemented method 'getEntityType'", e);
+            throw new UnimplementedOperationException(
+                "class " + getClass().getName() + " hasn't implemented method 'getEntityType'",
+                e
+            );
         }
     }
 }

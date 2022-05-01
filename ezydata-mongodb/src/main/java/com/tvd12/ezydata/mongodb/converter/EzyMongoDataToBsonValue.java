@@ -107,6 +107,7 @@ public class EzyMongoDataToBsonValue {
         document.put(keyString, cv);
     }
 
+    @SuppressWarnings("MethodLength")
     protected Map<Class, Function<Object, BsonValue>> defaultConverters() {
         Map<Class, Function<Object, BsonValue>> map = new HashMap<>();
         map.put(Boolean.class, v -> new BsonBoolean((Boolean) v));

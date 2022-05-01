@@ -22,6 +22,14 @@ public class EzyPropertiesMongoClientLoader
             .load();
     }
 
+    @Override
+    public MongoClient load() {
+        this.preload();
+        return this.createMongoClient();
+    }
+
+    protected void preload() {}
+
     public EzyPropertiesMongoClientLoader host(String host) {
         this.properties.put(EzyMongoClientLoader.HOST, host);
         return this;
@@ -57,14 +65,6 @@ public class EzyPropertiesMongoClientLoader
         this.properties.put(name, value);
         return this;
     }
-
-    @Override
-    public MongoClient load() {
-        this.preload();
-        return this.createMongoClient();
-    }
-
-    protected void preload() {}
 
     protected MongoClient createMongoClient() {
         String uri = properties.getProperty(URI);

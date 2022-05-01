@@ -27,14 +27,6 @@ import com.tvd12.ezyfox.naming.EzySimpleNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
-import org.bson.BsonValue;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Function;
-
-import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_CASE;
-import static com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader.COLLECTION_NAMING_IGNORED_SUFFIX;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -135,8 +127,8 @@ public class EzyMongoDatabaseContextBuilder
     private EzyField getCollectionIdFieldOf(Class<?> entityClass) {
         EzyClass clazz = new EzyClass(entityClass);
         return clazz.getField(f ->
-                f.isAnnotated(EzyCollectionId.class) ||
-                    f.isAnnotated(EzyId.class)
+                f.isAnnotated(EzyCollectionId.class)
+                    || f.isAnnotated(EzyId.class)
             )
             .orElseThrow(() ->
                 new IllegalArgumentException(

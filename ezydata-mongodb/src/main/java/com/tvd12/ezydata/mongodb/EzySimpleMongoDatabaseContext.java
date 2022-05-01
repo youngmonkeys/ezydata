@@ -44,8 +44,10 @@ public class EzySimpleMongoDatabaseContext
     }
 
     @Override
-    public <T> MongoCollection<T>
-    getCollection(String name, Class<T> documentType) {
+    public <T> MongoCollection<T> getCollection(
+        String name,
+        Class<T> documentType
+    ) {
         return database.getCollection(name, documentType);
     }
 

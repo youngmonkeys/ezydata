@@ -20,6 +20,7 @@ public class EzyMongoRepositoryImplementer
         super(clazz);
     }
 
+    @SuppressWarnings("MethodLength")
     @Override
     protected String makeAbstractMethodContent(EzyMethod method) {
         String queryString = getQueryString(method).getQueryString();
@@ -59,10 +60,14 @@ public class EzyMongoRepositoryImplementer
                 .append("answer = this.countWithQuery(query, " + nextArg + ")"));
             answerInstruction.answer()
                 .append(returnType == long.class ? "answer" : "(int)answer");
-        } else if (methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE) ||
-            methodName.startsWith(EzyDatabaseRepository.PREFIX_DELETE)) {
+        } else if (methodName.startsWith(EzyDatabaseRepository.PREFIX_UPDATE)
+            || methodName.startsWith(EzyDatabaseRepository.PREFIX_DELETE)
+        ) {
             if (returnType != int.class && returnType != void.class) {
-                throw new IllegalArgumentException("update or delete method must return int or void, error method: " + method);
+                throw new IllegalArgumentException(
+                    "update or delete method must return int " +
+                        "or void, error method: " + method
+                );
             }
             body.append(new EzyInstruction("\t", "\n")
                 .variable(int.class, "answer").equal().append("0"));
@@ -77,8 +82,8 @@ public class EzyMongoRepositoryImplementer
         } else {
             Class<?> resultType = getResultType(method);
             if (Iterable.class.isAssignableFrom(returnType)) {
-                if (methodName.startsWith(EzyMongoRepository.PREFIX_FETCH) ||
-                    resultType != entityType
+                if (methodName.startsWith(EzyMongoRepository.PREFIX_FETCH)
+                    || resultType != entityType
                 ) {
                     answerInstruction.answer()
                         .cast(
@@ -93,8 +98,8 @@ public class EzyMongoRepositoryImplementer
                         );
                 }
             } else {
-                if (methodName.startsWith(EzyMongoRepository.PREFIX_FETCH) ||
-                    (resultType != entityType && resultType != Optional.class)
+                if (methodName.startsWith(EzyMongoRepository.PREFIX_FETCH)
+                    || (resultType != entityType && resultType != Optional.class)
                 ) {
                     if (resultType == returnType && returnType == Optional.class) {
                         try {
