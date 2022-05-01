@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.tvd12.ezydata.mongodb.loader;
 
 import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
@@ -11,11 +8,6 @@ import java.util.Map;
 import java.util.Properties;
 
 
-/**
- *
- * @author tavandung12
- *
- */
 public class EzySimpleMongoClientLoader extends EzyPropertiesMongoClientLoader {
 
     protected InputStream inputStream;
@@ -54,5 +46,4 @@ public class EzySimpleMongoClientLoader extends EzyPropertiesMongoClientLoader {
     private Properties loadInputStream() {
         return new BaseFileReader().loadInputStream(inputStream);
     }
-
 }

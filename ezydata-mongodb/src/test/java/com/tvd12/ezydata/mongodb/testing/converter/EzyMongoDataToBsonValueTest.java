@@ -79,9 +79,8 @@ public class EzyMongoDataToBsonValueTest {
         Asserts.assertEquals(converter.convert(objectId), new BsonObjectId(objectId));
     }
 
-    public static enum EnumA {
+    public enum EnumA {
         HELLO,
         WORLD
     }
-
 }

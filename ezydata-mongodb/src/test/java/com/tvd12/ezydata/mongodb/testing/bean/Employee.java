@@ -11,7 +11,6 @@ import lombok.ToString;
 @ToString
 @EzyCollection("test_mongo_employee")
 public class Employee {
-
     @EzyId
     private String employeeId;
     private String firstName;
@@ -19,5 +18,4 @@ public class Employee {
     private String email = "dzung@youngmokeys.org";
     private String phoneNumber = "123456789";
     private String bankAccountNo = "abcdefgh";
-
 }

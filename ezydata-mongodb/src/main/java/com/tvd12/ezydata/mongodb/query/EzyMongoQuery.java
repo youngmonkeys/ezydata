@@ -38,7 +38,5 @@ public class EzyMongoQuery extends EzyQLQuery {
         public EzyQLQuery build() {
             return new EzyMongoQuery(this);
         }
-
     }
-
 }

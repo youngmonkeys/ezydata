@@ -44,25 +44,23 @@ public class EzySimpleRepositoriesImplementerTest extends MongodbTest {
 
         @Override
         protected EzyAbstractRepositoryImplementer newRepoImplementer(Class<?> itf) {
-            return new ExEzySimpleRepositoryImplementerer(itf);
+            return new ExEzySimpleRepositoryImplementer(itf);
         }
 
     }
 
-    public static class ExEzySimpleRepositoryImplementerer extends EzyMongoRepositoryImplementer {
+    public static class ExEzySimpleRepositoryImplementer extends EzyMongoRepositoryImplementer {
 
-        public ExEzySimpleRepositoryImplementerer(Class<?> clazz) {
+        public ExEzySimpleRepositoryImplementer(Class<?> clazz) {
             super(clazz);
         }
 
         @Override
-        protected void setRepoComponent(Object repo, Object template) {
-        }
+        protected void setRepoComponent(Object repo, Object template) {}
 
         @Override
         protected Class<?> getSuperClass() {
             return ExEzyMongoRepository.class;
         }
-
     }
 }

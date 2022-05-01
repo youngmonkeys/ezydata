@@ -9,11 +9,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EzyCollection("test_mongo_bean_chickend")
+@EzyCollection("test_mongo_bean_chicken")
 public class Chicken {
-
     @EzyId
     private String _id;
     private String name;
-
 }

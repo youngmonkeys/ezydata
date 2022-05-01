@@ -34,7 +34,8 @@ public class EzyMongoMaxIdRepository implements EzyMaxIdRepository {
             .upsert(true)
             .returnDocument(ReturnDocument.AFTER);
         Document result = collection.findOneAndUpdate(filter, update, opts);
-        return ((Number) result.get("value")).longValue();
+        Object value = result != null ? result.get("value") : null;
+        return value != null ? ((Number) value).longValue() : 0L;
     }
 
 }

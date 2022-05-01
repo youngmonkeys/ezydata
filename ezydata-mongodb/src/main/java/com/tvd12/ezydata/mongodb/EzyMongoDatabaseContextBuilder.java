@@ -27,7 +27,6 @@ import com.tvd12.ezyfox.naming.EzySimpleNameTranslator;
 import com.tvd12.ezyfox.reflect.EzyClass;
 import com.tvd12.ezyfox.reflect.EzyField;
 import com.tvd12.ezyfox.reflect.EzyReflection;
-import org.bson.BsonValue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -155,7 +154,6 @@ public class EzyMongoDatabaseContextBuilder
         return context;
     }
 
-
     @Override
     protected void postBuild(
         EzySimpleDatabaseContext ctx,
@@ -194,8 +192,7 @@ public class EzyMongoDatabaseContextBuilder
     protected Function<Object, Object> newQueryParameterConverter(EzyMarshaller marshaller) {
         return param -> {
             Object data = marshaller.marshal(param);
-            BsonValue value = dataConverter.dataToBsonValue(data);
-            return value;
+            return dataConverter.dataToBsonValue(data);
         };
     }
 
@@ -209,5 +206,4 @@ public class EzyMongoDatabaseContextBuilder
         }
         return collectionNameTranslator;
     }
-
 }

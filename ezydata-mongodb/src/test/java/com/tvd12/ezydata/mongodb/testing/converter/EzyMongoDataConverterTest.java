@@ -16,5 +16,4 @@ public class EzyMongoDataConverterTest {
             .bsonValueToString(new EzyMongoBsonValueToString())
             .build();
     }
-
 }

@@ -7,7 +7,6 @@ import com.mongodb.MongoClient;
 
 public interface EzyMongoClientLoader {
 
-    String PROPERTY_NAME_PREFIX = "database.mongo";
     String URI = "database.mongo.uri";
     String HOST = "database.mongo.host";
     String PORT = "database.mongo.port";
@@ -18,5 +17,4 @@ public interface EzyMongoClientLoader {
     String COLLECTION_NAMING_IGNORED_SUFFIX = "database.mongo.collection.naming.ignored_suffix";
 
     MongoClient load();
-
 }

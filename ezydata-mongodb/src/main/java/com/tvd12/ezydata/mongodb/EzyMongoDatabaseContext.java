@@ -26,5 +26,4 @@ public interface EzyMongoDatabaseContext extends EzyDatabaseContext {
     <T> T bsonValueToData(BsonValue value, Class<T> dataType);
 
     EzyNameTranslator getCollectionNameTranslator();
-
 }

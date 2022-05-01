@@ -35,5 +35,4 @@ public class EzyMongoBsonValueToDataTest {
             assert e instanceof IllegalArgumentException;
         }
     }
-
 }

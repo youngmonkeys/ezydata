@@ -67,5 +67,4 @@ public class EzyMongoBsonValueToData {
         map.put(BsonType.REGULAR_EXPRESSION, v -> ((BsonRegularExpression) v).getPattern());
         return map;
     }
-
 }

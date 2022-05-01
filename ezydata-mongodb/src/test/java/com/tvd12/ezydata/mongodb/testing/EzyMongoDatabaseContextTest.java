@@ -250,6 +250,7 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
             .call();
 
         // then
+        //noinspection OptionalGetWithoutIsPresent
         Customer expectation = customerRepo.fetchCustomerByNameWork("dzung").get();
         Asserts.assertEquals(actual, expectation);
         customerRepo.deleteAll();
@@ -312,32 +313,35 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
         Optional<Customer> actual = customerRepo.findByName("dzung");
 
         // then
+        //noinspection OptionalGetWithoutIsPresent
         Asserts.assertEquals(actual.get(), new Customer("1", "dzung", "hello", "world"));
         customerRepo.deleteAll();
     }
 
-    public static interface RepoA extends EzyMongoRepository<Integer, Person> {
+    @SuppressWarnings("unused")
+    public interface RepoA extends EzyMongoRepository<Integer, Person> {
 
         @EzyQuery("{}")
         void countInvalid();
 
     }
 
-    public static interface RepoB extends EzyMongoRepository<Integer, Person> {
+    @SuppressWarnings("unused")
+    public interface RepoB extends EzyMongoRepository<Integer, Person> {
 
         @EzyQuery("{}")
         Class<?> deleteInvalid();
-
     }
 
-    public static interface RepoC extends EzyMongoRepository<Integer, Person> {
+    @SuppressWarnings("unused")
+    public interface RepoC extends EzyMongoRepository<Integer, Person> {
 
         @EzyQuery("{}")
         Class<?> invalid();
-
     }
 
-    public static interface RepoD extends EzyMongoRepository<Integer, Person> {
+    @SuppressWarnings("unused")
+    public interface RepoD extends EzyMongoRepository<Integer, Person> {
 
         @EzyQuery(resultType = Person.class, value = "{}")
         Person findByName();
@@ -357,5 +361,4 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
         @EzyQuery("{}")
         Person fetchListByName();
     }
-
 }

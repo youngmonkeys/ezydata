@@ -35,5 +35,4 @@ public class EzyPropertiesMongoClientLoaderTest extends BaseTest {
         properties.setProperty(EzyMongoClientLoader.URI, "mongodb://root:123456@127.0.0.1:27017/test");
         EzyPropertiesMongoClientLoader.load(properties);
     }
-
 }

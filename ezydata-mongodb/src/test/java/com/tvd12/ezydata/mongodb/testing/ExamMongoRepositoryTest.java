@@ -12,6 +12,7 @@ import org.bson.types.ObjectId;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 public class ExamMongoRepositoryTest extends MongodbTest {
 
@@ -45,7 +46,10 @@ public class ExamMongoRepositoryTest extends MongodbTest {
         System.out.println(fromDb);
         Asserts.assertEquals(exam, fromDb);
         Asserts.assertEquals(exam, repo.findByField("eventId", eventId));
-        Asserts.assertEquals(Lists.newArrayList(exam), repo.findListByIds(Arrays.asList(examId)));
+        Asserts.assertEquals(
+            Lists.newArrayList(exam),
+            repo.findListByIds(Collections.singletonList(examId))
+        );
         Asserts.assertEquals(exam, repo.findByField("secondId", secondId));
     }
 }

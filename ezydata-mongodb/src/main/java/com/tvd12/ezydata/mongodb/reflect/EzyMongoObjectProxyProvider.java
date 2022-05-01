@@ -31,7 +31,6 @@ public class EzyMongoObjectProxyProvider extends EzyObjectProxyProvider {
             EzyValue valueAnno = field.getAnnotation(EzyValue.class);
             if (valueAnno != null) {
                 map.put(valueAnno.value(), name);
-                continue;
             }
         }
         return map;
@@ -66,5 +65,4 @@ public class EzyMongoObjectProxyProvider extends EzyObjectProxyProvider {
             builder.addPropertyType(fieldName, idSetterMethod.get().getParameterTypes()[0]);
         }
     }
-
 }

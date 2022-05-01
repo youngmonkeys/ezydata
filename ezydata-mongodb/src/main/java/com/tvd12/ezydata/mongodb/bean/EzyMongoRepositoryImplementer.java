@@ -117,15 +117,6 @@ public class EzyMongoRepositoryImplementer
                         );
                     }
                 } else {
-                    if (resultType == returnType && returnType == Optional.class) {
-                        try {
-                            resultType = EzyGenerics.getOneGenericClassArgument(
-                                method.getGenericReturnType()
-                            );
-                        } catch (Exception e) {
-                            // do nothing
-                        }
-                    }
                     answerInstruction.answer();
                     if (returnType == Optional.class) {
                         answerInstruction.clazz(Optional.class)
