@@ -10,9 +10,7 @@
     <artifactId>ezydata-mongodb</artifactId>
     <name>ezydata-mongodb</name>
     <url>https://youngmonkeys.org/</url>
-    <properties>
-        <mongodb.version>3.12.10</mongodb.version>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.tvd12</groupId>

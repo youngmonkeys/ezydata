@@ -10,9 +10,11 @@
     <artifactId>ezydata-morphia</artifactId>
     <name>ezydata-morphia</name>
     <url>http://maven.apache.org</url>
+
     <properties>
         <morphia.version>1.6.1</morphia.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.tvd12</groupId>

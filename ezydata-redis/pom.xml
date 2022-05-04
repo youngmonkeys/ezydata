@@ -11,11 +11,6 @@
     <name>ezydata-redis</name>
     <url>https://youngmonkeys.org/</url>
 
-    <properties>
-        <jedis.version>4.2.2</jedis.version>
-        <javax.persistence.version>2.2</javax.persistence.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>com.tvd12</groupId>
