@@ -1,8 +1,10 @@
 package com.tvd12.ezydata.jpa.test.repository;
 
 import com.tvd12.ezydata.database.EzyDatabaseContext;
+import com.tvd12.ezydata.database.query.EzyQueryEntity;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContext;
 import com.tvd12.ezydata.jpa.EzyJpaDatabaseContextBuilder;
+import com.tvd12.ezydata.jpa.bean.EzyJpaRepositoryImplementer;
 import com.tvd12.ezydata.jpa.repository.EzyJpaRepository;
 import com.tvd12.ezydata.jpa.test.BaseJpaTest;
 import com.tvd12.ezydata.jpa.test.entity.Employee;
@@ -11,6 +13,7 @@ import com.tvd12.ezydata.jpa.test.repo.EmployeeRepo;
 import com.tvd12.ezydata.jpa.test.repo.UserRepo;
 import com.tvd12.ezydata.jpa.test.result.UserIdFullNameResult;
 import com.tvd12.ezyfox.exception.UnimplementedOperationException;
+import com.tvd12.ezyfox.util.EzyNext;
 import com.tvd12.test.assertion.Asserts;
 import com.tvd12.test.reflect.MethodInvoker;
 import com.tvd12.test.util.RandomUtil;
@@ -19,6 +22,7 @@ import org.testng.annotations.Test;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -485,6 +489,61 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
             resultList,
             UserIdFullNameResult.class
         );
+    }
+
+    @Test
+    public void containsByIdTest() {
+        // given
+        EzyDatabaseContext databaseContext = new EzyJpaDatabaseContextBuilder()
+            .scan("com.tvd12.ezydata.jpa.test.repo")
+            .scan("com.tvd12.ezydata.jpa.test.result")
+            .entityManagerFactory(ENTITY_MANAGER_FACTORY)
+            .build();
+        EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
+        employeeRepo.deleteAll();
+        Employee employee = new Employee();
+        String employId = RandomUtil.randomShortAlphabetString();
+        employee.setEmployeeId(employId);
+        employee.setFirstName("Dep");
+        employee.setLastName("Trai");
+        employeeRepo.save(employee);
+
+        // when
+        boolean actual1 = employeeRepo.containsById(employId);
+        boolean actual2 = employeeRepo.containsById("I don't know");
+        employeeRepo.deleteAll();
+
+        // then
+        Asserts.assertTrue(actual1);
+        Asserts.assertFalse(actual2);
+    }
+
+    @Test
+    public void containsByFieldTest() {
+        // given
+        EzyDatabaseContext databaseContext = new EzyJpaDatabaseContextBuilder()
+            .scan("com.tvd12.ezydata.jpa.test.repo")
+            .scan("com.tvd12.ezydata.jpa.test.result")
+            .entityManagerFactory(ENTITY_MANAGER_FACTORY)
+            .build();
+        EmployeeRepo employeeRepo = databaseContext.getRepository(EmployeeRepo.class);
+        employeeRepo.deleteAll();
+        Employee employee = new Employee();
+        String employId = RandomUtil.randomShortAlphabetString();
+        employee.setEmployeeId(employId);
+        String firstName = RandomUtil.randomShortAlphabetString();
+        employee.setFirstName(firstName);
+        employee.setLastName("Trai");
+        employeeRepo.save(employee);
+
+        // when
+        boolean actual1 = employeeRepo.containsByField("firstName", firstName);
+        boolean actual2 = employeeRepo.containsByField("firstName", "I don't know");
+        employeeRepo.deleteAll();
+
+        // then
+        Asserts.assertTrue(actual1);
+        Asserts.assertFalse(actual2);
     }
 
     @SuppressWarnings("rawtypes")

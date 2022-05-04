@@ -215,6 +215,20 @@ public class EzySimpleMongoRepository<I, E>
     }
 
     @Override
+    public boolean containsById(I id) {
+        return containsByField("_id", id);
+    }
+
+    @Override
+    public boolean containsByField(String field, Object value) {
+        BsonDocument filter = new BsonDocument();
+        BsonValue bsonId = dataToBsonValue(value);
+        filter.put(field, bsonId);
+        FindIterable<BsonDocument> list = collection.find(filter).limit(1);
+        return list.first() != null;
+    }
+
+    @Override
     public int deleteByIds(Collection<I> ids) {
         BsonDocument filter = new BsonDocument();
         BsonArray bsonIds = new BsonArray();

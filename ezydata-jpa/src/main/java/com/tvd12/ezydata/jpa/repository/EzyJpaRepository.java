@@ -263,6 +263,29 @@ public class EzyJpaRepository<I, E>
     }
 
     @Override
+    public boolean containsById(I id) {
+        return containsByField("id", id);
+    }
+
+    @Override
+    public boolean containsByField(String field, Object value) {
+        String queryString = "select e." + field + " from " +
+            entityType.getName() + " e " +
+            "where e." + field + " = ?0";
+        EntityManager entityManager = databaseContext.createEntityManager();
+        List resultList;
+        try {
+            Query query = entityManager.createQuery(queryString);
+            query.setParameter(0, value);
+            query.setMaxResults(1);
+            resultList = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+        return resultList.size() > 0;
+    }
+
+    @Override
     public int deleteAll() {
         String queryString = "delete from " +
             entityType.getName() + " e ";

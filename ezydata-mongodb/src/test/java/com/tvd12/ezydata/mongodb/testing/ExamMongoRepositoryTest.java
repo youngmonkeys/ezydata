@@ -51,4 +51,68 @@ public class ExamMongoRepositoryTest extends MongodbTest {
         );
         Asserts.assertEquals(exam, repo.findByField("secondId", secondId));
     }
+
+    @Test
+    public void containsByIdTest() {
+        // given
+        EzyMongoDatabaseContext ctx = new EzyMongoDatabaseContextBuilder()
+            .mongoClient(mongoClient)
+            .scan("com.tvd12.ezydata.mongodb.testing")
+            .propertiesFile("mongodb_config.properties")
+            .build();
+        ExamRepository repo = ctx.getRepository(ExamRepository.class);
+
+        ObjectId examId = new ObjectId();
+        ObjectId eventId = new ObjectId();
+        BsonObjectId secondId = new BsonObjectId();
+        String content = RandomUtil.randomShortAlphabetString();
+
+        Exam exam = new Exam();
+        exam.setId(examId);
+        exam.setEventId(eventId);
+        exam.setContent(content);
+        exam.setRefIds(Lists.newArrayList(new ObjectId(), new ObjectId()));
+        exam.setSecondId(secondId);
+        repo.save(exam);
+
+        // when
+        boolean actual1 = repo.containsById(examId);
+        boolean actual2 = repo.containsById(new ObjectId());
+
+        // then
+        Asserts.assertTrue(actual1);
+        Asserts.assertFalse(actual2);
+    }
+
+    @Test
+    public void containsByFieldTest() {
+        // given
+        EzyMongoDatabaseContext ctx = new EzyMongoDatabaseContextBuilder()
+            .mongoClient(mongoClient)
+            .scan("com.tvd12.ezydata.mongodb.testing")
+            .propertiesFile("mongodb_config.properties")
+            .build();
+        ExamRepository repo = ctx.getRepository(ExamRepository.class);
+
+        ObjectId examId = new ObjectId();
+        ObjectId eventId = new ObjectId();
+        BsonObjectId secondId = new BsonObjectId();
+        String content = RandomUtil.randomShortAlphabetString();
+
+        Exam exam = new Exam();
+        exam.setId(examId);
+        exam.setEventId(eventId);
+        exam.setContent(content);
+        exam.setRefIds(Lists.newArrayList(new ObjectId(), new ObjectId()));
+        exam.setSecondId(secondId);
+        repo.save(exam);
+
+        // when
+        boolean actual1 = repo.containsByField("eventId", eventId);
+        boolean actual2 = repo.containsByField("eventId", "I don't know");
+
+        // then
+        Asserts.assertTrue(actual1);
+        Asserts.assertFalse(actual2);
+    }
 }
