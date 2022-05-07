@@ -12,9 +12,11 @@ import com.tvd12.test.reflect.FieldUtil;
 import com.tvd12.test.util.RandomUtil;
 import org.testng.annotations.Test;
 
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.tvd12.ezydata.redis.setting.EzyRedisSettings.MAX_CONNECTION_ATTEMPTS;
 import static org.mockito.Mockito.*;
 
 public class EzyRedisProxyFactoryTest {
@@ -85,7 +87,10 @@ public class EzyRedisProxyFactoryTest {
             }
             throw new IllegalStateException("just test");
         });
+        Properties properties = new Properties();
+        properties.put(MAX_CONNECTION_ATTEMPTS, Integer.MAX_VALUE);
         EzyRedisProxyFactory factory = new EzyRedisProxyFactory.Builder()
+            .properties(properties)
             .settingsBuilder(new EzyRedisSettingsBuilder())
             .clientPool(clientPool)
             .build();
@@ -97,6 +102,28 @@ public class EzyRedisProxyFactoryTest {
     }
 
     @Test
+    public void getRedisClientRetryButMaxConnectionAttemptsWasNotSetTest() {
+        // given
+        EzyRedisClientPool clientPool = mock(EzyRedisClientPool.class);
+
+        Exception exception = new IllegalStateException("just test");
+        when(clientPool.getClient()).thenAnswer(it -> {
+            throw exception;
+        });
+        EzyRedisProxyFactory factory = new EzyRedisProxyFactory.Builder()
+            .settingsBuilder(new EzyRedisSettingsBuilder())
+            .clientPool(clientPool)
+            .build();
+
+        // when
+        Throwable e = Asserts.assertThrows(factory::newRedisProxy);
+
+        // then
+        Asserts.assertEquals(e, exception);
+        verify(clientPool, times(1)).getClient();
+    }
+
+    @Test
     public void getRedisClientInterruptTest() {
         // given
         EzyRedisClientPool clientPool = mock(EzyRedisClientPool.class);
@@ -104,7 +131,10 @@ public class EzyRedisProxyFactoryTest {
         when(clientPool.getClient()).thenAnswer(it -> {
             throw new IllegalStateException("just test");
         });
+        Properties properties = new Properties();
+        properties.put(MAX_CONNECTION_ATTEMPTS, Integer.MAX_VALUE);
         EzyRedisProxyFactory factory = new EzyRedisProxyFactory.Builder()
+            .properties(properties)
             .settingsBuilder(new EzyRedisSettingsBuilder())
             .clientPool(clientPool)
             .build();

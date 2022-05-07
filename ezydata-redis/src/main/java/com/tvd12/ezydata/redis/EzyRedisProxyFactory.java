@@ -33,16 +33,20 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import static com.tvd12.ezydata.redis.setting.EzyRedisSettings.MAX_CONNECTION_ATTEMPTS;
+
 public class EzyRedisProxyFactory extends EzyLoggable {
 
     protected final EzyRedisSettings settings;
     protected final EzyEntityCodec entityCodec;
     protected final EzyRedisClientPool clientPool;
+    protected final int maxConnectionAttempts;
 
     protected EzyRedisProxyFactory(Builder builder) {
         this.settings = builder.settings;
         this.entityCodec = builder.entityCodec;
         this.clientPool = builder.clientPool;
+        this.maxConnectionAttempts = builder.maxConnectionAttempts;
     }
 
     public static Builder builder() {
@@ -63,6 +67,9 @@ public class EzyRedisProxyFactory extends EzyLoggable {
             try {
                 return clientPool.getClient();
             } catch (Exception e) {
+                if (retryCount >= maxConnectionAttempts) {
+                    throw e;
+                }
                 logger.error(
                     "can not get redis client, retry count: {}",
                     (++retryCount),
@@ -78,6 +85,7 @@ public class EzyRedisProxyFactory extends EzyLoggable {
         protected EzyReflection reflection;
         protected Set<String> packagesToScan;
         protected Properties properties;
+        protected int maxConnectionAttempts;
         protected EzyRedisSettings settings;
         protected EzyEntityCodec entityCodec;
         protected EzyRedisClientPool clientPool;
@@ -148,11 +156,19 @@ public class EzyRedisProxyFactory extends EzyLoggable {
             if (packagesToScan.size() > 0) {
                 this.reflection = new EzyReflectionProxy(packagesToScan);
             }
+            this.extractProperties();
             this.prepareMapNameTranslator();
             this.prepareSettings();
             this.prepareEntityCodec();
             this.prepareClientPool();
             return new EzyRedisProxyFactory(this);
+        }
+
+        private void extractProperties() {
+            this.maxConnectionAttempts = (int) properties.getOrDefault(
+                MAX_CONNECTION_ATTEMPTS,
+                0
+            );
         }
 
         private void prepareSettings() {
@@ -242,7 +258,9 @@ public class EzyRedisProxyFactory extends EzyLoggable {
         protected void prepareMapNameTranslator() {
             if (mapNameTranslator == null) {
                 EzyNamingCase namingCase =
-                    EzyNamingCase.of(properties.getProperty(EzyRedisSettings.MAP_NAMING_CASE));
+                    EzyNamingCase.of(
+                        properties.getProperty(EzyRedisSettings.MAP_NAMING_CASE)
+                    );
                 String ignoredSuffix =
                     properties.getProperty(EzyRedisSettings.MAP_NAMING_IGNORED_SUFFIX);
                 mapNameTranslator(namingCase, ignoredSuffix);
