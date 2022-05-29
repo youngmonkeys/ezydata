@@ -165,9 +165,10 @@ public class EzyRedisProxyFactory extends EzyLoggable {
         }
 
         private void extractProperties() {
-            this.maxConnectionAttempts = (int) properties.getOrDefault(
-                MAX_CONNECTION_ATTEMPTS,
-                0
+            this.maxConnectionAttempts = Integer.parseInt(
+                properties
+                    .getOrDefault(MAX_CONNECTION_ATTEMPTS, maxConnectionAttempts)
+                    .toString()
             );
         }
 
