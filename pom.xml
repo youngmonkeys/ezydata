@@ -106,11 +106,9 @@
 
     <modules>
         <module>ezydata-mongodb</module>
-        <module>ezydata-morphia</module>
         <module>ezydata-hazelcast</module>
         <module>ezydata-hazelcast-bean</module>
         <module>ezydata-hazelcast-mongodb</module>
-        <module>ezydata-hazelcast-morphia</module>
         <module>ezydata-elasticsearch</module>
         <module>ezydata-jpa</module>
         <module>ezydata-database</module>
