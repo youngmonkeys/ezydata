@@ -35,4 +35,23 @@ public class EzyPropertiesMongoClientLoaderTest extends BaseTest {
         properties.setProperty(EzyMongoClientLoader.URI, "mongodb://root:123456@127.0.0.1:27017/test");
         EzyPropertiesMongoClientLoader.load(properties);
     }
+
+    @Test
+    public void testWithDefaultHostPort() {
+        // given
+        EzyPropertiesMongoClientLoader loader = new EzyPropertiesMongoClientLoader()
+            .username("root")
+            .password("123456")
+            .property(EzyMongoClientLoader.HOST, "127.0.0.1")
+            .property(EzyMongoClientLoader.PORT, "27017")
+            .properties(EzyMapBuilder.mapBuilder()
+                .put(EzyMongoClientLoader.USERNAME, "root")
+                .put(EzyMongoClientLoader.PASSWORD, "123456")
+                .put(EzyMongoClientLoader.DATABASE, "test")
+                .build());
+
+        // when
+        // then
+        loader.load();
+    }
 }

@@ -75,22 +75,32 @@ public class EzyPropertiesMongoClientLoader
         return new MongoClient(
             new ServerAddress(getHost(), getPort()),
             createCredential(),
-            MongoClientOptions.builder().build());
+            MongoClientOptions.builder().build()
+        );
     }
 
     protected MongoCredential createCredential() {
         return MongoCredential.createCredential(
             getUsername(),
             getDatabase(),
-            getPassword().toCharArray());
+            getPassword().toCharArray()
+        );
     }
 
     protected String getHost() {
-        return (String) properties.get(EzyMongoClientLoader.HOST);
+        return (String) properties.getOrDefault(
+            EzyMongoClientLoader.HOST,
+            EzyMongoClientLoader.DEFAULT_HOST
+        );
     }
 
     protected int getPort() {
-        return Integer.parseInt((String) properties.get(EzyMongoClientLoader.PORT));
+        return Integer.parseInt(
+            properties.getOrDefault(
+                EzyMongoClientLoader.PORT,
+                EzyMongoClientLoader.DEFAULT_PORT
+            ).toString()
+        );
     }
 
     protected String getUsername() {

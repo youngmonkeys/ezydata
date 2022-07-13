@@ -13,5 +13,8 @@ public interface EzyMongoClientLoader {
     String COLLECTION_NAMING_CASE = "database.mongo.collection.naming.case";
     String COLLECTION_NAMING_IGNORED_SUFFIX = "database.mongo.collection.naming.ignored_suffix";
 
+    String DEFAULT_HOST = "127.0.0.1";
+    int DEFAULT_PORT = 27017;
+
     MongoClient load();
 }
