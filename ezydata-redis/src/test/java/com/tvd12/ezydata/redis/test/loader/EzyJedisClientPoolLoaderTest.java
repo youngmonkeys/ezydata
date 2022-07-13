@@ -37,10 +37,24 @@ public class EzyJedisClientPoolLoaderTest {
             .property(EzyRedisClientPoolLoader.HOST, "localhost")
             .property(EzyRedisClientPoolLoader.PORT, "6379");
 
+        // when
+        EzyRedisClientPool pool = sut.load();
+
+        // then
+        assert pool != null;
+    }
+
+    @Test
+    public void testWithStringPort() {
+        // given
+        EzyJedisClientPoolLoader sut = new EzyJedisClientPoolLoader()
+            .property(EzyRedisClientPoolLoader.HOST, "localhost")
+            .property(EzyRedisClientPoolLoader.PORT, "6379");
 
         // when
         EzyRedisClientPool pool = sut.load();
 
+        // then
         assert pool != null;
     }
 }

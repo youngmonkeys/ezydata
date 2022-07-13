@@ -41,7 +41,12 @@ public abstract class EzyRedisAbstractClientPoolLoader<T extends EzyRedisAbstrac
             this.host = properties.getProperty(HOST);
         }
         if (properties.containsKey(PORT)) {
-            this.port = Integer.parseInt(properties.getProperty(PORT));
+            this.port = Integer.parseInt(
+                properties.getOrDefault(
+                    PORT,
+                    DEFAULT_PORT
+                ).toString()
+            );
         }
     }
 
