@@ -37,5 +37,10 @@
             <artifactId>ezyfox-database</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.tvd12</groupId>
+            <artifactId>ezyfox-bean</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
