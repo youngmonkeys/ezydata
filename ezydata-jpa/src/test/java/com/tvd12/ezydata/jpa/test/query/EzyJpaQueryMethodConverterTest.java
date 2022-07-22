@@ -23,10 +23,13 @@ public class EzyJpaQueryMethodConverterTest {
     }
 
     @Test
-    public void convertWithOneField() {
-        EzyClass repoClass = new EzyClass(EmployeeRepo.class);
-        EzyMethod method = repoClass.getMethod(
-            "findByEmail");
+    public void convertWithOneField() throws Exception {
+        EzyMethod method = new EzyMethod(
+            EmployeeRepo.class.getDeclaredMethod(
+                "findByEmail",
+                String.class
+            )
+        );
         EzyQueryMethod queryMethod = new EzyQueryMethod(method);
         String queryString = sut.toQueryString(Employee.class, queryMethod);
         System.out.println(queryString);
