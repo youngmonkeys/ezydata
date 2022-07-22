@@ -69,6 +69,7 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
         assert employeeRepo.findAll().size() >= 0;
         assert employeeRepo.findAll(0, 1).size() == 1;
         assert employeeRepo.findByEmail("dzung@youngmokeys.org") != null;
+        assert employeeRepo.findByEmail("dzung@youngmokeys.org", "Hello") != null;
         assert employeeRepo.findByEmailAndPhoneNumber(
             "dzung@youngmokeys.org",
             "123456789"

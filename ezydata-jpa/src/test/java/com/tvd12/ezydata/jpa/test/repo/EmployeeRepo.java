@@ -50,6 +50,11 @@ public interface EmployeeRepo extends EzyDatabaseRepository<String, Employee> {
 
     Employee findByEmail(String email);
 
+    @EzyQuery(
+        "select e from Employee e where e.email = ?0 and e.firstName = ?1"
+    )
+    Employee findByEmail(String email, String firstName);
+
     @EzyQuery("select e from Employee e where e.email = ?0")
     Optional<Employee> findByEmailOptional(String email);
 
