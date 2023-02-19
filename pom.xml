@@ -8,7 +8,7 @@
         <version>1.0.5</version>
     </parent>
     <artifactId>ezydata</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
     <packaging>pom</packaging>
 
     <name>ezydata</name>
@@ -65,11 +65,11 @@
     <properties>
         <javax.persistence.version>2.2</javax.persistence.version>
         <javax.transaction.version>1.3</javax.transaction.version>
-        <jedis.version>4.2.2</jedis.version>
-        <hibernate.version>5.6.8.Final</hibernate.version>
+        <jedis.version>4.3.1</jedis.version>
+        <hibernate.version>5.6.15.Final</hibernate.version>
         <hikaricp.version>4.0.3</hikaricp.version>
-        <mongodb.version>3.12.11</mongodb.version>
-        <mysql.connector.version>8.0.29</mysql.connector.version>
+        <mongodb.version>3.12.12</mongodb.version>
+        <mysql.connector.version>8.0.32</mysql.connector.version>
     </properties>
 
     <build>
