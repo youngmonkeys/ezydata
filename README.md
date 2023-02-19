@@ -1,5 +1,7 @@
 # ezydata <img src="https://github.com/youngmonkeys/ezydata/blob/master/logo.png" width="72" />
 
+[![Java CI with Maven](https://github.com/youngmonkeys/ezydata/actions/workflows/maven.yml/badge.svg)](https://github.com/youngmonkeys/ezydata/actions/workflows/maven.yml)
+
 # Documentation
 
 [https://youngmonkeys.org/project/ezydata/](https://youngmonkeys.org/project/ezydata/)
