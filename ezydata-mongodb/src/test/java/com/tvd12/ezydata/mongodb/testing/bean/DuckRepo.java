@@ -17,6 +17,9 @@ public interface DuckRepo extends EzyMongoRepository<DuckId, Duck> {
     @EzyQuery("{_id : ?0}")
     Optional<Duck> findDuckByIdOptional(DuckId id);
 
+    @EzyQuery("{$and: [{'_id.type': ?0}, {'_id.name': ?1}]}")
+    Optional<Duck> findDuckTypeAndName(int type, String name);
+
     @EzyQuery("{$query: {age: {$gte : ?0}}, $orderby : {age: -1}}")
     List<Duck> findListByAge(int age, Next next);
 

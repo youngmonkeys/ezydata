@@ -4,7 +4,7 @@
 
 # Documentation
 
-[https://youngmonkeys.org/project/ezydata/](https://youngmonkeys.org/project/ezydata/)
+[https://youngmonkeys.org/projects/ezydata/](https://youngmonkeys.org/project/ezydata/)
 
 # Synopsis
 

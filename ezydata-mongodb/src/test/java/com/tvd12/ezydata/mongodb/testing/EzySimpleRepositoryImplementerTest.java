@@ -70,6 +70,7 @@ public class EzySimpleRepositoryImplementerTest extends MongodbTest {
         System.out.println("found duck1: " + duckRepo.findById(duckId1));
         System.out.println("found duck2: " + duckRepo.findDuckById(duckId1));
         assert duckRepo.findDuckByIdOptional(duckId1).isPresent();
+        assert duckRepo.findDuckTypeAndName(duckId1.getType(), duckId1.getName()).isPresent();
         assert duckRepo.findListByIds(Sets.newHashSet(duckId1, duckId2)).size() >= 2;
         assert duckRepo.findByField("age", 11) != null;
         assert duckRepo.findListByField("age", 10).size() >= 1;
