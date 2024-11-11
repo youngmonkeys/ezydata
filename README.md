@@ -4,7 +4,7 @@
 
 # Documentation
 
-[https://youngmonkeys.org/projects/ezydata/](https://youngmonkeys.org/project/ezydata/)
+[https://youngmonkeys.org/projects/ezydata/](https://youngmonkeys.org/projects/ezydata/)
 
 # Synopsis
 
@@ -18,7 +18,7 @@ In an effort to bring data interaction to EzyFox ecosystem and help everyone stu
 
 # API Reference
 
-[https://youngmonkeys.org/project/ezydata/](https://youngmonkeys.org/project/ezydata/)
+[https://youngmonkeys.org/projects/ezydata/](https://youngmonkeys.org/projects/ezydata/)
 
 # Tests
 
