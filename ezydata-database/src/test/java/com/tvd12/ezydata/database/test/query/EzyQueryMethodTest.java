@@ -7,6 +7,8 @@ import com.tvd12.ezyfox.util.Next;
 import com.tvd12.test.assertion.Asserts;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class EzyQueryMethodTest {
@@ -90,6 +92,45 @@ public class EzyQueryMethodTest {
     }
 
     @Test
+    public void methodDeleteAndOr() {
+        // given
+        EzyMethod method = getMethod(
+            "deleteByNameAndValueOrEmailAndPhoneIn",
+            String.class,
+            String.class,
+            String.class,
+            String.class
+        );
+
+        // when
+        EzyQueryMethod queryMethod = new EzyQueryMethod(method);
+
+        // then
+        Asserts.assertEquals(queryMethod.getMethod(), method);
+        Asserts.assertEquals(queryMethod.getType(), EzyQueryMethodType.DELETE);
+
+        EzyQueryConditionChain conditionChain = queryMethod.getConditionChain();
+        Asserts.assertEquals(conditionChain.getParameterCount(), 4);
+
+        List<EzyQueryConditionGroup> conditionGroups = conditionChain.getConditionGroups();
+        Asserts.assertEquals(conditionGroups.size(), 2);
+
+        EzyQueryConditionGroup conditionGroup1 = conditionGroups.get(0);
+        Asserts.assertEquals(conditionGroup1.size(), 2);
+        Asserts.assertEquals(conditionGroup1.getConditions().get(0).getOperation(), EzyQueryOperation.EQUAL);
+        Asserts.assertEquals(conditionGroup1.getConditions().get(0).getField(), "name");
+        Asserts.assertEquals(conditionGroup1.getConditions().get(1).getOperation(), EzyQueryOperation.EQUAL);
+        Asserts.assertEquals(conditionGroup1.getConditions().get(1).getField(), "value");
+
+        EzyQueryConditionGroup conditionGroup2 = conditionGroups.get(1);
+        Asserts.assertEquals(conditionGroup2.size(), 2);
+        Asserts.assertEquals(conditionGroup2.getConditions().get(0).getOperation(), EzyQueryOperation.EQUAL);
+        Asserts.assertEquals(conditionGroup2.getConditions().get(0).getField(), "email");
+        Asserts.assertEquals(conditionGroup2.getConditions().get(1).getOperation(), EzyQueryOperation.IN);
+        Asserts.assertEquals(conditionGroup2.getConditions().get(1).getField(), "phone");
+    }
+
+    @Test
     public void emptyParamsMethod() {
         // given
         EzyMethod method = getMethod("findAll");
@@ -120,6 +161,122 @@ public class EzyQueryMethodTest {
         Asserts.assertEqualsType(e, IllegalArgumentException.class);
     }
 
+    @Test
+    public void splitConditionsTest() {
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "",
+                "And"
+            ),
+            Collections.singletonList(""),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "And",
+                "And"
+            ),
+            Collections.singletonList("And"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "Anda",
+                "And"
+            ),
+            Collections.singletonList("Anda"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "",
+                "Or"
+            ),
+            Collections.singletonList(""),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "Or",
+                "Or"
+            ),
+            Collections.singletonList("Or"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "Ora",
+                "Or"
+            ),
+            Collections.singletonList("Ora"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "Name",
+                "And"
+            ),
+            Collections.singletonList("Name"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "NameAndAnd",
+                "And"
+            ),
+            Arrays.asList("Name", "And"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "NameOrOr",
+                "Or"
+            ),
+            Arrays.asList("Name", "Or"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "NameAndId",
+                "And"
+            ),
+            Arrays.asList("Name", "Id"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "NameAndIdOrEmail",
+                "And"
+            ),
+            Arrays.asList("Name", "IdOrEmail"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "IdOrEmail",
+                "Or"
+            ),
+            Arrays.asList("Id", "Email"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "DisplayOrderInOrName",
+                "Or"
+            ),
+            Arrays.asList("DisplayOrderIn", "Name"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
+                "DataTypeAndDataIdAndMetaKeyAndMetaValue",
+                "And"
+            ),
+            Arrays.asList("DataType", "DataId", "MetaKey", "MetaValue"),
+            false
+        );
+    }
+
     private EzyMethod getMethod(String name, Class<?>... parameters) {
         try {
             return new EzyMethod(Repo.class.getDeclaredMethod(name, parameters));
@@ -137,6 +294,13 @@ public class EzyQueryMethodTest {
         List<Data> findByNameAndValue(String name, String value, Next next);
 
         int deleteByNameAndValue(String name, String value);
+
+        int deleteByNameAndValueOrEmailAndPhoneIn(
+            String name,
+            String value,
+            String email,
+            String phone
+        );
 
         @Override
         List<Data> findAll();
