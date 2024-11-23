@@ -90,6 +90,9 @@ public class EzySimpleMongoRepository<I, E>
     @Override
     public void save(Iterable<E> entities) {
         List<E> entityList = iterableToList(entities);
+        if (entityList.isEmpty()) {
+            return;
+        }
         List<WriteModel<BsonDocument>> request = new ArrayList<>();
         for (E entity : entityList) {
             BsonDocument document = entityToBsonDocument(entity);

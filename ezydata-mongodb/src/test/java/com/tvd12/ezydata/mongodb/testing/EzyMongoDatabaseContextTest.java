@@ -12,6 +12,7 @@ import com.tvd12.test.reflect.MethodInvoker;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,7 @@ public class EzyMongoDatabaseContextTest extends MongodbTest {
         Category category2 = new Category("category2");
         assert category1.getName() == null;
         assert category2.getName() == null;
+        categoryRepo.save(Collections.emptyList());
         categoryRepo.save(Arrays.asList(category1, category2));
         assert category1.getName() != null;
         assert category2.getName() != null;

@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.util.Collections;
 import java.util.List;
 
+@Getter
 public enum EzyQueryOperation {
     EQUAL("=", "eq", ""),
     IN("in", "in", "In"),
@@ -14,11 +15,8 @@ public enum EzyQueryOperation {
     LT("<", "lt", "Lt"),
     LTE("<=", "lte", "Lte");
 
-    @Getter
     private final String sign;
-    @Getter
     private final String signName;
-    @Getter
     private final String tag;
 
     private static final List<EzyQueryOperation> NOT_INCLUDE_EQUAL_VALUES =

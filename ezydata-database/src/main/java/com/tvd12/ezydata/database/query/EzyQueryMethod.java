@@ -5,6 +5,9 @@ import com.tvd12.ezyfox.reflect.EzyMethod;
 import com.tvd12.ezyfox.util.Next;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.tvd12.ezydata.database.EzyDatabaseRepository.*;
 
 @Getter
@@ -52,10 +55,10 @@ public class EzyQueryMethod {
             return conditionChainBuilder.build();
         }
 
-        String[] conditionGroupStrings = chain.split(OR);
+        List<String> conditionGroupStrings = splitConditions(chain, OR);
 
         for (String conditionGroupString : conditionGroupStrings) {
-            String[] conditionStrings = conditionGroupString.split(AND);
+            List<String> conditionStrings = splitConditions(conditionGroupString, AND);
             EzyQueryConditionGroup.Builder conditionGroupBuilder = EzyQueryConditionGroup.builder();
 
             for (String conditionString : conditionStrings) {
@@ -65,6 +68,35 @@ public class EzyQueryMethod {
             conditionChainBuilder.addConditionGroup(conditionGroupBuilder.build());
         }
         return conditionChainBuilder.build();
+    }
+
+    public static List<String> splitConditions(
+        String chain,
+        String operator
+    ) {
+        int fromIndex = 0;
+        String remaining = chain;
+        List<String> conditions = new ArrayList<>();
+        while (true) {
+            int index = remaining.indexOf(operator, fromIndex);
+            if (index <= 0) {
+                break;
+            }
+            int afterIndex = index + operator.length();
+            if (afterIndex >= remaining.length()) {
+                break;
+            }
+            char afterOperatorChar = remaining.charAt(afterIndex);
+            if (Character.isUpperCase(afterOperatorChar)) {
+                conditions.add(remaining.substring(0, index));
+                fromIndex = 0;
+                remaining = remaining.substring(afterIndex);
+            } else {
+                fromIndex = afterIndex;
+            }
+        }
+        conditions.add(remaining);
+        return conditions;
     }
 
     public static int getQueryParameterCount(EzyMethod method) {
