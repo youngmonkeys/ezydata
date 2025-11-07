@@ -6,11 +6,11 @@ import lombok.Setter;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+@Setter
 public class EzySimpleJpaDatabaseContext
     extends EzySimpleDatabaseContext
     implements EzyJpaDatabaseContext {
 
-    @Setter
     protected EntityManagerFactory entityManagerFactory;
 
     @Override
