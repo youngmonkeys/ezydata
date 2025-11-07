@@ -282,7 +282,7 @@ public class EzyJpaRepository<I, E>
         } finally {
             entityManager.close();
         }
-        return resultList.size() > 0;
+        return !resultList.isEmpty();
     }
 
     @Override
