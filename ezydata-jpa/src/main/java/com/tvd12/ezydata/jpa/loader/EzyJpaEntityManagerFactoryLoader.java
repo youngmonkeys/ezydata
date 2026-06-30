@@ -115,7 +115,7 @@ public class EzyJpaEntityManagerFactoryLoader
         return persistenceProvider
             .createContainerEntityManagerFactory(
                 persistenceUnitInfo,
-                Collections.EMPTY_MAP
+                Collections.emptyMap()
             );
     }
 

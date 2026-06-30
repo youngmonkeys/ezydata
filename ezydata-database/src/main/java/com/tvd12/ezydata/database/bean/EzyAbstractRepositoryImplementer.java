@@ -24,6 +24,7 @@ import javassist.CtClass;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -64,6 +65,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected Object doImplement(Object template) throws Exception {
         Class[] idAndEntityTypes = getIdAndEntityTypes();
         idType = idAndEntityTypes[0];
@@ -88,7 +90,8 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
         implClass.setInterfaces(new CtClass[]{pool.get(clazz.getName())});
         Class answerClass = implClass.toClass();
         implClass.detach();
-        Object repo = answerClass.newInstance();
+        Constructor constructor = answerClass.getDeclaredConstructor();
+        Object repo = constructor.newInstance();
         if (template instanceof EzyDatabaseContext) {
             if (repo instanceof EzyDatabaseContextAware) {
                 ((EzyDatabaseContextAware) repo).setDatabaseContext(
