@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.mongodb;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 
 public interface EzyMongoClientAware {
 

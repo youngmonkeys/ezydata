@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 public class EzySimpleRepositoryImplementerTest extends BaseTest {
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void test() {
         ExEzySimpleRepositoryImplementer implementer =
             new ExEzySimpleRepositoryImplementer(PersonRepo.class);

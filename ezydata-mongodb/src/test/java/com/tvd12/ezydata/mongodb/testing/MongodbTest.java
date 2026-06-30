@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.mongodb.testing;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.tvd12.ezydata.mongodb.loader.EzyMongoClientLoader;
 import com.tvd12.ezydata.mongodb.loader.EzySimpleMongoClientLoader;
 import com.tvd12.ezyfox.stream.EzyAnywayInputStreamLoader;
