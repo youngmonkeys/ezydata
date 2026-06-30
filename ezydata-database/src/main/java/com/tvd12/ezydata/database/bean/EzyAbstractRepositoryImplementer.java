@@ -4,7 +4,11 @@ import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
-import com.tvd12.ezydata.database.query.*;
+import com.tvd12.ezydata.database.query.EzyQueryEntity;
+import com.tvd12.ezydata.database.query.EzyQueryMethod;
+import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
+import com.tvd12.ezydata.database.query.EzyQueryRegister;
+import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
@@ -50,11 +54,13 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     public Object implement(Object template) {
         try {
             return doImplement(template);
-        } catch (Exception e) {
-            throw new IllegalStateException(
-                "error on repo interface: " + clazz.getName(),
+        } catch (Throwable e) {
+            logger.error(
+                "error on repo interface: {}",
+                clazz.getName(),
                 e
             );
+            return null;
         }
     }
 

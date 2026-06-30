@@ -168,7 +168,7 @@ public abstract class EzyDatabaseContextBuilder<B extends EzyDatabaseContextBuil
 
     @Override
     public EzyDatabaseContext build() {
-        if (packagesToScan.size() > 0) {
+        if (!packagesToScan.isEmpty()) {
             reflections.add(new EzyReflectionProxy(packagesToScan));
         }
         if (bindingContextBuilder == null) {

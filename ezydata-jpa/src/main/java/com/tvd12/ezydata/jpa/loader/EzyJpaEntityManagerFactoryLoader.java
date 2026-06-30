@@ -6,13 +6,22 @@ import com.tvd12.ezyfox.reflect.EzyReflectionProxy;
 import lombok.AllArgsConstructor;
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
 import javax.persistence.spi.ClassTransformer;
 import javax.persistence.spi.PersistenceUnitInfo;
 import javax.persistence.spi.PersistenceUnitTransactionType;
 import javax.sql.DataSource;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 public class EzyJpaEntityManagerFactoryLoader
     extends EzyDatabasePropertiesKeeper<EzyJpaEntityManagerFactoryLoader> {
@@ -174,7 +183,7 @@ public class EzyJpaEntityManagerFactoryLoader
 
         @Override
         public boolean excludeUnlistedClasses() {
-            return false;
+            return true;
         }
 
         @Override
@@ -184,7 +193,7 @@ public class EzyJpaEntityManagerFactoryLoader
 
         @Override
         public ValidationMode getValidationMode() {
-            return ValidationMode.AUTO;
+            return ValidationMode.NONE;
         }
 
         public Properties getProperties() {

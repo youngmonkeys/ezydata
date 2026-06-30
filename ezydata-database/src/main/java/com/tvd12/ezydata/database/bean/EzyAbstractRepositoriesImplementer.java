@@ -129,7 +129,9 @@ public abstract class EzyAbstractRepositoriesImplementer
         Map<Class<?>, Object> repositories = new ConcurrentHashMap<>();
         for (Class<?> itf : autoImplInterfaces) {
             Object repo = implementRepoInterface(itf, template);
-            repositories.put(itf, repo);
+            if (repo != null) {
+                repositories.put(itf, repo);
+            }
         }
         return repositories;
     }
@@ -147,7 +149,7 @@ public abstract class EzyAbstractRepositoriesImplementer
     );
 
     private Collection<Class<?>> getAutoImplRepoInterfaces() {
-        if (packagesToScan.size() > 0) {
+        if (!packagesToScan.isEmpty()) {
             reflections.add(new EzyReflectionProxy(packagesToScan));
         }
         Set<Class<?>> classes = new HashSet<>();
