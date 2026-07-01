@@ -1,6 +1,6 @@
 package com.tvd12.ezydata.hazelcast.mapstore;
 
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.tvd12.ezydata.mongodb.EzyMongoClientAware;
 import lombok.Setter;
 

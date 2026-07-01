@@ -221,6 +221,14 @@ public class EzyQueryMethodTest {
         );
         Asserts.assertEquals(
             EzyQueryMethod.splitConditions(
+                "NameAnd",
+                "And"
+            ),
+            Collections.singletonList("NameAnd"),
+            false
+        );
+        Asserts.assertEquals(
+            EzyQueryMethod.splitConditions(
                 "NameAndAnd",
                 "And"
             ),

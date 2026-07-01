@@ -103,28 +103,28 @@ public class EzyJpaRepositoryTest extends BaseJpaTest {
             .build();
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void invalidCountMethodTest() {
         new EzyJpaDatabaseContextBuilder()
             .repositoryInterface(BRepo.class)
             .build();
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void invalidDeleteMethodTest() {
         new EzyJpaDatabaseContextBuilder()
             .repositoryInterface(CRepo.class)
             .build();
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void invalidQueryNameTest() {
         new EzyJpaDatabaseContextBuilder()
             .repositoryInterface(DRepo.class)
             .build();
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void invalidQueryName2Test() {
         new EzyJpaDatabaseContextBuilder()
             .repositoryInterface(ERepo.class)

@@ -1,8 +1,13 @@
 package com.tvd12.ezydata.mongodb.loader;
 
-import com.mongodb.*;
+import com.mongodb.MongoClientSettings;
+import com.mongodb.MongoCredential;
+import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
 import com.tvd12.ezyfox.util.EzyLoggable;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 
@@ -69,14 +74,20 @@ public class EzyPropertiesMongoClientLoader
     protected MongoClient createMongoClient() {
         String uri = properties.getProperty(URI);
         if (uri != null) {
-            return new MongoClient(new MongoClientURI(uri));
+            return MongoClients.create(uri);
         }
 
-        return new MongoClient(
-            new ServerAddress(getHost(), getPort()),
-            createCredential(),
-            MongoClientOptions.builder().build()
-        );
+        MongoClientSettings settings = MongoClientSettings.builder()
+            .applyToClusterSettings(builder ->
+                builder.hosts(
+                    Collections.singletonList(
+                        new ServerAddress(getHost(), getPort())
+                    )
+                )
+            )
+            .credential(createCredential())
+            .build();
+        return MongoClients.create(settings);
     }
 
     protected MongoCredential createCredential() {

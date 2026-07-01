@@ -2,7 +2,7 @@ package com.tvd12.ezydata.hazelcast.testing;
 
 
 import com.hazelcast.core.HazelcastInstance;
-import com.mongodb.MongoClient;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import com.tvd12.ezydata.hazelcast.factory.EzyMapTransactionFactory;
 import com.tvd12.ezydata.hazelcast.factory.EzySimpleMapTransactionFactory;

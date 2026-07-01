@@ -17,6 +17,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.tvd12.reflections.ReflectionUtils.toClass;
+
 public class EzySimpleServiceImplementer {
 
     protected static final AtomicInteger COUNT = new AtomicInteger(0);
@@ -57,7 +59,7 @@ public class EzySimpleServiceImplementer {
         CtConstructor constructorMethod = makeConstructorMethod(pool, implClass);
         implClass.addConstructor(constructorMethod);
         implClass.addMethod(CtNewMethod.make(getMapNameMethodContent, implClass));
-        Class answerClass = implClass.toClass();
+        Class answerClass = toClass(implClass, clazz.getClazz());
         implClass.detach();
         Constructor constructor = answerClass.getConstructor(HazelcastInstance.class);
         return constructor.newInstance(hzInstance);

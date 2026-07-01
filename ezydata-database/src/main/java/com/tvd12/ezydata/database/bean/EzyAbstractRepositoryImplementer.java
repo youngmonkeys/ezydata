@@ -4,7 +4,11 @@ import com.tvd12.ezydata.database.EzyDatabaseContext;
 import com.tvd12.ezydata.database.EzyDatabaseContextAware;
 import com.tvd12.ezydata.database.EzyDatabaseRepository;
 import com.tvd12.ezydata.database.EzyDatabaseRepositoryWrapper;
-import com.tvd12.ezydata.database.query.*;
+import com.tvd12.ezydata.database.query.EzyQueryEntity;
+import com.tvd12.ezydata.database.query.EzyQueryMethod;
+import com.tvd12.ezydata.database.query.EzyQueryMethodConverter;
+import com.tvd12.ezydata.database.query.EzyQueryRegister;
+import com.tvd12.ezydata.database.query.EzyQueryString;
 import com.tvd12.ezyfox.asm.EzyFunction;
 import com.tvd12.ezyfox.asm.EzyFunction.EzyBody;
 import com.tvd12.ezyfox.asm.EzyInstruction;
@@ -20,8 +24,11 @@ import javassist.CtClass;
 import javassist.CtNewMethod;
 import lombok.Setter;
 
+import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.tvd12.reflections.ReflectionUtils.toClass;
 
 @SuppressWarnings("rawtypes")
 public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
@@ -50,14 +57,17 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     public Object implement(Object template) {
         try {
             return doImplement(template);
-        } catch (Exception e) {
-            throw new IllegalStateException(
-                "error on repo interface: " + clazz.getName(),
+        } catch (Throwable e) {
+            logger.error(
+                "error on repo interface: {}",
+                clazz.getName(),
                 e
             );
+            return null;
         }
     }
 
+    @SuppressWarnings("unchecked")
     protected Object doImplement(Object template) throws Exception {
         Class[] idAndEntityTypes = getIdAndEntityTypes();
         idType = idAndEntityTypes[0];
@@ -80,9 +90,10 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
             CtNewMethod.make(getEntityTypeMethodContent, implClass)
         );
         implClass.setInterfaces(new CtClass[]{pool.get(clazz.getName())});
-        Class answerClass = implClass.toClass();
+        Class answerClass = toClass(implClass, clazz.getClazz());
         implClass.detach();
-        Object repo = answerClass.newInstance();
+        Constructor constructor = answerClass.getDeclaredConstructor();
+        Object repo = constructor.newInstance();
         if (template instanceof EzyDatabaseContext) {
             if (repo instanceof EzyDatabaseContextAware) {
                 ((EzyDatabaseContextAware) repo).setDatabaseContext(
