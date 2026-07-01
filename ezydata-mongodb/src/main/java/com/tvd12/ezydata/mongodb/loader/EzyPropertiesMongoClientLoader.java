@@ -79,9 +79,11 @@ public class EzyPropertiesMongoClientLoader
 
         MongoClientSettings settings = MongoClientSettings.builder()
             .applyToClusterSettings(builder ->
-                builder.hosts(Collections.singletonList(
-                    new ServerAddress(getHost(), getPort())
-                ))
+                builder.hosts(
+                    Collections.singletonList(
+                        new ServerAddress(getHost(), getPort())
+                    )
+                )
             )
             .credential(createCredential())
             .build();
