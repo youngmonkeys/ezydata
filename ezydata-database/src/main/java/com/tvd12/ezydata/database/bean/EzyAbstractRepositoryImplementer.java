@@ -28,6 +28,8 @@ import java.lang.reflect.Constructor;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.tvd12.reflections.ReflectionUtils.toClass;
+
 @SuppressWarnings("rawtypes")
 public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
     @Setter
@@ -88,7 +90,7 @@ public abstract class EzyAbstractRepositoryImplementer extends EzyLoggable {
             CtNewMethod.make(getEntityTypeMethodContent, implClass)
         );
         implClass.setInterfaces(new CtClass[]{pool.get(clazz.getName())});
-        Class answerClass = implClass.toClass();
+        Class answerClass = toClass(implClass, clazz.getClazz());
         implClass.detach();
         Constructor constructor = answerClass.getDeclaredConstructor();
         Object repo = constructor.newInstance();
